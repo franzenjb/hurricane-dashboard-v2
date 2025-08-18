@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hurricane Analytics Dashboard 2.0</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .map-container { height: 500px; }
+        @media (max-width: 768px) {
+            .map-container { height: 400px; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100" x-data="hurricaneApp()">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <h1 class="text-xl font-bold text-gray-800">Hurricane Analytics Dashboard 2.0</h1>
+                </div>
+                <div class="flex items-center space-x-1">
+                    <button @click="activeTab = 'timeline'" 
+                            :class="activeTab === 'timeline' ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-gray-100'"
+                            class="px-4 py-2 rounded-lg font-medium transition-colors">
+                        Timeline & Map
+                    </button>
+                    <button @click="activeTab = 'tracker'" 
+                            :class="activeTab === 'tracker' ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-gray-100'"
+                            class="px-4 py-2 rounded-lg font-medium transition-colors">
+                        Multi-State Analysis
+                    </button>
+                    <button @click="activeTab = 'database'" 
+                            :class="activeTab === 'database' ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-gray-100'"
+                            class="px-4 py-2 rounded-lg font-medium transition-colors">
+                        Storm Database
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-6">
+        <!-- Timeline & Map Tab -->
+        <div x-show="activeTab === 'timeline'" x-cloak>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Left: Map -->
+                <div class="bg-white rounded-lg shadow-lg p-4">
+                    <h2 class="text-lg font-semibold mb-3">Hurricane Tracks & Landfalls</h2>
+                    <div id="hurricane-map" class="map-container rounded-lg"></div>
+                    <div class="mt-3 text-sm text-gray-600">
+                        <div class="flex items-center gap-4">
+                            <span class="flex items-center"><span class="w-3 h-3 bg-blue-500 rounded-full inline-block mr-1"></span> Cat 1</span>
+                            <span class="flex items-center"><span class="w-3 h-3 bg-green-500 rounded-full inline-block mr-1"></span> Cat 2</span>
+                            <span class="flex items-center"><span class="w-3 h-3 bg-yellow-500 rounded-full inline-block mr-1"></span> Cat 3</span>
+                            <span class="flex items-center"><span class="w-3 h-3 bg-orange-500 rounded-full inline-block mr-1"></span> Cat 4</span>
+                            <span class="flex items-center"><span class="w-3 h-3 bg-red-600 rounded-full inline-block mr-1"></span> Cat 5</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Timeline & Details -->
+                <div class="space-y-4">
+                    <!-- Filters -->
+                    <div class="bg-white rounded-lg shadow-lg p-4">
+                        <h3 class="font-semibold mb-3">Filters</h3>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Year Range</label>
+                                <div class="flex items-center gap-2">
+                                    <input type="number" x-model="filters.yearStart" min="1851" max="2024" 
+                                           class="w-full px-2 py-1 border rounded text-sm">
+                                    <span>-</span>
+                                    <input type="number" x-model="filters.yearEnd" min="1851" max="2024" 
+                                           class="w-full px-2 py-1 border rounded text-sm">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                                <select x-model="filters.category" class="w-full px-2 py-1 border rounded text-sm">
+                                    <option value="">All</option>
+                                    <option value="1">Cat 1</option>
+                                    <option value="2">Cat 2</option>
+                                    <option value="3">Cat 3</option>
+                                    <option value="4">Cat 4</option>
+                                    <option value="5">Cat 5</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">State</label>
+                                <select x-model="filters.state" class="w-full px-2 py-1 border rounded text-sm">
+                                    <option value="">All States</option>
+                                    <option value="FL">Florida</option>
+                                    <option value="TX">Texas</option>
+                                    <option value="LA">Louisiana</option>
+                                    <option value="MS">Mississippi</option>
+                                    <option value="AL">Alabama</option>
+                                    <option value="GA">Georgia</option>
+                                    <option value="SC">South Carolina</option>
+                                    <option value="NC">North Carolina</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Search</label>
+                                <input type="text" x-model="filters.search" placeholder="Storm name..." 
+                                       class="w-full px-2 py-1 border rounded text-sm">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Chart -->
+                    <div class="bg-white rounded-lg shadow-lg p-4">
+                        <h3 class="font-semibold mb-3">Hurricane Timeline</h3>
+                        <div id="timeline-chart" class="h-64"></div>
+                    </div>
+
+                    <!-- Storm Details -->
+                    <div x-show="selectedStorm" class="bg-white rounded-lg shadow-lg p-4">
+                        <h3 class="font-semibold mb-3">Storm Details</h3>
+                        <div class="grid grid-cols-2 gap-3 text-sm">
+                            <div>
+                                <span class="text-gray-600">Name:</span>
+                                <span class="font-medium ml-2" x-text="selectedStorm?.name"></span>
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Date:</span>
+                                <span class="font-medium ml-2" x-text="selectedStorm?.date"></span>
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Category:</span>
+                                <span class="font-medium ml-2" x-text="'Category ' + selectedStorm?.category"></span>
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Wind Speed:</span>
+                                <span class="font-medium ml-2" x-text="selectedStorm?.windSpeed + ' mph'"></span>
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Pressure:</span>
+                                <span class="font-medium ml-2" x-text="selectedStorm?.pressure + ' mb'"></span>
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Landfall:</span>
+                                <span class="font-medium ml-2" x-text="selectedStorm?.landfall"></span>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <span class="text-gray-600 text-sm">Impact:</span>
+                            <p class="text-sm mt-1" x-text="selectedStorm?.impact"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Multi-State Analysis Tab -->
+        <div x-show="activeTab === 'tracker'" x-cloak>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Left: Map -->
+                <div class="lg:col-span-2 bg-white rounded-lg shadow-lg p-4">
+                    <h2 class="text-lg font-semibold mb-3">Multi-State Hurricane Impact</h2>
+                    <div id="state-map" class="map-container rounded-lg"></div>
+                </div>
+
+                <!-- Right: Stats -->
+                <div class="space-y-4">
+                    <div class="bg-white rounded-lg shadow-lg p-4">
+                        <h3 class="font-semibold mb-3">State Selection</h3>
+                        <div class="space-y-2">
+                            <template x-for="state in availableStates" :key="state.code">
+                                <label class="flex items-center">
+                                    <input type="checkbox" :value="state.code" x-model="selectedStates" 
+                                           class="mr-2">
+                                    <span x-text="state.name" class="text-sm"></span>
+                                </label>
+                            </template>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-lg p-4">
+                        <h3 class="font-semibold mb-3">Comparison Chart</h3>
+                        <div id="comparison-chart" class="h-64"></div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-lg p-4">
+                        <h3 class="font-semibold mb-3">Statistics</h3>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Total Hurricanes:</span>
+                                <span class="font-medium" x-text="statistics.total"></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Major (Cat 3+):</span>
+                                <span class="font-medium" x-text="statistics.major"></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Most Active State:</span>
+                                <span class="font-medium" x-text="statistics.mostActive"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Database Tab -->
+        <div x-show="activeTab === 'database'" x-cloak>
+            <div class="bg-white rounded-lg shadow-lg p-4">
+                <h2 class="text-lg font-semibold mb-4">Hurricane Database</h2>
+                
+                <div class="mb-4">
+                    <input type="text" x-model="dbSearch" @input="searchDatabase()" 
+                           placeholder="Search by name, year, or location..." 
+                           class="w-full px-3 py-2 border rounded-lg">
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Year</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Category</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Wind</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Pressure</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Landfall</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <template x-for="storm in dbResults" :key="storm.id">
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-2 text-sm" x-text="storm.year"></td>
+                                    <td class="px-4 py-2 text-sm font-medium" x-text="storm.name"></td>
+                                    <td class="px-4 py-2 text-sm">
+                                        <span class="px-2 py-1 text-xs rounded-full"
+                                              :class="getCategoryClass(storm.category)"
+                                              x-text="'Cat ' + storm.category"></span>
+                                    </td>
+                                    <td class="px-4 py-2 text-sm" x-text="storm.windSpeed + ' mph'"></td>
+                                    <td class="px-4 py-2 text-sm" x-text="storm.pressure + ' mb'"></td>
+                                    <td class="px-4 py-2 text-sm" x-text="storm.landfall"></td>
+                                    <td class="px-4 py-2 text-sm">
+                                        <button @click="viewStormOnMap(storm)" 
+                                                class="text-blue-600 hover:text-blue-800 text-sm">
+                                            View Map
+                                        </button>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/app-v2.js"></script>
+</body>
+</html>
