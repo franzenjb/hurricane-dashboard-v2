@@ -8,6 +8,7 @@
     <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="atlantic-storms-enhanced.js"></script>
     <style>
         [x-cloak] { display: none !important; }
         .full-height { height: calc(100vh - 4rem); }
@@ -184,6 +185,15 @@
 
         <!-- Timeline & Map Tab -->
         <div x-show="activeTab === 'timeline'" class="h-full flex" x-cloak>
+            <!-- Enhanced Atlantic Hurricane Timeline -->
+            <iframe src="enhanced-timeline.html" 
+                    class="w-full h-full border-0" 
+                    onload="enableStormPanelInIframes()">
+            </iframe>
+        </div>
+
+        <!-- Original Timeline (Backup) -->
+        <div x-show="false" class="h-full flex" x-cloak>
             <!-- Left Sidebar - Filters -->
             <div class="w-56 bg-white shadow-lg p-4 overflow-y-auto flex flex-col">
                 <div class="flex items-center justify-between mb-4">
@@ -714,5 +724,12 @@
 
     <script src="js/timeline-app.js"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <script>
+        function enableStormPanelInIframes() {
+            // Enable storm panel communication for iframe content
+            console.log('Enhanced Timeline iframe loaded successfully');
+        }
+    </script>
 </body>
 </html>
