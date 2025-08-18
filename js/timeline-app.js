@@ -206,6 +206,8 @@ function hurricaneApp() {
         },
 
         updateMap() {
+            if (!this.hurricaneMap) return;
+            
             // Clear existing markers
             this.mapMarkers.forEach(marker => this.hurricaneMap.removeLayer(marker));
             this.mapMarkers = [];
