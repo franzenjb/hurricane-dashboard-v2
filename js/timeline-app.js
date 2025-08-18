@@ -99,8 +99,11 @@ function hurricaneApp() {
         ],
 
         init() {
-            this.initMap();
-            this.updateVisualization();
+            // Delay map initialization to ensure DOM is ready
+            setTimeout(() => {
+                this.initMap();
+                this.updateVisualization();
+            }, 100);
             
             // Watch for filter changes
             this.$watch('filters.categories', () => this.updateVisualization());
@@ -108,10 +111,26 @@ function hurricaneApp() {
 
         initMap() {
             // Initialize the map
-            this.hurricaneMap = L.map('hurricane-map').setView([25, -80], 5);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(this.hurricaneMap);
+            const mapElement = document.getElementById('hurricane-map');
+            if (mapElement) {
+                this.hurricaneMap = L.map('hurricane-map').setView([25, -80], 5);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap contributors'
+                }).addTo(this.hurricaneMap);
+            }
+        },
+
+        resetFilters() {
+            this.filters = {
+                yearStart: 1851,
+                yearEnd: 2030,
+                monthStart: 5,
+                monthEnd: 11,
+                categories: ['0', '1', '2', '3', '4', '5'],
+                state: '',
+                search: ''
+            };
+            this.updateVisualization();
         },
 
         updateVisualization() {
@@ -310,10 +329,10 @@ function hurricaneApp() {
             return months[month] || '';
         },
 
-        formatDate(date) {
-            if (!date) return '';
+        formatDate(storm) {
+            if (!storm) return '';
             const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-            return `${months[date.month - 1]} ${date.day}, ${date.year}`;
+            return `${months[storm.month - 1]} ${storm.day}, ${storm.year}`;
         }
     }
 }

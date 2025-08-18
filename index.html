@@ -38,6 +38,25 @@
             background: #2563eb;
             cursor: pointer;
         }
+        
+        /* Vertical slider styles */
+        .slider-vertical {
+            -webkit-appearance: none;
+            writing-mode: bt-lr; /* IE */
+            -webkit-appearance: slider-vertical; /* WebKit */
+            width: 6px;
+            height: 100%;
+            background: #ddd;
+            outline: none;
+        }
+        
+        .year-slider-container {
+            height: calc(100% - 120px);
+            width: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
     </style>
 </head>
 <body class="bg-gray-50 overflow-hidden" x-data="hurricaneApp()">
@@ -69,63 +88,43 @@
     <main class="full-height">
         <!-- Timeline & Map Tab -->
         <div x-show="activeTab === 'timeline'" class="h-full flex" x-cloak>
-            <!-- Left Sidebar - Filters (20%) -->
-            <div class="w-64 bg-white shadow-lg p-4 overflow-y-auto">
-                <h2 class="text-lg font-bold mb-4">Filters</h2>
+            <!-- Left Sidebar - Filters -->
+            <div class="w-56 bg-white shadow-lg p-4 overflow-y-auto flex flex-col">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-lg font-bold">Filters</h2>
+                    <button @click="resetFilters()" 
+                            class="text-sm bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded">
+                        Reset
+                    </button>
+                </div>
                 
-                <!-- Year Range -->
-                <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Year Range: <span x-text="filters.yearStart + ' - ' + filters.yearEnd"></span>
-                    </label>
-                    <div class="space-y-2">
-                        <input type="range" x-model="filters.yearStart" min="1851" max="2030" 
-                               class="slider" @input="updateVisualization()">
-                        <input type="range" x-model="filters.yearEnd" min="1851" max="2030" 
-                               class="slider" @input="updateVisualization()">
-                    </div>
-                </div>
-
-                <!-- Month Range -->
-                <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Month Range: <span x-text="getMonthName(filters.monthStart) + ' - ' + getMonthName(filters.monthEnd)"></span>
-                    </label>
-                    <div class="space-y-2">
-                        <input type="range" x-model="filters.monthStart" min="5" max="11" 
-                               class="slider" @input="updateVisualization()">
-                        <input type="range" x-model="filters.monthEnd" min="5" max="11" 
-                               class="slider" @input="updateVisualization()">
-                    </div>
-                </div>
-
                 <!-- Category Filter -->
                 <div class="mb-6">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
                     <div class="space-y-1">
                         <label class="flex items-center text-sm">
-                            <input type="checkbox" x-model="filters.categories" value="0" class="mr-2">
-                            Tropical Storm
+                            <input type="checkbox" x-model="filters.categories" value="0" class="mr-2" @change="updateVisualization()">
+                            <span class="w-3 h-3 rounded-full bg-blue-300 mr-1"></span> Tropical Storm
                         </label>
                         <label class="flex items-center text-sm">
-                            <input type="checkbox" x-model="filters.categories" value="1" class="mr-2">
-                            Category 1
+                            <input type="checkbox" x-model="filters.categories" value="1" class="mr-2" @change="updateVisualization()">
+                            <span class="w-3 h-3 rounded-full bg-blue-500 mr-1"></span> Category 1
                         </label>
                         <label class="flex items-center text-sm">
-                            <input type="checkbox" x-model="filters.categories" value="2" class="mr-2">
-                            Category 2
+                            <input type="checkbox" x-model="filters.categories" value="2" class="mr-2" @change="updateVisualization()">
+                            <span class="w-3 h-3 rounded-full bg-green-500 mr-1"></span> Category 2
                         </label>
                         <label class="flex items-center text-sm">
-                            <input type="checkbox" x-model="filters.categories" value="3" class="mr-2">
-                            Category 3
+                            <input type="checkbox" x-model="filters.categories" value="3" class="mr-2" @change="updateVisualization()">
+                            <span class="w-3 h-3 rounded-full bg-yellow-500 mr-1"></span> Category 3
                         </label>
                         <label class="flex items-center text-sm">
-                            <input type="checkbox" x-model="filters.categories" value="4" class="mr-2">
-                            Category 4
+                            <input type="checkbox" x-model="filters.categories" value="4" class="mr-2" @change="updateVisualization()">
+                            <span class="w-3 h-3 rounded-full bg-orange-500 mr-1"></span> Category 4
                         </label>
                         <label class="flex items-center text-sm">
-                            <input type="checkbox" x-model="filters.categories" value="5" class="mr-2">
-                            Category 5
+                            <input type="checkbox" x-model="filters.categories" value="5" class="mr-2" @change="updateVisualization()">
+                            <span class="w-3 h-3 rounded-full bg-red-600 mr-1"></span> Category 5
                         </label>
                     </div>
                 </div>
@@ -166,7 +165,7 @@
                 </div>
 
                 <!-- Statistics -->
-                <div class="border-t pt-4">
+                <div class="border-t pt-4 mt-auto">
                     <h3 class="font-medium text-sm mb-2">Current View</h3>
                     <div class="text-xs space-y-1 text-gray-600">
                         <div>Storms shown: <span class="font-medium" x-text="filteredStorms.length"></span></div>
@@ -175,34 +174,61 @@
                 </div>
             </div>
 
-            <!-- Center - Main Content (80%) -->
-            <div class="flex-1 flex flex-col">
-                <!-- Top Half - Map -->
-                <div class="flex-1 bg-white shadow-sm">
-                    <div id="hurricane-map" class="w-full h-full"></div>
+            <!-- Year Slider (Vertical) -->
+            <div class="w-12 bg-gray-100 flex flex-col items-center py-4">
+                <div class="text-xs font-medium mb-2" x-text="filters.yearStart"></div>
+                <div class="year-slider-container">
+                    <input type="range" x-model="filters.yearStart" min="1851" max="2030" 
+                           orient="vertical" class="slider-vertical" @input="updateVisualization()">
+                    <div class="my-2"></div>
+                    <input type="range" x-model="filters.yearEnd" min="1851" max="2030" 
+                           orient="vertical" class="slider-vertical" @input="updateVisualization()">
                 </div>
+                <div class="text-xs font-medium mt-2" x-text="filters.yearEnd"></div>
+            </div>
 
-                <!-- Bottom Half -->
-                <div class="flex-1 flex">
-                    <!-- Timeline (70% of bottom) -->
-                    <div class="flex-1 bg-white shadow-sm p-4">
-                        <h3 class="text-sm font-medium mb-2">Hurricane Timeline</h3>
+            <!-- Center - Timeline and Right Panel -->
+            <div class="flex-1 flex">
+                <!-- Timeline Container -->
+                <div class="flex-1 flex flex-col bg-white">
+                    <!-- Timeline Chart -->
+                    <div class="flex-1 p-4">
                         <div id="timeline-chart" class="w-full h-full"></div>
                     </div>
+                    
+                    <!-- Month Slider (Horizontal) -->
+                    <div class="h-20 px-4 pb-4 bg-gray-50 flex items-center">
+                        <div class="flex-1">
+                            <div class="flex justify-between text-xs font-medium mb-2">
+                                <span x-text="getMonthName(filters.monthStart)"></span>
+                                <span>Month Range</span>
+                                <span x-text="getMonthName(filters.monthEnd)"></span>
+                            </div>
+                            <div class="space-y-2">
+                                <input type="range" x-model="filters.monthStart" min="5" max="11" 
+                                       class="slider" @input="updateVisualization()">
+                                <input type="range" x-model="filters.monthEnd" min="5" max="11" 
+                                       class="slider" @input="updateVisualization()">
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                    <!-- Storm Details (30% of bottom) -->
-                    <div class="w-96 bg-gray-50 p-4 overflow-y-auto">
+                <!-- Right Panel - Storm Details and Map -->
+                <div class="w-96 flex flex-col bg-gray-50">
+                    <!-- Storm Details -->
+                    <div class="p-4 bg-white border-b">
                         <h3 class="text-sm font-medium mb-3">Storm Details</h3>
                         <div x-show="!selectedStorm" class="text-sm text-gray-500">
-                            Click on a storm in the timeline or map to view details
+                            Click on a storm in the timeline to view details
                         </div>
                         <div x-show="selectedStorm" x-cloak>
-                            <div class="bg-white rounded p-3 shadow-sm">
+                            <div class="bg-gray-50 rounded p-3">
                                 <h4 class="font-bold text-lg" x-text="selectedStorm?.name"></h4>
                                 <div class="mt-2 space-y-1 text-sm">
                                     <div class="flex justify-between">
                                         <span class="text-gray-600">Date:</span>
-                                        <span x-text="formatDate(selectedStorm?.date)"></span>
+                                        <span x-text="formatDate(selectedStorm)"></span>
                                     </div>
                                     <div class="flex justify-between">
                                         <span class="text-gray-600">Category:</span>
@@ -226,6 +252,12 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+
+                    <!-- Map -->
+                    <div class="flex-1 p-4">
+                        <h3 class="text-sm font-medium mb-2">Storm Tracks</h3>
+                        <div id="hurricane-map" class="w-full h-full rounded shadow"></div>
                     </div>
                 </div>
             </div>
