@@ -1,0 +1,29 @@
+name,year,month,day,category,impact,category_name
+Arlene,2005,6,11,0,Panhandle near Pensacola,Tropical Storm
+Dennis,2005,7,10,3,Panhandle,Category 3
+Katrina,2005,8,25,1,South Florida,Category 1
+Tammy,2005,10,5,0,Jacksonville/Mayport,Tropical Storm
+Wilma,2005,10,24,3,Southwest Florida,Category 3
+Barry,2007,6,2,0,"Tampa Bay (as TD, TS prior)",Tropical Storm
+Fay,2008,8,19,0,"4 FL landfalls (Keys, SW, EC, Big Bend)",Tropical Storm
+Claudette,2009,8,17,0,Fort Walton Beach,Tropical Storm
+Bonnie,2010,7,23,0,"Elliott Key, South Florida",Tropical Storm
+Beryl,2012,5,28,0,Jacksonville Beach,Tropical Storm
+Debby,2012,6,26,0,"Steinhatchee, Big Bend",Tropical Storm
+Andrea,2013,6,6,0,South of Steinhatchee,Tropical Storm
+Colin,2016,6,6,0,"Keaton Beach, Big Bend",Tropical Storm
+Hermine,2016,9,2,1,Big Bend,Category 1
+Irma,2017,9,10,4,"Cudjoe Key, then Marco Island",Category 4
+Alberto,2018,5,29,0,"Laguna Beach, Panhandle",Tropical Storm
+Gordon,2018,9,3,0,Crossed Keys and SW Florida,Tropical Storm
+Michael,2018,10,10,5,"Mexico Beach, Panhandle",Category 5
+Eta,2020,11,12,0,"Lower Keys, then Tampa Bay area",Tropical Storm
+Elsa,2021,7,7,0,"Taylor County, Big Bend",Tropical Storm
+Fred,2021,8,16,0,Mexico Beach/Cape San Blas,Tropical Storm
+Mindy,2021,9,9,0,"St. Vincent Island, Big Bend",Tropical Storm
+Ian,2022,9,28,4,Cayo Costa,Category 4
+Nicole,2022,11,10,1,Vero Beach,Category 1
+Idalia,2023,8,30,3,"Keaton Beach, Big Bend",Category 3
+Debby,2024,8,5,1,"Steinhatchee, Big Bend",Category 1
+Helene,2024,9,26,4,"Perry, Big Bend",Category 4
+Milton,2024,10,9,3,Siesta Key,Category 3

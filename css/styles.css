@@ -1,0 +1,134 @@
+/* Custom styles for Hurricane Dashboard v2 */
+
+/* Fix layout issues */
+.timeline-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.timeline-chart-wrapper {
+    flex: 1;
+    min-height: 0;
+    position: relative;
+}
+
+/* Ensure Plotly charts fill their containers */
+.js-plotly-plot {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.js-plotly-plot .plotly {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* Fix map container */
+#hurricane-map {
+    width: 100%;
+    height: 100%;
+    min-height: 400px;
+}
+
+/* Prevent collapse when filters change */
+.filter-sidebar {
+    flex-shrink: 0;
+    min-width: 224px;
+}
+
+/* Fix modebar positioning */
+.js-plotly-plot .plotly .modebar {
+    position: absolute !important;
+    top: 10px !important;
+    right: 10px !important;
+}
+
+/* Better transitions */
+* {
+    transition: none !important;
+}
+
+/* Fix Alpine.js transitions */
+[x-cloak] {
+    display: none !important;
+}
+
+/* Full height layout */
+.full-height-container {
+    height: calc(100vh - 4rem);
+    display: flex;
+    overflow: hidden;
+}
+
+/* Scrollable content areas */
+.scrollable-content {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Fix month range selector layout */
+.month-range-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80px;
+    background-color: #f9fafb;
+}
+
+/* Storm details panel */
+.storm-details-panel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.storm-details-content {
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* Fix category badges */
+.category-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    font-weight: bold;
+    color: white;
+}
+
+/* Ensure proper z-index for dropdowns */
+.dropdown-menu {
+    z-index: 50;
+}
+
+/* Fix AI chat window positioning */
+.ai-chat-window {
+    position: fixed;
+    bottom: 5rem;
+    right: 1rem;
+    width: 24rem;
+    max-height: 80vh;
+    z-index: 100;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .filter-sidebar {
+        min-width: 200px;
+    }
+    
+    .ai-chat-window {
+        width: 20rem;
+    }
+}
+
+/* Print styles */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+}

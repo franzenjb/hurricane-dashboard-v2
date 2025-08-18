@@ -1,0 +1,21 @@
+name,year,month,day,category,impact
+Dennis,2005,7,10,3,Panhandle
+Wilma,2005,10,24,3,Southwest Florida
+Fay,2008,8,19,0,Multiple landfalls
+Debby,2012,6,26,0,Big Bend
+Isaac,2012,8,28,0,Keys (TS)
+Colin,2016,6,6,0,Big Bend
+Hermine,2016,9,2,1,Big Bend
+Irma,2017,9,10,4,Keys/Southwest
+Alberto,2018,5,28,0,Panhandle
+Gordon,2018,9,4,0,Panhandle border
+Michael,2018,10,10,5,Panhandle
+Eta,2020,11,12,0,Keys/South Florida
+Elsa,2021,7,7,0,West Coast
+Fred,2021,8,16,0,Panhandle
+Ian,2022,9,28,4,Southwest Florida
+Nicole,2022,11,10,1,East Coast
+Idalia,2023,8,30,3,Big Bend
+Debby,2024,8,5,0,Big Bend
+Helene,2024,9,26,4,Big Bend
+Milton,2024,10,9,3,West Central

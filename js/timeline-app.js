@@ -106,7 +106,13 @@ function hurricaneApp() {
             {id: 14, name: 'Katrina', category: 3, year: 2005, month: 8, day: 29, windSpeed: 125, pressure: 920,
              lat: 29.3, lon: -89.6, state: 'LA', landfall: 'Louisiana/Mississippi', deaths: 1833,
              impact: 'Hurricane Katrina became the deadliest and costliest natural disaster in modern U.S. history, causing catastrophic devastation along the Gulf Coast. While Katrina weakened to Category 3 before landfall, its massive size generated a record 28-foot storm surge that overwhelmed Mississippi coastal communities and breached New Orleans\' levee system. The failure of the levees led to the flooding of 80% of New Orleans, with some neighborhoods under 15-20 feet of water for weeks. Over 1,800 people died, many trapped in attics or drowned in the rising waters. The storm displaced over one million people, destroyed 300,000 homes, and caused $125 billion in damage. The catastrophe exposed critical failures in disaster preparedness and response, leading to major reforms in emergency management. Entire communities along the Mississippi coast were erased, and New Orleans\' population has never fully recovered.',
-             track: [[23.0, -75.0], [24.0, -77.0], [25.0, -79.0], [25.5, -80.3], [24.5, -82.0], [25.0, -84.0], [26.0, -86.0], [27.0, -88.0], [29.3, -89.6]]}
+             track: [[23.0, -75.0], [24.0, -77.0], [25.0, -79.0], [25.5, -80.3], [24.5, -82.0], [25.0, -84.0], [26.0, -86.0], [27.0, -88.0], [29.3, -89.6]]},
+            
+            // Add more historical storms for better AI responses
+            {id: 15, name: 'Charley', category: 4, year: 2004, month: 8, day: 13, windSpeed: 150, pressure: 941,
+             lat: 26.9, lon: -82.2, state: 'FL', landfall: 'Cayo Costa/Captiva, FL', deaths: 10,
+             impact: 'Hurricane Charley was a small but extremely intense Category 4 hurricane that devastated Southwest Florida. The storm rapidly intensified just before landfall, catching many off guard who expected a weaker Category 2 storm. Charley\\'s compact eye and extreme winds caused catastrophic damage in Punta Gorda and Port Charlotte, with entire neighborhoods destroyed. The hurricane maintained major hurricane strength as it crossed the Florida peninsula, causing significant damage in Orlando and other inland areas. Charley was the first of an unprecedented four hurricanes to impact Florida in 2004.',
+             track: [[18.0, -76.0], [21.0, -79.0], [23.0, -81.0], [24.5, -82.0], [26.9, -82.2]]}
         ],
 
         init() {
@@ -626,12 +632,59 @@ function aiAssistant() {
                     response = "Texas has been hit by several major hurricanes including Harvey (2017), Laura (2020), and most recently Beryl (2024). These storms have caused significant damage along the Texas coast.";
                     filters = { state: 'TX' };
                 }
-                else if (lowerQuery.includes('katrina')) {
-                    response = "Hurricane Katrina made landfall on August 29, 2005 as a Category 3 hurricane near the Louisiana/Mississippi border. It became the deadliest and costliest natural disaster in U.S. history with 1,833 deaths and $125 billion in damage. The catastrophic flooding in New Orleans occurred when the levee system failed.";
+                else if (lowerQuery.includes('katrina') && lowerQuery.includes('florida')) {
+                    response = "Hurricane Katrina first made landfall in Florida on August 25, 2005 as a Category 1 hurricane near the Miami-Dade/Broward county line. It crossed the Florida peninsula, causing 14 deaths and moderate damage, before intensifying dramatically in the Gulf of Mexico. Katrina later struck Louisiana on August 29, 2005 as a devastating Category 3 storm.";
                     filters = { yearStart: 2005, yearEnd: 2005, search: 'Katrina' };
                 }
+                else if (lowerQuery.includes('katrina') && (lowerQuery.includes('how many') || lowerQuery.includes('named'))) {
+                    response = "Only one hurricane has been named Katrina in the Atlantic basin - the devastating 2005 storm. Hurricane names are retired after particularly deadly or destructive storms, so the name Katrina will never be used again for an Atlantic hurricane. The name was officially retired by the World Meteorological Organization in April 2006.";
+                    filters = { yearStart: 2005, yearEnd: 2005, search: 'Katrina' };
+                }
+                else if (lowerQuery.includes('katrina')) {
+                    response = "Hurricane Katrina (2005) had two landfalls: First in Florida on August 25 as a Category 1, then in Louisiana/Mississippi on August 29 as a Category 3. It became the deadliest (1,833 deaths) and costliest ($125 billion) natural disaster in U.S. history. The storm is most remembered for the catastrophic levee failures in New Orleans.";
+                    filters = { yearStart: 2005, yearEnd: 2005, search: 'Katrina' };
+                }
+                else if (lowerQuery.includes('charlie') || lowerQuery.includes('charley')) {
+                    response = "Hurricane Charley struck Florida on August 13, 2004 as a Category 4 hurricane with 150 mph winds. It made landfall at Cayo Costa/Captiva Island and devastated Punta Gorda and Port Charlotte. Charley was one of four hurricanes to impact Florida in 2004 (along with Frances, Ivan, and Jeanne). It caused $16 billion in damage and 10 direct deaths in the U.S.";
+                    filters = { yearStart: 2004, yearEnd: 2004, search: 'Charley' };
+                }
+                else if (lowerQuery.includes('andrew')) {
+                    response = "Hurricane Andrew devastated South Florida on August 24, 1992 as a Category 5 hurricane with 165 mph sustained winds. It made landfall at Homestead, essentially destroying the city and causing $27 billion in damage (1992 dollars). Andrew held the record as the costliest hurricane until Katrina in 2005. The storm led to major improvements in Florida's building codes.";
+                    filters = { yearStart: 1992, yearEnd: 1992, search: 'Andrew' };
+                }
+                else if (lowerQuery.includes('irma')) {
+                    response = "Hurricane Irma struck the Florida Keys on September 10, 2017 as a Category 4 hurricane, then made a second landfall at Marco Island as a Category 3. Irma maintained hurricane strength while traversing the entire Florida peninsula. The storm caused widespread damage, power outages affecting 6.7 million customers, and 92 deaths in the U.S. Total damage exceeded $50 billion.";
+                    filters = { yearStart: 2017, yearEnd: 2017, search: 'Irma' };
+                }
+                else if (lowerQuery.includes('michael')) {
+                    response = "Hurricane Michael slammed into Mexico Beach, Florida on October 10, 2018 as a catastrophic Category 5 hurricane with 160 mph winds. It was the first Category 5 to hit the Florida Panhandle and the fourth-strongest hurricane to make U.S. landfall. Michael caused catastrophic damage from Panama City to Mexico Beach, with 74 deaths and over $25 billion in damage.";
+                    filters = { yearStart: 2018, yearEnd: 2018, search: 'Michael' };
+                }
+                else if (lowerQuery.includes('ian')) {
+                    response = "Hurricane Ian devastated Southwest Florida on September 28, 2022 as a Category 4 hurricane with 150 mph winds. It made landfall near Fort Myers/Cayo Costa, causing catastrophic storm surge and wind damage. Ian was the deadliest hurricane to hit Florida since 1935 (150+ deaths) and caused over $112 billion in damage, making it the costliest Florida hurricane on record.";
+                    filters = { yearStart: 2022, yearEnd: 2022, search: 'Ian' };
+                }
+                else if ((lowerQuery.includes('strong') || lowerQuery.includes('powerful')) && lowerQuery.includes('florida')) {
+                    response = "The strongest hurricanes to hit Florida include: Labor Day Hurricane (1935) - 185 mph, the strongest ever to hit the U.S.; Hurricane Andrew (1992) - 165 mph Cat 5; Hurricane Michael (2018) - 160 mph Cat 5; Hurricane Charley (2004) - 150 mph Cat 4; and Hurricane Ian (2022) - 150 mph Cat 4. The 1935 Labor Day Hurricane remains the most intense with a pressure of 892 mb.";
+                    filters = { category: 5, state: 'FL' };
+                }
+                else if (lowerQuery.includes('2024') || lowerQuery.includes('this year')) {
+                    response = "In 2024, two hurricanes have impacted the Gulf Coast so far: Alberto made landfall in Texas on June 19 as a Category 1, and Beryl struck Texas on July 8 as a Category 4 with 145 mph winds. Beryl was particularly notable as the earliest Category 5 on record in the Atlantic (though it weakened before landfall). The hurricane season continues through November 30.";
+                    filters = { yearStart: 2024, yearEnd: 2024 };
+                }
+                else if (lowerQuery.includes('how many') && (lowerQuery.includes('florida') || lowerQuery.includes('fl'))) {
+                    // Access the main app's data
+                    const app = document.querySelector('[x-data*="hurricaneApp"]')?._x_dataStack?.[0];
+                    if (app && app.allStorms) {
+                        const floridaStorms = app.allStorms.filter(s => s.state === 'FL');
+                        response = `Florida has been hit by ${floridaStorms.length} hurricanes in our database from 1851-2024. This includes ${floridaStorms.filter(s => s.category >= 3).length} major hurricanes (Category 3+) and ${floridaStorms.filter(s => s.category === 5).length} Category 5 storms. Florida is the most hurricane-prone state in the U.S. due to its long coastline and position between the Atlantic and Gulf of Mexico.`;
+                    } else {
+                        response = "Florida has been hit by numerous hurricanes throughout history. It's the most hurricane-prone state due to its long coastline and position between the Atlantic Ocean and Gulf of Mexico. Major storms include Andrew (1992), Charley (2004), Irma (2017), Michael (2018), and Ian (2022).";
+                    }
+                    filters = { state: 'FL' };
+                }
                 else {
-                    response = "I can help you explore hurricane data. Try asking about specific categories, years, states, or storm names. For example: 'Show all Category 5 hurricanes' or 'Which storms hit Florida?'";
+                    response = "I can help you explore hurricane data. Try asking about specific storms (Andrew, Katrina, Ian), years (2004, 2017), categories, or states. For example: 'When did Katrina hit Florida?' or 'What was the strongest hurricane to hit Florida?'";
                 }
                 
                 this.addMessage('assistant', response);

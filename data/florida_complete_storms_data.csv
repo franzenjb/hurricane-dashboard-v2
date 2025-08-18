@@ -1,0 +1,73 @@
+name,year,month,day,category,impact
+Gordon,2000,9,17,0,Tropical Storm
+Helene,2000,9,22,0,Tropical Storm
+Barry,2001,8,6,0,Tropical Storm
+Gabrielle,2001,9,14,0,Tropical Storm
+Edouard,2002,9,5,0,Tropical Storm
+Hanna,2002,9,14,0,Tropical Storm
+Isidore,2002,9,26,0,Tropical Storm
+Kyle,2002,10,11,0,Tropical Storm
+Henri,2003,9,5,-1,Tropical Depression
+Bonnie,2004,8,12,0,Tropical Storm
+Charley,2004,8,13,4,Cat 4 SW Florida
+Frances,2004,9,5,2,Cat 2 East Coast
+Ivan,2004,9,16,3,Cat 3 impacts (AL landfall)
+Jeanne,2004,9,26,3,Cat 3 East Coast
+Matthew,2004,10,9,0,Tropical Storm
+Arlene,2005,6,11,0,Tropical Storm
+Dennis,2005,7,10,3,Cat 3 Panhandle
+Katrina,2005,8,25,1,Cat 1 South Florida
+Rita,2005,9,20,0,Keys impacts
+Tammy,2005,10,5,0,Tropical Storm
+Wilma,2005,10,24,3,Cat 3 SW Florida
+Alberto,2006,6,13,0,Tropical Storm
+Ernesto,2006,8,30,0,Tropical Storm
+Andrea,2007,5,9,0,Subtropical Storm
+TD Ten,2007,9,21,-1,Tropical Depression
+Noel,2007,11,2,0,Coastal impacts
+Fay,2008,8,19,0,Multiple FL landfalls
+Gustav,2008,8,31,0,Keys brushed
+Ike,2008,9,10,0,Outer bands
+Claudette,2009,8,16,0,Tropical Storm
+Ida,2009,11,10,0,Extratropical impacts
+Bonnie,2010,7,23,0,Tropical Storm
+TD Five,2010,8,11,-1,Offshore surf
+Irene,2011,8,26,0,Offshore brush
+Lee,2011,9,3,0,Tropical Storm
+Beryl,2012,5,28,0,FL landfall
+Debby,2012,6,26,0,FL landfall
+Isaac,2012,8,28,0,Near Key West
+Andrea,2013,6,6,0,FL landfall
+Erika,2015,8,28,0,Remnants
+Colin,2016,6,6,0,FL landfall
+Hermine,2016,9,2,1,Cat 1 Big Bend
+Julia,2016,9,13,0,Formed over NE FL
+Matthew,2016,10,7,2,Grazed east coast
+Cindy,2017,6,22,0,Panhandle rains
+Emily,2017,7,31,0,FL landfall
+Irma,2017,9,10,4,Cat 4 Keys/SW FL
+Philippe,2017,10,29,0,Tropical Storm
+Alberto,2018,5,28,0,Panhandle landfall
+Gordon,2018,9,4,0,Crossed Keys/SW FL
+Michael,2018,10,10,5,Cat 5 Panhandle
+Dorian,2019,9,2,2,"Offshore, FL impacts"
+Nestor,2019,10,19,0,Extratropical approach
+Cristobal,2020,6,7,0,Tropical Storm
+Isaias,2020,8,2,1,Parallel to east coast
+Laura,2020,8,24,0,Squalls Keys/Gulf
+Marco,2020,8,24,0,Rain Panhandle
+Sally,2020,9,16,2,"AL landfall, FL flooding"
+Zeta,2020,10,28,0,Gusts Panhandle
+Eta,2020,11,12,0,Two FL landfalls
+Elsa,2021,7,7,0,Taylor County landfall
+Fred,2021,8,16,0,Panhandle landfall
+Mindy,2021,9,9,0,St. Vincent Island
+Alex,2022,6,5,0,South FL flooding
+Ian,2022,9,28,4,Cat 4 Cayo Costa
+Nicole,2022,11,10,1,Cat 1 Vero Beach
+Idalia,2023,8,30,3,Cat 3 Keaton Beach
+Debby,2024,8,5,1,Cat 1 Big Bend
+Helene,2024,9,26,4,Cat 4 Gulf Coast
+Milton,2024,10,9,3,Cat 3 Siesta Key
+Rafael,2024,11,8,0,Offshore/Keys bands
+Sara,2024,11,18,0,Remnant moisture
