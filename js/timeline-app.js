@@ -230,23 +230,33 @@ function hurricaneApp() {
                 return;
             }
 
+            // Sort storms by year for better display
+            const sortedStorms = [...this.filteredStorms].sort((a, b) => a.year - b.year);
+
             const trace = {
-                x: this.filteredStorms.map(s => s.year),
-                y: this.filteredStorms.map(s => s.windSpeed),
-                mode: 'markers',
+                x: sortedStorms.map(s => this.getMonthPosition(s.month, s.day)),
+                y: sortedStorms.map(s => s.year),
+                mode: 'markers+text',
                 type: 'scatter',
                 name: 'Hurricane Landfalls',
-                text: this.filteredStorms.map(s => 
+                text: sortedStorms.map(s => s.name),
+                textposition: 'middle right',
+                textfont: {
+                    size: 10,
+                    color: '#1F2937'
+                },
+                hovertext: sortedStorms.map(s => 
                     `<b>${s.name} (${s.year})</b><br>` +
                     `Category ${s.category}<br>` +
                     `${s.windSpeed} mph<br>` +
                     `${s.landfall}<br>` +
+                    `${this.formatDate(s)}<br>` +
                     `Click for details`
                 ),
-                hovertemplate: '%{text}<extra></extra>',
+                hovertemplate: '%{hovertext}<extra></extra>',
                 marker: {
-                    size: this.filteredStorms.map(s => Math.max(8, 8 + s.category * 4)),
-                    color: this.filteredStorms.map(s => s.category),
+                    size: sortedStorms.map(s => Math.max(12, 12 + s.category * 3)),
+                    color: sortedStorms.map(s => s.category),
                     colorscale: [
                         [0, '#3B82F6'],    // Blue - Tropical Storm
                         [0.2, '#10B981'],  // Green - Cat 1
@@ -261,39 +271,52 @@ function hurricaneApp() {
                         tickmode: 'array',
                         tickvals: [0, 1, 2, 3, 4, 5],
                         ticktext: ['TS', '1', '2', '3', '4', '5'],
-                        len: 0.7
+                        len: 0.8,
+                        x: 1.02
                     },
-                    line: { color: '#ffffff', width: 1 }
+                    line: { color: '#ffffff', width: 2 }
                 }
             };
 
             const layout = {
                 title: {
-                    text: `Hurricane Timeline (${this.filteredStorms.length} storms)`,
-                    font: { size: 18, color: '#1F2937' }
+                    text: `Hurricane Timeline (${sortedStorms.length} storms)`,
+                    font: { size: 16, color: '#1F2937' },
+                    x: 0.5,
+                    y: 0.98
                 },
                 xaxis: {
-                    title: { text: 'Year', font: { size: 14 } },
+                    title: { text: 'Month', font: { size: 12 } },
+                    tickmode: 'array',
+                    tickvals: [5, 6, 7, 8, 9, 10, 11],
+                    ticktext: ['May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov'],
+                    range: [4.5, 11.5],
                     gridcolor: '#E5E7EB',
-                    tickfont: { size: 12 }
+                    tickfont: { size: 11 },
+                    side: 'bottom'
                 },
                 yaxis: {
-                    title: { text: 'Wind Speed (mph)', font: { size: 14 } },
+                    title: { text: 'Year', font: { size: 12 } },
+                    range: [this.filters.yearStart - 1, this.filters.yearEnd + 1],
+                    dtick: 5,
                     gridcolor: '#E5E7EB',
-                    tickfont: { size: 12 }
+                    tickfont: { size: 11 },
+                    autorange: 'reversed'  // Years increase going down
                 },
                 hovermode: 'closest',
                 plot_bgcolor: '#F9FAFB',
                 paper_bgcolor: '#FFFFFF',
-                margin: { l: 60, r: 80, t: 50, b: 50 },
+                margin: { l: 50, r: 120, t: 40, b: 50 },
                 showlegend: false,
-                font: { family: 'system-ui, sans-serif' }
+                font: { family: 'system-ui, sans-serif' },
+                height: window.innerHeight - 100  // Full height minus navigation
             };
 
             const config = {
                 responsive: true,
                 displayModeBar: true,
-                displaylogo: false
+                displaylogo: false,
+                modeBarButtonsToRemove: ['select2d', 'lasso2d']
             };
 
             Plotly.newPlot('timeline-chart', [trace], layout, config);
@@ -301,9 +324,15 @@ function hurricaneApp() {
             // Add click handler
             timelineDiv.on('plotly_click', (data) => {
                 const point = data.points[0];
-                const storm = this.filteredStorms[point.pointIndex];
+                const storm = sortedStorms[point.pointIndex];
                 this.selectStorm(storm);
             });
+        },
+
+        getMonthPosition(month, day) {
+            // Convert day of month to decimal position within month
+            const daysInMonth = { 5: 31, 6: 30, 7: 31, 8: 31, 9: 30, 10: 31, 11: 30 };
+            return month + ((day - 1) / (daysInMonth[month] || 30));
         },
 
         updateMap() {
@@ -350,9 +379,59 @@ function hurricaneApp() {
 
         selectStorm(storm) {
             this.selectedStorm = storm;
-            if (this.hurricaneMap && storm.lat && storm.lon) {
-                this.hurricaneMap.setView([storm.lat, storm.lon], 8);
-            }
+            
+            // Initialize or update the map in the details panel
+            this.$nextTick(() => {
+                const mapElement = document.getElementById('hurricane-map');
+                if (mapElement && storm.lat && storm.lon) {
+                    // Remove existing map if any
+                    if (this.hurricaneMap) {
+                        this.hurricaneMap.remove();
+                    }
+                    
+                    // Create new map
+                    this.hurricaneMap = L.map('hurricane-map', {
+                        center: [storm.lat, storm.lon],
+                        zoom: 7,
+                        scrollWheelZoom: true
+                    });
+                    
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '© OpenStreetMap contributors'
+                    }).addTo(this.hurricaneMap);
+                    
+                    // Add storm track if available
+                    if (storm.track && storm.track.length > 0) {
+                        L.polyline(storm.track, {
+                            color: this.getCategoryColor(storm.category),
+                            weight: 4,
+                            opacity: 0.8
+                        }).addTo(this.hurricaneMap);
+                    }
+                    
+                    // Add landfall marker
+                    const marker = L.marker([storm.lat, storm.lon], {
+                        icon: this.createStormIcon(storm.category)
+                    }).addTo(this.hurricaneMap)
+                    .bindPopup(`
+                        <div class="p-3">
+                            <h3 class="font-bold text-lg mb-2">${storm.name} (${storm.year})</h3>
+                            <p><strong>Category:</strong> ${storm.category}</p>
+                            <p><strong>Wind Speed:</strong> ${storm.windSpeed} mph</p>
+                            <p><strong>Pressure:</strong> ${storm.pressure} mb</p>
+                            <p><strong>Landfall:</strong> ${storm.landfall}</p>
+                            <p><strong>Date:</strong> ${this.formatDate(storm)}</p>
+                        </div>
+                    `).openPopup();
+                    
+                    // Force map to resize after a short delay
+                    setTimeout(() => {
+                        if (this.hurricaneMap) {
+                            this.hurricaneMap.invalidateSize();
+                        }
+                    }, 200);
+                }
+            });
         },
 
         updateStatistics() {
