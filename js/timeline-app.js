@@ -180,6 +180,21 @@ function hurricaneApp() {
                 this.updateVisualization();
                 this.updateStateComparison();
                 this.searchDatabase();
+                
+                // Watch for tab changes to refresh timeline
+                this.$watch('activeTab', (newTab) => {
+                    if (newTab === 'timeline') {
+                        setTimeout(() => {
+                            this.updateTimeline();
+                            // Handle responsive resize
+                            window.addEventListener('resize', () => {
+                                if (this.activeTab === 'timeline') {
+                                    setTimeout(() => this.updateTimeline(), 100);
+                                }
+                            });
+                        }, 100);
+                    }
+                });
             });
         },
 
@@ -309,7 +324,7 @@ function hurricaneApp() {
                 margin: { l: 50, r: 120, t: 40, b: 50 },
                 showlegend: false,
                 font: { family: 'system-ui, sans-serif' },
-                height: window.innerHeight - 100  // Full height minus navigation
+                height: window.innerHeight - 180  // Full height minus navigation and controls
             };
 
             const config = {
@@ -380,57 +395,77 @@ function hurricaneApp() {
         selectStorm(storm) {
             this.selectedStorm = storm;
             
-            // Initialize or update the map in the details panel
+            // Initialize or update the map in the details panel with proper timing
             this.$nextTick(() => {
-                const mapElement = document.getElementById('hurricane-map');
-                if (mapElement && storm.lat && storm.lon) {
-                    // Remove existing map if any
-                    if (this.hurricaneMap) {
-                        this.hurricaneMap.remove();
-                    }
-                    
-                    // Create new map
-                    this.hurricaneMap = L.map('hurricane-map', {
-                        center: [storm.lat, storm.lon],
-                        zoom: 7,
-                        scrollWheelZoom: true
-                    });
-                    
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: '© OpenStreetMap contributors'
-                    }).addTo(this.hurricaneMap);
-                    
-                    // Add storm track if available
-                    if (storm.track && storm.track.length > 0) {
-                        L.polyline(storm.track, {
-                            color: this.getCategoryColor(storm.category),
-                            weight: 4,
-                            opacity: 0.8
-                        }).addTo(this.hurricaneMap);
-                    }
-                    
-                    // Add landfall marker
-                    const marker = L.marker([storm.lat, storm.lon], {
-                        icon: this.createStormIcon(storm.category)
-                    }).addTo(this.hurricaneMap)
-                    .bindPopup(`
-                        <div class="p-3">
-                            <h3 class="font-bold text-lg mb-2">${storm.name} (${storm.year})</h3>
-                            <p><strong>Category:</strong> ${storm.category}</p>
-                            <p><strong>Wind Speed:</strong> ${storm.windSpeed} mph</p>
-                            <p><strong>Pressure:</strong> ${storm.pressure} mb</p>
-                            <p><strong>Landfall:</strong> ${storm.landfall}</p>
-                            <p><strong>Date:</strong> ${this.formatDate(storm)}</p>
-                        </div>
-                    `).openPopup();
-                    
-                    // Force map to resize after a short delay
-                    setTimeout(() => {
+                // Small delay to ensure the DOM element is rendered
+                setTimeout(() => {
+                    const mapElement = document.getElementById('hurricane-map');
+                    if (mapElement && storm.lat && storm.lon) {
+                        // Remove existing map if any
                         if (this.hurricaneMap) {
-                            this.hurricaneMap.invalidateSize();
+                            this.hurricaneMap.remove();
+                            this.hurricaneMap = null;
                         }
-                    }, 200);
-                }
+                        
+                        // Clear the map element
+                        mapElement.innerHTML = '';
+                        
+                        // Create new map with error handling
+                        try {
+                            this.hurricaneMap = L.map('hurricane-map', {
+                                center: [storm.lat, storm.lon],
+                                zoom: 8,
+                                scrollWheelZoom: true,
+                                zoomControl: true
+                            });
+                            
+                            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                attribution: '© OpenStreetMap contributors',
+                                maxZoom: 18
+                            }).addTo(this.hurricaneMap);
+                            
+                            // Add storm track if available
+                            if (storm.track && storm.track.length > 0) {
+                                L.polyline(storm.track.map(point => [point[1], point[0]]), {
+                                    color: this.getCategoryColor(storm.category),
+                                    weight: 4,
+                                    opacity: 0.8,
+                                    dashArray: '5, 10'
+                                }).addTo(this.hurricaneMap);
+                            }
+                            
+                            // Add landfall marker
+                            const marker = L.marker([storm.lat, storm.lon], {
+                                icon: this.createStormIcon(storm.category)
+                            }).addTo(this.hurricaneMap)
+                            .bindPopup(`
+                                <div class="p-3 max-w-xs">
+                                    <h3 class="font-bold text-lg mb-2">${storm.name} (${storm.year})</h3>
+                                    <div class="space-y-1 text-sm">
+                                        <p><strong>Category:</strong> ${storm.category >= 1 ? 'Category ' + storm.category : 'Tropical Storm'}</p>
+                                        <p><strong>Wind Speed:</strong> ${storm.windSpeed} mph</p>
+                                        <p><strong>Pressure:</strong> ${storm.pressure} mb</p>
+                                        <p><strong>Landfall:</strong> ${storm.landfall}</p>
+                                        <p><strong>Date:</strong> ${this.formatDate(storm)}</p>
+                                        <p><strong>Deaths:</strong> ${storm.deaths || 0}</p>
+                                    </div>
+                                </div>
+                            `).openPopup();
+                            
+                            // Force map to resize and invalidate size
+                            setTimeout(() => {
+                                if (this.hurricaneMap) {
+                                    this.hurricaneMap.invalidateSize();
+                                    this.hurricaneMap.setView([storm.lat, storm.lon], 8);
+                                }
+                            }, 300);
+                            
+                        } catch (error) {
+                            console.error('Error initializing map:', error);
+                            mapElement.innerHTML = '<div class="flex items-center justify-center h-full text-red-500">Error loading map</div>';
+                        }
+                    }
+                }, 100);
             });
         },
 
