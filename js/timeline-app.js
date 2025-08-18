@@ -273,8 +273,16 @@ function hurricaneApp() {
             // Create the timeline with months on X-axis and years on Y-axis
             const monthNames = ['', '', '', '', '', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov'];
             
+            // Calculate the decimal position within the month (1-31 days mapped to 0-1)
+            const getMonthPosition = (month, day) => {
+                const daysInMonth = {
+                    5: 31, 6: 30, 7: 31, 8: 31, 9: 30, 10: 31, 11: 30
+                };
+                return month + (day - 1) / daysInMonth[month];
+            };
+            
             const trace = {
-                x: this.filteredStorms.map(s => s.month),
+                x: this.filteredStorms.map(s => getMonthPosition(s.month, s.day)),
                 y: this.filteredStorms.map(s => s.year),
                 mode: 'markers',
                 type: 'scatter',
@@ -422,9 +430,17 @@ function hurricaneApp() {
             // Add up actual deaths from the storms
             this.stateStats.totalDeaths = stateStorms.reduce((sum, s) => sum + (s.deaths || 0), 0);
 
+            // Calculate the decimal position within the month (1-31 days mapped to 0-1)
+            const getMonthPosition = (month, day) => {
+                const daysInMonth = {
+                    5: 31, 6: 30, 7: 31, 8: 31, 9: 30, 10: 31, 11: 30
+                };
+                return month + (day - 1) / daysInMonth[month];
+            };
+            
             // Create timeline visualization similar to the main timeline
             const trace = {
-                x: stateStorms.map(s => s.month),
+                x: stateStorms.map(s => getMonthPosition(s.month, s.day)),
                 y: stateStorms.map(s => s.year),
                 mode: 'markers',
                 type: 'scatter',
@@ -607,6 +623,10 @@ function aiAssistant() {
                 else if (lowerQuery.includes('texas')) {
                     response = "Texas has been hit by several major hurricanes including Harvey (2017), Laura (2020), and most recently Beryl (2024). These storms have caused significant damage along the Texas coast.";
                     filters = { state: 'TX' };
+                }
+                else if (lowerQuery.includes('katrina')) {
+                    response = "Hurricane Katrina made landfall on August 29, 2005 as a Category 3 hurricane near the Louisiana/Mississippi border. It became the deadliest and costliest natural disaster in U.S. history with 1,833 deaths and $125 billion in damage. The catastrophic flooding in New Orleans occurred when the levee system failed.";
+                    filters = { yearStart: 2005, yearEnd: 2005, search: 'Katrina' };
                 }
                 else {
                     response = "I can help you explore hurricane data. Try asking about specific categories, years, states, or storm names. For example: 'Show all Category 5 hurricanes' or 'Which storms hit Florida?'";
