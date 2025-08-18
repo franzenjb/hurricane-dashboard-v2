@@ -724,7 +724,25 @@ function hurricaneFacts() {
             'Hurricane early warning systems are vital for public safety.',
             'The National Weather Service provides authoritative hurricane forecasts.',
             'Hurricane research continues to improve forecasts and understanding.',
-            'Every hurricane teaches us something new about these powerful storms.'\n        ],\n        \n        init() {\n            this.currentFact = this.facts[0];\n            this.startRotation();\n        },\n        \n        startRotation() {\n            setInterval(() => {\n                this.factIndex = (this.factIndex + 1) % this.facts.length;\n                this.currentFact = this.facts[this.factIndex];\n            }, 30000); // Change every 30 seconds\n        }\n    };\n}\n\n// AI Assistant functionality\nfunction aiAssistant() {
+            'Every hurricane teaches us something new about these powerful storms.'
+        ],
+        
+        init() {
+            this.currentFact = this.facts[0];
+            this.startRotation();
+        },
+        
+        startRotation() {
+            setInterval(() => {
+                this.factIndex = (this.factIndex + 1) % this.facts.length;
+                this.currentFact = this.facts[this.factIndex];
+            }, 30000); // Change every 30 seconds
+        }
+    };
+}
+
+// AI Assistant functionality
+function aiAssistant() {
     return {
         showChat: false,
         messages: [],
