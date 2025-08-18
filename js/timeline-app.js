@@ -99,24 +99,46 @@ function hurricaneApp() {
         ],
 
         init() {
-            // Delay map initialization to ensure DOM is ready
-            setTimeout(() => {
-                this.initMap();
-                this.updateVisualization();
-            }, 100);
+            // Delay map initialization to ensure DOM is ready and has dimensions
+            this.$nextTick(() => {
+                setTimeout(() => {
+                    this.initMap();
+                    this.updateVisualization();
+                }, 200);
+            });
             
             // Watch for filter changes
             this.$watch('filters.categories', () => this.updateVisualization());
+            
+            // Watch for tab changes to invalidate map size
+            this.$watch('activeTab', () => {
+                if (this.activeTab === 'timeline' && this.hurricaneMap) {
+                    setTimeout(() => {
+                        this.hurricaneMap.invalidateSize();
+                    }, 100);
+                }
+            });
         },
 
         initMap() {
             // Initialize the map
             const mapElement = document.getElementById('hurricane-map');
-            if (mapElement) {
-                this.hurricaneMap = L.map('hurricane-map').setView([25, -80], 5);
+            if (mapElement && mapElement.offsetHeight > 0) {
+                this.hurricaneMap = L.map('hurricane-map', {
+                    center: [25, -80],
+                    zoom: 5,
+                    scrollWheelZoom: true,
+                    doubleClickZoom: true,
+                    zoomControl: true
+                });
+                
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '© OpenStreetMap contributors'
+                    attribution: '© OpenStreetMap contributors',
+                    maxZoom: 18
                 }).addTo(this.hurricaneMap);
+                
+                // Force a size update
+                this.hurricaneMap.invalidateSize();
             }
         },
 
