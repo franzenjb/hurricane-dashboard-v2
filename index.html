@@ -347,43 +347,78 @@
         </div>
 
         <!-- Multi-State Tab -->
-        <div x-show="activeTab === 'tracker'" class="h-full p-6" x-cloak>
-            <div class="bg-white rounded-lg shadow-lg p-6 h-full overflow-auto">
-                <h2 class="text-xl font-bold mb-4">Multi-State Hurricane Tracker</h2>
-                
-                <!-- State Selection -->
-                <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Select States to Compare</label>
-                    <div class="grid grid-cols-3 gap-2">
-                        <template x-for="state in ['TX', 'LA', 'MS', 'AL', 'FL', 'GA', 'SC', 'NC']">
-                            <label class="flex items-center">
-                                <input type="checkbox" x-model="selectedStatesComparison" :value="state" 
-                                       @change="updateStateComparison()" class="mr-2">
-                                <span x-text="getStateName(state)"></span>
-                            </label>
-                        </template>
+        <div x-show="activeTab === 'tracker'" class="h-full flex flex-col" x-cloak>
+            <!-- Header Banner -->
+            <div class="bg-red-500 text-white px-6 py-3">
+                <div class="text-center font-medium">
+                    PROTOTYPE: Multi-State Hurricane Tracker | Select states to compare regional hurricane activity
+                </div>
+            </div>
+            
+            <!-- Content Area -->
+            <div class="flex-1 bg-gray-50 p-6">
+                <!-- Controls Bar -->
+                <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+                    <div class="flex items-center justify-between">
+                        <!-- State Selection -->
+                        <div class="flex items-center space-x-4">
+                            <label class="font-medium text-gray-700">Select States:</label>
+                            <div class="relative" x-data="{ open: false }">
+                                <button @click="open = !open" 
+                                        class="bg-white border border-gray-300 rounded px-4 py-2 flex items-center space-x-2 hover:bg-gray-50">
+                                    <span x-text="selectedStatesComparison.map(s => getStateName(s)).join(', ') || 'Select states'"></span>
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+                                <div x-show="open" @click.away="open = false" 
+                                     class="absolute z-10 mt-1 w-64 bg-white border border-gray-300 rounded shadow-lg">
+                                    <template x-for="state in ['TX', 'LA', 'MS', 'AL', 'FL', 'GA', 'SC', 'NC']">
+                                        <label class="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                                            <input type="checkbox" x-model="selectedStatesComparison" :value="state" 
+                                                   @change="updateStateComparison()" class="mr-2">
+                                            <span x-text="getStateName(state)"></span>
+                                        </label>
+                                    </template>
+                                </div>
+                            </div>
+                            <span class="text-sm text-gray-600" x-text="selectedStatesComparison.length + ' state(s) selected'"></span>
+                        </div>
+                        
+                        <!-- Year Range -->
+                        <div class="flex items-center space-x-4">
+                            <label class="font-medium text-gray-700">Years:</label>
+                            <input type="number" x-model="stateComparisonYearStart" min="1851" max="2030" 
+                                   class="w-20 px-2 py-1 border rounded text-sm">
+                            <span>to</span>
+                            <input type="number" x-model="stateComparisonYearEnd" min="1851" max="2030" 
+                                   class="w-20 px-2 py-1 border rounded text-sm">
+                            <button @click="updateStateComparison()" 
+                                    class="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600">
+                                Update
+                            </button>
+                        </div>
                     </div>
                 </div>
                 
-                <!-- Comparison Chart -->
-                <div class="mb-6">
-                    <div id="state-comparison-chart" style="height: 400px;"></div>
+                <!-- Timeline Chart -->
+                <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+                    <div id="state-timeline-chart" style="height: 500px;"></div>
                 </div>
                 
-                <!-- State Statistics -->
-                <div class="grid grid-cols-3 gap-4">
-                    <div class="bg-blue-50 rounded p-4">
-                        <div class="text-2xl font-bold text-blue-600" x-text="stateStats.totalStorms"></div>
-                        <div class="text-sm text-gray-600">Total Storms</div>
-                    </div>
-                    <div class="bg-orange-50 rounded p-4">
-                        <div class="text-2xl font-bold text-orange-600" x-text="stateStats.majorHurricanes"></div>
-                        <div class="text-sm text-gray-600">Major Hurricanes (Cat 3+)</div>
-                    </div>
-                    <div class="bg-red-50 rounded p-4">
-                        <div class="text-2xl font-bold text-red-600" x-text="stateStats.cat5Storms"></div>
-                        <div class="text-sm text-gray-600">Category 5 Storms</div>
-                    </div>
+                <!-- Summary Statistics -->
+                <div class="bg-gray-800 text-white rounded-lg shadow-md p-4 text-center">
+                    <p class="text-lg">
+                        <strong class="text-2xl" x-text="stateStats.totalStorms"></strong> hurricane landfalls
+                        across <span x-text="selectedStatesComparison.map(s => getStateName(s).substring(0,2).toUpperCase()).join(', ')"></span> 
+                        (<span x-text="stateComparisonYearStart"></span>-<span x-text="stateComparisonYearEnd"></span>), including
+                        <strong class="text-2xl text-orange-400" x-text="stateStats.majorHurricanes"></strong> major hurricanes
+                        (Category 3+), resulting in
+                        <strong class="text-2xl text-red-400" x-text="stateStats.totalDeaths"></strong> deaths.
+                    </p>
+                    <p class="text-sm mt-2 text-gray-400">
+                        HURDAT2 Database | Multi-State Analysis | Research: jeff.franzen2@redcross.org
+                    </p>
                 </div>
             </div>
         </div>
