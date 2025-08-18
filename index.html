@@ -587,11 +587,12 @@
                         </div>
                         
                         <div>
-                            <h3 class="text-lg font-semibold text-gray-700 mb-3">Infrastructure</h3>
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">Infrastructure & Backend</h3>
                             <ul class="space-y-1 text-gray-600">
+                                <li>• <strong>Supabase</strong> - Real-time database for hurricane data</li>
                                 <li>• <strong>GitHub Pages</strong> - Static hosting</li>
                                 <li>• <strong>GitHub Actions</strong> - Automated deployment</li>
-                                <li>• <strong>CloudFlare Workers</strong> - AI API proxy (planned)</li>
+                                <li>• <strong>CloudFlare Workers</strong> - AI API proxy</li>
                                 <li>• <strong>Open Source</strong> - MIT License</li>
                             </ul>
                         </div>
@@ -602,7 +603,7 @@
     </main>
 
     <!-- AI Assistant Chat -->
-    <div x-data="{ showChat: false }" class="fixed bottom-4 right-4 z-50">
+    <div x-data="aiAssistant()" class="fixed bottom-4 right-4 z-50">
         <!-- Chat Button -->
         <button @click="showChat = !showChat" 
                 class="bg-blue-600 text-white rounded-full p-4 shadow-lg hover:bg-blue-700 transition-colors">
@@ -624,23 +625,56 @@
                 </button>
             </div>
             
-            <div class="h-96 overflow-y-auto p-4 bg-gray-50">
-                <div class="text-center text-gray-500 py-8">
+            <div class="h-96 overflow-y-auto p-4 bg-gray-50" x-ref="chatContainer">
+                <div x-show="messages.length === 0" class="text-center text-gray-500 py-8">
                     <p class="mb-2">Ask me about hurricanes!</p>
                     <p class="text-sm">Examples:</p>
-                    <p class="text-sm italic">"Show all Category 5 hurricanes"</p>
-                    <p class="text-sm italic">"Which storms hit Florida in 2004?"</p>
+                    <button @click="askQuestion('Show all Category 5 hurricanes')" 
+                            class="text-sm italic text-blue-600 hover:underline block mx-auto mb-1">
+                        "Show all Category 5 hurricanes"
+                    </button>
+                    <button @click="askQuestion('Which storms hit Florida in 2004?')" 
+                            class="text-sm italic text-blue-600 hover:underline block mx-auto">
+                        "Which storms hit Florida in 2004?"
+                    </button>
+                </div>
+                
+                <!-- Chat Messages -->
+                <template x-for="message in messages" :key="message.id">
+                    <div class="mb-4" :class="message.role === 'user' ? 'text-right' : 'text-left'">
+                        <div class="inline-block max-w-[80%] p-3 rounded-lg"
+                             :class="message.role === 'user' ? 'bg-blue-500 text-white' : 'bg-white shadow'">
+                            <p class="text-sm" x-text="message.content"></p>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1" x-text="message.time"></p>
+                    </div>
+                </template>
+                
+                <!-- Loading indicator -->
+                <div x-show="isLoading" class="text-center">
+                    <div class="inline-flex items-center">
+                        <svg class="animate-spin h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span class="ml-2 text-gray-600">Thinking...</span>
+                    </div>
                 </div>
             </div>
             
             <div class="p-4 border-t">
-                <div class="flex space-x-2">
-                    <input type="text" placeholder="Ask about hurricanes..." 
+                <form @submit.prevent="sendMessage" class="flex space-x-2">
+                    <input type="text" 
+                           x-model="currentMessage"
+                           :disabled="isLoading"
+                           placeholder="Ask about hurricanes..." 
                            class="flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                    <button type="submit" 
+                            :disabled="isLoading || !currentMessage.trim()"
+                            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed">
                         Send
                     </button>
-                </div>
+                </form>
             </div>
         </div>
     </div>

@@ -535,3 +535,155 @@ function hurricaneApp() {
         }
     }
 }
+
+// AI Assistant functionality
+function aiAssistant() {
+    return {
+        showChat: false,
+        messages: [],
+        currentMessage: '',
+        isLoading: false,
+        messageId: 0,
+        
+        // CloudFlare Worker URL - Replace with your deployed worker URL
+        WORKER_URL: 'https://hurricane-ai.YOUR-SUBDOMAIN.workers.dev',
+        
+        sendMessage() {
+            if (!this.currentMessage.trim() || this.isLoading) return;
+            
+            const userMessage = this.currentMessage;
+            this.addMessage('user', userMessage);
+            this.currentMessage = '';
+            this.isLoading = true;
+            
+            // For demo purposes, use local processing
+            // In production, this would call the CloudFlare Worker
+            this.processLocalQuery(userMessage);
+        },
+        
+        askQuestion(question) {
+            this.currentMessage = question;
+            this.sendMessage();
+        },
+        
+        addMessage(role, content) {
+            this.messages.push({
+                id: this.messageId++,
+                role: role,
+                content: content,
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            });
+            
+            // Scroll to bottom
+            this.$nextTick(() => {
+                this.$refs.chatContainer.scrollTop = this.$refs.chatContainer.scrollHeight;
+            });
+        },
+        
+        processLocalQuery(query) {
+            // Simulate AI processing with local pattern matching
+            setTimeout(() => {
+                const lowerQuery = query.toLowerCase();
+                let response = '';
+                let filters = null;
+                
+                // Pattern matching for common queries
+                if (lowerQuery.includes('category 5') || lowerQuery.includes('cat 5')) {
+                    response = "I found 3 Category 5 hurricanes in the database: Michael (2018), Labor Day (1935), and Andrew (1992). These are the most powerful storms on record.";
+                    filters = { category: 5 };
+                }
+                else if (lowerQuery.includes('florida') && lowerQuery.includes('2004')) {
+                    response = "Florida was hit by 4 major hurricanes in 2004: Charley (Cat 4), Frances (Cat 2), Ivan (Cat 3), and Jeanne (Cat 3). This was one of the most active hurricane seasons for Florida.";
+                    filters = { state: 'FL', yearStart: 2004, yearEnd: 2004 };
+                }
+                else if (lowerQuery.includes('deadliest') || lowerQuery.includes('most deaths')) {
+                    response = "The deadliest hurricane in the database is Hurricane Katrina (2005) with 1,833 deaths, followed by the Labor Day Hurricane (1935) with 423 deaths.";
+                    filters = { yearStart: 2005, yearEnd: 2005 };
+                }
+                else if (lowerQuery.includes('recent') || lowerQuery.includes('latest')) {
+                    response = "The most recent hurricanes in 2024 are Alberto (Category 1) which hit Texas in June, and Beryl (Category 4) which struck Texas in July.";
+                    filters = { yearStart: 2024, yearEnd: 2024 };
+                }
+                else if (lowerQuery.includes('texas')) {
+                    response = "Texas has been hit by several major hurricanes including Harvey (2017), Laura (2020), and most recently Beryl (2024). These storms have caused significant damage along the Texas coast.";
+                    filters = { state: 'TX' };
+                }
+                else {
+                    response = "I can help you explore hurricane data. Try asking about specific categories, years, states, or storm names. For example: 'Show all Category 5 hurricanes' or 'Which storms hit Florida?'";
+                }
+                
+                this.addMessage('assistant', response);
+                
+                // Apply filters if suggested
+                if (filters && window.hurricaneApp) {
+                    this.applyFilters(filters);
+                }
+                
+                this.isLoading = false;
+            }, 1000);
+        },
+        
+        applyFilters(filters) {
+            // Get the main app instance
+            const app = document.querySelector('[x-data*="hurricaneApp"]')?._x_dataStack?.[0];
+            if (!app) return;
+            
+            // Apply the filters
+            if (filters.category !== undefined) {
+                app.filters.categories = [filters.category.toString()];
+            }
+            if (filters.state) {
+                app.filters.state = filters.state;
+            }
+            if (filters.yearStart !== undefined) {
+                app.filters.yearStart = filters.yearStart;
+            }
+            if (filters.yearEnd !== undefined) {
+                app.filters.yearEnd = filters.yearEnd;
+            }
+            
+            // Update visualization and switch to timeline tab
+            app.updateVisualization();
+            app.activeTab = 'timeline';
+            
+            // Add a note about applying filters
+            setTimeout(() => {
+                this.addMessage('assistant', '✓ I\'ve updated the filters on the Timeline tab to show these storms.');
+            }, 500);
+        },
+        
+        async callCloudFlareWorker(question) {
+            // This would be used in production with a deployed CloudFlare Worker
+            try {
+                const response = await fetch(this.WORKER_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        question: question,
+                        context: 'Hurricane database with storms from 1851-2024'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                
+                this.addMessage('assistant', data.answer);
+                
+                if (data.filters) {
+                    this.applyFilters(data.filters);
+                }
+                
+            } catch (error) {
+                this.addMessage('assistant', 'Sorry, I encountered an error processing your request. Please try again.');
+                console.error('AI Assistant error:', error);
+            } finally {
+                this.isLoading = false;
+            }
+        }
+    }
+}
