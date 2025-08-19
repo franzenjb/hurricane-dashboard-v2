@@ -564,6 +564,41 @@
                 </div>
                 <button class="update-button" onclick="updateTimeline()">Update</button>
             </div>
+            
+            <!-- Storm Filtering Controls (same as timeline tab) -->
+            <div class="filter-controls-section" style="margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #ddd;">
+                <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+                    <input type="text" id="nameFilter" placeholder="Search by name" style="padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <label style="font-weight: bold; font-size: 14px;">Categories:</label>
+                        <div style="display: flex; gap: 12px;" id="categoryFilter">
+                            <label style="display: flex; align-items: center; gap: 4px; cursor: pointer;">
+                                <input type="checkbox" value="0"> TS
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 4px; cursor: pointer;">
+                                <input type="checkbox" value="1"> Cat 1
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 4px; cursor: pointer;">
+                                <input type="checkbox" value="2"> Cat 2
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 4px; cursor: pointer;">
+                                <input type="checkbox" value="3" checked> Cat 3
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 4px; cursor: pointer;">
+                                <input type="checkbox" value="4" checked> Cat 4
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 4px; cursor: pointer;">
+                                <input type="checkbox" value="5" checked> Cat 5
+                            </label>
+                        </div>
+                    </div>
+                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                        <input type="checkbox" id="landfallOnly"> Landfall Only
+                    </label>
+                    <button onclick="applyFilters()" style="padding: 8px 16px; background: #007cba; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;">Apply Filters</button>
+                    <button onclick="clearFilters()" style="padding: 8px 16px; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;">Clear</button>
+                </div>
+            </div>
         </div>
         
             <div id="timeline"></div>
@@ -800,6 +835,143 @@
                 5: "#8B008B"    // Cat 5 - Dark Magenta
             };
             return colors[category] || "#757575";
+        }
+        
+        // Enhanced landfall detection using analyzed track data (same as timeline tab)
+        function isLikelyUSLandfall(storm) {
+            // Use the enhanced landfall_states array if available
+            if (storm.landfall_states && Array.isArray(storm.landfall_states)) {
+                return storm.landfall_states.length > 0;
+            }
+            
+            // Fallback to coordinate-based detection for older data
+            if (!storm.lat || !storm.lon) return false;
+            
+            // Atlantic basin US landfall areas only
+            const ATLANTIC_US_LANDFALL_BOUNDS = {
+                // East Coast: Maine to Florida Keys
+                eastCoast: {
+                    north: 47.5, south: 24.3, east: -66.0, west: -87.0
+                },
+                // Gulf Coast: Florida to Texas (Atlantic storms that enter Gulf)
+                gulfCoast: {
+                    north: 32.0, south: 24.0, east: -80.0, west: -98.0
+                },
+                // Puerto Rico and US Virgin Islands (Atlantic territories)
+                caribbeanTerritories: {
+                    north: 18.6, south: 17.6, east: -64.5, west: -67.5
+                }
+            };
+            
+            const lat = storm.lat;
+            const lon = storm.lon;
+            
+            // Check if coordinates fall within Atlantic basin US landfall zones
+            const inEastCoast = (lat >= ATLANTIC_US_LANDFALL_BOUNDS.eastCoast.south && 
+                               lat <= ATLANTIC_US_LANDFALL_BOUNDS.eastCoast.north &&
+                               lon >= ATLANTIC_US_LANDFALL_BOUNDS.eastCoast.west && 
+                               lon <= ATLANTIC_US_LANDFALL_BOUNDS.eastCoast.east);
+                               
+            const inGulfCoast = (lat >= ATLANTIC_US_LANDFALL_BOUNDS.gulfCoast.south && 
+                               lat <= ATLANTIC_US_LANDFALL_BOUNDS.gulfCoast.north &&
+                               lon >= ATLANTIC_US_LANDFALL_BOUNDS.gulfCoast.west && 
+                               lon <= ATLANTIC_US_LANDFALL_BOUNDS.gulfCoast.east);
+                               
+            const inCaribbean = (lat >= ATLANTIC_US_LANDFALL_BOUNDS.caribbeanTerritories.south && 
+                               lat <= ATLANTIC_US_LANDFALL_BOUNDS.caribbeanTerritories.north &&
+                               lon >= ATLANTIC_US_LANDFALL_BOUNDS.caribbeanTerritories.west && 
+                               lon <= ATLANTIC_US_LANDFALL_BOUNDS.caribbeanTerritories.east);
+            
+            return inEastCoast || inGulfCoast || inCaribbean;
+        }
+        
+        // Storm filtering functions (same as timeline tab)
+        function applyFilters() {
+            const nameFilter = document.getElementById('nameFilter').value.toLowerCase();
+            const landfallOnly = document.getElementById('landfallOnly').checked;
+            
+            // Get selected categories from checkboxes
+            const selectedCategories = [];
+            const categoryCheckboxes = document.querySelectorAll('#categoryFilter input[type="checkbox"]:checked');
+            categoryCheckboxes.forEach(checkbox => {
+                selectedCategories.push(parseInt(checkbox.value));
+            });
+            
+            // Apply filters to storms for the selected states
+            const allStorms = ATLANTIC_STORMS_ENHANCED.filter(storm => {
+                const isSelectedState = selectedStates.some(state => 
+                    storm.landfall_states && storm.landfall_states.includes(state)
+                );
+                const inYearRange = storm.year >= currentStartYear && storm.year <= currentEndYear;
+                
+                if (!isSelectedState || !inYearRange) return false;
+                
+                // If name search is active, ONLY filter by name - ignore all other filters
+                if (nameFilter) {
+                    return storm.name.toLowerCase().includes(nameFilter);
+                }
+                
+                // Otherwise apply normal filters
+                if (selectedCategories.length > 0 && !selectedCategories.includes(storm.category)) return false;
+                // Only show hurricane season months (Jun-Dec: months 6-12)
+                if (storm.month < 6 || storm.month > 12) return false;
+                // Filter for landfall storms if checkbox is checked
+                if (landfallOnly && !isLikelyUSLandfall(storm)) return false;
+                return true;
+            });
+            
+            // If name search is active and found storms, adjust year range to show results
+            if (nameFilter && allStorms.length > 0) {
+                const stormYears = allStorms.map(s => s.year);
+                const minStormYear = Math.min(...stormYears);
+                const maxStormYear = Math.max(...stormYears);
+                
+                // Only adjust if storms are outside current range
+                if (minStormYear < currentStartYear || maxStormYear > currentEndYear) {
+                    currentStartYear = Math.min(minStormYear, currentStartYear);
+                    currentEndYear = Math.max(maxStormYear, currentEndYear);
+                    
+                    // Update the year input fields
+                    document.getElementById('start-year').value = currentStartYear;
+                    document.getElementById('end-year').value = currentEndYear;
+                    
+                    console.log(`Name search found storms from ${minStormYear}-${maxStormYear}, adjusted range to ${currentStartYear}-${currentEndYear}`);
+                }
+            }
+            
+            updateTimeline();
+        }
+        
+        function clearFilters() {
+            document.getElementById('nameFilter').value = '';
+            
+            // Reset category checkboxes to initial page load state (only Cat 3-5)
+            const categoryCheckboxes = document.querySelectorAll('#categoryFilter input[type="checkbox"]');
+            categoryCheckboxes.forEach(checkbox => {
+                const category = parseInt(checkbox.value);
+                checkbox.checked = (category >= 3); // Only Cat 3, 4, 5 checked by default
+            });
+            
+            // Reset landfall filter
+            document.getElementById('landfallOnly').checked = false;
+            
+            // Reset year range
+            currentStartYear = 2010;
+            currentEndYear = new Date().getFullYear();
+            document.getElementById('start-year').value = currentStartYear;
+            document.getElementById('end-year').value = currentEndYear;
+            
+            // Reset map view if available
+            if (map) {
+                map.eachLayer(function(layer) {
+                    if (layer instanceof L.Marker || layer instanceof L.Polyline) {
+                        map.removeLayer(layer);
+                    }
+                });
+                map.setView([25.0, -80.0], 5);
+            }
+            
+            updateTimeline();
         }
         
         const MULTI_STATE_LANDFALLS = {
@@ -1733,6 +1905,23 @@
             document.getElementById('stormModal').style.display = 'none';
         }
         
+        // Add the missing updateTimeline function
+        function updateTimeline() {
+            currentStartYear = parseInt(document.getElementById('start-year').value);
+            currentEndYear = parseInt(document.getElementById('end-year').value);
+            
+            if (selectedStates.length > 0) {
+                Plotly.purge('timeline');
+                createMultiStateTimeline();
+                updateStats();
+            }
+        }
+        
+        function createMultiStateTimeline() {
+            // This function name was being called but didn't exist - just redirect to existing logic
+            updateTimelineInternal();
+        }
+        
         // Recreate on window resize
         let resizeTimeout;
         window.addEventListener('resize', () => {
@@ -1740,7 +1929,7 @@
             resizeTimeout = setTimeout(() => {
                 if (selectedStates.length > 0) {
                     Plotly.purge('timeline');
-                    createMultiStateTimeline();
+                    updateTimelineInternal();
                 }
             }, 500);
         });
