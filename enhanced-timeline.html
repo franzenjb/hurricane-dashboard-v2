@@ -30,7 +30,7 @@
         .popup .close { position: absolute; top: 10px; right: 15px; font-size: 24px; cursor: pointer; }
         .popup .details { line-height: 1.5; }
         .popup .details div { margin: 5px 0; }
-        .storm-info-panel { flex: 0 0 15%; background: white; border-bottom: 2px solid #ccc; padding: 15px; overflow: hidden; }
+        .storm-info-panel { flex: 0 0 15%; background: white; padding: 15px; overflow: hidden; }
         .storm-banner { display: flex; flex-direction: column; gap: 12px; }
         .storm-name-section { display: flex; align-items: center; gap: 15px; }
         .category-icon { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; font-size: 20px; flex-shrink: 0; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
@@ -39,7 +39,7 @@
         .stat-inline { text-align: center; background: #f8f9fa; border-radius: 6px; padding: 8px 4px; }
         .stat-label { font-size: 10px; color: #666; text-transform: uppercase; margin-bottom: 3px; font-weight: 600; }
         .stat-value { font-size: 14px; font-weight: bold; color: #333; }
-        .map-panel { flex: 0 0 55%; background: white; border-bottom: 2px solid #ccc; }
+        .map-panel { flex: 0 0 55%; background: white; }
         .narrative-panel { flex: 0 0 30%; background: white; padding: 20px; overflow-y: auto; }
         .narrative-header { font-size: 18px; font-weight: bold; color: #333; margin-bottom: 10px; border-bottom: 2px solid #007cba; padding-bottom: 5px; }
         .narrative-subtitle { font-size: 12px; color: #666; margin-bottom: 15px; font-style: italic; }
@@ -584,14 +584,17 @@
             if (!map) return;
             
             clearMapLayers();
+            console.log('Loading storm on map:', storm.name, storm.year, 'ID:', storm.storm_id);
             
             // Try to load the full storm track
             const trackData = await loadStormTrack(storm);
             
             if (trackData) {
+                console.log('Track data loaded, drawing storm track');
                 // Draw the full storm track
                 drawStormTrack(trackData, storm);
             } else {
+                console.log('No track data found, showing single point');
                 // Fallback to single point if no track data available
                 if (storm.lat && storm.lon) {
                     const color = getCategoryColor(storm.category);
