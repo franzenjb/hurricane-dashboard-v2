@@ -1763,16 +1763,44 @@
         
         // Show storm details in modal
         function showStormDetails(storm) {
-            console.log('showStormDetails called with:', storm);
+            console.log('=== SHOWING STORM DETAILS (SIMPLIFIED) ===');
+            console.log('Storm object:', storm);
             
-            // Update the sidebar panel
-            updateStormInfoPanel(storm);
+            // Initialize map if needed
+            if (!map) {
+                initMap();
+            }
+            
+            // Directly populate the sidebar elements
+            const categoryIcon = document.getElementById('categoryIcon');
+            const stormTitle = document.getElementById('stormTitle');
+            const statDate = document.getElementById('statDate');
+            const statWind = document.getElementById('statWind');
+            const statLandfall = document.getElementById('statLandfall');
+            const statDeaths = document.getElementById('statDeaths');
+            const narrativeContent = document.getElementById('narrativeContent');
+            
+            // Update category icon and title
+            categoryIcon.textContent = storm.category === 0 ? 'TS' : storm.category;
+            categoryIcon.style.backgroundColor = getCategoryColor(storm.category);
+            stormTitle.textContent = `${storm.name} (${storm.year})`;
+            
+            // Update stats
+            statDate.textContent = `${storm.month}/${storm.day}/${storm.year}`;
+            statWind.textContent = `${storm.wind_mph} mph`;
+            statLandfall.textContent = storm.landfall_states ? storm.landfall_states.join(', ') : '-';
+            statDeaths.textContent = storm.deaths || '0';
+            
+            // Update narrative
+            if (STORM_NARRATIVES[storm.name]) {
+                narrativeContent.textContent = STORM_NARRATIVES[storm.name];
+            } else {
+                narrativeContent.textContent = `Select a storm with landfall history for detailed narrative information.`;
+            }
+            
+            // Show storm on map
             showStormOnMap(storm);
-            
-            console.log('In iframe?', window.parent !== window);
-            console.log('Has postMessage?', window.parent.postMessage);
-            
-            // Check if we're in an iframe and the parent wants to handle storm clicks
+        }
             if (window.parent !== window && window.parent.postMessage) {
                 console.log('Sending storm data to parent dashboard...');
                 // Send storm data to parent dashboard
