@@ -52,49 +52,35 @@
         <span x-text="currentFact" class="font-medium"></span>
     </div>
 
-    <!-- Red Cross Branded Navigation -->
-    <nav class="bg-white shadow-sm h-16 border-b-4" style="border-color: #ED1B2E;">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm h-16">
         <div class="h-full px-4 flex items-center justify-between">
-            <div class="flex items-center">
-                <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold mr-3" 
-                     style="background-color: #ED1B2E;">RC</div>
-                <h1 class="text-xl font-bold text-gray-800">Hurricane Intelligence Platform</h1>
-            </div>
-            <div class="flex items-center space-x-1">
+            <h1 class="text-xl font-bold text-gray-800">Hurricane Analytics Dashboard 2.0</h1>
+            <div class="flex items-center space-x-2">
                 <button @click="activeTab = 'home'" 
-                        :class="activeTab === 'home' ? 'bg-red-600 text-white' : 'text-gray-700 hover:bg-gray-100'"
+                        :class="activeTab === 'home' ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-gray-100'"
                         class="px-3 py-1.5 rounded text-sm font-medium transition-colors">
-                    🏠 Home
+                    Home
                 </button>
                 <button @click="activeTab = 'timeline'" 
-                        :class="activeTab === 'timeline' ? 'bg-red-600 text-white' : 'text-gray-700 hover:bg-gray-100'"
+                        :class="activeTab === 'timeline' ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-gray-100'"
                         class="px-3 py-1.5 rounded text-sm font-medium transition-colors">
-                    📅 Timeline
+                    Timeline & Map
                 </button>
                 <button @click="activeTab = 'tracker'" 
-                        :class="activeTab === 'tracker' ? 'bg-red-600 text-white' : 'text-gray-700 hover:bg-gray-100'"
+                        :class="activeTab === 'tracker' ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-gray-100'"
                         class="px-3 py-1.5 rounded text-sm font-medium transition-colors">
-                    🗺️ Regional
+                    Multi-State
                 </button>
                 <button @click="activeTab = 'database'" 
-                        :class="activeTab === 'database' ? 'bg-red-600 text-white' : 'text-gray-700 hover:bg-gray-100'"
+                        :class="activeTab === 'database' ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-gray-100'"
                         class="px-3 py-1.5 rounded text-sm font-medium transition-colors">
-                    🗄️ Database
-                </button>
-                <button @click="activeTab = 'intelligence'" 
-                        :class="activeTab === 'intelligence' ? 'bg-red-600 text-white' : 'text-gray-700 hover:bg-gray-100'"
-                        class="px-3 py-1.5 rounded text-sm font-medium transition-colors">
-                    🧠 Intelligence
-                </button>
-                <button @click="activeTab = 'response'" 
-                        :class="activeTab === 'response' ? 'bg-red-600 text-white' : 'text-gray-700 hover:bg-gray-100'"
-                        class="px-3 py-1.5 rounded text-sm font-medium transition-colors">
-                    🏥 Response
+                    Database
                 </button>
                 <button @click="activeTab = 'about'" 
-                        :class="activeTab === 'about' ? 'bg-red-600 text-white' : 'text-gray-700 hover:bg-gray-100'"
+                        :class="activeTab === 'about' ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-gray-100'"
                         class="px-3 py-1.5 rounded text-sm font-medium transition-colors">
-                    ℹ️ About
+                    About & Research
                 </button>
             </div>
         </div>
@@ -107,12 +93,10 @@
             <div class="max-w-6xl mx-auto p-8">
                 <!-- Hero Section -->
                 <div class="text-center mb-12">
-                    <div class="w-20 h-20 rounded-full flex items-center justify-center text-white font-bold text-3xl mx-auto mb-4" 
-                         style="background-color: #ED1B2E;">RC</div>
-                    <h1 class="text-4xl font-bold text-gray-900 mb-4">Hurricane Intelligence Platform</h1>
+                    <h1 class="text-4xl font-bold text-gray-900 mb-4">Florida Hurricane Analysis</h1>
                     <p class="text-xl text-gray-700 max-w-3xl mx-auto">
-                        American Red Cross hurricane analysis system with 1,991 storms (1851-2024), 
-                        TCR integration, and RC Impact Scoring for resource planning.
+                        Comprehensive hurricane landfall data, historical research, and impact analysis for Florida from 1851-2024. 
+                        Explore 174 years of tropical cyclone history with research-grade data visualization.
                     </p>
                 </div>
 
@@ -147,44 +131,16 @@
                         </div>
                     </div>
 
-                    <!-- Enhanced Database Card -->
+                    <!-- HURDAT2 Database Card -->
                     <div @click="activeTab = 'database'" 
                          class="bg-white rounded-xl shadow-lg p-6 cursor-pointer transform transition-all hover:scale-105 hover:shadow-xl">
                         <div class="flex-1">
-                            <h3 class="text-xl font-bold text-gray-900 mb-2">🗄️ Enhanced Database</h3>
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">HURDAT2 Database Browser</h3>
                             <p class="text-gray-600 mb-3">
-                                1,991 storms with RC Impact Scores, TCR links, advanced filtering & export.
+                                Query 3,233 storms from 1851-2024 with SQL browser and interactive maps.
                             </p>
-                            <span class="inline-block px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full">
-                                ENHANCED
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- Intelligence Card -->
-                    <div @click="activeTab = 'intelligence'" 
-                         class="bg-white rounded-xl shadow-lg p-6 cursor-pointer transform transition-all hover:scale-105 hover:shadow-xl">
-                        <div class="flex-1">
-                            <h3 class="text-xl font-bold text-gray-900 mb-2">🧠 Storm Intelligence</h3>
-                            <p class="text-gray-600 mb-3">
-                                Compare storms, find patterns, predict RC resources, view TCR reports.
-                            </p>
-                            <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full">
-                                NEW
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- Response Card -->
-                    <div @click="activeTab = 'response'" 
-                         class="bg-white rounded-xl shadow-lg p-6 cursor-pointer transform transition-all hover:scale-105 hover:shadow-xl">
-                        <div class="flex-1">
-                            <h3 class="text-xl font-bold text-gray-900 mb-2">🏥 RC Response</h3>
-                            <p class="text-gray-600 mb-3">
-                                Red Cross operations history, resource deployment, response patterns.
-                            </p>
-                            <span class="inline-block px-3 py-1 bg-orange-100 text-orange-800 text-sm font-medium rounded-full">
-                                COMING SOON
+                            <span class="inline-block px-3 py-1 bg-red-100 text-red-800 text-sm font-medium rounded-full">
+                                DEVELOPMENT
                             </span>
                         </div>
                     </div>
@@ -193,12 +149,12 @@
                     <div @click="activeTab = 'about'" 
                          class="bg-white rounded-xl shadow-lg p-6 cursor-pointer transform transition-all hover:scale-105 hover:shadow-xl">
                         <div class="flex-1">
-                            <h3 class="text-xl font-bold text-gray-900 mb-2">ℹ️ About & Research</h3>
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">Historical Research</h3>
                             <p class="text-gray-600 mb-3">
-                                Data sources, methodology, and contact information.
+                                Detailed historical context, data sources, and research methodology.
                             </p>
                             <span class="inline-block px-3 py-1 bg-purple-100 text-purple-800 text-sm font-medium rounded-full">
-                                INFO
+                                ACADEMIC
                             </span>
                         </div>
                     </div>
@@ -503,8 +459,8 @@
             </div>
         </div>
 
-        <!-- Original Database Tab (hidden - replaced by enhanced version) -->
-        <div x-show="false" class="h-full p-6" x-cloak>
+        <!-- Database Tab -->
+        <div x-show="activeTab === 'database'" class="h-full p-6" x-cloak>
             <div class="h-full grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <!-- Database Search Panel (Left Side) -->
                 <div class="lg:col-span-2">
@@ -609,27 +565,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Enhanced Database Tab (NEW) -->
-        <div x-show="activeTab === 'database'" class="h-full" x-cloak>
-            <iframe src="enhanced-database.html" class="w-full h-full border-0"></iframe>
-        </div>
-
-        <!-- Intelligence Tab (NEW) -->
-        <div x-show="activeTab === 'intelligence'" class="h-full" x-cloak>
-            <iframe src="intelligence-tab.html" class="w-full h-full border-0"></iframe>
-        </div>
-
-        <!-- Response Tab (Coming Soon) -->
-        <div x-show="activeTab === 'response'" class="h-full" x-cloak>
-            <div class="flex items-center justify-center h-full">
-                <div class="text-center">
-                    <div class="text-6xl mb-4">🏥</div>
-                    <h2 class="text-2xl font-bold mb-2">Red Cross Response Center</h2>
-                    <p class="text-gray-600">Coming Soon - Historical RC operations data</p>
                 </div>
             </div>
         </div>

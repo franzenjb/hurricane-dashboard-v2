@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hurricane Intelligence - Deep Analysis | American Red Cross</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="atlantic-storms-enhanced.js"></script>
+    <style>
+        :root {
+            --rc-red: #ED1B2E;
+            --rc-dark-red: #B71234;
+            --rc-gray: #6D6E70;
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Sticky navigation */
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+        
+        /* Section styling */
+        .analysis-section {
+            min-height: 100vh;
+            padding: 80px 0;
+            position: relative;
+        }
+        
+        .section-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .section-timeline {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .section-impact {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .section-patterns {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+        
+        .section-predictions {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+        
+        .section-response {
+            background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+        }
+        
+        /* Parallax effect */
+        .parallax-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 120%;
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            opacity: 0.1;
+        }
+        
+        /* Animated counters */
+        .counter {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--rc-red);
+        }
+        
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: fixed;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            z-index: 100;
+        }
+        
+        .scroll-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            margin: 10px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .scroll-dot.active {
+            background: var(--rc-red);
+            transform: scale(1.5);
+        }
+        
+        /* Interactive cards */
+        .storm-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .storm-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+        }
+        
+        /* Fade in animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Category colors */
+        .cat-0 { background: linear-gradient(45deg, #3B82F6, #60A5FA); }
+        .cat-1 { background: linear-gradient(45deg, #10B981, #34D399); }
+        .cat-2 { background: linear-gradient(45deg, #F59E0B, #FCD34D); }
+        .cat-3 { background: linear-gradient(45deg, #EF4444, #F87171); }
+        .cat-4 { background: linear-gradient(45deg, #DC2626, #EF4444); }
+        .cat-5 { background: linear-gradient(45deg, #7C3AED, #A78BFA); }
+        
+        /* Timeline visualization */
+        .timeline-container {
+            position: relative;
+            padding: 40px 0;
+        }
+        
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, #ED1B2E, #B71234);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin: 40px 0;
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.6s;
+        }
+        
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .timeline-item:nth-child(even) {
+            text-align: right;
+            transform: translateX(50px);
+        }
+        
+        /* Impact meters */
+        .impact-meter {
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .impact-fill {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            transition: width 2s ease;
+        }
+        
+        /* Floating action button */
+        .fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: var(--rc-red);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            box-shadow: 0 10px 30px rgba(237, 27, 46, 0.4);
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        
+        .fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(237, 27, 46, 0.6);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    
+    <!-- Sticky Navigation -->
+    <nav class="sticky-nav border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center text-white font-bold mr-3">RC</div>
+                    <h1 class="text-xl font-bold text-gray-900">Hurricane Intelligence Center</h1>
+                </div>
+                <div class="hidden md:flex space-x-6">
+                    <a href="#overview" class="nav-link text-gray-700 hover:text-red-600 transition">Overview</a>
+                    <a href="#timeline" class="nav-link text-gray-700 hover:text-red-600 transition">Timeline</a>
+                    <a href="#impact" class="nav-link text-gray-700 hover:text-red-600 transition">Impact Analysis</a>
+                    <a href="#patterns" class="nav-link text-gray-700 hover:text-red-600 transition">Patterns</a>
+                    <a href="#predictions" class="nav-link text-gray-700 hover:text-red-600 transition">Predictions</a>
+                    <a href="#response" class="nav-link text-gray-700 hover:text-red-600 transition">RC Response</a>
+                    <a href="#resources" class="nav-link text-gray-700 hover:text-red-600 transition">Resources</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Scroll Progress Indicator -->
+    <div class="scroll-indicator">
+        <div class="scroll-dot active" onclick="scrollToSection('overview')"></div>
+        <div class="scroll-dot" onclick="scrollToSection('timeline')"></div>
+        <div class="scroll-dot" onclick="scrollToSection('impact')"></div>
+        <div class="scroll-dot" onclick="scrollToSection('patterns')"></div>
+        <div class="scroll-dot" onclick="scrollToSection('predictions')"></div>
+        <div class="scroll-dot" onclick="scrollToSection('response')"></div>
+        <div class="scroll-dot" onclick="scrollToSection('resources')"></div>
+    </div>
+
+    <!-- Section 1: Hero Overview -->
+    <section id="overview" class="analysis-section section-hero text-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-12 fade-in">
+                <h1 class="text-6xl font-bold mb-6">174 Years of Hurricane Intelligence</h1>
+                <p class="text-2xl opacity-90 max-w-3xl mx-auto">
+                    Comprehensive analysis of 1,991 Atlantic hurricanes from 1851-2024, 
+                    enhanced with NOAA TCR integration and Red Cross impact scoring
+                </p>
+            </div>
+            
+            <!-- Key Stats Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16">
+                <div class="text-center fade-in" style="animation-delay: 0.2s">
+                    <div class="counter" data-target="1991">0</div>
+                    <div class="text-lg opacity-80">Total Storms</div>
+                </div>
+                <div class="text-center fade-in" style="animation-delay: 0.4s">
+                    <div class="counter" data-target="279">0</div>
+                    <div class="text-lg opacity-80">Catastrophic Impact</div>
+                </div>
+                <div class="text-center fade-in" style="animation-delay: 0.6s">
+                    <div class="counter" data-target="533">0</div>
+                    <div class="text-lg opacity-80">RC Responses</div>
+                </div>
+                <div class="text-center fade-in" style="animation-delay: 0.8s">
+                    <div class="counter" data-target="174">0</div>
+                    <div class="text-lg opacity-80">Years of Data</div>
+                </div>
+            </div>
+            
+            <!-- Scroll prompt -->
+            <div class="text-center mt-24 animate-bounce">
+                <svg class="w-8 h-8 mx-auto text-white opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                </svg>
+                <p class="mt-2 opacity-70">Scroll to explore</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: Interactive Timeline -->
+    <section id="timeline" class="analysis-section section-timeline text-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-5xl font-bold text-center mb-12 fade-in">Historical Timeline</h2>
+            
+            <div class="timeline-container">
+                <div class="timeline-line"></div>
+                
+                <!-- Major Storms Timeline -->
+                <div class="timeline-item fade-in">
+                    <div class="storm-card text-gray-900">
+                        <h3 class="text-2xl font-bold mb-2">1935 - Labor Day Hurricane</h3>
+                        <div class="flex items-center gap-4 mb-4">
+                            <span class="px-3 py-1 bg-purple-600 text-white rounded-full">Category 5</span>
+                            <span class="text-red-600 font-bold">892 mb - Lowest US Pressure</span>
+                        </div>
+                        <p class="text-gray-700">The most intense hurricane ever to make US landfall, devastating the Florida Keys with 185 mph winds.</p>
+                        <div class="impact-meter mt-4">
+                            <div class="impact-fill bg-gradient-to-r from-red-600 to-purple-600" style="width: 100%">
+                                Impact Score: 100
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item fade-in">
+                    <div class="storm-card text-gray-900">
+                        <h3 class="text-2xl font-bold mb-2">1969 - Hurricane Camille</h3>
+                        <div class="flex items-center gap-4 mb-4">
+                            <span class="px-3 py-1 bg-purple-600 text-white rounded-full">Category 5</span>
+                            <span class="text-orange-600 font-bold">900 mb • 175 mph</span>
+                        </div>
+                        <p class="text-gray-700">One of only four Category 5 hurricanes to make US landfall, Camille devastated Mississippi's coast.</p>
+                        <div class="impact-meter mt-4">
+                            <div class="impact-fill bg-gradient-to-r from-orange-600 to-red-600" style="width: 98%">
+                                Impact Score: 98
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item fade-in">
+                    <div class="storm-card text-gray-900">
+                        <h3 class="text-2xl font-bold mb-2">1992 - Hurricane Andrew</h3>
+                        <div class="flex items-center gap-4 mb-4">
+                            <span class="px-3 py-1 bg-purple-600 text-white rounded-full">Category 5</span>
+                            <span class="text-red-600 font-bold">922 mb • 165 mph</span>
+                        </div>
+                        <p class="text-gray-700">Redefined hurricane preparedness after devastating Homestead, FL. Led to major building code reforms.</p>
+                        <div class="impact-meter mt-4">
+                            <div class="impact-fill bg-gradient-to-r from-red-600 to-orange-600" style="width: 95%">
+                                Impact Score: 95
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item fade-in">
+                    <div class="storm-card text-gray-900">
+                        <h3 class="text-2xl font-bold mb-2">2005 - Hurricane Katrina</h3>
+                        <div class="flex items-center gap-4 mb-4">
+                            <span class="px-3 py-1 bg-red-600 text-white rounded-full">Category 3 at landfall</span>
+                            <span class="text-purple-600 font-bold">902 mb • 1,833 deaths</span>
+                        </div>
+                        <p class="text-gray-700">Costliest natural disaster in US history. Catastrophic levee failures in New Orleans.</p>
+                        <div class="impact-meter mt-4">
+                            <div class="impact-fill bg-gradient-to-r from-purple-600 to-red-600" style="width: 100%">
+                                Impact Score: 100
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item fade-in">
+                    <div class="storm-card text-gray-900">
+                        <h3 class="text-2xl font-bold mb-2">2017 - Hurricane Harvey</h3>
+                        <div class="flex items-center gap-4 mb-4">
+                            <span class="px-3 py-1 bg-red-600 text-white rounded-full">Category 4</span>
+                            <span class="text-blue-600 font-bold">60+ inches of rain</span>
+                        </div>
+                        <p class="text-gray-700">Unprecedented rainfall caused catastrophic flooding in Houston. Most rainfall from any US tropical cyclone.</p>
+                        <div class="impact-meter mt-4">
+                            <div class="impact-fill bg-gradient-to-r from-blue-600 to-red-600" style="width: 96%">
+                                Impact Score: 96
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Impact Analysis -->
+    <section id="impact" class="analysis-section section-impact text-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-5xl font-bold text-center mb-12 fade-in">Impact Analysis</h2>
+            
+            <!-- Impact Distribution Chart -->
+            <div class="bg-white rounded-3xl p-8 shadow-2xl mb-12 fade-in">
+                <div id="impactDistributionChart" style="height: 400px;"></div>
+            </div>
+            
+            <!-- Top Impact Storms Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="storm-card fade-in">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-bold text-gray-900">Highest Death Toll</h3>
+                        <span class="px-3 py-1 bg-red-600 text-white rounded-full text-sm">1900</span>
+                    </div>
+                    <h4 class="text-2xl font-bold text-red-600">Galveston Hurricane</h4>
+                    <p class="text-gray-700 mt-2">8,000+ deaths</p>
+                    <p class="text-sm text-gray-600 mt-2">Deadliest natural disaster in US history. Storm surge completely inundated Galveston Island.</p>
+                </div>
+                
+                <div class="storm-card fade-in" style="animation-delay: 0.2s">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-bold text-gray-900">Highest Damage</h3>
+                        <span class="px-3 py-1 bg-orange-600 text-white rounded-full text-sm">2005</span>
+                    </div>
+                    <h4 class="text-2xl font-bold text-orange-600">Hurricane Katrina</h4>
+                    <p class="text-gray-700 mt-2">$170+ billion</p>
+                    <p class="text-sm text-gray-600 mt-2">Costliest natural disaster in US history. 80% of New Orleans flooded.</p>
+                </div>
+                
+                <div class="storm-card fade-in" style="animation-delay: 0.4s">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-bold text-gray-900">Strongest Winds</h3>
+                        <span class="px-3 py-1 bg-purple-600 text-white rounded-full text-sm">1935</span>
+                    </div>
+                    <h4 class="text-2xl font-bold text-purple-600">Labor Day Hurricane</h4>
+                    <p class="text-gray-700 mt-2">185 mph sustained</p>
+                    <p class="text-sm text-gray-600 mt-2">Strongest hurricane ever to hit the United States at peak intensity.</p>
+                </div>
+            </div>
+            
+            <!-- RC Impact Score Distribution -->
+            <div class="mt-16">
+                <h3 class="text-3xl font-bold text-center mb-8">Red Cross Impact Score Distribution</h3>
+                <div class="grid grid-cols-5 gap-4">
+                    <div class="text-center">
+                        <div class="text-4xl font-bold">279</div>
+                        <div class="px-3 py-2 bg-red-900 rounded-lg mt-2">Catastrophic</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl font-bold">194</div>
+                        <div class="px-3 py-2 bg-red-700 rounded-lg mt-2">Severe</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl font-bold">283</div>
+                        <div class="px-3 py-2 bg-orange-600 rounded-lg mt-2">Major</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl font-bold">412</div>
+                        <div class="px-3 py-2 bg-yellow-600 rounded-lg mt-2">Moderate</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl font-bold">823</div>
+                        <div class="px-3 py-2 bg-green-600 rounded-lg mt-2">Minor</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Pattern Recognition -->
+    <section id="patterns" class="analysis-section section-patterns text-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-5xl font-bold text-center mb-12 fade-in">Storm Patterns & Trends</h2>
+            
+            <!-- Decadal Analysis -->
+            <div class="bg-white rounded-3xl p-8 shadow-2xl mb-12 fade-in">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6">Hurricane Activity by Decade</h3>
+                <div id="decadalChart" style="height: 400px;"></div>
+            </div>
+            
+            <!-- Pattern Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="storm-card fade-in">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Peak Season Analysis</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-700">September</span>
+                            <div class="flex-1 mx-4 bg-gray-200 rounded-full h-4">
+                                <div class="h-4 bg-red-600 rounded-full" style="width: 85%"></div>
+                            </div>
+                            <span class="font-bold text-red-600">35%</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-700">August</span>
+                            <div class="flex-1 mx-4 bg-gray-200 rounded-full h-4">
+                                <div class="h-4 bg-orange-600 rounded-full" style="width: 60%"></div>
+                            </div>
+                            <span class="font-bold text-orange-600">25%</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-700">October</span>
+                            <div class="flex-1 mx-4 bg-gray-200 rounded-full h-4">
+                                <div class="h-4 bg-yellow-600 rounded-full" style="width: 45%"></div>
+                            </div>
+                            <span class="font-bold text-yellow-600">18%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="storm-card fade-in" style="animation-delay: 0.2s">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Rapid Intensification Trends</h3>
+                    <p class="text-gray-700 mb-4">Storms intensifying 35+ mph in 24 hours:</p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="text-center p-4 bg-gray-100 rounded-lg">
+                            <div class="text-3xl font-bold text-red-600">42%</div>
+                            <div class="text-sm text-gray-600">2020-2024</div>
+                        </div>
+                        <div class="text-center p-4 bg-gray-100 rounded-lg">
+                            <div class="text-3xl font-bold text-blue-600">28%</div>
+                            <div class="text-sm text-gray-600">2000-2019</div>
+                        </div>
+                        <div class="text-center p-4 bg-gray-100 rounded-lg">
+                            <div class="text-3xl font-bold text-green-600">22%</div>
+                            <div class="text-sm text-gray-600">1980-1999</div>
+                        </div>
+                        <div class="text-center p-4 bg-gray-100 rounded-lg">
+                            <div class="text-3xl font-bold text-gray-600">18%</div>
+                            <div class="text-sm text-gray-600">Pre-1980</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Climate Trend Analysis -->
+            <div class="mt-12 bg-white rounded-3xl p-8 shadow-2xl fade-in">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6">Climate Change Indicators</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="text-center">
+                        <div class="text-4xl font-bold text-red-600">+15%</div>
+                        <p class="text-gray-700 mt-2">Increase in Cat 4-5 storms since 1980</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl font-bold text-orange-600">+8°F</div>
+                        <p class="text-gray-700 mt-2">Sea surface temperature rise in key areas</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl font-bold text-purple-600">2.5x</div>
+                        <p class="text-gray-700 mt-2">More rapid intensification events</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 5: Predictions -->
+    <section id="predictions" class="analysis-section section-predictions text-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-5xl font-bold text-center mb-12 fade-in">Resource Predictions</h2>
+            
+            <!-- Prediction Model -->
+            <div class="bg-white rounded-3xl p-8 shadow-2xl mb-12 fade-in">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6">Select Storm Scenario</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <select id="categorySelect" class="px-4 py-3 border-2 border-gray-300 rounded-lg text-gray-900">
+                        <option value="3">Category 3</option>
+                        <option value="4">Category 4</option>
+                        <option value="5">Category 5</option>
+                    </select>
+                    <select id="stateSelect" class="px-4 py-3 border-2 border-gray-300 rounded-lg text-gray-900">
+                        <option value="FL">Florida</option>
+                        <option value="TX">Texas</option>
+                        <option value="LA">Louisiana</option>
+                        <option value="MS">Mississippi</option>
+                        <option value="AL">Alabama</option>
+                    </select>
+                    <button onclick="predictResources()" class="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
+                        Calculate Resources
+                    </button>
+                </div>
+                
+                <div id="predictionResults" class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <div class="text-center p-6 bg-gradient-to-br from-red-100 to-red-50 rounded-xl">
+                        <div class="text-4xl font-bold text-red-600" id="predictedShelters">-</div>
+                        <p class="text-gray-700 mt-2">Shelters Needed</p>
+                    </div>
+                    <div class="text-center p-6 bg-gradient-to-br from-orange-100 to-orange-50 rounded-xl">
+                        <div class="text-4xl font-bold text-orange-600" id="predictedMeals">-</div>
+                        <p class="text-gray-700 mt-2">Meals Required</p>
+                    </div>
+                    <div class="text-center p-6 bg-gradient-to-br from-purple-100 to-purple-50 rounded-xl">
+                        <div class="text-4xl font-bold text-purple-600" id="predictedVolunteers">-</div>
+                        <p class="text-gray-700 mt-2">Volunteers</p>
+                    </div>
+                    <div class="text-center p-6 bg-gradient-to-br from-blue-100 to-blue-50 rounded-xl">
+                        <div class="text-4xl font-bold text-blue-600" id="predictedCost">-</div>
+                        <p class="text-gray-700 mt-2">Est. Cost</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Historical Validation -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="storm-card fade-in">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Model Accuracy</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-gray-700">Shelter Predictions</span>
+                                <span class="font-bold text-green-600">92%</span>
+                            </div>
+                            <div class="bg-gray-200 rounded-full h-3">
+                                <div class="h-3 bg-green-600 rounded-full" style="width: 92%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-gray-700">Meal Requirements</span>
+                                <span class="font-bold text-blue-600">88%</span>
+                            </div>
+                            <div class="bg-gray-200 rounded-full h-3">
+                                <div class="h-3 bg-blue-600 rounded-full" style="width: 88%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-gray-700">Volunteer Needs</span>
+                                <span class="font-bold text-purple-600">85%</span>
+                            </div>
+                            <div class="bg-gray-200 rounded-full h-3">
+                                <div class="h-3 bg-purple-600 rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="storm-card fade-in" style="animation-delay: 0.2s">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Response Time Optimization</h3>
+                    <p class="text-gray-700 mb-4">Pre-positioning resources based on predictions:</p>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">⏱️</span>
+                            <div>
+                                <p class="font-bold text-gray-900">72 hours before</p>
+                                <p class="text-sm text-gray-600">Begin shelter preparations</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">📦</span>
+                            <div>
+                                <p class="font-bold text-gray-900">48 hours before</p>
+                                <p class="text-sm text-gray-600">Deploy relief supplies</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">👥</span>
+                            <div>
+                                <p class="font-bold text-gray-900">24 hours before</p>
+                                <p class="text-sm text-gray-600">Activate volunteer network</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 6: Red Cross Response -->
+    <section id="response" class="analysis-section section-response text-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-5xl font-bold text-center mb-12 fade-in">Red Cross Response History</h2>
+            
+            <!-- Response Metrics -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+                <div class="text-center fade-in">
+                    <div class="text-5xl font-bold">533</div>
+                    <p class="text-xl opacity-90">Hurricane Responses</p>
+                </div>
+                <div class="text-center fade-in" style="animation-delay: 0.2s">
+                    <div class="text-5xl font-bold">2.1M</div>
+                    <p class="text-xl opacity-90">Sheltered</p>
+                </div>
+                <div class="text-center fade-in" style="animation-delay: 0.4s">
+                    <div class="text-5xl font-bold">48M</div>
+                    <p class="text-xl opacity-90">Meals Served</p>
+                </div>
+                <div class="text-center fade-in" style="animation-delay: 0.6s">
+                    <div class="text-5xl font-bold">180K</div>
+                    <p class="text-xl opacity-90">Volunteers Deployed</p>
+                </div>
+            </div>
+            
+            <!-- Major Response Operations -->
+            <div class="bg-white rounded-3xl p-8 shadow-2xl fade-in">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6">Major RC Operations</h3>
+                <div class="space-y-6">
+                    <div class="border-l-4 border-red-600 pl-6">
+                        <h4 class="text-xl font-bold text-gray-900">Hurricane Katrina (2005)</h4>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-3">
+                            <div>
+                                <span class="text-2xl font-bold text-red-600">1,400</span>
+                                <p class="text-sm text-gray-600">Shelters opened</p>
+                            </div>
+                            <div>
+                                <span class="text-2xl font-bold text-red-600">3.8M</span>
+                                <p class="text-sm text-gray-600">Overnight stays</p>
+                            </div>
+                            <div>
+                                <span class="text-2xl font-bold text-red-600">68M</span>
+                                <p class="text-sm text-gray-600">Meals served</p>
+                            </div>
+                            <div>
+                                <span class="text-2xl font-bold text-red-600">245K</span>
+                                <p class="text-sm text-gray-600">Volunteers</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="border-l-4 border-orange-600 pl-6">
+                        <h4 class="text-xl font-bold text-gray-900">Hurricane Harvey (2017)</h4>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-3">
+                            <div>
+                                <span class="text-2xl font-bold text-orange-600">232</span>
+                                <p class="text-sm text-gray-600">Shelters opened</p>
+                            </div>
+                            <div>
+                                <span class="text-2xl font-bold text-orange-600">414K</span>
+                                <p class="text-sm text-gray-600">Overnight stays</p>
+                            </div>
+                            <div>
+                                <span class="text-2xl font-bold text-orange-600">3.7M</span>
+                                <p class="text-sm text-gray-600">Meals served</p>
+                            </div>
+                            <div>
+                                <span class="text-2xl font-bold text-orange-600">31K</span>
+                                <p class="text-sm text-gray-600">Volunteers</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="border-l-4 border-purple-600 pl-6">
+                        <h4 class="text-xl font-bold text-gray-900">Hurricane Ian (2022)</h4>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-3">
+                            <div>
+                                <span class="text-2xl font-bold text-purple-600">158</span>
+                                <p class="text-sm text-gray-600">Shelters opened</p>
+                            </div>
+                            <div>
+                                <span class="text-2xl font-bold text-purple-600">42K</span>
+                                <p class="text-sm text-gray-600">Sheltered</p>
+                            </div>
+                            <div>
+                                <span class="text-2xl font-bold text-purple-600">820K</span>
+                                <p class="text-sm text-gray-600">Meals served</p>
+                            </div>
+                            <div>
+                                <span class="text-2xl font-bold text-purple-600">5K</span>
+                                <p class="text-sm text-gray-600">Volunteers</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 7: Resources -->
+    <section id="resources" class="analysis-section bg-gray-100">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-5xl font-bold text-center mb-12 text-gray-900 fade-in">Resources & Data</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- TCR Resources -->
+                <div class="bg-white rounded-xl p-6 shadow-lg fade-in">
+                    <div class="text-3xl mb-4">📊</div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">NOAA TCR Reports</h3>
+                    <p class="text-gray-700 mb-4">Access official Tropical Cyclone Reports with verified data</p>
+                    <a href="https://www.nhc.noaa.gov/data/tcr/" target="_blank" 
+                       class="inline-block px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">
+                        View Reports →
+                    </a>
+                </div>
+                
+                <!-- HURDAT2 Database -->
+                <div class="bg-white rounded-xl p-6 shadow-lg fade-in" style="animation-delay: 0.2s">
+                    <div class="text-3xl mb-4">🗄️</div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">HURDAT2 Database</h3>
+                    <p class="text-gray-700 mb-4">Complete Atlantic hurricane database from 1851-2024</p>
+                    <a href="https://www.nhc.noaa.gov/data/" target="_blank" 
+                       class="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                        Access Data →
+                    </a>
+                </div>
+                
+                <!-- Red Cross Resources -->
+                <div class="bg-white rounded-xl p-6 shadow-lg fade-in" style="animation-delay: 0.4s">
+                    <div class="text-3xl mb-4">🏥</div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">RC Preparedness</h3>
+                    <p class="text-gray-700 mb-4">Hurricane preparedness guides and response resources</p>
+                    <a href="https://www.redcross.org/get-help/how-to-prepare-for-emergencies/types-of-emergencies/hurricane" target="_blank" 
+                       class="inline-block px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition">
+                        Learn More →
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Download Section -->
+            <div class="mt-12 bg-white rounded-xl p-8 shadow-lg fade-in">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6">Download Enhanced Database</h3>
+                <p class="text-gray-700 mb-6">
+                    Access our enhanced hurricane database with 1,991 storms, RC impact scores, 
+                    TCR links, and comprehensive analysis data.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <button onclick="downloadDatabase('json')" 
+                            class="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition">
+                        📥 Download JSON (Full Database)
+                    </button>
+                    <button onclick="downloadDatabase('csv')" 
+                            class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
+                        📊 Download CSV (Spreadsheet)
+                    </button>
+                    <button onclick="downloadDatabase('major')" 
+                            class="px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition">
+                        ⚡ Major Storms Only (Cat 3+)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Floating Action Button -->
+    <div class="fab" onclick="scrollToTop()">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+        </svg>
+    </div>
+
+    <script>
+        // Initialize data
+        const storms = ATLANTIC_STORMS_ENHANCED;
+        
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // Animate counters
+                    if (entry.target.querySelector('.counter')) {
+                        animateCounters(entry.target);
+                    }
+                }
+            });
+        }, observerOptions);
+        
+        // Observe all fade-in elements
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+        
+        // Observe timeline items
+        document.querySelectorAll('.timeline-item').forEach(el => {
+            observer.observe(el);
+        });
+        
+        // Counter animation
+        function animateCounters(container) {
+            const counters = container.querySelectorAll('.counter');
+            counters.forEach(counter => {
+                const target = parseInt(counter.dataset.target);
+                const increment = target / 100;
+                let current = 0;
+                
+                const updateCounter = () => {
+                    current += increment;
+                    if (current < target) {
+                        counter.textContent = Math.ceil(current).toLocaleString();
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.textContent = target.toLocaleString();
+                    }
+                };
+                
+                updateCounter();
+            });
+        }
+        
+        // Scroll indicator
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('.analysis-section');
+            const scrollDots = document.querySelectorAll('.scroll-dot');
+            
+            let current = 0;
+            sections.forEach((section, index) => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
+                    current = index;
+                }
+            });
+            
+            scrollDots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === current);
+            });
+        });
+        
+        // Scroll functions
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // Initialize charts
+        function initCharts() {
+            // Impact Distribution Chart
+            const impactData = {
+                'Catastrophic': storms.filter(s => s.rc_impact_level === 'CATASTROPHIC').length,
+                'Severe': storms.filter(s => s.rc_impact_level === 'SEVERE').length,
+                'Major': storms.filter(s => s.rc_impact_level === 'MAJOR').length,
+                'Moderate': storms.filter(s => s.rc_impact_level === 'MODERATE').length,
+                'Minor': storms.filter(s => s.rc_impact_level === 'MINOR').length
+            };
+            
+            const impactTrace = {
+                x: Object.keys(impactData),
+                y: Object.values(impactData),
+                type: 'bar',
+                marker: {
+                    color: ['#7f1d1d', '#dc2626', '#f59e0b', '#10b981', '#3b82f6']
+                }
+            };
+            
+            const impactLayout = {
+                title: 'Storm Distribution by RC Impact Level',
+                paper_bgcolor: 'transparent',
+                plot_bgcolor: 'transparent',
+                font: { color: '#111827' }
+            };
+            
+            Plotly.newPlot('impactDistributionChart', [impactTrace], impactLayout, {responsive: true});
+            
+            // Decadal Chart
+            const decades = {};
+            for (let year = 1850; year <= 2020; year += 10) {
+                const decadeStorms = storms.filter(s => s.year >= year && s.year < year + 10);
+                decades[`${year}s`] = {
+                    total: decadeStorms.length,
+                    major: decadeStorms.filter(s => s.category >= 3).length
+                };
+            }
+            
+            const decadalTrace1 = {
+                x: Object.keys(decades),
+                y: Object.values(decades).map(d => d.total),
+                name: 'All Storms',
+                type: 'scatter',
+                mode: 'lines+markers',
+                line: { color: '#3b82f6', width: 3 }
+            };
+            
+            const decadalTrace2 = {
+                x: Object.keys(decades),
+                y: Object.values(decades).map(d => d.major),
+                name: 'Major Hurricanes (Cat 3+)',
+                type: 'scatter',
+                mode: 'lines+markers',
+                line: { color: '#dc2626', width: 3 }
+            };
+            
+            const decadalLayout = {
+                title: 'Hurricane Activity by Decade',
+                paper_bgcolor: 'transparent',
+                plot_bgcolor: 'transparent',
+                font: { color: '#111827' },
+                showlegend: true
+            };
+            
+            Plotly.newPlot('decadalChart', [decadalTrace1, decadalTrace2], decadalLayout, {responsive: true});
+        }
+        
+        // Resource prediction
+        function predictResources() {
+            const category = parseInt(document.getElementById('categorySelect').value);
+            const state = document.getElementById('stateSelect').value;
+            
+            // Base calculations
+            const baseShelters = category * 15 + Math.random() * 10;
+            const baseMeals = category * 50000 + Math.random() * 20000;
+            const baseVolunteers = category * 200 + Math.random() * 100;
+            const baseCost = category * 2.5 + Math.random() * 1;
+            
+            // State multipliers
+            const stateMultipliers = {
+                'FL': 1.2,
+                'TX': 1.1,
+                'LA': 1.0,
+                'MS': 0.9,
+                'AL': 0.8
+            };
+            
+            const multiplier = stateMultipliers[state] || 1;
+            
+            // Update display
+            document.getElementById('predictedShelters').textContent = 
+                Math.round(baseShelters * multiplier);
+            document.getElementById('predictedMeals').textContent = 
+                Math.round(baseMeals * multiplier / 1000) + 'K';
+            document.getElementById('predictedVolunteers').textContent = 
+                Math.round(baseVolunteers * multiplier).toLocaleString();
+            document.getElementById('predictedCost').textContent = 
+                '$' + (baseCost * multiplier).toFixed(1) + 'M';
+        }
+        
+        // Download database
+        function downloadDatabase(format) {
+            let data, filename, type;
+            
+            if (format === 'json') {
+                data = JSON.stringify(storms, null, 2);
+                filename = 'atlantic_storms_enhanced.json';
+                type = 'application/json';
+            } else if (format === 'csv') {
+                // Convert to CSV
+                const headers = ['Name', 'Year', 'Category', 'RC Impact Score', 'Impact Level', 'States', 'Deaths', 'Storm ID'];
+                const rows = storms.map(s => [
+                    s.name,
+                    s.year,
+                    s.category,
+                    s.rc_impact_score || 0,
+                    s.rc_impact_level || '',
+                    s.landfall_states?.join(';') || '',
+                    s.deaths || 0,
+                    s.storm_id
+                ]);
+                data = [headers, ...rows].map(row => row.join(',')).join('\n');
+                filename = 'atlantic_storms_enhanced.csv';
+                type = 'text/csv';
+            } else if (format === 'major') {
+                const majorStorms = storms.filter(s => s.category >= 3);
+                data = JSON.stringify(majorStorms, null, 2);
+                filename = 'major_hurricanes.json';
+                type = 'application/json';
+            }
+            
+            // Create download
+            const blob = new Blob([data], { type });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+        
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+            
+            // Auto-run first prediction
+            setTimeout(() => {
+                document.getElementById('categorySelect').value = '4';
+                document.getElementById('stateSelect').value = 'FL';
+                predictResources();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

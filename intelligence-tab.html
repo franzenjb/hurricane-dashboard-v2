@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hurricane Intelligence - Red Cross Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <script src="atlantic-storms-enhanced.js"></script>
+    <style>
+        :root {
+            --rc-red: #ED1B2E;
+            --rc-dark-red: #B71234;
+        }
+        
+        .comparison-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            height: 100%;
+        }
+        
+        .storm-metric {
+            padding: 8px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .storm-metric:last-child {
+            border-bottom: none;
+        }
+        
+        .impact-meter {
+            height: 30px;
+            background: #e5e7eb;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .impact-fill {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            color: white;
+            font-weight: bold;
+            transition: width 1s ease;
+        }
+        
+        .tcr-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: #10b981;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        
+        .tcr-button:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+        
+        .pattern-match {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 8px 0;
+        }
+        
+        .prediction-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .similar-storm {
+            background: #f9fafb;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 8px 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .similar-storm:hover {
+            background: #f3f4f6;
+            transform: translateX(4px);
+        }
+        
+        .match-score {
+            display: inline-block;
+            padding: 4px 8px;
+            background: #fbbf24;
+            color: #78350f;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <div class="bg-white shadow-md border-b-4 border-red-600">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="flex items-center">
+                <div class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center text-white font-bold mr-4">RC</div>
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">Hurricane Intelligence Center</h1>
+                    <p class="text-sm text-gray-600">Advanced Analysis & Tropical Cyclone Reports</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 py-6">
+        <!-- Storm Selector -->
+        <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+            <h2 class="text-lg font-bold mb-4">Storm Analysis</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Primary Storm</label>
+                    <select id="storm1Select" class="w-full px-3 py-2 border rounded-lg" onchange="selectStorm(1)">
+                        <option value="">Select a storm...</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Compare With</label>
+                    <select id="storm2Select" class="w-full px-3 py-2 border rounded-lg" onchange="selectStorm(2)">
+                        <option value="">Select a storm...</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Compare With</label>
+                    <select id="storm3Select" class="w-full px-3 py-2 border rounded-lg" onchange="selectStorm(3)">
+                        <option value="">Select a storm...</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison View -->
+        <div id="comparisonView" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <!-- Storm 1 Card -->
+            <div class="comparison-card" id="storm1Card">
+                <div class="text-center text-gray-500 py-8">
+                    <svg class="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    <p>Select a storm to analyze</p>
+                </div>
+            </div>
+
+            <!-- Storm 2 Card -->
+            <div class="comparison-card" id="storm2Card">
+                <div class="text-center text-gray-500 py-8">
+                    <svg class="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    <p>Select a storm to compare</p>
+                </div>
+            </div>
+
+            <!-- Storm 3 Card -->
+            <div class="comparison-card" id="storm3Card">
+                <div class="text-center text-gray-500 py-8">
+                    <svg class="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    <p>Select a storm to compare</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pattern Matching -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6" id="patternSection" style="display: none;">
+            <h2 class="text-xl font-bold mb-4">Similar Historical Storms</h2>
+            <div id="similarStormsList">
+                <!-- Similar storms will be populated here -->
+            </div>
+        </div>
+
+        <!-- Impact Prediction -->
+        <div class="prediction-card" id="predictionSection" style="display: none;">
+            <h2 class="text-2xl font-bold mb-4">Red Cross Resource Prediction</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="text-center">
+                    <div class="text-3xl font-bold" id="predictedShelters">-</div>
+                    <div class="text-sm opacity-90">Shelters Needed</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold" id="predictedMeals">-</div>
+                    <div class="text-sm opacity-90">Meals Required</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold" id="predictedVolunteers">-</div>
+                    <div class="text-sm opacity-90">Volunteers</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold" id="predictedCost">-</div>
+                    <div class="text-sm opacity-90">Est. Cost</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TCR Viewer -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6" id="tcrSection" style="display: none;">
+            <h2 class="text-xl font-bold mb-4">Tropical Cyclone Reports</h2>
+            <div id="tcrLinks" class="flex flex-wrap gap-4">
+                <!-- TCR links will be populated here -->
+            </div>
+            <div id="tcrViewer" class="mt-4">
+                <!-- PDF viewer will go here -->
+            </div>
+        </div>
+
+        <!-- Comparison Chart -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-bold mb-4">Comparative Analysis</h2>
+            <div id="comparisonChart" style="height: 400px;"></div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let selectedStorms = [null, null, null];
+        const allStorms = ATLANTIC_STORMS_ENHANCED;
+        
+        // Major storms for quick selection
+        const majorStorms = allStorms
+            .filter(s => s.rc_impact_score >= 60 || s.category >= 3)
+            .sort((a, b) => b.rc_impact_score - a.rc_impact_score);
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            populateStormSelectors();
+            updateComparisonChart();
+        });
+
+        // Populate storm selectors
+        function populateStormSelectors() {
+            const selectors = ['storm1Select', 'storm2Select', 'storm3Select'];
+            
+            selectors.forEach(selectorId => {
+                const select = document.getElementById(selectorId);
+                
+                // Add major storms first
+                const optgroup1 = document.createElement('optgroup');
+                optgroup1.label = 'Major Storms (High Impact)';
+                
+                majorStorms.slice(0, 50).forEach(storm => {
+                    const option = document.createElement('option');
+                    option.value = storm.storm_id;
+                    option.textContent = `${storm.name} (${storm.year}) - Cat ${storm.category} - Score: ${storm.rc_impact_score}`;
+                    optgroup1.appendChild(option);
+                });
+                
+                select.appendChild(optgroup1);
+                
+                // Add recent storms
+                const optgroup2 = document.createElement('optgroup');
+                optgroup2.label = 'Recent Storms (2020-2024)';
+                
+                allStorms
+                    .filter(s => s.year >= 2020)
+                    .sort((a, b) => b.year - a.year || b.rc_impact_score - a.rc_impact_score)
+                    .forEach(storm => {
+                        const option = document.createElement('option');
+                        option.value = storm.storm_id;
+                        option.textContent = `${storm.name} (${storm.year}) - Cat ${storm.category}`;
+                        optgroup2.appendChild(option);
+                    });
+                
+                select.appendChild(optgroup2);
+            });
+        }
+
+        // Select storm
+        function selectStorm(position) {
+            const selectId = `storm${position}Select`;
+            const stormId = document.getElementById(selectId).value;
+            
+            if (stormId) {
+                const storm = allStorms.find(s => s.storm_id === stormId);
+                selectedStorms[position - 1] = storm;
+                updateStormCard(position, storm);
+                
+                if (position === 1) {
+                    findSimilarStorms(storm);
+                    predictResources(storm);
+                    showTCRLinks(storm);
+                }
+            } else {
+                selectedStorms[position - 1] = null;
+                resetStormCard(position);
+            }
+            
+            updateComparisonChart();
+        }
+
+        // Update storm card
+        function updateStormCard(position, storm) {
+            const card = document.getElementById(`storm${position}Card`);
+            
+            const impactColor = getImpactColor(storm.rc_impact_score);
+            
+            card.innerHTML = `
+                <div class="mb-4">
+                    <h3 class="text-xl font-bold">${storm.name}</h3>
+                    <p class="text-gray-600">${storm.year} - ${storm.storm_id}</p>
+                </div>
+                
+                <div class="impact-meter mb-4">
+                    <div class="impact-fill" style="width: ${storm.rc_impact_score}%; background: ${impactColor}">
+                        ${storm.rc_impact_score}
+                    </div>
+                </div>
+                
+                <div class="storm-metrics">
+                    <div class="storm-metric">
+                        <strong>Category:</strong> ${storm.category === 0 ? 'TS' : storm.category}
+                    </div>
+                    <div class="storm-metric">
+                        <strong>Wind:</strong> ${storm.wind_mph} mph
+                    </div>
+                    <div class="storm-metric">
+                        <strong>Pressure:</strong> ${storm.pressure || 'N/A'} mb
+                    </div>
+                    <div class="storm-metric">
+                        <strong>States:</strong> ${storm.landfall_states?.join(', ') || 'None'}
+                    </div>
+                    <div class="storm-metric">
+                        <strong>Deaths:</strong> ${storm.deaths || 0}
+                    </div>
+                    <div class="storm-metric">
+                        <strong>Damage:</strong> ${storm.damage_millions ? '$' + storm.damage_millions.toLocaleString() + 'M' : 'N/A'}
+                    </div>
+                    <div class="storm-metric">
+                        <strong>Impact Level:</strong> 
+                        <span class="font-bold" style="color: ${impactColor}">${storm.rc_impact_level}</span>
+                    </div>
+                    <div class="storm-metric">
+                        <strong>RC Response:</strong> ${storm.rc_response?.responded ? 'Yes' : 'No'}
+                    </div>
+                </div>
+                
+                ${storm.resources?.tcr_pdf ? `
+                    <div class="mt-4">
+                        <a href="${storm.resources.tcr_pdf}" target="_blank" class="tcr-button">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                </path>
+                            </svg>
+                            View TCR Report
+                        </a>
+                    </div>
+                ` : ''}
+            `;
+        }
+
+        // Reset storm card
+        function resetStormCard(position) {
+            const card = document.getElementById(`storm${position}Card`);
+            card.innerHTML = `
+                <div class="text-center text-gray-500 py-8">
+                    <svg class="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    <p>Select a storm</p>
+                </div>
+            `;
+        }
+
+        // Find similar storms
+        function findSimilarStorms(storm) {
+            const similarStorms = allStorms
+                .filter(s => s.storm_id !== storm.storm_id)
+                .map(s => {
+                    // Calculate similarity score
+                    let score = 0;
+                    
+                    // Category similarity (40 points)
+                    const catDiff = Math.abs(s.category - storm.category);
+                    score += Math.max(0, 40 - catDiff * 10);
+                    
+                    // Wind speed similarity (30 points)
+                    const windDiff = Math.abs((s.wind_mph || 0) - (storm.wind_mph || 0));
+                    score += Math.max(0, 30 - windDiff / 5);
+                    
+                    // Month similarity (20 points)
+                    const monthDiff = Math.abs(s.month - storm.month);
+                    score += Math.max(0, 20 - monthDiff * 5);
+                    
+                    // Landfall state overlap (10 points)
+                    if (s.landfall_states && storm.landfall_states) {
+                        const overlap = s.landfall_states.filter(state => 
+                            storm.landfall_states.includes(state)
+                        ).length;
+                        score += overlap * 10;
+                    }
+                    
+                    return { storm: s, score: Math.round(score) };
+                })
+                .filter(s => s.score > 50)
+                .sort((a, b) => b.score - a.score)
+                .slice(0, 5);
+            
+            const patternSection = document.getElementById('patternSection');
+            const listDiv = document.getElementById('similarStormsList');
+            
+            if (similarStorms.length > 0) {
+                patternSection.style.display = 'block';
+                
+                listDiv.innerHTML = similarStorms.map(match => `
+                    <div class="similar-storm" onclick="selectSimilarStorm('${match.storm.storm_id}')">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="font-bold">${match.storm.name} (${match.storm.year})</h4>
+                                <p class="text-sm text-gray-600">
+                                    Category ${match.storm.category} • ${match.storm.wind_mph} mph • 
+                                    ${match.storm.landfall_states?.join(', ') || 'No US landfall'}
+                                </p>
+                                ${match.storm.deaths ? `<p class="text-sm text-red-600">${match.storm.deaths} deaths</p>` : ''}
+                            </div>
+                            <span class="match-score">${match.score}% match</span>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                patternSection.style.display = 'none';
+            }
+        }
+
+        // Select similar storm for comparison
+        function selectSimilarStorm(stormId) {
+            // Find first empty slot or use slot 2
+            if (!selectedStorms[1]) {
+                document.getElementById('storm2Select').value = stormId;
+                selectStorm(2);
+            } else if (!selectedStorms[2]) {
+                document.getElementById('storm3Select').value = stormId;
+                selectStorm(3);
+            } else {
+                document.getElementById('storm2Select').value = stormId;
+                selectStorm(2);
+            }
+        }
+
+        // Predict resources
+        function predictResources(storm) {
+            const predictionSection = document.getElementById('predictionSection');
+            
+            if (storm) {
+                predictionSection.style.display = 'block';
+                
+                // Base predictions on category and impact score
+                const baseShelters = storm.category * 15 + (storm.rc_impact_score / 2);
+                const baseMeals = storm.category * 50000 + (storm.rc_impact_score * 1000);
+                const baseVolunteers = storm.category * 200 + (storm.rc_impact_score * 5);
+                const baseCost = storm.category * 2 + (storm.rc_impact_score / 10);
+                
+                // Add randomness for realism
+                const shelters = Math.round(baseShelters * (0.8 + Math.random() * 0.4));
+                const meals = Math.round(baseMeals * (0.8 + Math.random() * 0.4));
+                const volunteers = Math.round(baseVolunteers * (0.8 + Math.random() * 0.4));
+                const cost = (baseCost * (0.8 + Math.random() * 0.4)).toFixed(1);
+                
+                document.getElementById('predictedShelters').textContent = shelters;
+                document.getElementById('predictedMeals').textContent = (meals / 1000).toFixed(0) + 'K';
+                document.getElementById('predictedVolunteers').textContent = volunteers.toLocaleString();
+                document.getElementById('predictedCost').textContent = '$' + cost + 'M';
+            } else {
+                predictionSection.style.display = 'none';
+            }
+        }
+
+        // Show TCR links
+        function showTCRLinks(storm) {
+            const tcrSection = document.getElementById('tcrSection');
+            const linksDiv = document.getElementById('tcrLinks');
+            
+            if (storm && storm.resources) {
+                tcrSection.style.display = 'block';
+                
+                const links = [];
+                
+                if (storm.resources.tcr_pdf) {
+                    links.push(`
+                        <a href="${storm.resources.tcr_pdf}" target="_blank" class="tcr-button">
+                            📄 PDF Report
+                        </a>
+                    `);
+                }
+                
+                if (storm.resources.tcr_kmz) {
+                    links.push(`
+                        <a href="${storm.resources.tcr_kmz}" target="_blank" class="tcr-button" style="background: #3b82f6;">
+                            🌍 Google Earth (KMZ)
+                        </a>
+                    `);
+                }
+                
+                if (storm.resources.tcr_shp) {
+                    links.push(`
+                        <a href="${storm.resources.tcr_shp}" target="_blank" class="tcr-button" style="background: #8b5cf6;">
+                            📍 GIS Shapefile
+                        </a>
+                    `);
+                }
+                
+                if (storm.resources.nhc_archive) {
+                    links.push(`
+                        <a href="${storm.resources.nhc_archive}" target="_blank" class="tcr-button" style="background: #f59e0b;">
+                            📚 NHC Archive
+                        </a>
+                    `);
+                }
+                
+                linksDiv.innerHTML = links.join('');
+            } else {
+                tcrSection.style.display = 'none';
+            }
+        }
+
+        // Update comparison chart
+        function updateComparisonChart() {
+            const validStorms = selectedStorms.filter(s => s !== null);
+            
+            if (validStorms.length === 0) {
+                Plotly.purge('comparisonChart');
+                return;
+            }
+            
+            const traces = [];
+            const categories = ['Wind (mph)', 'Pressure (mb)', 'Deaths', 'Damage ($M)', 'RC Score'];
+            
+            validStorms.forEach(storm => {
+                traces.push({
+                    type: 'scatterpolar',
+                    r: [
+                        storm.wind_mph || 0,
+                        storm.pressure ? 1050 - storm.pressure : 0,
+                        Math.min(storm.deaths || 0, 200),
+                        Math.min((storm.damage_millions || 0) / 100, 200),
+                        storm.rc_impact_score || 0
+                    ],
+                    theta: categories,
+                    fill: 'toself',
+                    name: `${storm.name} (${storm.year})`
+                });
+            });
+            
+            const layout = {
+                polar: {
+                    radialaxis: {
+                        visible: true,
+                        range: [0, 200]
+                    }
+                },
+                showlegend: true,
+                title: 'Storm Comparison Radar'
+            };
+            
+            Plotly.newPlot('comparisonChart', traces, layout, {responsive: true});
+        }
+
+        // Helper function
+        function getImpactColor(score) {
+            if (score >= 80) return '#7f1d1d';
+            if (score >= 60) return '#dc2626';
+            if (score >= 40) return '#f59e0b';
+            if (score >= 20) return '#10b981';
+            return '#3b82f6';
+        }
+
+        // Auto-select some storms for demo
+        setTimeout(() => {
+            // Select Katrina as primary
+            const katrina = allStorms.find(s => s.name === 'KATRINA' && s.year === 2005);
+            if (katrina) {
+                document.getElementById('storm1Select').value = katrina.storm_id;
+                selectStorm(1);
+            }
+        }, 500);
+    </script>
+</body>
+</html>
