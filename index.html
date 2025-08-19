@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="atlantic-storms-enhanced.js"></script>
+    <script src="storm-sidebar-component.js"></script>
     <style>
         [x-cloak] { display: none !important; }
         .full-height { height: calc(100vh - 4rem); }
@@ -460,62 +461,116 @@
 
         <!-- Database Tab -->
         <div x-show="activeTab === 'database'" class="h-full p-6" x-cloak>
-            <div class="bg-white rounded-lg shadow-lg p-6 h-full overflow-auto">
-                <h2 class="text-xl font-bold mb-4">HURDAT2 Hurricane Database</h2>
-                
-                <!-- Search Bar -->
-                <div class="mb-6">
-                    <div class="flex space-x-4">
-                        <input type="text" x-model="dbSearch" @input="searchDatabase()" 
-                               placeholder="Search by name, year, or location..." 
-                               class="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <button @click="dbSearch = ''; searchDatabase()" 
-                                class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg">
-                            Clear
-                        </button>
+            <div class="h-full grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Database Search Panel (Left Side) -->
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-lg shadow-lg p-6 h-full overflow-auto">
+                        <h2 class="text-xl font-bold mb-4">HURDAT2 Hurricane Database</h2>
+                        
+                        <!-- Search Bar -->
+                        <div class="mb-6">
+                            <div class="flex space-x-4">
+                                <input type="text" x-model="dbSearch" @input="searchDatabase()" 
+                                       placeholder="Search by name, year, or location..." 
+                                       class="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <button @click="dbSearch = ''; searchDatabase()" 
+                                        class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg">
+                                    Clear
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Results Table -->
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Year</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Wind Speed</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Landfall</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <template x-for="storm in dbResults" :key="storm.id">
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900" x-text="storm.year"></td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900" x-text="storm.name"></td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
+                                                      :class="getCategoryClass(storm.category)"
+                                                      x-text="'Cat ' + storm.category"></span>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" x-text="storm.windSpeed + ' mph'"></td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" x-text="storm.landfall"></td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                                <button @click="viewStormOnMapDatabase(storm)" 
+                                                        class="text-blue-600 hover:text-blue-900">
+                                                    View Details
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Results Count -->
+                        <div class="mt-4 text-sm text-gray-600">
+                            Showing <span x-text="dbResults.length"></span> of <span x-text="allStorms.length"></span> storms
+                        </div>
                     </div>
                 </div>
-                
-                <!-- Results Table -->
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Year</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Wind Speed</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Landfall</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            <template x-for="storm in dbResults" :key="storm.id">
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900" x-text="storm.year"></td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900" x-text="storm.name"></td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
-                                              :class="getCategoryClass(storm.category)"
-                                              x-text="'Cat ' + storm.category"></span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" x-text="storm.windSpeed + ' mph'"></td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" x-text="storm.landfall"></td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <button @click="viewStormOnMap(storm)" 
-                                                class="text-blue-600 hover:text-blue-900">
-                                            View on Map
-                                        </button>
-                                    </td>
-                                </tr>
-                            </template>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <!-- Results Count -->
-                <div class="mt-4 text-sm text-gray-600">
-                    Showing <span x-text="dbResults.length"></span> of <span x-text="allStorms.length"></span> storms
+
+                <!-- Storm Details Sidebar (Right Side) -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-lg shadow-lg p-4 h-full flex flex-col">
+                        <!-- Storm Info Header -->
+                        <div class="flex items-center mb-4 pb-4 border-b border-gray-200">
+                            <div class="flex items-center">
+                                <div id="categoryIconDb" class="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg mr-3" 
+                                     style="background-color: #8B9DC3;">TS</div>
+                                <div>
+                                    <h3 id="stormTitleDb" class="text-lg font-bold text-gray-800">Select a Storm</h3>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Storm Stats -->
+                        <div class="grid grid-cols-2 gap-3 mb-4 text-sm">
+                            <div class="text-center p-2 bg-gray-50 rounded">
+                                <div class="font-medium text-gray-600">Date</div>
+                                <div id="statDateDb" class="font-bold text-gray-800">-</div>
+                            </div>
+                            <div class="text-center p-2 bg-gray-50 rounded">
+                                <div class="font-medium text-gray-600">Wind</div>
+                                <div id="statWindDb" class="font-bold text-gray-800">-</div>
+                            </div>
+                            <div class="text-center p-2 bg-gray-50 rounded">
+                                <div class="font-medium text-gray-600">Landfall</div>
+                                <div id="statLandfallDb" class="font-bold text-gray-800">-</div>
+                            </div>
+                            <div class="text-center p-2 bg-gray-50 rounded">
+                                <div class="font-medium text-gray-600">Deaths</div>
+                                <div id="statDeathsDb" class="font-bold text-gray-800">-</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Map -->
+                        <div class="mb-4">
+                            <div id="mapDb" style="height: 300px; border-radius: 8px;"></div>
+                        </div>
+                        
+                        <!-- Narrative Section -->
+                        <div class="flex-1 overflow-auto">
+                            <h4 class="font-bold text-gray-800 mb-2">Historical Narrative</h4>
+                            <div id="narrativeContentDb" class="text-sm text-gray-700 leading-relaxed">
+                                Select a storm from the database for detailed narrative information.
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

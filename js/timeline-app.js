@@ -181,7 +181,7 @@ function hurricaneApp() {
                 this.updateStateComparison();
                 this.searchDatabase();
                 
-                // Watch for tab changes to refresh timeline
+                // Watch for tab changes to refresh timeline and initialize sidebar
                 this.$watch('activeTab', (newTab) => {
                     if (newTab === 'timeline') {
                         setTimeout(() => {
@@ -192,6 +192,26 @@ function hurricaneApp() {
                                     setTimeout(() => this.updateTimeline(), 100);
                                 }
                             });
+                        }, 100);
+                    } else if (newTab === 'database') {
+                        // Initialize StormSidebar component for database tab
+                        setTimeout(() => {
+                            if (typeof StormSidebar !== 'undefined') {
+                                StormSidebar.init({
+                                    containerId: 'stormInfoPanelDb',
+                                    narrativeId: 'narrativeContentDb',
+                                    mapId: 'mapDb',
+                                    enableMap: true,
+                                    // Override element IDs for database tab
+                                    categoryIconId: 'categoryIconDb',
+                                    stormTitleId: 'stormTitleDb',
+                                    statDateId: 'statDateDb',
+                                    statWindId: 'statWindDb',
+                                    statLandfallId: 'statLandfallDb',
+                                    statDeathsId: 'statDeathsDb'
+                                });
+                                console.log('Database StormSidebar initialized');
+                            }
                         }, 100);
                     }
                 });
@@ -541,6 +561,35 @@ function hurricaneApp() {
         viewStormOnMap(storm) {
             this.activeTab = 'timeline';
             this.selectStorm(storm);
+        },
+
+        viewStormOnMapDatabase(storm) {
+            // Convert the database storm format to match ATLANTIC_STORMS_ENHANCED format
+            const enhancedStorm = ATLANTIC_STORMS_ENHANCED.find(s => 
+                s.name === storm.name && s.year === storm.year
+            );
+            
+            if (enhancedStorm) {
+                console.log('Using enhanced storm data for sidebar:', enhancedStorm);
+                StormSidebar.updateStorm(enhancedStorm);
+            } else {
+                // Fallback to basic storm data
+                console.log('Using basic storm data for sidebar:', storm);
+                const basicStorm = {
+                    name: storm.name,
+                    year: storm.year,
+                    month: storm.month || 9,
+                    day: storm.day || 1,
+                    category: storm.category,
+                    wind_mph: storm.windSpeed,
+                    deaths: storm.deaths || 0,
+                    landfall_states: storm.state ? [storm.state] : [],
+                    lat: storm.lat,
+                    lon: storm.lon,
+                    storm_id: `AL${storm.id.toString().padStart(2, '0')}${storm.year}`
+                };
+                StormSidebar.updateStorm(basicStorm);
+            }
         },
 
         getCategoryClass(category) {

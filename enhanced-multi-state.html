@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="atlantic-storms-enhanced.js"></script>
+    <script src="storm-sidebar-component.js"></script>
     <style>
         * {
             margin: 0;
@@ -1546,260 +1547,19 @@
             }
         });
         
-        // Map and sidebar functions
-        let map = null;
-        
-        function initMap() {
-            if (!map) {
-                map = L.map('map').setView([25.0, -80.0], 5);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '© OpenStreetMap contributors'
-                }).addTo(map);
-            }
-        }
-        
-        function updateStormInfoPanel(storm) {
-            const icon = document.getElementById('categoryIcon');
-            const title = document.getElementById('stormTitle');
-            
-            title.textContent = storm.name;
-            icon.textContent = storm.category === 0 ? 'TS' : storm.category;
-            icon.style.backgroundColor = getCategoryColor(storm.category);
-            
-            document.getElementById('statDate').textContent = storm.date || '-';
-            document.getElementById('statWind').textContent = storm.wind_mph ? `${storm.wind_mph} mph` : '-';
-            document.getElementById('statLandfall').textContent = storm.state || '-';
-            document.getElementById('statDeaths').textContent = storm.deaths || '0';
-            
-            // Update narrative
-            const narrativeContent = document.getElementById('narrativeContent');
-            if (STORM_NARRATIVES[storm.name]) {
-                narrativeContent.textContent = STORM_NARRATIVES[storm.name];
-            } else {
-                narrativeContent.textContent = `Select a storm with landfall history for detailed narrative information.`;
-            }
-        }
-        
-        async function showStormOnMap(storm) {
-            if (!map) return;
-            
-            // Clear existing layers
-            map.eachLayer(function(layer) {
-                if (layer instanceof L.Marker || layer instanceof L.Polyline) {
-                    map.removeLayer(layer);
-                }
+        // Initialize storm sidebar component on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            StormSidebar.init({
+                containerId: 'stormInfoPanel',
+                narrativeId: 'narrativeContent',
+                mapId: 'map',
+                enableMap: true
             });
-            
-            // Use IDENTICAL system as timeline tab
-            const trackData = await loadStormTrack(storm);
-            
-            if (trackData) {
-                console.log('Track data loaded, drawing storm track');
-                drawStormTrack(trackData, storm);
-            } else {
-                console.log('No track data found, showing single point');
-                // Fallback to single point if no track data available
-                if (storm.lat && storm.lon) {
-                    const color = getCategoryColor(storm.category);
-                    L.circleMarker([storm.lat, storm.lon], {
-                        color: color,
-                        fillColor: color,
-                        fillOpacity: 0.7,
-                        radius: 8
-                    }).addTo(map).bindPopup(`<b>${storm.name}</b><br>Category ${storm.category}<br>${storm.wind_mph} mph`);
-                    
-                    map.setView([storm.lat, storm.lon], 6);
-                }
-            }
-        }
-        
-        // Add the same dynamic track loading functions as timeline
-        async function loadStormTrack(storm) {
-            try {
-                const decade = Math.floor(storm.year / 10) * 10;
-                
-                const pointsFile = `./hurdat2_data/points_${decade}s.geojson`;
-                console.log(`=== MULTI-STATE TRACK LOADING ===`);
-                console.log(`File: ${pointsFile}`);
-                console.log(`Storm ID: "${storm.storm_id}" (${typeof storm.storm_id})`);
-                console.log(`Storm name: "${storm.name}"`);
-                console.log(`Storm year: ${storm.year}`);
-                
-                let pointsResponse = await fetch(pointsFile);
-                if (pointsResponse.ok) {
-                    const pointsData = await pointsResponse.json();
-                    const pointFeatures = pointsData.features.filter(f => 
-                        f.properties.storm_id === storm.storm_id
-                    );
-                    
-                    if (pointFeatures.length > 0) {
-                        console.log(`Found ${pointFeatures.length} track points for ${storm.name} - RAINBOW TRACK AVAILABLE`);
-                        return { type: 'points', features: pointFeatures };
-                    } else {
-                        console.log(`No point data found for ${storm.name} in ${pointsFile}`);
-                    }
-                } else {
-                    console.log(`Points file ${pointsFile} not accessible`);
-                }
-                
-                const tracksFile = `./hurdat2_data/tracks_${decade}s.geojson`;
-                console.log(`Fallback: Loading track line from ${tracksFile} for storm ${storm.storm_id || storm.name}`);
-                
-                const tracksResponse = await fetch(tracksFile);
-                if (!tracksResponse.ok) {
-                    console.log(`Track file ${tracksFile} not found`);
-                    return null;
-                }
-                
-                const tracksData = await tracksResponse.json();
-                const feature = tracksData.features.find(f => 
-                    f.properties.storm_id === storm.storm_id
-                );
-                
-                if (feature && feature.geometry.type === 'LineString') {
-                    console.log(`Found track line for ${storm.name} with ${feature.geometry.coordinates.length} points - SINGLE COLOR TRACK`);
-                    return { type: 'line', geometry: feature.geometry };
-                } else {
-                    console.log(`No track found for storm ${storm.storm_id || storm.name} (${storm.name})`);
-                    return null;
-                }
-            } catch (error) {
-                console.error('Error loading storm track:', error);
-                return null;
-            }
-        }
-        
-        function drawStormTrack(trackData, storm) {
-            if (trackData.type === 'points' && trackData.features) {
-                drawRainbowTrack(trackData.features, storm);
-            } else if (trackData.type === 'line' && trackData.geometry) {
-                drawSimpleTrack(trackData.geometry, storm);
-            }
-        }
-        
-        function drawRainbowTrack(pointFeatures, storm) {
-            if (pointFeatures.length === 0) return;
-            
-            pointFeatures.sort((a, b) => {
-                if (a.properties.datetime && b.properties.datetime) {
-                    return new Date(a.properties.datetime) - new Date(b.properties.datetime);
-                }
-                return 0;
-            });
-            
-            const allLatLngs = [];
-            
-            for (let i = 0; i < pointFeatures.length - 1; i++) {
-                const point1 = pointFeatures[i];
-                const point2 = pointFeatures[i + 1];
-                
-                const coord1 = point1.geometry.coordinates;
-                const coord2 = point2.geometry.coordinates;
-                const latLng1 = [coord1[1], coord1[0]];
-                const latLng2 = [coord2[1], coord2[0]];
-                
-                allLatLngs.push(latLng1);
-                if (i === pointFeatures.length - 2) allLatLngs.push(latLng2);
-                
-                const category1 = point1.properties.category || 0;
-                const category2 = point2.properties.category || 0;
-                const maxCategory = Math.max(category1, category2);
-                
-                L.polyline([latLng1, latLng2], {
-                    color: getCategoryColor(maxCategory),
-                    weight: 5,
-                    opacity: 0.8
-                }).addTo(map);
-            }
-            
-            if (allLatLngs.length > 0) {
-                map.fitBounds(allLatLngs, {padding: [30, 30]});
-            }
-        }
-        
-        function drawSimpleTrack(geometry, storm) {
-            const coordinates = geometry.coordinates;
-            const latLngs = coordinates.map(coord => [coord[1], coord[0]]);
-            
-            // Use storm category color, but make it more prominent since we can't do rainbow
-            const stormColor = getCategoryColor(storm.category || 3);
-            
-            L.polyline(latLngs, {
-                color: stormColor,
-                weight: 6,  // Slightly thicker
-                opacity: 0.9  // More opaque
-            }).addTo(map);
-            
-            // Add start and end markers to show storm progression
-            if (latLngs.length >= 2) {
-                // Start marker (green circle)
-                L.circleMarker(latLngs[0], {
-                    color: '#00ff00',
-                    fillColor: '#00ff00',
-                    fillOpacity: 0.8,
-                    radius: 8,
-                    weight: 2
-                }).addTo(map).bindPopup(`<b>${storm.name}</b><br>Track Start`);
-                
-                // End marker (red circle)
-                L.circleMarker(latLngs[latLngs.length - 1], {
-                    color: stormColor,
-                    fillColor: stormColor,
-                    fillOpacity: 0.9,
-                    radius: 10,
-                    weight: 3
-                }).addTo(map).bindPopup(`<b>${storm.name}</b><br>Category ${storm.category}<br>${storm.wind_mph} mph`);
-            }
-            
-            map.fitBounds(latLngs, {padding: [30, 30]});
-        }
-        
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            initMap();
-            updateSelection();
-            updateTimeline();
         });
         
-        // Show storm details in modal
+        // Simple function to show storm details using the reusable component
         function showStormDetails(storm) {
-            console.log('=== SHOWING STORM DETAILS (SIMPLIFIED) ===');
-            console.log('Storm object:', storm);
-            
-            // Initialize map if needed
-            if (!map) {
-                initMap();
-            }
-            
-            // Directly populate the sidebar elements
-            const categoryIcon = document.getElementById('categoryIcon');
-            const stormTitle = document.getElementById('stormTitle');
-            const statDate = document.getElementById('statDate');
-            const statWind = document.getElementById('statWind');
-            const statLandfall = document.getElementById('statLandfall');
-            const statDeaths = document.getElementById('statDeaths');
-            const narrativeContent = document.getElementById('narrativeContent');
-            
-            // Update category icon and title
-            categoryIcon.textContent = storm.category === 0 ? 'TS' : storm.category;
-            categoryIcon.style.backgroundColor = getCategoryColor(storm.category);
-            stormTitle.textContent = `${storm.name} (${storm.year})`;
-            
-            // Update stats
-            statDate.textContent = `${storm.month}/${storm.day}/${storm.year}`;
-            statWind.textContent = `${storm.wind_mph} mph`;
-            statLandfall.textContent = storm.landfall_states ? storm.landfall_states.join(', ') : '-';
-            statDeaths.textContent = storm.deaths || '0';
-            
-            // Update narrative
-            if (STORM_NARRATIVES[storm.name]) {
-                narrativeContent.textContent = STORM_NARRATIVES[storm.name];
-            } else {
-                narrativeContent.textContent = `Select a storm with landfall history for detailed narrative information.`;
-            }
-            
-            // Show storm on map
-            showStormOnMap(storm);
+            StormSidebar.updateStorm(storm);
         }
         // Close modal
         document.querySelector('.close').onclick = function() {
