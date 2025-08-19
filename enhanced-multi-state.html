@@ -451,8 +451,9 @@
     </div>
     
     <div class="container">
-        <!-- Controls Header -->
-        <div class="controls-header">
+        <div class="main-content">
+            <!-- Controls Header -->
+            <div class="controls-header">
             <div class="state-selector">
                 <label>Select States:</label>
                 <div class="multi-select">
@@ -562,12 +563,51 @@
             </div>
         </div>
         
-        <div id="timeline"></div>
+            <div id="timeline"></div>
+            
+            <div class="stats-banner">
+                <span id="stats-text">Loading multi-state hurricane data...</span>
+                <div style="font-size: 12px; color: #bbb; margin-top: 8px;">
+                    HURDAT2 Database | Multi-State Analysis | Research: jeff.franzen2@redcross.org
+                </div>
+            </div>
+        </div>
         
-        <div class="stats-banner">
-            <span id="stats-text">Loading multi-state hurricane data...</span>
-            <div style="font-size: 12px; color: #bbb; margin-top: 8px;">
-                HURDAT2 Database | Multi-State Analysis | Research: jeff.franzen2@redcross.org
+        <div class="right-sidebar">
+            <div class="storm-info-panel" id="stormInfoPanel">
+                <div class="storm-banner">
+                    <div class="storm-name-section">
+                        <div class="category-icon" id="categoryIcon" style="background-color: #8B9DC3;">TS</div>
+                        <div class="storm-title" id="stormTitle">Select a Storm</div>
+                    </div>
+                    <div class="stats-inline">
+                        <div class="stat-inline">
+                            <div class="stat-label">Date</div>
+                            <div class="stat-value" id="statDate">-</div>
+                        </div>
+                        <div class="stat-inline">
+                            <div class="stat-label">Wind</div>
+                            <div class="stat-value" id="statWind">-</div>
+                        </div>
+                        <div class="stat-inline">
+                            <div class="stat-label">Landfall</div>
+                            <div class="stat-value" id="statLandfall">-</div>
+                        </div>
+                        <div class="stat-inline">
+                            <div class="stat-label">Deaths</div>
+                            <div class="stat-value" id="statDeaths">-</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="map-panel">
+                <div id="map"></div>
+            </div>
+            <div class="narrative-panel" id="narrativePanel">
+                <div class="narrative-header">Historical Narrative</div>
+                <div class="narrative-subtitle">Select a storm with landfall history for detailed narrative information.</div>
+                <div class="narrative-content" id="narrativeContent">
+                </div>
             </div>
         </div>
     </div>
@@ -1279,8 +1319,89 @@
             }
         });
         
+        // Map and sidebar functions
+        let map = null;
+        
+        function initMap() {
+            if (!map) {
+                map = L.map('map').setView([25.0, -80.0], 5);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap contributors'
+                }).addTo(map);
+            }
+        }
+        
+        function updateStormInfoPanel(storm) {
+            const icon = document.getElementById('categoryIcon');
+            const title = document.getElementById('stormTitle');
+            
+            title.textContent = storm.name;
+            icon.textContent = storm.category === 0 ? 'TS' : storm.category;
+            icon.style.backgroundColor = getCategoryColor(storm.category);
+            
+            document.getElementById('statDate').textContent = storm.date || '-';
+            document.getElementById('statWind').textContent = storm.wind_mph ? `${storm.wind_mph} mph` : '-';
+            document.getElementById('statLandfall').textContent = storm.state || '-';
+            document.getElementById('statDeaths').textContent = storm.deaths || '0';
+            
+            // Update narrative
+            const narrativeContent = document.getElementById('narrativeContent');
+            if (STORM_NARRATIVES[storm.name]) {
+                narrativeContent.textContent = STORM_NARRATIVES[storm.name];
+            } else {
+                narrativeContent.textContent = `Select a storm with landfall history for detailed narrative information.`;
+            }
+        }
+        
+        function showStormOnMap(storm) {
+            if (!map) return;
+            
+            // Clear existing layers
+            map.eachLayer(function(layer) {
+                if (layer instanceof L.Marker || layer instanceof L.Polyline) {
+                    map.removeLayer(layer);
+                }
+            });
+            
+            // Show storm path if available
+            const path = STORM_PATHS[storm.name];
+            if (path && path.length > 0) {
+                // Draw path segments with color based on intensity
+                for (let i = 0; i < path.length - 1; i++) {
+                    const segment = [
+                        [path[i].lat, path[i].lon],
+                        [path[i + 1].lat, path[i + 1].lon]
+                    ];
+                    
+                    const category = Math.max(path[i].category, path[i + 1].category);
+                    
+                    L.polyline(segment, {
+                        color: getCategoryColor(category),
+                        weight: 6,
+                        opacity: 0.8
+                    }).addTo(map);
+                }
+                
+                // Fit map to show entire path
+                const pathBounds = path.map(p => [p.lat, p.lon]);
+                map.fitBounds(pathBounds, {padding: [20, 20]});
+            } else {
+                // Show single point
+                const coords = storm.lat && storm.lon ? [storm.lat, storm.lon] : [30.0, -85.0];
+                L.circleMarker(coords, {
+                    color: getCategoryColor(storm.category),
+                    fillColor: getCategoryColor(storm.category),
+                    fillOpacity: 0.7,
+                    radius: 8
+                }).addTo(map).bindPopup(`<b>${storm.name}</b><br>Category ${storm.category}<br>${storm.wind_mph} mph`);
+                
+                map.setView(coords, 6);
+            }
+        }
+        
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
+            initMap();
             updateSelection();
             updateTimeline();
         });
@@ -1288,6 +1409,11 @@
         // Show storm details in modal
         function showStormDetails(storm) {
             console.log('showStormDetails called with:', storm);
+            
+            // Update the sidebar panel
+            updateStormInfoPanel(storm);
+            showStormOnMap(storm);
+            
             console.log('In iframe?', window.parent !== window);
             console.log('Has postMessage?', window.parent.postMessage);
             

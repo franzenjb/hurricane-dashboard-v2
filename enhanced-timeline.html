@@ -622,7 +622,7 @@
                 const decade = Math.floor(storm.year / 10) * 10;
                 
                 // Try to load point data first (for category-based coloring)
-                const pointsFile = `./hurdat2_data/points_${decade}s.geojson`;
+                const pointsFile = `./hurdat2_data/points_${decade}s.geojson?v=${Date.now()}`;
                 console.log(`Trying to load point data from ${pointsFile} for storm ${storm.storm_id}`);
                 
                 let pointsResponse = await fetch(pointsFile);
@@ -640,7 +640,7 @@
                 }
                 
                 // Fallback to track lines
-                const tracksFile = `./hurdat2_data/tracks_${decade}s.geojson`;
+                const tracksFile = `./hurdat2_data/tracks_${decade}s.geojson?v=${Date.now()}`;
                 console.log(`Loading track line from ${tracksFile} for storm ${storm.storm_id}`);
                 
                 const tracksResponse = await fetch(tracksFile);
