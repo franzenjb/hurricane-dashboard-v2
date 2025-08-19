@@ -666,6 +666,16 @@
     </div>
 
     <script>
+        // Initialize StormSidebar component
+        document.addEventListener('DOMContentLoaded', function() {
+            StormSidebar.init({
+                containerId: 'stormInfoPanel',
+                narrativeId: 'narrativeContent',
+                enableMap: true,
+                mapId: 'map'
+            });
+        });
+
         // EXPANDED MULTI-STATE HURRICANE DATA (1851-2024)
         // Includes historical storms from HURDAT2 database
         
@@ -1484,7 +1494,7 @@
                     const storm = allStorms[pointIndex];
                     if (storm) {
                         console.log(`Storm ID: "${storm.storm_id}"`);
-                        showStormDetails(storm); // Pass the FULL storm object with storm_id
+                        StormSidebar.updateStorm(storm); // Pass the FULL storm object with storm_id
                     } else {
                         console.log('No storm found at index', pointIndex);
                     }
