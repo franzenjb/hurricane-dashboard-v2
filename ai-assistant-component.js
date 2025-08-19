@@ -49,10 +49,10 @@ class AIAssistant {
             </div>
             <div class="assistant-suggestions">
                 <div class="suggestion-title">Try asking:</div>
-                <button class="suggestion-chip" data-query="When do hurricanes typically hit west Florida?">West Florida timing</button>
-                <button class="suggestion-chip" data-query="Tell me about Hurricane Milton in 2024">Hurricane Milton 2024</button>
-                <button class="suggestion-chip" data-query="Show me all Category 5 hurricanes">Category 5 storms</button>
-                <button class="suggestion-chip" data-query="What hurricanes hit Tampa Bay?">Tampa Bay history</button>
+                <button class="suggestion-chip" data-query="What Category 5 hurricanes hit Florida's east coast in the last 50 years?">Cat 5 East Coast FL</button>
+                <button class="suggestion-chip" data-query="Tell me about Hurricane Milton's 2024 impact">Hurricane Milton 2024</button>
+                <button class="suggestion-chip" data-query="When is peak hurricane season for Florida?">FL Hurricane Season</button>
+                <button class="suggestion-chip" data-query="Why is Tampa Bay vulnerable to hurricanes?">Tampa Bay Risk</button>
             </div>
         `;
 
@@ -377,7 +377,17 @@ class AIAssistant {
     }
 
     addInitialMessage() {
-        this.addMessage('assistant', 'Hello! I\'m your Hurricane Data Assistant. I can help you explore 173 years of Atlantic hurricane data. Ask me about specific storms, patterns, or impacts!');
+        this.addMessage('assistant', `Hello! I'm your Hurricane Data Assistant with access to the complete HURDAT2 database (1,991 storms from 1851-2024).
+
+I can answer questions about:
+• Specific hurricanes (Andrew, Katrina, Milton, etc.)
+• Category 5 storms and major hurricane history
+• Regional impacts (Florida east/west coast, Gulf states)
+• The 2024 season (Helene, Milton, and others)
+• Historical patterns and trends
+• Why certain areas are vulnerable
+
+Try asking: "What Category 5 hurricanes hit Florida's east coast in the last 50 years?"`);
     }
 
     addMessage(type, content) {
