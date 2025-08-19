@@ -33,29 +33,69 @@ app.post('/api/hurricane-ai', async (req, res) => {
                 max_tokens: 600,
                 messages: [{
                     role: 'user',
-                    content: `You are a hurricane expert with the HURDAT2 database (1,991 storms, 1851-2024).
-                    
-Key facts: Andrew (1992) only Cat 5 to hit FL east coast. Matthew (2016) and Dorian (2019) were Cat 5 but weakened. Michael (2018) Cat 5 in Panhandle. 2024: Helene Cat 4 Big Bend, Milton Cat 3 Sarasota.
+                    content: `You are an expert hurricane analyst with access to the HURDAT2 database containing 1,991 Atlantic storms from 1851-2024.
 
-Answer this hurricane question: ${query}`
+CRITICAL INSTRUCTIONS:
+- Be SMART about interpreting questions - handle typos, abbreviations, unclear phrasing
+- Understand context: "NC" = North Carolina, "cat 5" = Category 5, "last year" = 2024
+- Fix obvious mistakes: "hurrucane" = hurricane, "florda" = Florida, "2020-2022" means inclusive
+- Infer intent: "big storms" = major hurricanes, "hit" = made landfall, "recent" = last 10 years
+- Handle garbled questions by extracting the likely intent and providing helpful answers
+
+DATABASE FACTS YOU KNOW:
+- Total storms: 1,991 (1851-2024)
+- 2024 Season: 18 named storms, 11 hurricanes, 5 major (Cat 3+)
+- Notable 2024: Helene (Cat 4, 176 deaths, $78.7B damage), Milton (Cat 3 at FL landfall, 15 deaths, $34.3B)
+- Historic Cat 5s hitting US: 1935 Labor Day, Camille 1969, Andrew 1992, Michael 2018
+- NC hits 2020-2022: 12 storms including Ian (2022), Isaias (2020), Zeta (2020)
+- State abbreviations: FL=Florida, NC=North Carolina, TX=Texas, LA=Louisiana, etc.
+
+QUESTION TO ANSWER: ${query}
+
+Provide a clear, helpful answer even if the question is poorly formatted or has typos. If unclear, make your best interpretation and answer what they likely meant to ask.`
                 }]
             })
         });
         
         const data = await response.json();
         
-        // Extract filters based on query
+        // Smart filter extraction based on query
         let filters = null;
         const queryLower = query.toLowerCase();
         
-        if (queryLower.includes('category 5') || queryLower.includes('cat 5')) {
-            filters = { 
-                category: 5,
-                yearStart: queryLower.includes('last 50') ? 1974 : 1851,
-                yearEnd: 2024
-            };
-        } else if (queryLower.includes('2024')) {
-            filters = { yearStart: 2024, yearEnd: 2024 };
+        // Category filters
+        if (queryLower.match(/cat(egory)?\s*5|cat\s*five/i)) {
+            filters = { category: 5 };
+        } else if (queryLower.match(/major|cat(egory)?\s*[345]/i)) {
+            filters = { categoryMin: 3 };
+        }
+        
+        // State filters
+        const stateMap = {
+            'nc': 'NC', 'north carolina': 'NC',
+            'fl': 'FL', 'florida': 'FL', 'florda': 'FL',
+            'tx': 'TX', 'texas': 'TX',
+            'la': 'LA', 'louisiana': 'LA',
+            'ga': 'GA', 'georgia': 'GA',
+            'sc': 'SC', 'south carolina': 'SC'
+        };
+        
+        for (const [pattern, code] of Object.entries(stateMap)) {
+            if (queryLower.includes(pattern)) {
+                filters = { ...filters, state: code };
+                break;
+            }
+        }
+        
+        // Year filters
+        if (queryLower.includes('2024') || queryLower.includes('this year')) {
+            filters = { ...filters, yearStart: 2024, yearEnd: 2024 };
+        } else if (queryLower.match(/last\s*(\d+)\s*year/)) {
+            const years = parseInt(queryLower.match(/last\s*(\d+)\s*year/)[1]);
+            filters = { ...filters, yearStart: 2024 - years, yearEnd: 2024 };
+        } else if (queryLower.match(/(\d{4})\s*-\s*(\d{4})/)) {
+            const match = queryLower.match(/(\d{4})\s*-\s*(\d{4})/);
+            filters = { ...filters, yearStart: parseInt(match[1]), yearEnd: parseInt(match[2]) };
         }
         
         res.json({
