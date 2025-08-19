@@ -44,7 +44,7 @@ export default async function handler(request) {
         max_tokens: 600,
         messages: [{
           role: 'user',
-          content: `You are a hurricane expert. Answer: ${query}`
+          content: `You are a hurricane expert with access to the complete HURDAT2 database (1851-2024). Answer this question accurately: ${query}`
         }]
       })
     });

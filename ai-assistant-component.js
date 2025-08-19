@@ -461,6 +461,77 @@ Try asking: "What Category 5 hurricanes hit Florida's east coast in the last 50 
         this.addMessage('user', query);
         input.value = '';
         sendBtn.disabled = true;
+        this.showTypingIndicator();
+
+        try {
+            let response = null;
+            let data = null;
+
+            // Try Vercel API first
+            try {
+                response = await fetch(this.vercelUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query })
+                });
+                if (response.ok) {
+                    data = await response.json();
+                }
+            } catch (e) {
+                console.log('Vercel not available');
+            }
+
+            // Try local backend if Vercel failed
+            if (!data) {
+                try {
+                    response = await fetch(this.localBackendUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ query })
+                    });
+                    if (response.ok) {
+                        data = await response.json();
+                    }
+                } catch (e) {
+                    console.log('Local backend not available');
+                }
+            }
+
+            this.hideTypingIndicator();
+
+            // Show response - ONLY real AI, no fallbacks
+            if (data && data.answer) {
+                this.addMessage('assistant', data.answer);
+                
+                // Apply filters if AI suggests them
+                if (data.filters) {
+                    this.applyFilters(data.filters);
+                    this.addMessage('system', '✓ Filters applied!');
+                }
+            } else {
+                this.addMessage('assistant', 'AI service unavailable. Run locally: ./setup-ai.sh');
+            }
+
+        } catch (error) {
+            console.error('AI Error:', error);
+            this.hideTypingIndicator();
+            this.addMessage('assistant', 'AI service error. Check console for details.');
+        } finally {
+            sendBtn.disabled = false;
+        }
+    }
+
+    async sendMessage_OLD() {
+        const input = document.getElementById('assistant-input');
+        const sendBtn = document.getElementById('assistant-send');
+        const query = input.value.trim();
+        
+        if (!query) return;
+
+        // Add user message
+        this.addMessage('user', query);
+        input.value = '';
+        sendBtn.disabled = true;
 
         // Show typing indicator
         this.showTypingIndicator();
@@ -545,9 +616,19 @@ Answer concisely: ${query}`
             // Hide typing indicator
             this.hideTypingIndicator();
 
-            // If worker failed or gave poor response, use intelligent fallback
-            if (!data || !data.answer || data.answer.includes('Looking at Hurricane')) {
-                const queryLower = query.toLowerCase();
+            // Only proceed if we got real AI response
+            if (data && data.answer && !data.answer.includes('Looking at Hurricane')) {
+                this.addMessage('assistant', data.answer);
+                
+                // Apply filters if suggested
+                if (data.filters && data.filters.action === 'filter') {
+                    this.applyFilters(data.filters.filters);
+                    this.addMessage('system', '✓ Filters applied!');
+                }
+            } else {
+                // No pre-written fallbacks - only real AI or nothing
+                this.addMessage('assistant', 'AI service is not currently available. For local testing with real AI, run: ./setup-ai.sh');
+            }
                 let answer = '';
                 let filters = null;
                 
