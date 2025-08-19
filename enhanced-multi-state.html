@@ -1940,10 +1940,8 @@
             }
         }
         
-        function createMultiStateTimeline() {
-            // This function name was being called but didn't exist - just redirect to existing logic
-            updateTimelineInternal();
-        }
+        // Note: The actual createMultiStateTimeline function is already defined above (line 1259)
+        // This was just a placeholder - removing the duplicate
         
         // Recreate on window resize
         let resizeTimeout;
@@ -1952,7 +1950,7 @@
             resizeTimeout = setTimeout(() => {
                 if (selectedStates.length > 0) {
                     Plotly.purge('timeline');
-                    updateTimelineInternal();
+                    createMultiStateTimeline();
                 }
             }, 500);
         });
