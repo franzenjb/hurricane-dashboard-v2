@@ -1,59 +1,54 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Enhanced Atlantic Hurricane Timeline</title>
+    <title>Atlantic Hurricane Timeline Test</title>
     <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="atlantic-storms-enhanced.js"></script>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif; margin: 0; background: #f9fafb; }
+        body { font-family: Arial, sans-serif; margin: 0; }
         .container { display: flex; height: 100vh; }
-        .left-sidebar { width: 80px; background: #f3f4f6; padding: 15px; display: flex; flex-direction: column; align-items: center; border-right: 1px solid #e5e7eb; position: relative; }
+        .left-sidebar { width: 80px; background: #e0e0e0; padding: 15px; display: flex; flex-direction: column; align-items: center; border-right: 1px solid #ccc; position: relative; }
         .main-content { flex: 1; display: flex; flex-direction: column; }
-        .right-sidebar { width: 525px; background: #ffffff; border-left: 2px solid #e5e7eb; display: flex; flex-direction: column; }
-        .top-controls { padding: 20px; background: #ffffff; border-bottom: 1px solid #e5e7eb; }
-        .chart-container { flex: 1; position: relative; background: #ffffff; }
+        .right-sidebar { width: 525px; background: #f5f5f5; border-left: 2px solid #ccc; display: flex; flex-direction: column; }
+        .top-controls { padding: 20px; background: #f8f8f8; }
+        .chart-container { flex: 1; position: relative; }
         .vertical-year-slider { position: absolute; left: 25px; top: 60px; bottom: 60px; width: 30px; }
-        .vertical-track { position: relative; width: 8px; height: 100%; background: #d1d5db; border-radius: 4px; margin: 0 auto; }
-        .vertical-range { position: absolute; width: 8px; background: #3b82f6; border-radius: 4px; cursor: grab; }
+        .vertical-track { position: relative; width: 8px; height: 100%; background: #ddd; border-radius: 4px; margin: 0 auto; }
+        .vertical-range { position: absolute; width: 8px; background: #007cba; border-radius: 4px; cursor: grab; }
         .vertical-range:active { cursor: grabbing; }
-        .vertical-handle { position: absolute; width: 24px; height: 24px; background: #3b82f6; border: 3px solid white; border-radius: 50%; cursor: grab; left: -8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .vertical-handle { position: absolute; width: 24px; height: 24px; background: #007cba; border: 3px solid white; border-radius: 50%; cursor: grab; left: -8px; box-shadow: 0 2px 4px rgba(0,0,0,0.3); }
         .vertical-handle:active { cursor: grabbing; }
-        .year-label { position: absolute; left: 40px; font-size: 12px; font-weight: 600; color: #374151; transform: translateY(-50%); width: 40px; text-align: center; }
+        .year-label { position: absolute; left: 40px; font-size: 12px; font-weight: bold; color: #333; transform: translateY(-50%); width: 40px; text-align: center; }
         #timeline { width: 100%; height: 100%; }
-        .controls { margin-bottom: 15px; }
-        .control-group { display: inline-block; margin-right: 20px; margin-bottom: 10px; }
-        .control-label { font-weight: 600; color: #374151; margin-bottom: 8px; display: block; }
-        input[type="text"] { padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; width: 200px; }
-        input[type="checkbox"] { margin-right: 6px; }
-        button { background: #3b82f6; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 500; cursor: pointer; margin-right: 10px; }
-        button:hover { background: #2563eb; }
-        button.secondary { background: #6b7280; }
-        button.secondary:hover { background: #4b5563; }
-        .category-filters { display: flex; flex-wrap: wrap; gap: 12px; }
-        .category-filters label { display: flex; align-items: center; font-size: 14px; color: #374151; }
-        .storm-info-panel { flex: 0 0 20%; background: white; border-bottom: 2px solid #e5e7eb; padding: 20px; overflow-y: auto; }
+        .controls { margin-bottom: 10px; }
+        input, select, button { margin: 5px; padding: 8px; }
+        .popup { position: fixed; top: 20px; right: 20px; width: 300px; background: white; border: 2px solid #333; border-radius: 8px; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); z-index: 1000; display: none; }
+        .popup h3 { margin: 0 0 10px 0; color: #333; }
+        .popup .close { position: absolute; top: 10px; right: 15px; font-size: 24px; cursor: pointer; }
+        .popup .details { line-height: 1.5; }
+        .popup .details div { margin: 5px 0; }
+        .storm-info-panel { flex: 0 0 20%; background: white; border-bottom: 2px solid #ccc; padding: 20px; overflow-y: auto; }
         .storm-header { display: flex; align-items: center; margin-bottom: 15px; }
-        .category-icon { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; font-size: 18px; margin-right: 12px; }
-        .storm-title { font-size: 20px; font-weight: 700; color: #111827; }
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .stat-box { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px; text-align: center; }
-        .stat-label { font-size: 11px; color: #6b7280; text-transform: uppercase; margin-bottom: 4px; font-weight: 600; }
-        .stat-value { font-size: 16px; font-weight: 700; color: #111827; }
-        .map-panel { flex: 0 0 50%; background: white; border-bottom: 2px solid #e5e7eb; }
+        .category-icon { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; font-size: 20px; margin-right: 12px; }
+        .storm-title { font-size: 20px; font-weight: bold; color: #333; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .stat-box { background: #f8f8f8; border: 1px solid #ddd; border-radius: 6px; padding: 10px; text-align: center; }
+        .stat-label { font-size: 10px; color: #666; text-transform: uppercase; margin-bottom: 3px; }
+        .stat-value { font-size: 16px; font-weight: bold; color: #333; }
+        .map-panel { flex: 0 0 50%; background: white; border-bottom: 2px solid #ccc; }
         .narrative-panel { flex: 0 0 30%; background: white; padding: 20px; overflow-y: auto; }
-        .narrative-header { font-size: 18px; font-weight: 700; color: #111827; margin-bottom: 10px; border-bottom: 2px solid #3b82f6; padding-bottom: 8px; }
-        .narrative-subtitle { font-size: 12px; color: #6b7280; margin-bottom: 15px; font-style: italic; }
-        .narrative-content { font-size: 16px; line-height: 1.6; color: #374151; }
+        .narrative-header { font-size: 18px; font-weight: bold; color: #333; margin-bottom: 10px; border-bottom: 2px solid #007cba; padding-bottom: 5px; }
+        .narrative-subtitle { font-size: 12px; color: #666; margin-bottom: 15px; font-style: italic; }
+        .narrative-content { font-size: 16px; line-height: 1.6; color: #555; }
         #map { width: 100%; height: 100%; }
-        h1 { font-size: 24px; font-weight: 700; color: #111827; margin: 0 0 20px 0; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="left-sidebar">
-            <div style="margin-bottom: 20px; font-size: 12px; font-weight: 600; color: #374151;">Years</div>
+            <div style="margin-bottom: 20px; font-size: 12px; font-weight: bold;">Years</div>
             <div class="vertical-year-slider">
                 <div class="vertical-track">
                     <div class="vertical-range" id="verticalRange"></div>
@@ -69,540 +64,726 @@
             <div class="top-controls">
                 <h1>Atlantic Hurricane Timeline</h1>
                 <div class="controls">
-                    <div class="control-group">
-                        <input type="text" id="nameFilter" placeholder="Search by storm name...">
+                    <input type="text" id="nameFilter" placeholder="Search by name">
+                    <div id="categoryFilter" style="display: inline-block; margin: 5px;">
+                        <label style="font-weight: bold;">Categories:</label><br>
+                        <label><input type="checkbox" value="0"> TS</label>
+                        <label><input type="checkbox" value="1"> Cat 1</label>
+                        <label><input type="checkbox" value="2"> Cat 2</label>
+                        <label><input type="checkbox" value="3" checked> Cat 3</label>
+                        <label><input type="checkbox" value="4" checked> Cat 4</label>
+                        <label><input type="checkbox" value="5" checked> Cat 5</label>
                     </div>
-                    <div class="control-group">
-                        <label class="control-label">Categories:</label>
-                        <div class="category-filters" id="categoryFilter">
-                            <label><input type="checkbox" value="0"> TS</label>
-                            <label><input type="checkbox" value="1"> Cat 1</label>
-                            <label><input type="checkbox" value="2"> Cat 2</label>
-                            <label><input type="checkbox" value="3" checked> Cat 3</label>
-                            <label><input type="checkbox" value="4" checked> Cat 4</label>
-                            <label><input type="checkbox" value="5" checked> Cat 5</label>
-                            <label style="margin-left: 20px;">
-                                <input type="checkbox" id="landfallOnly"> Landfall Only
-                            </label>
-                        </div>
+                    <div style="display: inline-block; margin: 5px;">
+                        <label style="font-weight: bold;">
+                            <input type="checkbox" id="landfallOnly"> Landfall Only
+                        </label>
                     </div>
-                    <div class="control-group">
-                        <button onclick="applyFilters()">Apply Filters</button>
-                        <button onclick="clearFilters()" class="secondary">Clear</button>
-                    </div>
+                    <button onclick="applyFilters()">Apply Filters</button>
+                    <button onclick="clearFilters()">Clear</button>
                 </div>
             </div>
             
             <div class="chart-container">
                 <div id="timeline"></div>
             </div>
+            
         </div>
         
         <div class="right-sidebar">
             <div class="storm-info-panel" id="stormInfoPanel">
                 <div class="storm-header">
-                    <div class="category-icon" id="categoryIcon" style="background-color: #6b7280;">TS</div>
+                    <div class="category-icon" id="categoryIcon" style="background-color: #8B9DC3;">TS</div>
                     <div class="storm-title" id="stormTitle">Select a Storm</div>
                 </div>
                 <div class="stats-grid">
                     <div class="stat-box">
-                        <div class="stat-label">Year</div>
-                        <div class="stat-value" id="stormYear">—</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-label">Month</div>
-                        <div class="stat-value" id="stormMonth">—</div>
+                        <div class="stat-label">Date</div>
+                        <div class="stat-value" id="statDate">-</div>
                     </div>
                     <div class="stat-box">
                         <div class="stat-label">Wind Speed</div>
-                        <div class="stat-value" id="stormWind">—</div>
+                        <div class="stat-value" id="statWind">-</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Landfall</div>
+                        <div class="stat-value" id="statLandfall">-</div>
                     </div>
                     <div class="stat-box">
                         <div class="stat-label">Deaths</div>
-                        <div class="stat-value" id="stormDeaths">—</div>
+                        <div class="stat-value" id="statDeaths">-</div>
                     </div>
                 </div>
             </div>
-            
             <div class="map-panel">
                 <div id="map"></div>
             </div>
-            
-            <div class="narrative-panel">
-                <div class="narrative-header">Storm Narrative</div>
+            <div class="narrative-panel" id="narrativePanel">
+                <div class="narrative-header">Historical Narrative</div>
                 <div class="narrative-subtitle">Select a storm with landfall history for detailed narrative information.</div>
                 <div class="narrative-content" id="narrativeContent">
-                    Click on any storm in the timeline above to view detailed information about its path, intensity, and impact.
                 </div>
             </div>
         </div>
     </div>
-
+    
+    <div id="stormPopup" class="popup">
+        <span class="close" onclick="closePopup()">&times;</span>
+        <h3 id="popupTitle">Storm Details</h3>
+        <div id="popupContent" class="details"></div>
+    </div>
+    
     <script>
-        // Global variables
-        let map = null;
-        let currentYear = new Date().getFullYear();
-        let minYear = 2010;
-        let maxYear = currentYear;
+        // Use the enhanced static data with multi-state landfalls and narratives
+        let filteredStorms = [...ATLANTIC_STORMS_ENHANCED];
         
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeMap();
-            initializeVerticalSlider();
-            setupEventListeners();
-            applyFilters(); // Initial load with default filters
-        });
-        
-        function initializeMap() {
-            map = L.map('map').setView([27.0, -85.0], 5);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(map);
+        function getCategoryColor(category) {
+            const colors = {
+                0: "#8B9DC3", 1: "#5CB85C", 2: "#F0AD4E", 
+                3: "#FF7F00", 4: "#D9534F", 5: "#8B008B"
+            };
+            return colors[category] || "#757575";
         }
         
-        function initializeVerticalSlider() {
-            const slider = document.querySelector('.vertical-year-slider');
-            const track = slider.querySelector('.vertical-track');
-            const range = slider.querySelector('.vertical-range');
-            const topHandle = slider.querySelector('#topHandle');
-            const bottomHandle = slider.querySelector('#bottomHandle');
-            const topLabel = document.getElementById('topYearLabel');
-            const bottomLabel = document.getElementById('bottomYearLabel');
-            
-            let isDragging = false;
-            let dragTarget = null;
-            let dragRange = false;
-            
-            function updateSlider() {
-                const trackHeight = track.clientHeight;
-                const yearSpan = 2025 - 1851;
-                const topPos = ((2025 - maxYear) / yearSpan) * trackHeight;
-                const bottomPos = ((2025 - minYear) / yearSpan) * trackHeight;
-                const rangeHeight = bottomPos - topPos;
-                
-                range.style.top = topPos + 'px';
-                range.style.height = rangeHeight + 'px';
-                topHandle.style.top = (topPos - 12) + 'px';
-                bottomHandle.style.top = (bottomPos - 12) + 'px';
-                
-                topLabel.style.top = topPos + 'px';
-                bottomLabel.style.top = bottomPos + 'px';
-                topLabel.textContent = maxYear;
-                bottomLabel.textContent = minYear;
+        // Enhanced landfall detection using analyzed track data
+        function isLikelyUSLandfall(storm) {
+            // Use the enhanced landfall_states array if available
+            if (storm.landfall_states && Array.isArray(storm.landfall_states)) {
+                return storm.landfall_states.length > 0;
             }
+            
+            // Fallback to coordinate-based detection for older data
+            if (!storm.lat || !storm.lon) return false;
+            
+            // Atlantic basin US landfall areas only
+            const ATLANTIC_US_LANDFALL_BOUNDS = {
+                // East Coast: Maine to Florida Keys
+                eastCoast: {
+                    north: 47.5, south: 24.3, east: -66.0, west: -87.0
+                },
+                // Gulf Coast: Florida to Texas (Atlantic storms that enter Gulf)
+                gulfCoast: {
+                    north: 32.0, south: 24.0, east: -80.0, west: -98.0
+                },
+                // Puerto Rico and US Virgin Islands (Atlantic territories)
+                caribbeanTerritories: {
+                    north: 18.6, south: 17.6, east: -64.5, west: -67.5
+                }
+            };
+            
+            const lat = storm.lat;
+            const lon = storm.lon;
+            
+            // Check if coordinates fall within Atlantic basin US landfall zones
+            const inEastCoast = (lat >= ATLANTIC_US_LANDFALL_BOUNDS.eastCoast.south && 
+                               lat <= ATLANTIC_US_LANDFALL_BOUNDS.eastCoast.north &&
+                               lon >= ATLANTIC_US_LANDFALL_BOUNDS.eastCoast.west && 
+                               lon <= ATLANTIC_US_LANDFALL_BOUNDS.eastCoast.east);
+                               
+            const inGulfCoast = (lat >= ATLANTIC_US_LANDFALL_BOUNDS.gulfCoast.south && 
+                               lat <= ATLANTIC_US_LANDFALL_BOUNDS.gulfCoast.north &&
+                               lon >= ATLANTIC_US_LANDFALL_BOUNDS.gulfCoast.west && 
+                               lon <= ATLANTIC_US_LANDFALL_BOUNDS.gulfCoast.east);
+                               
+            const inCaribbean = (lat >= ATLANTIC_US_LANDFALL_BOUNDS.caribbeanTerritories.south && 
+                               lat <= ATLANTIC_US_LANDFALL_BOUNDS.caribbeanTerritories.north &&
+                               lon >= ATLANTIC_US_LANDFALL_BOUNDS.caribbeanTerritories.west && 
+                               lon <= ATLANTIC_US_LANDFALL_BOUNDS.caribbeanTerritories.east);
+            
+            return inEastCoast || inGulfCoast || inCaribbean;
+        }
+        
+        function updateStormInfoPanel(storm) {
+            const panel = document.getElementById('stormInfoPanel');
+            const icon = document.getElementById('categoryIcon');
+            const title = document.getElementById('stormTitle');
+            
+            // Update header
+            title.textContent = storm.name;
+            icon.textContent = storm.category === 0 ? 'TS' : storm.category;
+            icon.style.backgroundColor = getCategoryColor(storm.category);
+            
+            // Update stats using static data
+            document.getElementById('statDate').textContent = `${getMonthName(storm.month)} ${storm.day}, ${storm.year}`;
+            document.getElementById('statWind').textContent = `${storm.wind_mph} mph`;
+            // Show landfall states (enhanced data)
+            if (storm.landfall_states && storm.landfall_states.length > 0) {
+                document.getElementById('statLandfall').textContent = storm.landfall_states.join(', ');
+            } else {
+                document.getElementById('statLandfall').textContent = 'No US Landfall';
+            }
+            document.getElementById('statDeaths').textContent = storm.deaths || '0';
+            
+            // Update narrative panel
+            const narrativeContent = document.getElementById('narrativeContent');
+            if (storm.narrative) {
+                narrativeContent.textContent = storm.narrative;
+            } else {
+                narrativeContent.textContent = `${storm.name} was a ${storm.category === 0 ? 'tropical storm' : `Category ${storm.category} hurricane`} that occurred in ${storm.year}. This storm did not make landfall in U.S. territory, so no detailed impact narrative is available.`;
+            }
+        }
+        
+        function createTimeline() {
+            console.log('Creating timeline with', filteredStorms.length, 'storms');
+            
+            // IMPORTANT: Atlantic Hurricane Timeline Axis Convention
+            // X-axis = MONTHS (horizontal: Jun, Jul, Aug, Sep, Oct, Nov)
+            // Y-axis = HURRICANE SEASON YEAR (vertical: June storms near year mark, December storms near next year)
+            // This spreads the 7-month season across the full vertical space between year marks
+            
+            const traces = [{
+                x: filteredStorms.map(s => s.month + (s.day - 1) / 31), // Position within month based on day
+                y: filteredStorms.map(s => s.year + (s.month - 6 + (s.day - 1) / 31) / 7), // Position within hurricane season (Jun=0, Dec=1)
+                text: filteredStorms.map(s => s.name),
+                mode: 'markers+text',
+                type: 'scatter',
+                textposition: 'top center',
+                marker: {
+                    size: filteredStorms.map(s => 10 + s.wind_mph / 10),
+                    color: filteredStorms.map(s => getCategoryColor(s.category)),
+                    line: { color: 'white', width: 2 }
+                },
+                hovertemplate: '<b>%{text}</b><br>Date: %{customdata[2]}<br>Year: %{customdata[3]}<br>Category: %{customdata[0]}<br>Wind: %{customdata[1]} mph<extra></extra>',
+                customdata: filteredStorms.map(s => [
+                    s.category === 0 ? 'TS' : s.category, 
+                    s.wind_mph,
+                    `${getMonthName(s.month)} ${s.day}`,
+                    s.year  // Add actual year as 4th element to avoid decimal positioning values
+                ])
+            }];
+            
+            // Calculate EXPLICIT tick values for Y-axis (MAXIMUM 15 lines)
+            const yearRange = yearMax - yearMin;
+            const maxLines = 15;
+            
+            // Calculate interval ensuring we never exceed maxLines
+            let interval = Math.max(2, Math.ceil(yearRange / maxLines));
+            
+            // Round to nice intervals
+            if (yearRange <= 15) interval = 1;
+            else if (yearRange <= 30) interval = 2;
+            else if (yearRange <= 75) interval = 5;
+            else if (yearRange <= 150) interval = 10;
+            else if (yearRange <= 300) interval = 20;
+            else interval = 50;
+            
+            // Generate explicit tick values
+            const tickValues = [];
+            const startTick = Math.ceil(yearMin / interval) * interval;
+            for (let year = startTick; year <= yearMax; year += interval) {
+                tickValues.push(year);
+            }
+            
+            // Safety check: if still too many ticks, increase interval
+            if (tickValues.length > maxLines) {
+                interval *= 2;
+                tickValues.length = 0;
+                const newStartTick = Math.ceil(yearMin / interval) * interval;
+                for (let year = newStartTick; year <= yearMax; year += interval) {
+                    tickValues.push(year);
+                }
+            }
+            
+            console.log(`Year range: ${yearRange}, interval: ${interval}, tick count: ${tickValues.length}, ticks:`, tickValues);
+            
+            const layout = {
+                title: 'Atlantic Hurricane Timeline',
+                xaxis: { 
+                    title: 'Month',
+                    tickvals: [6,7,8,9,10,11,12],
+                    ticktext: ['Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+                    range: [5.7, 12.3]
+                },
+                yaxis: { 
+                    title: 'Year',
+                    autorange: false,
+                    range: [yearMax + 1, yearMin - 1],
+                    tickmode: 'array',
+                    tickvals: tickValues,
+                    showgrid: true,
+                    gridwidth: 1
+                },
+                hovermode: 'closest'
+            };
+            
+            Plotly.newPlot('timeline', traces, layout);
+            
+            // Add click handler for storm details
+            document.getElementById('timeline').on('plotly_click', function(data){
+                const pointIndex = data.points[0].pointIndex;
+                const storm = filteredStorms[pointIndex];
+                updateStormInfoPanel(storm);
+                showStormOnMap(storm);
+            });
+        }
+        
+        function showStormDetails(storm) {
+            const popup = document.getElementById('stormPopup');
+            const title = document.getElementById('popupTitle');
+            const content = document.getElementById('popupContent');
+            
+            title.textContent = `Hurricane ${storm.name} (${storm.year})`;
+            content.innerHTML = `
+                <div><strong>Date:</strong> ${getMonthName(storm.month)} ${storm.day}, ${storm.year}</div>
+                <div><strong>Category:</strong> ${storm.category === 0 ? 'Tropical Storm' : 'Category ' + storm.category}</div>
+                <div><strong>Wind Speed:</strong> ${storm.wind_mph} mph</div>
+                <div><strong>Landfall States:</strong> ${storm.landfall_states && storm.landfall_states.length > 0 ? storm.landfall_states.join(', ') : 'No US Landfall'}</div>
+                ${storm.deaths ? `<div><strong>Deaths:</strong> ${storm.deaths}</div>` : ''}
+                ${storm.lat && storm.lon ? `<div><strong>Location:</strong> ${storm.lat.toFixed(2)}°N, ${Math.abs(storm.lon).toFixed(2)}°W</div>` : ''}
+                ${storm.narrative ? `<div style="margin-top: 15px;"><strong>Historical Narrative:</strong><br><em>${storm.narrative}</em></div>` : ''}
+            `;
+            
+            popup.style.display = 'block';
+            showStormOnMap(storm);
+        }
+        
+        function closePopup() {
+            document.getElementById('stormPopup').style.display = 'none';
+        }
+        
+        function getMonthName(month) {
+            const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            return months[month-1];
+        }
+        
+        // Vertical year range slider variables
+        let yearMin = 2010;
+        let yearMax = new Date().getFullYear();
+        let isDragging = false;
+        let activeHandle = null;
+        let isDraggingRange = false;
+        let dragStartY = 0;
+        let dragStartYearMin = 0;
+        let dragStartYearMax = 0;
+        
+        // Extract updateVerticalSliderDisplay to global scope for use by applyFilters
+        function updateVerticalSliderDisplay() {
+            const topHandle = document.getElementById('topHandle');
+            const bottomHandle = document.getElementById('bottomHandle');
+            const range = document.getElementById('verticalRange');
+            
+            if (!topHandle || !bottomHandle || !range) return; // Guards for when elements don't exist yet
+            
+            const topPercent = (yearMin - 1851) / (2025 - 1851) * 100;
+            const bottomPercent = (yearMax - 1851) / (2025 - 1851) * 100;
+            
+            topHandle.style.top = topPercent + '%';
+            bottomHandle.style.top = bottomPercent + '%';
+            range.style.top = topPercent + '%';
+            range.style.height = (bottomPercent - topPercent) + '%';
+            
+            document.getElementById('topYearLabel').textContent = yearMin;
+            document.getElementById('bottomYearLabel').textContent = yearMax;
+        }
+
+        function initVerticalYearSlider() {
+            const topHandle = document.getElementById('topHandle');
+            const bottomHandle = document.getElementById('bottomHandle');
+            const range = document.getElementById('verticalRange');
+            const track = document.querySelector('.vertical-track');
+            
+            updateVerticalSliderDisplay();
             
             function getYearFromPosition(y) {
                 const rect = track.getBoundingClientRect();
-                const relativeY = y - rect.top;
-                const trackHeight = track.clientHeight;
-                const yearSpan = 2025 - 1851;
-                return Math.round(2025 - (relativeY / trackHeight) * yearSpan);
-            }
-            
-            function handleMouseMove(e) {
-                if (!isDragging) return;
-                
-                const newYear = getYearFromPosition(e.clientY);
-                
-                if (dragRange) {
-                    const yearSpan = maxYear - minYear;
-                    const centerYear = newYear;
-                    minYear = Math.max(1851, centerYear - yearSpan / 2);
-                    maxYear = Math.min(2025, centerYear + yearSpan / 2);
-                } else if (dragTarget === topHandle) {
-                    maxYear = Math.max(minYear + 1, Math.min(2025, newYear));
-                } else if (dragTarget === bottomHandle) {
-                    minYear = Math.max(1851, Math.min(maxYear - 1, newYear));
-                }
-                
-                updateSlider();
-            }
-            
-            function handleMouseUp() {
-                if (isDragging) {
-                    isDragging = false;
-                    dragTarget = null;
-                    dragRange = false;
-                    applyFilters();
-                }
+                const percent = Math.max(0, Math.min(1, (y - rect.top) / rect.height));
+                // Convert position to year (1851 at top = 0%, 2025 at bottom = 100%)
+                return Math.round(1851 + percent * (2025 - 1851));
             }
             
             topHandle.addEventListener('mousedown', (e) => {
                 isDragging = true;
-                dragTarget = topHandle;
+                activeHandle = 'top';
                 e.preventDefault();
             });
             
             bottomHandle.addEventListener('mousedown', (e) => {
                 isDragging = true;
-                dragTarget = bottomHandle;
+                activeHandle = 'bottom';
                 e.preventDefault();
             });
             
+            // Add drag functionality to the range area (between handles)
             range.addEventListener('mousedown', (e) => {
-                isDragging = true;
-                dragRange = true;
+                isDraggingRange = true;
+                dragStartY = e.clientY;
+                dragStartYearMin = yearMin;
+                dragStartYearMax = yearMax;
                 e.preventDefault();
             });
             
-            document.addEventListener('mousemove', handleMouseMove);
-            document.addEventListener('mouseup', handleMouseUp);
-            
-            updateSlider();
-        }
-        
-        function setupEventListeners() {
-            document.getElementById('nameFilter').addEventListener('input', handleNameSearch);
-            
-            // Category checkboxes
-            const categoryCheckboxes = document.querySelectorAll('#categoryFilter input[type="checkbox"]');
-            categoryCheckboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', applyFilters);
+            document.addEventListener('mousemove', (e) => {
+                if (isDragging) {
+                    const newYear = getYearFromPosition(e.clientY);
+                    
+                    if (activeHandle === 'top') {
+                        yearMin = Math.min(newYear, yearMax - 5); // Keep at least 5 year gap
+                    } else if (activeHandle === 'bottom') {
+                        yearMax = Math.max(newYear, yearMin + 5); // Keep at least 5 year gap
+                    }
+                    
+                    // Ensure bounds
+                    yearMin = Math.max(1851, yearMin);
+                    yearMax = Math.min(2025, yearMax);
+                    
+                    updateVerticalSliderDisplay();
+                    applyFilters();
+                } else if (isDraggingRange) {
+                    // Calculate the year change based on mouse movement
+                    const rect = track.getBoundingClientRect();
+                    const deltaY = e.clientY - dragStartY;
+                    const deltaPercent = deltaY / rect.height;
+                    const deltaYears = deltaPercent * (2025 - 1851);
+                    
+                    const yearRange = dragStartYearMax - dragStartYearMin;
+                    let newYearMin = dragStartYearMin + deltaYears;
+                    let newYearMax = dragStartYearMax + deltaYears;
+                    
+                    // Ensure bounds - keep the range together
+                    if (newYearMin < 1851) {
+                        newYearMin = 1851;
+                        newYearMax = newYearMin + yearRange;
+                    }
+                    if (newYearMax > 2025) {
+                        newYearMax = 2025;
+                        newYearMin = newYearMax - yearRange;
+                    }
+                    
+                    yearMin = Math.round(newYearMin);
+                    yearMax = Math.round(newYearMax);
+                    
+                    updateVerticalSliderDisplay();
+                    applyFilters();
+                }
             });
             
-            // Landfall only checkbox
-            document.getElementById('landfallOnly').addEventListener('change', applyFilters);
-        }
-        
-        function handleNameSearch() {
-            const nameFilter = document.getElementById('nameFilter').value.toLowerCase().trim();
-            if (nameFilter) {
-                // Find storms matching the name
-                const matchingStorms = ATLANTIC_STORMS_ENHANCED.filter(storm => 
-                    storm.name.toLowerCase().includes(nameFilter)
-                );
-                
-                if (matchingStorms.length > 0) {
-                    // Auto-adjust year range to include all matching storms
-                    const matchingYears = matchingStorms.map(s => s.year);
-                    const newMinYear = Math.min(...matchingYears);
-                    const newMaxYear = Math.max(...matchingYears);
-                    
-                    // Expand range slightly for better visibility
-                    minYear = Math.max(1851, newMinYear - 2);
-                    maxYear = Math.min(2025, newMaxYear + 2);
-                    
-                    // Update slider visually
-                    const slider = document.querySelector('.vertical-year-slider');
-                    const track = slider.querySelector('.vertical-track');
-                    const range = slider.querySelector('.vertical-range');
-                    const topHandle = slider.querySelector('#topHandle');
-                    const bottomHandle = slider.querySelector('#bottomHandle');
-                    const topLabel = document.getElementById('topYearLabel');
-                    const bottomLabel = document.getElementById('bottomYearLabel');
-                    
-                    const trackHeight = track.clientHeight;
-                    const yearSpan = 2025 - 1851;
-                    const topPos = ((2025 - maxYear) / yearSpan) * trackHeight;
-                    const bottomPos = ((2025 - minYear) / yearSpan) * trackHeight;
-                    const rangeHeight = bottomPos - topPos;
-                    
-                    range.style.top = topPos + 'px';
-                    range.style.height = rangeHeight + 'px';
-                    topHandle.style.top = (topPos - 12) + 'px';
-                    bottomHandle.style.top = (bottomPos - 12) + 'px';
-                    
-                    topLabel.style.top = topPos + 'px';
-                    bottomLabel.style.top = bottomPos + 'px';
-                    topLabel.textContent = maxYear;
-                    bottomLabel.textContent = minYear;
-                }
-            }
-            applyFilters();
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+                isDraggingRange = false;
+                activeHandle = null;
+            });
         }
         
         function applyFilters() {
-            const nameFilter = document.getElementById('nameFilter').value.toLowerCase().trim();
+            const nameFilter = document.getElementById('nameFilter').value.toLowerCase();
             const landfallOnly = document.getElementById('landfallOnly').checked;
             
-            // Get selected categories
+            // Get selected categories from checkboxes
             const selectedCategories = [];
-            const categoryCheckboxes = document.querySelectorAll('#categoryFilter input[type="checkbox"]:not(#landfallOnly)');
+            const categoryCheckboxes = document.querySelectorAll('#categoryFilter input[type="checkbox"]:checked');
             categoryCheckboxes.forEach(checkbox => {
-                if (checkbox.checked) {
-                    selectedCategories.push(parseInt(checkbox.value));
-                }
+                selectedCategories.push(parseInt(checkbox.value));
             });
             
-            // Filter storms
-            let filteredStorms = ATLANTIC_STORMS_ENHANCED.filter(storm => {
-                // Name search overrides all other filters if active
+            filteredStorms = ATLANTIC_STORMS_ENHANCED.filter(storm => {
+                // If name search is active, ONLY filter by name - ignore all other filters
                 if (nameFilter) {
                     return storm.name.toLowerCase().includes(nameFilter);
                 }
                 
                 // Otherwise apply normal filters
-                const yearMatch = storm.year >= minYear && storm.year <= maxYear;
-                const categoryMatch = selectedCategories.includes(storm.category);
-                const landfallMatch = !landfallOnly || (storm.landfall_states && storm.landfall_states.length > 0);
-                
-                return yearMatch && categoryMatch && landfallMatch;
+                if (selectedCategories.length > 0 && !selectedCategories.includes(storm.category)) return false;
+                if (storm.year < yearMin || storm.year > yearMax) return false;
+                // Only show hurricane season months (Jun-Dec: months 6-12)
+                if (storm.month < 6 || storm.month > 12) return false;
+                // Filter for landfall storms if checkbox is checked
+                if (landfallOnly && !isLikelyUSLandfall(storm)) return false;
+                return true;
             });
             
-            createTimeline(filteredStorms);
+            // If name search is active and found storms, adjust year slider to show results
+            if (nameFilter && filteredStorms.length > 0) {
+                const stormYears = filteredStorms.map(s => s.year);
+                const minStormYear = Math.min(...stormYears);
+                const maxStormYear = Math.max(...stormYears);
+                
+                // Only adjust if storms are outside current range
+                if (minStormYear < yearMin || maxStormYear > yearMax) {
+                    yearMin = Math.min(minStormYear, yearMin);
+                    yearMax = Math.max(maxStormYear, yearMax);
+                    
+                    // Update visual slider display
+                    updateVerticalSliderDisplay();
+                    
+                    console.log(`Name search found storms from ${minStormYear}-${maxStormYear}, adjusted slider to ${yearMin}-${yearMax}`);
+                }
+            }
+            
+            createTimeline();
         }
         
         function clearFilters() {
-            // Reset year range to default
-            minYear = 2010;
-            maxYear = currentYear;
-            
-            // Reset name filter
             document.getElementById('nameFilter').value = '';
             
-            // Reset category checkboxes to default (Cat 3-5 only)
-            const categoryCheckboxes = document.querySelectorAll('#categoryFilter input[type="checkbox"]:not(#landfallOnly)');
+            // Reset category checkboxes to initial page load state (only Cat 3-5)
+            const categoryCheckboxes = document.querySelectorAll('#categoryFilter input[type="checkbox"]');
             categoryCheckboxes.forEach(checkbox => {
                 const category = parseInt(checkbox.value);
-                checkbox.checked = (category >= 3);
+                checkbox.checked = (category >= 3); // Only Cat 3, 4, 5 checked by default
             });
             
             // Reset landfall filter
             document.getElementById('landfallOnly').checked = false;
             
-            // Update slider visually
-            const slider = document.querySelector('.vertical-year-slider');
-            const track = slider.querySelector('.vertical-track');
-            const range = slider.querySelector('.vertical-range');
-            const topHandle = slider.querySelector('#topHandle');
-            const bottomHandle = slider.querySelector('#bottomHandle');
-            const topLabel = document.getElementById('topYearLabel');
-            const bottomLabel = document.getElementById('bottomYearLabel');
+            // Reset year range
+            yearMin = 2010;
+            yearMax = new Date().getFullYear();
             
-            const trackHeight = track.clientHeight;
-            const yearSpan = 2025 - 1851;
-            const topPos = ((2025 - maxYear) / yearSpan) * trackHeight;
-            const bottomPos = ((2025 - minYear) / yearSpan) * trackHeight;
-            const rangeHeight = bottomPos - topPos;
+            // Close any open popup (keep storm info panel always visible)
+            document.getElementById('stormPopup').style.display = 'none';
             
-            range.style.top = topPos + 'px';
-            range.style.height = rangeHeight + 'px';
-            topHandle.style.top = (topPos - 12) + 'px';
-            bottomHandle.style.top = (bottomPos - 12) + 'px';
+            // Reset map view
+            if (map) {
+                clearMapLayers();
+                map.setView([25.0, -80.0], 5);
+            }
             
-            topLabel.style.top = topPos + 'px';
-            bottomLabel.style.top = bottomPos + 'px';
-            topLabel.textContent = maxYear;
-            bottomLabel.textContent = minYear;
+            // Update vertical slider display
+            const topHandle = document.getElementById('topHandle');
+            const bottomHandle = document.getElementById('bottomHandle');
+            const range = document.getElementById('verticalRange');
+            
+            if (topHandle && bottomHandle && range) {
+                const topPercent = (yearMin - 1851) / (2025 - 1851) * 100;
+                const bottomPercent = (yearMax - 1851) / (2025 - 1851) * 100;
+                
+                topHandle.style.top = topPercent + '%';
+                bottomHandle.style.top = bottomPercent + '%';
+                range.style.top = topPercent + '%';
+                range.style.height = (bottomPercent - topPercent) + '%';
+                
+                document.getElementById('topYearLabel').textContent = yearMin;
+                document.getElementById('bottomYearLabel').textContent = yearMax;
+            }
             
             applyFilters();
         }
         
-        function createTimeline(storms) {
-            // Clear existing plot
-            const timelineDiv = document.getElementById('timeline');
-            Plotly.purge(timelineDiv);
-            
-            if (storms.length === 0) {
-                timelineDiv.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #6b7280; font-size: 18px;">No storms match the current filters</div>';
-                return;
-            }
-            
-            // Calculate timeline positions
-            const x = storms.map(s => s.month + (s.day - 1) / 31);
-            const y = storms.map(s => s.year + (s.month - 6 + (s.day - 1) / 31) / 7);
-            const colors = storms.map(s => getCategoryColor(s.category));
-            const sizes = storms.map(s => Math.max(8, 6 + s.category * 2));
-            
-            // Create hover text
-            const hoverText = storms.map(s => 
-                `<b>${s.name}</b><br>` +
-                `Year: ${s.year}<br>` +
-                `Category: ${s.category >= 1 ? s.category : 'TS'}<br>` +
-                `Wind: ${s.wind_mph} mph<br>` +
-                `${s.landfall_states && s.landfall_states.length > 0 ? `States: ${s.landfall_states.join(', ')}` : 'No US Landfall'}`
-            );
-            
-            const trace = {
-                x: x,
-                y: y,
-                mode: 'markers',
-                type: 'scatter',
-                marker: {
-                    size: sizes,
-                    color: colors,
-                    line: { width: 1, color: 'white' }
-                },
-                text: hoverText,
-                hovertemplate: '%{text}<extra></extra>',
-                customdata: storms
-            };
-            
-            // Calculate y-axis range and ticks
-            const minDisplayYear = Math.min(...storms.map(s => s.year));
-            const maxDisplayYear = Math.max(...storms.map(s => s.year));
-            const yearRange = maxDisplayYear - minDisplayYear;
-            const maxTicks = 15;
-            const tickInterval = Math.max(1, Math.ceil(yearRange / maxTicks));
-            
-            const tickVals = [];
-            for (let year = minDisplayYear; year <= maxDisplayYear; year += tickInterval) {
-                tickVals.push(year);
-            }
-            
-            const layout = {
-                title: {
-                    text: `Atlantic Hurricane Timeline (${storms.length} storms)`,
-                    font: { size: 16, color: '#111827' }
-                },
-                xaxis: {
-                    title: 'Month',
-                    range: [5.7, 12.3],
-                    tickvals: [6, 7, 8, 9, 10, 11, 12],
-                    ticktext: ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                    showgrid: true,
-                    gridcolor: '#e5e7eb'
-                },
-                yaxis: {
-                    title: 'Year',
-                    autorange: 'reversed',
-                    tickvals: tickVals,
-                    showgrid: true,
-                    gridcolor: '#e5e7eb'
-                },
-                hovermode: 'closest',
-                plot_bgcolor: '#ffffff',
-                paper_bgcolor: '#ffffff',
-                margin: { l: 60, r: 20, t: 40, b: 60 }
-            };
-            
-            const config = {
-                responsive: true,
-                displayModeBar: true,
-                modeBarButtonsToRemove: ['pan2d', 'select2d', 'lasso2d', 'autoScale2d'],
-                displaylogo: false
-            };
-            
-            Plotly.newPlot(timelineDiv, [trace], layout, config);
-            
-            // Add click event listener
-            timelineDiv.on('plotly_click', function(data) {
-                if (data.points && data.points.length > 0) {
-                    const storm = data.points[0].customdata;
-                    selectStorm(storm);
-                }
-            });
+        // Initialize map
+        let map;
+        function initMap() {
+            map = L.map('map').setView([25.0, -80.0], 5);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
         }
         
-        function getCategoryColor(category) {
-            const colors = {
-                0: '#74a9cf',   // Tropical Storm - light blue
-                1: '#2b83ba',   // Cat 1 - blue
-                2: '#abdda4',   // Cat 2 - light green
-                3: '#fdae61',   // Cat 3 - orange
-                4: '#f46d43',   // Cat 4 - red-orange
-                5: '#d73027'    // Cat 5 - dark red
-            };
-            return colors[category] || colors[0];
-        }
-        
-        function selectStorm(storm) {
-            // Update storm info panel
-            document.getElementById('stormTitle').textContent = storm.name;
-            document.getElementById('categoryIcon').style.backgroundColor = getCategoryColor(storm.category);
-            document.getElementById('categoryIcon').textContent = storm.category >= 1 ? 'C' + storm.category : 'TS';
+        async function showStormOnMap(storm) {
+            if (!map) return;
             
-            document.getElementById('stormYear').textContent = storm.year;
-            document.getElementById('stormMonth').textContent = getMonthName(storm.month);
-            document.getElementById('stormWind').textContent = storm.wind_mph + ' mph';
-            document.getElementById('stormDeaths').textContent = storm.deaths || '0';
+            clearMapLayers();
             
-            // Update narrative
-            if (storm.narrative) {
-                document.querySelector('.narrative-subtitle').textContent = `${storm.name} (${storm.year}) - Category ${storm.category >= 1 ? storm.category : 'TS'} ${storm.category >= 1 ? 'Hurricane' : 'Storm'}`;
-                document.getElementById('narrativeContent').textContent = storm.narrative;
+            // Try to load the full storm track
+            const trackData = await loadStormTrack(storm);
+            
+            if (trackData) {
+                // Draw the full storm track
+                drawStormTrack(trackData, storm);
             } else {
-                document.querySelector('.narrative-subtitle').textContent = 'No detailed narrative available';
-                document.getElementById('narrativeContent').textContent = `${storm.name} was a ${storm.category >= 1 ? 'Category ' + storm.category + ' hurricane' : 'tropical storm'} that occurred in ${storm.year}. ${storm.landfall_states && storm.landfall_states.length > 0 ? 'This storm made landfall in: ' + storm.landfall_states.join(', ') + '.' : 'This storm did not make landfall in the United States.'}`;
-            }
-            
-            // Load and display storm track on map
-            loadStormTrack(storm);
-        }
-        
-        function getMonthName(month) {
-            const months = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-            return months[month] || 'Unknown';
-        }
-        
-        function loadStormTrack(storm) {
-            // Clear existing layers
-            map.eachLayer(layer => {
-                if (!(layer instanceof L.TileLayer)) {
-                    map.removeLayer(layer);
+                // Fallback to single point if no track data available
+                if (storm.lat && storm.lon) {
+                    const color = getCategoryColor(storm.category);
+                    L.circleMarker([storm.lat, storm.lon], {
+                        color: color,
+                        fillColor: color,
+                        fillOpacity: 0.7,
+                        radius: 8
+                    }).addTo(map).bindPopup(`<b>${storm.name}</b><br>Category ${storm.category}<br>${storm.wind_mph} mph`);
+                    
+                    map.setView([storm.lat, storm.lon], 6);
                 }
+            }
+        }
+
+        async function loadStormTrack(storm) {
+            try {
+                // Determine which decade file to load  
+                const decade = Math.floor(storm.year / 10) * 10;
+                
+                // Try to load point data first (for category-based coloring)
+                const pointsFile = `hurdat2_data/points_${decade}s.geojson`;
+                console.log(`Trying to load point data from ${pointsFile} for storm ${storm.storm_id}`);
+                
+                let pointsResponse = await fetch(pointsFile);
+                if (pointsResponse.ok) {
+                    const pointsData = await pointsResponse.json();
+                    const pointFeatures = pointsData.features.filter(f => 
+                        f.properties.storm_id === storm.storm_id || 
+                        (f.properties.name === storm.name && f.properties.year === storm.year)
+                    );
+                    
+                    if (pointFeatures.length > 0) {
+                        console.log(`Found ${pointFeatures.length} track points for ${storm.name}`);
+                        return { type: 'points', features: pointFeatures };
+                    }
+                }
+                
+                // Fallback to track lines
+                const tracksFile = `hurdat2_data/tracks_${decade}s.geojson`;
+                console.log(`Loading track line from ${tracksFile} for storm ${storm.storm_id}`);
+                
+                const tracksResponse = await fetch(tracksFile);
+                if (!tracksResponse.ok) {
+                    console.log(`Track file ${tracksFile} not found`);
+                    return null;
+                }
+                
+                const tracksData = await tracksResponse.json();
+                const feature = tracksData.features.find(f => 
+                    f.properties.storm_id === storm.storm_id || 
+                    (f.properties.name === storm.name && f.properties.year === storm.year)
+                );
+                
+                if (feature && feature.geometry.type === 'LineString') {
+                    console.log(`Found track line for ${storm.name} with ${feature.geometry.coordinates.length} points`);
+                    return { type: 'line', geometry: feature.geometry };
+                } else {
+                    console.log(`No track found for storm ${storm.storm_id} (${storm.name})`);
+                    return null;
+                }
+            } catch (error) {
+                console.error('Error loading storm track:', error);
+                return null;
+            }
+        }
+
+        function drawStormTrack(trackData, storm) {
+            if (trackData.type === 'points' && trackData.features) {
+                // Draw rainbow-colored track using point data
+                drawRainbowTrack(trackData.features, storm);
+            } else if (trackData.type === 'line' && trackData.geometry) {
+                // Draw simple line track
+                drawSimpleTrack(trackData.geometry, storm);
+            }
+        }
+
+        function drawRainbowTrack(pointFeatures, storm) {
+            if (pointFeatures.length === 0) return;
+            
+            // Sort points by time if datetime is available
+            pointFeatures.sort((a, b) => {
+                if (a.properties.datetime && b.properties.datetime) {
+                    return new Date(a.properties.datetime) - new Date(b.properties.datetime);
+                }
+                return 0;
             });
             
-            // Determine decade for file lookup
-            const year = storm.year;
-            const decade = Math.floor(year / 10) * 10;
+            // Collect ALL coordinates for proper bounds calculation
+            const allLatLngs = [];
             
-            // Load GeoJSON data
-            fetch(`hurdat2_data/points_${decade}s.geojson`)
-                .then(response => response.json())
-                .then(data => {
-                    // Find points for this storm
-                    const stormPoints = data.features.filter(f => f.properties.storm_id === storm.storm_id);
-                    
-                    if (stormPoints.length > 0) {
-                        // Sort by datetime
-                        stormPoints.sort((a, b) => new Date(a.properties.datetime) - new Date(b.properties.datetime));
-                        
-                        // Draw rainbow track
-                        drawRainbowTrack(stormPoints, storm);
-                        
-                        // Center map on storm track
-                        const latLngs = stormPoints.map(p => [p.geometry.coordinates[1], p.geometry.coordinates[0]]);
-                        const bounds = L.latLngBounds(latLngs);
-                        map.fitBounds(bounds, { padding: [20, 20] });
-                    } else {
-                        // Fallback: center on landfall location if available
-                        if (storm.lat && storm.lon) {
-                            map.setView([storm.lat, storm.lon], 6);
-                            L.marker([storm.lat, storm.lon])
-                                .bindPopup(`${storm.name} (${storm.year})`)
-                                .addTo(map);
-                        }
-                    }
-                })
-                .catch(error => {
-                    console.log('Could not load storm track data:', error);
-                    if (storm.lat && storm.lon) {
-                        map.setView([storm.lat, storm.lon], 6);
-                        L.marker([storm.lat, storm.lon])
-                            .bindPopup(`${storm.name} (${storm.year})`)
-                            .addTo(map);
-                    }
-                });
-        }
-        
-        function drawRainbowTrack(pointFeatures, storm) {
+            // Draw ONLY colored line segments - no markers, no circles
             for (let i = 0; i < pointFeatures.length - 1; i++) {
                 const point1 = pointFeatures[i];
                 const point2 = pointFeatures[i + 1];
                 
-                const latLng1 = [point1.geometry.coordinates[1], point1.geometry.coordinates[0]];
-                const latLng2 = [point2.geometry.coordinates[1], point2.geometry.coordinates[0]];
+                const coord1 = point1.geometry.coordinates;
+                const coord2 = point2.geometry.coordinates;
                 
-                // Calculate category from wind speed
-                const windSpeed = point1.properties.max_wind || 0;
+                // Debug category data
+                if (i < 3) {
+                    console.log(`${storm.name} point ${i} properties:`, point1.properties);
+                    console.log(`Raw max_wind value: ${point1.properties.max_wind} (type: ${typeof point1.properties.max_wind})`);
+                }
+                
+                // Calculate category from wind speed (GeoJSON only has max_wind in knots)
+                const maxWind = point1.properties.max_wind || 0; // Wind in knots
                 let category = 0;
-                if (windSpeed >= 34 && windSpeed < 64) category = 0; // TS
-                else if (windSpeed >= 64 && windSpeed < 83) category = 1;
-                else if (windSpeed >= 83 && windSpeed < 96) category = 2;
-                else if (windSpeed >= 96 && windSpeed < 113) category = 3;
-                else if (windSpeed >= 113 && windSpeed < 137) category = 4;
-                else if (windSpeed >= 137) category = 5;
+                if (maxWind >= 137) category = 5;      // 157+ mph  
+                else if (maxWind >= 113) category = 4; // 130-156 mph (JOSE 135mph = 117kt should be Cat 4)
+                else if (maxWind >= 96) category = 3;  // 111-129 mph
+                else if (maxWind >= 83) category = 2;  // 96-110 mph
+                else if (maxWind >= 64) category = 1;  // 74-95 mph
+                else category = 0;                     // <74 mph (TS/TD)
                 
-                const color = getCategoryColor(category);
+                const latLng1 = [coord1[1], coord1[0]]; // Convert [lon,lat] to [lat,lon]
+                const latLng2 = [coord2[1], coord2[0]];
+                
+                // Add to bounds calculation
+                allLatLngs.push(latLng1);
+                if (i === pointFeatures.length - 2) allLatLngs.push(latLng2); // Add final point
+                
+                // Draw rainbow-colored line segment
+                const segmentColor = getCategoryColor(category);
+                if (i < 5) { // Debug first few segments
+                    console.log(`Segment ${i}: wind=${maxWind}kt, category=${category}, color=${segmentColor}`);
+                }
                 
                 L.polyline([latLng1, latLng2], {
-                    color: color,
+                    color: segmentColor,
                     weight: 6,
                     opacity: 1.0
                 }).addTo(map);
             }
+            
+            // Fit map to show COMPLETE storm track within sidebar constraints
+            if (allLatLngs.length > 0) {
+                const bounds = L.latLngBounds(allLatLngs);
+                // Use larger padding for constrained sidebar map to ensure full visibility
+                map.fitBounds(bounds, { 
+                    padding: [20, 20],
+                    maxZoom: 8  // Prevent over-zooming on short tracks
+                });
+                console.log(`Fitted ${storm.name} track bounds:`, bounds.toBBoxString());
+            }
         }
+
+        function drawSimpleTrack(trackGeometry, storm) {
+            const coordinates = trackGeometry.coordinates;
+            
+            // Convert coordinates from [lon, lat] to [lat, lon] for Leaflet
+            const trackPoints = coordinates.map(coord => [coord[1], coord[0]]);
+            
+            // Create the track line
+            const trackLine = L.polyline(trackPoints, {
+                color: getCategoryColor(storm.category),
+                weight: 4,
+                opacity: 0.8
+            }).addTo(map);
+            
+            // Add start and end markers
+            if (trackPoints.length > 0) {
+                // Start marker (green)
+                L.circleMarker(trackPoints[0], {
+                    color: '#00ff00',
+                    fillColor: '#00ff00',
+                    fillOpacity: 0.8,
+                    radius: 8
+                }).addTo(map).bindPopup(`<b>${storm.name} START</b><br>${storm.year}`);
+                
+                // End marker (red)
+                L.circleMarker(trackPoints[trackPoints.length - 1], {
+                    color: '#ff0000',
+                    fillColor: '#ff0000',
+                    fillOpacity: 0.8,
+                    radius: 8
+                }).addTo(map).bindPopup(`<b>${storm.name} END</b><br>${storm.year}`);
+            }
+            
+            // Fit map to track bounds with padding optimized for sidebar
+            map.fitBounds(trackLine.getBounds(), { 
+                padding: [20, 20],
+                maxZoom: 8  // Prevent over-zooming for constrained sidebar map
+            });
+        }
+
+
+        function clearMapLayers() {
+            if (map) {
+                map.eachLayer(function (layer) {
+                    if (layer instanceof L.CircleMarker || layer instanceof L.Polyline) {
+                        map.removeLayer(layer);
+                    }
+                });
+            }
+        }
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM loaded, applying initial filters...');
+            initMap();
+            initVerticalYearSlider();
+            applyFilters(); // Use applyFilters() to respect default checkbox settings
+        });
     </script>
 </body>
 </html>
