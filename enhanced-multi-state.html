@@ -7,6 +7,7 @@
     <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="atlantic-storms-enhanced.js"></script>
     <style>
         * {
             margin: 0;
@@ -1275,6 +1276,11 @@
                         const categoryMatch = storm[3].match(/\d+/);
                         const category = categoryMatch ? parseInt(categoryMatch[0]) : 1;
                         
+                        // Find the storm_id from the enhanced database
+                        const enhancedStorm = ATLANTIC_STORMS_ENHANCED.find(s => 
+                            s.name === storm[0] && s.year === year
+                        );
+                        
                         showStormDetails({
                             name: storm[0],
                             year: year,
@@ -1282,7 +1288,10 @@
                             date: storm[2],
                             category: category,
                             wind_mph: storm[4],
-                            deaths: storm[5]
+                            deaths: storm[5],
+                            storm_id: enhancedStorm ? enhancedStorm.storm_id : null,
+                            lat: enhancedStorm ? enhancedStorm.lat : null,
+                            lon: enhancedStorm ? enhancedStorm.lon : null
                         });
                     }
                 });
@@ -1364,6 +1373,13 @@
                     map.removeLayer(layer);
                 }
             });
+            
+            console.log('=== MULTI-STATE STORM DEBUG ===');
+            console.log('Storm object:', storm);
+            console.log('Storm name:', storm.name);
+            console.log('Storm year:', storm.year);
+            console.log('Storm ID:', storm.storm_id);
+            console.log('Storm properties:', Object.keys(storm));
             
             // Try to load dynamic track data like timeline tab
             const trackData = await loadStormTrack(storm);
