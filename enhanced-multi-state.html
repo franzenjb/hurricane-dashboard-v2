@@ -962,6 +962,10 @@
         // Initialize map when page loads
         document.addEventListener('DOMContentLoaded', function() {
             initMap();
+            // Initialize with default filters to show storm markers
+            setTimeout(() => {
+                applyFilters();
+            }, 500);
         });
 
         // EXPANDED MULTI-STATE HURRICANE DATA (1851-2024)
@@ -1239,6 +1243,68 @@
             }
             
             updateTimeline();
+            plotStormsOnMap(allStorms);
+        }
+        
+        function plotStormsOnMap(storms) {
+            if (!map) return;
+            
+            // Clear existing storm markers
+            map.eachLayer(function(layer) {
+                if (layer instanceof L.CircleMarker || layer instanceof L.Marker) {
+                    map.removeLayer(layer);
+                }
+            });
+            
+            // Add markers for each storm
+            storms.forEach(storm => {
+                if (storm.lat && storm.lon) {
+                    const color = getCategoryColor(storm.category);
+                    const marker = L.circleMarker([storm.lat, storm.lon], {
+                        radius: 6 + (storm.category * 1.5),
+                        fillColor: color,
+                        color: '#fff',
+                        weight: 2,
+                        opacity: 1,
+                        fillOpacity: 0.8
+                    });
+                    
+                    // Add popup with storm info
+                    marker.bindPopup(`
+                        <div style="min-width: 200px;">
+                            <h3 style="margin: 0 0 8px 0; font-weight: bold;">
+                                ${storm.name} (${storm.year})
+                            </h3>
+                            <div style="font-size: 14px;">
+                                <div>Category: ${storm.category}</div>
+                                <div>Wind: ${storm.wind_mph} mph</div>
+                                <div>Date: ${getMonthName(storm.month)} ${storm.day}</div>
+                                ${storm.landfall_states ? `<div>States: ${storm.landfall_states.join(', ')}</div>` : ''}
+                                ${storm.deaths ? `<div>Deaths: ${storm.deaths}</div>` : ''}
+                            </div>
+                        </div>
+                    `);
+                    
+                    // Add click handler to show full storm details
+                    marker.on('click', function() {
+                        showStormOnMap(storm);
+                        updateStormInfoPanel(storm);
+                    });
+                    
+                    marker.addTo(map);
+                }
+            });
+            
+            // Adjust map view to show all markers if there are any
+            if (storms.length > 0) {
+                const group = new L.featureGroup(
+                    storms.filter(s => s.lat && s.lon)
+                          .map(s => L.marker([s.lat, s.lon]))
+                );
+                if (group.getLayers().length > 0) {
+                    map.fitBounds(group.getBounds().pad(0.1));
+                }
+            }
         }
         
         function clearFilters() {
