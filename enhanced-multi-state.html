@@ -1633,13 +1633,17 @@
                     );
                     
                     if (pointFeatures.length > 0) {
-                        console.log(`Found ${pointFeatures.length} track points for ${storm.name}`);
+                        console.log(`Found ${pointFeatures.length} track points for ${storm.name} - RAINBOW TRACK AVAILABLE`);
                         return { type: 'points', features: pointFeatures };
+                    } else {
+                        console.log(`No point data found for ${storm.name} in ${pointsFile}`);
                     }
+                } else {
+                    console.log(`Points file ${pointsFile} not accessible`);
                 }
                 
                 const tracksFile = `./hurdat2_data/tracks_${decade}s.geojson`;
-                console.log(`Loading track line from ${tracksFile} for storm ${storm.storm_id || storm.name}`);
+                console.log(`Fallback: Loading track line from ${tracksFile} for storm ${storm.storm_id || storm.name}`);
                 
                 const tracksResponse = await fetch(tracksFile);
                 if (!tracksResponse.ok) {
@@ -1653,7 +1657,7 @@
                 );
                 
                 if (feature && feature.geometry.type === 'LineString') {
-                    console.log(`Found track line for ${storm.name} with ${feature.geometry.coordinates.length} points`);
+                    console.log(`Found track line for ${storm.name} with ${feature.geometry.coordinates.length} points - SINGLE COLOR TRACK`);
                     return { type: 'line', geometry: feature.geometry };
                 } else {
                     console.log(`No track found for storm ${storm.storm_id || storm.name} (${storm.name})`);
@@ -1717,11 +1721,35 @@
             const coordinates = geometry.coordinates;
             const latLngs = coordinates.map(coord => [coord[1], coord[0]]);
             
+            // Use storm category color, but make it more prominent since we can't do rainbow
+            const stormColor = getCategoryColor(storm.category || 3);
+            
             L.polyline(latLngs, {
-                color: getCategoryColor(storm.category || 3),
-                weight: 5,
-                opacity: 0.8
+                color: stormColor,
+                weight: 6,  // Slightly thicker
+                opacity: 0.9  // More opaque
             }).addTo(map);
+            
+            // Add start and end markers to show storm progression
+            if (latLngs.length >= 2) {
+                // Start marker (green circle)
+                L.circleMarker(latLngs[0], {
+                    color: '#00ff00',
+                    fillColor: '#00ff00',
+                    fillOpacity: 0.8,
+                    radius: 8,
+                    weight: 2
+                }).addTo(map).bindPopup(`<b>${storm.name}</b><br>Track Start`);
+                
+                // End marker (red circle)
+                L.circleMarker(latLngs[latLngs.length - 1], {
+                    color: stormColor,
+                    fillColor: stormColor,
+                    fillOpacity: 0.9,
+                    radius: 10,
+                    weight: 3
+                }).addTo(map).bindPopup(`<b>${storm.name}</b><br>Category ${storm.category}<br>${storm.wind_mph} mph`);
+            }
             
             map.fitBounds(latLngs, {padding: [30, 30]});
         }
