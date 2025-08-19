@@ -602,6 +602,14 @@
                 }
             }
             
+            // IMPORTANT: Do NOT plot all filtered storms on the map
+            // The map should only show the currently selected storm's path
+            // Clear the map but keep the current storm if one is selected
+            if (currentStorm) {
+                clearMapLayers();
+                showStormOnMap(currentStorm);
+            }
+            
             createTimeline();
         }
         
@@ -989,6 +997,12 @@
             console.log('DOM loaded, applying initial filters...');
             initMap();
             initVerticalYearSlider();
+            
+            // Clear the map first to ensure no stray markers
+            if (map) {
+                clearMapLayers();
+            }
+            
             applyFilters(); // Use applyFilters() to respect default checkbox settings
         });
         
