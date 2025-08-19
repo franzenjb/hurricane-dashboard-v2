@@ -1276,23 +1276,7 @@
                         const categoryMatch = storm[3].match(/\d+/);
                         const category = categoryMatch ? parseInt(categoryMatch[0]) : 1;
                         
-                        // Find the storm_id from the enhanced database
-                        console.log(`=== STORM LOOKUP DEBUG ===`);
-                        console.log(`Looking for: name="${storm[0]}", year=${year}`);
-                        
-                        const enhancedStorm = ATLANTIC_STORMS_ENHANCED.find(s => 
-                            s.name === storm[0] && s.year === year
-                        );
-                        
-                        console.log(`Enhanced storm found:`, enhancedStorm ? 'YES' : 'NO');
-                        if (enhancedStorm) {
-                            console.log(`Storm ID: ${enhancedStorm.storm_id}`);
-                        } else {
-                            // Show some examples from that year to see name differences
-                            const sameYearStorms = ATLANTIC_STORMS_ENHANCED.filter(s => s.year === year).slice(0, 5);
-                            console.log(`Sample storms from ${year}:`, sameYearStorms.map(s => s.name));
-                        }
-                        
+                        // Just use the hardcoded paths - keep it simple
                         showStormDetails({
                             name: storm[0],
                             year: year,
@@ -1300,10 +1284,7 @@
                             date: storm[2],
                             category: category,
                             wind_mph: storm[4],
-                            deaths: storm[5],
-                            storm_id: enhancedStorm ? enhancedStorm.storm_id : null,
-                            lat: enhancedStorm ? enhancedStorm.lat : null,
-                            lon: enhancedStorm ? enhancedStorm.lon : null
+                            deaths: storm[5]
                         });
                     }
                 });
@@ -1376,7 +1357,7 @@
             }
         }
         
-        async function showStormOnMap(storm) {
+        function showStormOnMap(storm) {
             if (!map) return;
             
             // Clear existing layers
@@ -1386,55 +1367,39 @@
                 }
             });
             
-            console.log('=== MULTI-STATE STORM DEBUG ===');
-            console.log('Storm object:', storm);
-            console.log('Storm name:', storm.name);
-            console.log('Storm year:', storm.year);
-            console.log('Storm ID:', storm.storm_id);
-            console.log('Storm properties:', Object.keys(storm));
-            
-            // Try to load dynamic track data like timeline tab
-            const trackData = await loadStormTrack(storm);
-            
-            if (trackData) {
-                console.log('Track data loaded, drawing storm track');
-                drawStormTrack(trackData, storm);
-            } else {
-                console.log('No track data found, checking hardcoded paths...');
-                // Fallback to hardcoded paths for recent storms
-                const path = STORM_PATHS[storm.name];
-                if (path && path.length > 0) {
-                    // Draw path segments with color based on intensity
-                    for (let i = 0; i < path.length - 1; i++) {
-                        const segment = [
-                            [path[i].lat, path[i].lon],
-                            [path[i + 1].lat, path[i + 1].lon]
-                        ];
-                        
-                        const category = Math.max(path[i].category, path[i + 1].category);
-                        
-                        L.polyline(segment, {
-                            color: getCategoryColor(category),
-                            weight: 6,
-                            opacity: 0.8
-                        }).addTo(map);
-                    }
+            // Simple approach: just use hardcoded paths for the ~12 recent storms that work
+            const path = STORM_PATHS[storm.name];
+            if (path && path.length > 0) {
+                // Draw path segments with color based on intensity
+                for (let i = 0; i < path.length - 1; i++) {
+                    const segment = [
+                        [path[i].lat, path[i].lon],
+                        [path[i + 1].lat, path[i + 1].lon]
+                    ];
                     
-                    // Fit map to show entire path
-                    const pathBounds = path.map(p => [p.lat, p.lon]);
-                    map.fitBounds(pathBounds, {padding: [20, 20]});
-                } else {
-                    // Show single point
-                    const coords = storm.lat && storm.lon ? [storm.lat, storm.lon] : [30.0, -85.0];
-                    L.circleMarker(coords, {
-                        color: getCategoryColor(storm.category),
-                        fillColor: getCategoryColor(storm.category),
-                        fillOpacity: 0.7,
-                        radius: 8
-                    }).addTo(map).bindPopup(`<b>${storm.name}</b><br>Category ${storm.category}<br>${storm.wind_mph} mph`);
+                    const category = Math.max(path[i].category, path[i + 1].category);
                     
-                    map.setView(coords, 6);
+                    L.polyline(segment, {
+                        color: getCategoryColor(category),
+                        weight: 6,
+                        opacity: 0.8
+                    }).addTo(map);
                 }
+                
+                // Fit map to show entire path
+                const pathBounds = path.map(p => [p.lat, p.lon]);
+                map.fitBounds(pathBounds, {padding: [20, 20]});
+            } else {
+                // Show single point for older storms
+                const coords = [30.0, -85.0]; // Default Gulf location
+                L.circleMarker(coords, {
+                    color: getCategoryColor(storm.category),
+                    fillColor: getCategoryColor(storm.category),
+                    fillOpacity: 0.7,
+                    radius: 8
+                }).addTo(map).bindPopup(`<b>${storm.name}</b><br>Category ${storm.category}<br>${storm.wind_mph} mph`);
+                
+                map.setView(coords, 6);
             }
         }
         
