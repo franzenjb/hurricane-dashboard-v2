@@ -1307,29 +1307,10 @@
                     }
                 }
                 
-                // Get state coordinates for the map
-                const stateCoordinates = {
-                    'FL': { lat: 27.5, lon: -81.5 },
-                    'TX': { lat: 27.5, lon: -97.0 },
-                    'LA': { lat: 29.5, lon: -91.0 },
-                    'MS': { lat: 30.5, lon: -89.0 },
-                    'AL': { lat: 30.5, lon: -88.0 },
-                    'NC': { lat: 34.5, lon: -77.5 },
-                    'SC': { lat: 33.0, lon: -80.0 },
-                    'GA': { lat: 31.5, lon: -81.0 },
-                    'VA': { lat: 37.0, lon: -78.0 },
-                    'MD': { lat: 39.0, lon: -76.5 },
-                    'DE': { lat: 39.0, lon: -75.5 },
-                    'NJ': { lat: 39.5, lon: -74.5 },
-                    'NY': { lat: 41.0, lon: -74.0 },
-                    'CT': { lat: 41.5, lon: -72.5 },
-                    'RI': { lat: 41.5, lon: -71.5 },
-                    'MA': { lat: 42.0, lon: -71.0 },
-                    'NH': { lat: 43.0, lon: -71.5 },
-                    'ME': { lat: 44.0, lon: -69.0 }
-                };
-                
-                const coords = stateCoordinates[storm.state] || { lat: 30.0, lon: -85.0 };
+                // Use actual storm coordinates if available, fallback to state coordinates
+                const coords = stormData && stormData.lat && stormData.lon 
+                    ? { lat: stormData.lat, lon: stormData.lon }
+                    : { lat: 30.0, lon: -85.0 }; // Default Gulf of Mexico coordinates
                 
                 window.parent.postMessage({
                     type: 'stormClick',
