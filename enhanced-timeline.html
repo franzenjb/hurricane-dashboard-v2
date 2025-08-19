@@ -963,6 +963,60 @@
             initVerticalYearSlider();
             applyFilters(); // Use applyFilters() to respect default checkbox settings
         });
+        
+        // Handle messages from parent frame (Database tab integration)
+        window.addEventListener('message', function(event) {
+            // Security check - only accept messages from same origin
+            if (event.origin !== window.location.origin) return;
+            
+            const data = event.data;
+            
+            switch(data.action) {
+                case 'displayStorm':
+                    // Display a single storm from Database tab
+                    if (data.storm) {
+                        clearMapLayers();
+                        updateStormInfoPanel(data.storm);
+                        showStormOnMap(data.storm);
+                        console.log('Displaying storm from Database:', data.storm.name, data.storm.year);
+                    }
+                    break;
+                    
+                case 'displayStorms':
+                    // Display multiple storms from Database tab
+                    if (data.storms && data.storms.length > 0) {
+                        clearMapLayers();
+                        
+                        // Display all storms on map
+                        data.storms.forEach(storm => {
+                            if (storm.lat && storm.lon) {
+                                const color = getCategoryColor(storm.category);
+                                const marker = L.circleMarker([storm.lat, storm.lon], {
+                                    radius: 6 + (storm.category * 1.5),
+                                    fillColor: color,
+                                    color: '#fff',
+                                    weight: 2,
+                                    opacity: 1,
+                                    fillOpacity: 0.8
+                                }).addTo(map);
+                                
+                                marker.bindPopup(`
+                                    <strong>${storm.name} (${storm.year})</strong><br>
+                                    Category: ${storm.category}<br>
+                                    Wind: ${storm.wind_mph} mph<br>
+                                    ${storm.landfall_states ? 'States: ' + storm.landfall_states.join(', ') : ''}
+                                `);
+                            }
+                        });
+                        
+                        // Show first storm details in panel
+                        updateStormInfoPanel(data.storms[0]);
+                        
+                        console.log('Displaying', data.storms.length, 'storms from Database');
+                    }
+                    break;
+            }
+        });
     </script>
 </body>
 </html>

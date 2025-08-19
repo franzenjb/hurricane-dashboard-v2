@@ -919,8 +919,18 @@
                         // Get Alpine.js component and update
                         const alpineComponent = document.querySelector('[x-data]').__x.$data;
                         alpineComponent.activeTab = 'timeline';
-                        alpineComponent.selectedStorm = storm;
                         console.log('Viewing storm:', storm.name, storm.year);
+                        
+                        // Wait for tab switch, then send storm to Timeline iframe
+                        setTimeout(() => {
+                            const timelineFrame = document.querySelector('iframe[src="enhanced-timeline.html"]');
+                            if (timelineFrame && timelineFrame.contentWindow) {
+                                timelineFrame.contentWindow.postMessage({
+                                    action: 'displayStorm',
+                                    storm: storm
+                                }, '*');
+                            }
+                        }, 100);
                     }
                     break;
                     
@@ -931,9 +941,17 @@
                     
                     if (data.storms && data.storms.length > 0) {
                         console.log('Viewing', data.storms.length, 'storms on map');
-                        // TODO: Add logic to display multiple storms on the Timeline map
-                        // For now, show the first storm
-                        alpineComponent.selectedStorm = data.storms[0];
+                        
+                        // Wait for tab switch, then send storms to Timeline iframe
+                        setTimeout(() => {
+                            const timelineFrame = document.querySelector('iframe[src="enhanced-timeline.html"]');
+                            if (timelineFrame && timelineFrame.contentWindow) {
+                                timelineFrame.contentWindow.postMessage({
+                                    action: 'displayStorms',
+                                    storms: data.storms
+                                }, '*');
+                            }
+                        }, 100);
                     }
                     break;
                     
