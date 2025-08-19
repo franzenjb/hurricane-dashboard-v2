@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storm Panel Component Test</title>
+    <script src="atlantic-storms-enhanced.js"></script>
+    <script src="storm-panel-component.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #f3f4f6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #111827;
+            margin-bottom: 20px;
+        }
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        .panel-wrapper {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            height: 400px;
+            overflow: hidden;
+        }
+        .controls {
+            margin-bottom: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        button {
+            margin: 5px;
+            padding: 8px 16px;
+            background: #ED1B2E;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #B71234;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Storm Panel Component Test</h1>
+        
+        <div class="controls">
+            <h3>Test Different Storms:</h3>
+            <button onclick="showStorm('katrina')">Katrina 2005 (Cat 5)</button>
+            <button onclick="showStorm('sandy')">Sandy 2012 (Cat 3)</button>
+            <button onclick="showStorm('harvey')">Harvey 2017 (Cat 4)</button>
+            <button onclick="showStorm('michael')">Michael 2018 (Cat 5)</button>
+            <button onclick="showStorm('ian')">Ian 2022 (Cat 4)</button>
+            <button onclick="showStorm('tropical')">Tropical Storm</button>
+            <button onclick="showStorm('depression')">Tropical Depression</button>
+            <button onclick="showEmpty()">Empty State</button>
+        </div>
+        
+        <div class="test-grid">
+            <div class="panel-wrapper">
+                <storm-panel id="panel1"></storm-panel>
+            </div>
+            <div class="panel-wrapper">
+                <storm-panel id="panel2"></storm-panel>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample storm data for testing
+        const testStorms = {
+            katrina: {
+                storm_id: "AL122005",
+                name: "KATRINA",
+                year: 2005,
+                month: 8,
+                day: 29,
+                category: 5,
+                wind_mph: 175,
+                pressure: 902,
+                landfall_states: ["LA", "MS", "AL", "FL"],
+                deaths: 1836,
+                damage_millions: 125000,
+                rc_impact_level: "CATASTROPHIC",
+                rc_impact_score: 100,
+                narrative: "Hurricane Katrina was one of the most devastating natural disasters in United States history. Making landfall near the Louisiana-Mississippi border as a large Category 3 hurricane, Katrina's storm surge overwhelmed the levee system protecting New Orleans, flooding 80% of the city. The hurricane caused catastrophic damage along the Gulf Coast, with entire communities wiped off the map. The storm displaced over one million people and led to a complete overhaul of disaster response procedures nationwide."
+            },
+            sandy: {
+                storm_id: "AL182012",
+                name: "SANDY",
+                year: 2012,
+                month: 10,
+                day: 29,
+                category: 3,
+                wind_mph: 115,
+                pressure: 940,
+                landfall_states: ["NJ", "NY", "CT", "PA"],
+                deaths: 233,
+                damage_millions: 65000,
+                rc_impact_level: "SEVERE",
+                rc_impact_score: 85,
+                narrative: "Superstorm Sandy was the largest Atlantic hurricane on record by diameter, spanning 1,100 miles. Though it weakened to a post-tropical cyclone just before landfall, Sandy's massive size and track perpendicular to the coast created record storm surges in New York and New Jersey. The storm flooded subway tunnels, knocked out power to millions, and devastated coastal communities from Jamaica to Canada."
+            },
+            harvey: {
+                storm_id: "AL092017",
+                name: "HARVEY",
+                year: 2017,
+                month: 8,
+                day: 25,
+                category: 4,
+                wind_mph: 130,
+                pressure: 937,
+                landfall_states: ["TX", "LA"],
+                deaths: 89,
+                damage_millions: 125000,
+                rc_impact_level: "CATASTROPHIC",
+                rc_impact_score: 95,
+                narrative: "Hurricane Harvey stalled over Southeast Texas for four days, producing the heaviest rainfall ever recorded in the continental United States from a tropical cyclone. Some areas received over 60 inches of rain, causing catastrophic flooding in the Houston metropolitan area. Harvey displaced 30,000 people and damaged or destroyed over 200,000 homes and businesses."
+            },
+            michael: {
+                storm_id: "AL142018",
+                name: "MICHAEL",
+                year: 2018,
+                month: 10,
+                day: 10,
+                category: 5,
+                wind_mph: 160,
+                pressure: 919,
+                landfall_states: ["FL", "GA", "AL", "SC", "NC"],
+                deaths: 74,
+                damage_millions: 25000,
+                rc_impact_level: "SEVERE",
+                rc_impact_score: 90,
+                narrative: "Hurricane Michael rapidly intensified before making landfall near Mexico Beach, Florida, as the first Category 5 hurricane to strike the Florida Panhandle. The storm's extreme winds and storm surge obliterated entire communities, with Mexico Beach and Panama City suffering catastrophic damage. Michael was the strongest hurricane to make landfall in the continental United States since Hurricane Andrew in 1992."
+            },
+            ian: {
+                storm_id: "AL092022",
+                name: "IAN",
+                year: 2022,
+                month: 9,
+                day: 28,
+                category: 4,
+                wind_mph: 150,
+                pressure: 940,
+                landfall_states: ["FL", "SC", "NC"],
+                deaths: 150,
+                damage_millions: 112900,
+                rc_impact_level: "CATASTROPHIC",
+                rc_impact_score: 95,
+                narrative: "Hurricane Ian devastated Southwest Florida as one of the most powerful hurricanes ever to strike the United States. The storm brought catastrophic storm surge up to 15 feet, devastating winds, and historic flooding to Fort Myers, Cape Coral, and surrounding areas. Ian was the deadliest hurricane to strike Florida since the 1935 Labor Day hurricane and caused the third-highest insured losses of any natural disaster in U.S. history."
+            },
+            tropical: {
+                storm_id: "AL052020",
+                name: "EDOUARD",
+                year: 2020,
+                month: 7,
+                day: 6,
+                category: 0,
+                wind_mph: 45,
+                pressure: 1005,
+                landfall_states: [],
+                deaths: 0,
+                damage_millions: 0,
+                rc_impact_level: "MINOR",
+                rc_impact_score: 5,
+                narrative: "Tropical Storm Edouard formed in the Atlantic but remained at sea, causing no damage to land areas. The storm briefly reached tropical storm strength before weakening."
+            },
+            depression: {
+                storm_id: "AL032019",
+                name: "TD THREE",
+                year: 2019,
+                month: 7,
+                day: 22,
+                category: -1,
+                wind_mph: 35,
+                pressure: 1013,
+                landfall_states: [],
+                deaths: 0,
+                damage_millions: 0,
+                rc_impact_level: "MINOR",
+                rc_impact_score: 0,
+                narrative: null
+            }
+        };
+
+        function showStorm(stormKey) {
+            const storm = testStorms[stormKey];
+            document.getElementById('panel1').setAttribute('storm-data', JSON.stringify(storm));
+            document.getElementById('panel2').setAttribute('storm-data', JSON.stringify(storm));
+        }
+
+        function showEmpty() {
+            document.getElementById('panel1').removeAttribute('storm-data');
+            document.getElementById('panel2').removeAttribute('storm-data');
+        }
+
+        // Show Katrina by default
+        setTimeout(() => showStorm('katrina'), 100);
+    </script>
+</body>
+</html>
