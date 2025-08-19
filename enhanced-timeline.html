@@ -712,7 +712,7 @@
             }
         }
 
-        function drawRainbowTrack(pointFeatures, storm) {
+        function drawRainbowTrack(pointFeatures, storm, animate = true) {
             if (pointFeatures.length === 0) return;
             
             // Sort points by time if datetime is available
@@ -725,8 +725,9 @@
             
             // Collect ALL coordinates for proper bounds calculation
             const allLatLngs = [];
+            const segments = [];
             
-            // Draw ONLY colored line segments - no markers, no circles
+            // Prepare segments first
             for (let i = 0; i < pointFeatures.length - 1; i++) {
                 const point1 = pointFeatures[i];
                 const point2 = pointFeatures[i + 1];
@@ -763,11 +764,12 @@
                     console.log(`Segment ${i}: wind=${maxWind}kt, category=${category}, color=${segmentColor}`);
                 }
                 
-                L.polyline([latLng1, latLng2], {
+                // Store segment for animation or immediate drawing
+                segments.push({
+                    coords: [latLng1, latLng2],
                     color: segmentColor,
-                    weight: 6,
-                    opacity: 1.0
-                }).addTo(map);
+                    index: i
+                });
             }
             
             // Fit map to show COMPLETE storm track within sidebar constraints
@@ -779,6 +781,38 @@
                     maxZoom: 8  // Prevent over-zooming on short tracks
                 });
                 console.log(`Fitted ${storm.name} track bounds:`, bounds.toBBoxString());
+            }
+            
+            // Draw segments with animation if enabled
+            if (animate && segments.length > 0) {
+                let segmentIndex = 0;
+                const animationSpeed = Math.max(20, 500 / segments.length); // Adjust speed based on segment count
+                
+                const animateSegment = () => {
+                    if (segmentIndex < segments.length) {
+                        const segment = segments[segmentIndex];
+                        L.polyline(segment.coords, {
+                            color: segment.color,
+                            weight: 6,
+                            opacity: 1.0
+                        }).addTo(map);
+                        
+                        segmentIndex++;
+                        setTimeout(animateSegment, animationSpeed);
+                    }
+                };
+                
+                // Start animation
+                animateSegment();
+            } else {
+                // Draw all segments immediately if no animation
+                segments.forEach(segment => {
+                    L.polyline(segment.coords, {
+                        color: segment.color,
+                        weight: 6,
+                        opacity: 1.0
+                    }).addTo(map);
+                });
             }
         }
 

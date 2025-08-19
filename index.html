@@ -14,6 +14,18 @@
         [x-cloak] { display: none !important; }
         .full-height { height: calc(100vh - 4rem); }
         
+        /* Mobile responsive styles */
+        @media (max-width: 768px) {
+            .full-height { height: calc(100vh - 3.5rem); }
+            nav { font-size: 0.875rem; }
+            nav button { padding: 0.25rem 0.5rem; font-size: 0.75rem; }
+            nav h1 { font-size: 1rem; }
+            .container { flex-direction: column; }
+            .left-sidebar { width: 100%; height: auto; }
+            .right-sidebar { width: 100%; }
+            .map-panel { height: 300px; }
+        }
+        
         /* Ensure map has proper height */
         #hurricane-map {
             min-height: 300px;
@@ -60,7 +72,16 @@
                      style="background-color: #ED1B2E;">RC</div>
                 <h1 class="text-xl font-bold text-gray-800">Hurricane Intelligence Platform</h1>
             </div>
-            <div class="flex items-center space-x-1">
+            <!-- Mobile menu button -->
+            <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                          d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+            
+            <!-- Desktop navigation -->
+            <div class="hidden md:flex items-center space-x-1">
                 <button @click="activeTab = 'home'" 
                         :class="activeTab === 'home' ? 'bg-red-600 text-white' : 'text-gray-700 hover:bg-gray-100'"
                         class="px-3 py-1.5 rounded text-sm font-medium transition-colors">
