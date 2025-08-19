@@ -1202,8 +1202,9 @@
             
             // Update the stats banner
             updateStatsDisplay(allStorms);
-            // Plot storms on map
-            plotStormsOnMap(allStorms);
+            // DO NOT automatically plot all storms on map
+            // Only show storms when user clicks on them in the timeline
+            // plotStormsOnMap(allStorms); // REMOVED - this was causing the bug
         }
         
         function updateStatsDisplay(storms) {
@@ -1510,7 +1511,7 @@
             }
             
             updateTimeline();
-            plotStormsOnMap(allStorms);
+            // Don't plot all storms - only the selected storm should be shown
         }
         
         function plotStormsOnMap(storms) {
