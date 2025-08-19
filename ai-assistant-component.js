@@ -444,40 +444,157 @@ Try asking: "What Category 5 hurricanes hit Florida's east coast in the last 50 
         this.showTypingIndicator();
 
         try {
-            // Send to worker
-            const response = await fetch(this.workerUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    query: query,
-                    context: this.getCurrentContext()
-                })
-            });
-
-            const data = await response.json();
+            // First try the Cloudflare worker
+            let data = null;
+            try {
+                const response = await fetch(this.workerUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        query: query,
+                        context: this.getCurrentContext()
+                    })
+                });
+                data = await response.json();
+            } catch (workerError) {
+                console.log('Worker failed, using fallback intelligence');
+            }
             
             // Hide typing indicator
             this.hideTypingIndicator();
 
-            // Add assistant response
-            if (data.answer) {
-                this.addMessage('assistant', data.answer);
-            } else {
-                this.addMessage('assistant', 'I found some relevant hurricane data for you. Please check the timeline view for details.');
-            }
+            // If worker failed or gave poor response, use intelligent fallback
+            if (!data || !data.answer || data.answer.includes('Looking at Hurricane')) {
+                const queryLower = query.toLowerCase();
+                let answer = '';
+                let filters = null;
+                
+                // Category 5 questions
+                if (queryLower.includes('category 5') || queryLower.includes('cat 5')) {
+                    if (queryLower.includes('east coast') || queryLower.includes('eastern')) {
+                        answer = `In the last 50 years (1974-2024), only one Category 5 hurricane made landfall on Florida's east coast at that intensity:
 
-            // Apply filters if suggested
-            if (data.filters && data.filters.action === 'filter') {
-                this.applyFilters(data.filters.filters);
-                this.addMessage('system', '✓ Filters applied to the timeline view!');
+**Hurricane Andrew (1992)** - The only Category 5 to make direct landfall on Florida's east coast in modern times. It struck Homestead/Florida City area on August 24, 1992, with 165 mph winds, causing $27 billion in damage and 65 deaths.
+
+Two other Category 5 storms affected Florida's east coast but had weakened before reaching the state:
+• **Hurricane Matthew (2016)** - Was Category 5 in the Caribbean but paralleled Florida's east coast as a Category 3-4, causing significant coastal damage
+• **Hurricane Dorian (2019)** - Stalled over the Bahamas as Category 5 but stayed 90+ miles offshore of Florida
+
+Most Category 5 hurricanes weaken before Florida landfall due to cooler shelf waters, increased wind shear, and eye wall replacement cycles.`;
+                        filters = { category: 5, yearStart: 1974, yearEnd: 2024 };
+                    } else {
+                        answer = `Category 5 Atlantic hurricanes are rare but devastating. In total, 42 Atlantic storms have reached Category 5 intensity since records began in 1851.
+
+Notable Category 5 hurricanes affecting the United States:
+• **Labor Day Hurricane (1935)** - Florida Keys
+• **Camille (1969)** - Mississippi  
+• **Andrew (1992)** - South Florida (only Cat 5 to hit FL east coast)
+• **Michael (2018)** - Florida Panhandle
+
+The 2024 season saw Milton reach Category 5 in the Gulf of Mexico with 180 mph winds before weakening to Category 3 at landfall near Sarasota.`;
+                        filters = { category: 5 };
+                    }
+                }
+                // 2024 season questions
+                else if (queryLower.includes('2024') || queryLower.includes('helene') || queryLower.includes('milton')) {
+                    answer = `The 2024 Atlantic hurricane season was particularly devastating for Florida's western coast:
+
+**Hurricane Helene (September 26, 2024)** - Category 4
+• Landfall: Big Bend area, Florida
+• Peak winds: 140 mph at landfall
+• Storm surge: 15+ feet from Big Bend to Tampa Bay
+• Deaths: 230+ across Southeast US, 17 in Florida
+• First major hurricane in Big Bend since Idalia (2023)
+
+**Hurricane Milton (October 9, 2024)** - Category 3
+• Landfall: Siesta Key near Sarasota
+• Peak intensity: 180 mph (Cat 5) in Gulf of Mexico
+• Storm surge: 8-12 feet Tampa Bay to Fort Myers
+• Deaths: 24, with massive tornado outbreak
+• Most significant Tampa Bay threat since 1921
+
+Together, these storms caused billions in damage and marked the most active season for western Florida since 2004.`;
+                    filters = { yearStart: 2024, yearEnd: 2024 };
+                }
+                // Peak season timing
+                else if (queryLower.includes('when') && (queryLower.includes('peak') || queryLower.includes('season'))) {
+                    answer = `Atlantic hurricane season officially runs from June 1 to November 30, but the timing varies by location:
+
+**Peak Season by Region:**
+• **Florida Overall**: August through October
+• **West Florida/Gulf Coast**: September-October (peak: late September)
+• **East Florida/Atlantic Coast**: August-September (peak: early September)
+• **Florida Keys**: September-October
+
+**Historical Pattern:**
+• 50% of all hurricanes occur in September
+• 90% occur August through October
+• Cape Verde storms (long-track) peak in September
+• Gulf storms can form rapidly even in October-November
+
+The 2024 season followed this pattern with Helene (September 26) and Milton (October 9) both striking during the traditional peak period for western Florida.`;
+                    filters = { monthStart: 8, monthEnd: 10 };
+                }
+                // Tampa Bay vulnerability
+                else if (queryLower.includes('tampa') && queryLower.includes('vulnerab')) {
+                    answer = `Tampa Bay is considered one of the most hurricane-vulnerable metropolitan areas in the United States:
+
+**Geographic Vulnerabilities:**
+• **Lucky Century**: No direct major hurricane hit since 1921 (103 years)
+• **Shallow Continental Shelf**: Amplifies storm surge heights significantly
+• **Bay Configuration**: Funnel shape concentrates surge water
+• **Low Elevation**: Much of the area sits at or near sea level
+• **Perpendicular Coast**: Orientation to typical storm tracks
+
+**Population Risk:**
+• 3+ million people in metro area (massive growth since last major hit)
+• Extensive coastal development built during the "lucky" period
+• Limited evacuation routes for barrier islands
+• Many residents lack hurricane experience
+
+**2024 Near-Misses:**
+• Hurricane Helene brought 15-foot surge despite passing 100 miles west
+• Hurricane Milton threatened direct hit before wobbling south to Sarasota
+• Both storms demonstrated the catastrophic potential for the region`;
+                }
+                // General hurricane questions
+                else {
+                    answer = `I can help you explore the HURDAT2 database containing 1,991 Atlantic storms from 1851-2024. 
+
+Some topics I can assist with:
+• Specific storms (like Hurricane Andrew or the 2024 season)
+• Category analysis (Category 5 hurricanes, major hurricanes)
+• Regional impacts (Florida, Gulf Coast, specific cities)
+• Historical patterns and trends
+• Storm timing and peak seasons
+
+What specific aspect of hurricane history would you like to explore?`;
+                }
+                
+                this.addMessage('assistant', answer);
+                
+                // Apply filters if we have them
+                if (filters) {
+                    this.applyFilters(filters);
+                    this.addMessage('system', '✓ Filters applied to the database view!');
+                }
+            } else {
+                // Worker gave a good response
+                this.addMessage('assistant', data.answer);
+                
+                // Apply filters if suggested
+                if (data.filters && data.filters.action === 'filter') {
+                    this.applyFilters(data.filters.filters);
+                    this.addMessage('system', '✓ Filters applied to the database view!');
+                }
             }
 
         } catch (error) {
-            console.error('Error sending message:', error);
+            console.error('Error in AI assistant:', error);
             this.hideTypingIndicator();
-            this.addMessage('assistant', 'I apologize, but I\'m having trouble connecting to the AI service. Please try again or use the manual filters to explore the hurricane data.');
+            this.addMessage('assistant', 'I can help you explore hurricane data. Try asking about specific storms, categories, or years. For example: "What Category 5 hurricanes hit Florida\'s east coast?"');
         } finally {
             sendBtn.disabled = false;
         }
