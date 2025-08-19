@@ -485,8 +485,8 @@ Try asking: "What Category 5 hurricanes hit Florida's east coast in the last 50 
             
             this.hideTypingIndicator();
 
-            // Show AI response
-            if (data && data.answer && data.answer !== 'Unable to process') {
+            // Show AI response - accept ANY response
+            if (data && data.answer) {
                 this.addMessage('assistant', data.answer);
                 
                 // Apply filters if AI suggests them
@@ -495,8 +495,8 @@ Try asking: "What Category 5 hurricanes hit Florida's east coast in the last 50 
                     this.addMessage('system', '✓ Filters applied!');
                 }
             } else {
-                console.error('Invalid AI response:', data);
-                this.addMessage('assistant', 'I apologize, but I encountered an error processing your question. Please try rephrasing it.');
+                console.error('No AI response:', data);
+                this.addMessage('assistant', 'Connection error. Please try again.');
             }
 
         } catch (error) {
