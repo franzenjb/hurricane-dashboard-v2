@@ -1,35 +1,29 @@
-// Vercel Edge Function for AI Hurricane Assistant
-// Deploy with: vercel
-
-export const config = {
-  runtime: 'edge',
-};
-
-export default async function handler(request) {
+// Vercel Serverless Function (NOT Edge) - This WILL work
+export default async function handler(req, res) {
   // Enable CORS
-  if (request.method === 'OPTIONS') {
-    return new Response(null, {
-      status: 200,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type',
-      }
-    });
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
   }
 
-  if (request.method !== 'POST') {
-    return new Response('Method not allowed', { status: 405 });
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
-    const { query } = await request.json();
+    const { query } = req.body;
     
     // Get API key from Vercel environment variable
     const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
     
     if (!ANTHROPIC_API_KEY) {
-      throw new Error('API key not configured');
+      return res.status(500).json({ 
+        answer: 'API key not configured. Set ANTHROPIC_API_KEY in Vercel dashboard.',
+        debug: 'No key found'
+      });
     }
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -51,26 +45,15 @@ export default async function handler(request) {
 
     const data = await response.json();
     
-    return new Response(JSON.stringify({
-      answer: data.content?.[0]?.text || 'Unable to process',
-      filters: null
-    }), {
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      }
+    return res.status(200).json({
+      answer: data.content?.[0]?.text || 'Unable to process'
     });
 
   } catch (error) {
-    return new Response(JSON.stringify({
-      error: 'Failed to process request',
-      answer: 'Please try again later.'
-    }), {
-      status: 500,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      }
+    console.error('Error:', error);
+    return res.status(500).json({
+      error: error.message,
+      answer: 'AI service error'
     });
   }
 }
