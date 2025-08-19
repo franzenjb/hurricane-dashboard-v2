@@ -10,6 +10,38 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **The user monitors progress through GitHub. Not pushing changes means the user cannot see your work. This is NOT optional.**
 
+## Git Best Practices - IMPORTANT
+
+### Understanding Git Push Behavior
+When you interrupt a Git push that's in progress:
+- **If interrupted before completion**: The changes aren't on the remote repository yet
+- **Your local commits are safe**: Git handles interrupted operations gracefully
+- **Only committed changes get pushed**: Uncommitted changes stay local until committed
+
+### Safe Git Workflow - ALWAYS FOLLOW THIS
+```bash
+# 1. Check what's staged/unstaged
+git status
+
+# 2. Check what commits will be pushed
+git log origin/main..HEAD
+
+# 3. Stage and commit your changes
+git add .
+git commit -m "Descriptive message of changes"
+
+# 4. Push to remote
+git push
+
+# If push is interrupted, simply run git push again
+```
+
+### Key Points
+- **Commits are local first**: Changes must be committed locally before they can be pushed
+- **Interrupted pushes are safe**: Your local repository retains all commits
+- **Always commit before pushing**: Uncommitted changes won't be included in push
+- **Check status first**: Use `git status` to understand what will be included
+
 ## Architecture Overview
 
 This is a **multi-tab hurricane analytics dashboard** with three distinct implementations:

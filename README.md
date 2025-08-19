@@ -49,6 +49,37 @@ Access the live dashboard at: https://franzenjb.github.io/hurricane-dashboard-v2
 - **Storm Path Loading**: Dynamic HURDAT2 GeoJSON system
 - **Responsive Design**: Optimized for iframe embedding
 
+## Git Best Practices
+
+### Understanding Git Push Behavior
+When working with Git, it's important to understand how pushes work:
+- **Interrupted pushes are safe**: If a push is interrupted before completion, your local commits remain intact
+- **Only committed changes get pushed**: Uncommitted changes stay local until you commit them
+- **Local commits are preserved**: Git handles interrupted operations gracefully
+
+### Recommended Git Workflow
+```bash
+# 1. Check current status
+git status                    # See what's staged/unstaged
+git log origin/main..HEAD     # See commits that will be pushed
+
+# 2. Stage and commit changes
+git add .                     # Stage all changes (or specify files)
+git commit -m "Clear description of what changed"
+
+# 3. Push to remote repository
+git push origin main
+
+# If push is interrupted, simply run git push again
+```
+
+### Important Git Rules
+- **Always commit locally first**: Changes must be committed before they can be pushed
+- **Check status before committing**: Use `git status` to understand what will be included
+- **Write clear commit messages**: Describe what changed and why
+- **Push immediately after committing**: This ensures changes are backed up and visible on GitHub
+- **Interrupted pushes can be retried**: Just run `git push` again if interrupted
+
 ## Troubleshooting
 
 **Storm tracks showing as single points?**
