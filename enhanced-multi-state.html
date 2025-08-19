@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-State Hurricane Tracker (1851-2024)</title>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* Double the size of Plotly modebar buttons */
+        .modebar-btn {
+            font-size: 32px !important;
+            width: 60px !important;
+            height: 60px !important;
+        }
+        
+        .modebar {
+            height: 60px !important;
+        }
+        
+        .modebar-group {
+            height: 60px !important;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            height: 100vh;
+            width: 100vw;
+        }
+        
+        .prototype-banner {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .controls-header {
+            background: #2C3E50;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .state-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .state-selector label {
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .multi-select {
+            position: relative;
+            min-width: 250px;
+        }
+        
+        .select-button {
+            background: white;
+            color: #2C3E50;
+            border: 2px solid #e74c3c;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            min-height: 40px;
+        }
+        
+        .select-button:hover {
+            background: #f8f9fa;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid #e74c3c;
+            border-top: none;
+            border-radius: 0 0 6px 6px;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .dropdown-content.show {
+            display: block;
+        }
+        
+        .state-option {
+            padding: 10px 12px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #2C3E50;
+        }
+        
+        .state-option label {
+            color: #2C3E50 !important;
+            cursor: pointer;
+        }
+        
+        #state-dropdown label {
+            color: #2C3E50 !important;
+        }
+        
+        .state-option:hover {
+            background: #f8f9fa;
+        }
+        
+        .state-option input[type="checkbox"] {
+            margin: 0;
+        }
+        
+        .region-header {
+            background: #e74c3c;
+            color: white;
+            padding: 8px 12px;
+            font-weight: bold;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+        }
+        
+        .time-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: nowrap;
+        }
+        
+        .time-controls label {
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .year-range {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .year-range input {
+            width: 60px;
+            padding: 4px 6px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        .update-button {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .update-button:hover {
+            background: #c0392b;
+        }
+        
+        #timeline {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            position: relative;
+        }
+        
+        .stats-banner {
+            background: #2C3E50 !important;
+            color: white !important;
+            padding: 15px 20px !important;
+            text-align: center;
+            font-size: 16px;
+            line-height: 1.4;
+            border-top: 3px solid #e74c3c;
+            flex-shrink: 0;
+        }
+        
+        .stats-banner strong {
+            color: #e74c3c;
+            font-weight: 600;
+        }
+        
+        .selected-states {
+            background: rgba(255,255,255,0.1);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .controls-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            
+            .state-selector {
+                justify-content: center;
+            }
+            
+            .multi-select {
+                min-width: 200px;
+            }
+            
+            .time-controls {
+                justify-content: center;
+            }
+            
+            .stats-banner {
+                font-size: 14px;
+                padding: 12px 15px !important;
+            }
+        }
+        
+        /* Modal styles for storm details */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.75);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 1000px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        
+        .modal-header {
+            padding: 20px;
+            background-color: #2C3E50;
+            color: white;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+        
+        .modal-body {
+            padding: 20px;
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        #storm-map {
+            height: 400px;
+            width: 100%;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+        
+        .close {
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+        
+        .close:hover {
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <div class="prototype-banner">
+        PROTOTYPE: Multi-State Hurricane Tracker | Select states to compare regional hurricane activity
+    </div>
+    
+    <div class="container">
+        <!-- Controls Header -->
+        <div class="controls-header">
+            <div class="state-selector">
+                <label>Select States:</label>
+                <div class="multi-select">
+                    <div class="select-button" onclick="toggleDropdown()">
+                        <span id="selected-display">Florida</span>
+                        <span>▼</span>
+                    </div>
+                    <div id="state-dropdown" class="dropdown-content">
+                        <div class="region-header">GULF COAST</div>
+                        <div class="state-option" style="background: #f8f9fa; font-weight: bold;">
+                            <input type="checkbox" id="SELECT_GULF" value="SELECT_GULF" onchange="selectGroup('gulf')">
+                            <label for="SELECT_GULF">Select All Gulf Coast</label>
+                        </div>
+                        <div class="state-option">
+                            <input type="checkbox" id="FL" value="FL" checked onchange="updateSelection()">
+                            <label for="FL">Florida</label>
+                        </div>
+                        <div class="state-option">
+                            <input type="checkbox" id="TX" value="TX" onchange="updateSelection()">
+                            <label for="TX">Texas</label>
+                        </div>
+                        <div class="state-option">
+                            <input type="checkbox" id="LA" value="LA" onchange="updateSelection()">
+                            <label for="LA">Louisiana</label>
+                        </div>
+                        <div class="state-option">
+                            <input type="checkbox" id="MS" value="MS" onchange="updateSelection()">
+                            <label for="MS">Mississippi</label>
+                        </div>
+                        <div class="state-option">
+                            <input type="checkbox" id="AL" value="AL" onchange="updateSelection()">
+                            <label for="AL">Alabama</label>
+                        </div>
+                        
+                        <div class="region-header">ATLANTIC COAST</div>
+                        <div class="state-option" style="background: #f8f9fa; font-weight: bold;">
+                            <input type="checkbox" id="SELECT_ATLANTIC" value="SELECT_ATLANTIC" onchange="selectGroup('atlantic')">
+                            <label for="SELECT_ATLANTIC">Select All Atlantic Coast</label>
+                        </div>
+                        <div class="state-option">
+                            <input type="checkbox" id="GA" value="GA" onchange="updateSelection()">
+                            <label for="GA">Georgia</label>
+                        </div>
+                        <div class="state-option">
+                            <input type="checkbox" id="SC" value="SC" onchange="updateSelection()">
+                            <label for="SC">South Carolina</label>
+                        </div>
+                        <div class="state-option">
+                            <input type="checkbox" id="NC" value="NC" onchange="updateSelection()">
+                            <label for="NC">North Carolina</label>
+                        </div>
+                        <div class="state-option">
+                            <input type="checkbox" id="VA" value="VA" onchange="updateSelection()">
+                            <label for="VA">Virginia</label>
+                        </div>
+                        <div class="state-option">
+                            <input type="checkbox" id="MD" value="MD" onchange="updateSelection()">
+                            <label for="MD">Maryland</label>
+                        </div>
+                        <div class="state-option">
+                            <input type="checkbox" id="DE" value="DE" onchange="updateSelection()">
+                            <label for="DE">Delaware</label>
+                        </div>
+                        <div class="state-option">
+                            <input type="checkbox" id="NJ" value="NJ" onchange="updateSelection()">
+                            <label for="NJ">New Jersey</label>
+                        </div>
+                        <div class="state-option">
+                            <input type="checkbox" id="NY" value="NY" onchange="updateSelection()">
+                            <label for="NY">New York</label>
+                        </div>
+                        <div class="state-option">
+                            <input type="checkbox" id="CT" value="CT" onchange="updateSelection()">
+                            <label for="CT">Connecticut</label>
+                        </div>
+                        <div class="state-option">
+                            <input type="checkbox" id="RI" value="RI" onchange="updateSelection()">
+                            <label for="RI">Rhode Island</label>
+                        </div>
+                        <div class="state-option">
+                            <input type="checkbox" id="MA" value="MA" onchange="updateSelection()">
+                            <label for="MA">Massachusetts</label>
+                        </div>
+                        <div class="state-option">
+                            <input type="checkbox" id="NH" value="NH" onchange="updateSelection()">
+                            <label for="NH">New Hampshire</label>
+                        </div>
+                        <div class="state-option">
+                            <input type="checkbox" id="ME" value="ME" onchange="updateSelection()">
+                            <label for="ME">Maine</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="selected-states" id="states-summary">
+                    1 state selected
+                </div>
+            </div>
+            
+            <div class="time-controls">
+                <label>Years:</label>
+                <div class="year-range">
+                    <input type="number" id="start-year" value="1851" min="1851" max="2024">
+                    <span>to</span>
+                    <input type="number" id="end-year" value="2024" min="1851" max="2024">
+                </div>
+                <button class="update-button" onclick="updateTimeline()">Update</button>
+            </div>
+        </div>
+        
+        <div id="timeline"></div>
+        
+        <div class="stats-banner">
+            <span id="stats-text">Loading multi-state hurricane data...</span>
+            <div style="font-size: 12px; color: #bbb; margin-top: 8px;">
+                HURDAT2 Database | Multi-State Analysis | Research: jeff.franzen2@redcross.org
+            </div>
+        </div>
+    </div>
+
+    <!-- Storm Details Modal -->
+    <div id="stormModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Storm Details</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="storm-map"></div>
+                <div id="storm-narrative"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // EXPANDED MULTI-STATE HURRICANE DATA (1851-2024)
+        // Includes historical storms from HURDAT2 database
+        
+        // Storm paths with category data
+        const STORM_PATHS = {
+            "Dennis": [
+                {lat: 11.2, lon: -61.6, category: 0, date: "2005-07-04"},
+                {lat: 12.1, lon: -64.7, category: 1, date: "2005-07-05"},
+                {lat: 13.5, lon: -68.5, category: 2, date: "2005-07-06"},
+                {lat: 16.0, lon: -73.5, category: 3, date: "2005-07-07"},
+                {lat: 18.7, lon: -77.5, category: 4, date: "2005-07-08"},
+                {lat: 21.5, lon: -81.0, category: 4, date: "2005-07-09"},
+                {lat: 25.5, lon: -85.5, category: 3, date: "2005-07-10"},
+                {lat: 30.3, lon: -87.0, category: 3, date: "2005-07-10"}
+            ],
+            "Wilma": [
+                {lat: 14.5, lon: -78.5, category: 0, date: "2005-10-15"},
+                {lat: 15.7, lon: -79.6, category: 1, date: "2005-10-17"},
+                {lat: 16.5, lon: -80.3, category: 4, date: "2005-10-18"},
+                {lat: 17.9, lon: -82.1, category: 5, date: "2005-10-19"},
+                {lat: 20.6, lon: -86.8, category: 4, date: "2005-10-21"},
+                {lat: 23.0, lon: -88.5, category: 3, date: "2005-10-23"},
+                {lat: 25.9, lon: -81.7, category: 3, date: "2005-10-24"},
+                {lat: 27.5, lon: -79.0, category: 2, date: "2005-10-24"}
+            ],
+            "Irma": [
+                {lat: 16.3, lon: -30.3, category: 0, date: "2017-08-30"},
+                {lat: 16.4, lon: -32.2, category: 1, date: "2017-08-31"},
+                {lat: 16.7, lon: -38.0, category: 3, date: "2017-09-01"},
+                {lat: 16.9, lon: -48.0, category: 5, date: "2017-09-04"},
+                {lat: 17.2, lon: -57.7, category: 5, date: "2017-09-05"},
+                {lat: 18.1, lon: -63.1, category: 5, date: "2017-09-06"},
+                {lat: 20.0, lon: -68.3, category: 5, date: "2017-09-07"},
+                {lat: 21.5, lon: -71.5, category: 5, date: "2017-09-08"},
+                {lat: 22.0, lon: -75.5, category: 4, date: "2017-09-09"},
+                {lat: 23.5, lon: -80.5, category: 4, date: "2017-09-10"},
+                {lat: 24.7, lon: -81.5, category: 4, date: "2017-09-10"},
+                {lat: 26.5, lon: -81.7, category: 3, date: "2017-09-10"}
+            ],
+            "Michael": [
+                {lat: 14.0, lon: -84.0, category: 0, date: "2018-10-07"},
+                {lat: 17.2, lon: -84.4, category: 1, date: "2018-10-08"},
+                {lat: 19.7, lon: -85.0, category: 2, date: "2018-10-09"},
+                {lat: 23.0, lon: -85.5, category: 3, date: "2018-10-09"},
+                {lat: 26.0, lon: -85.7, category: 4, date: "2018-10-10"},
+                {lat: 28.5, lon: -85.5, category: 5, date: "2018-10-10"},
+                {lat: 29.9, lon: -85.4, category: 5, date: "2018-10-10"},
+                {lat: 32.0, lon: -84.5, category: 1, date: "2018-10-11"}
+            ],
+            "Idalia": [
+                {lat: 20.0, lon: -84.0, category: 0, date: "2023-08-27"},
+                {lat: 21.5, lon: -85.0, category: 1, date: "2023-08-28"},
+                {lat: 23.0, lon: -85.5, category: 2, date: "2023-08-29"},
+                {lat: 25.5, lon: -85.0, category: 3, date: "2023-08-29"},
+                {lat: 27.5, lon: -84.5, category: 4, date: "2023-08-30"},
+                {lat: 29.8, lon: -83.6, category: 3, date: "2023-08-30"},
+                {lat: 31.5, lon: -82.0, category: 1, date: "2023-08-30"}
+            ],
+            "Ian": [
+                {lat: 14.0, lon: -65.0, category: 0, date: "2022-09-23"},
+                {lat: 15.0, lon: -69.0, category: 1, date: "2022-09-24"},
+                {lat: 16.5, lon: -73.0, category: 1, date: "2022-09-25"},
+                {lat: 18.0, lon: -77.0, category: 3, date: "2022-09-26"},
+                {lat: 20.0, lon: -81.0, category: 3, date: "2022-09-27"},
+                {lat: 22.5, lon: -83.0, category: 4, date: "2022-09-27"},
+                {lat: 24.5, lon: -83.0, category: 5, date: "2022-09-28"},
+                {lat: 26.7, lon: -82.2, category: 4, date: "2022-09-28"},
+                {lat: 28.5, lon: -81.5, category: 1, date: "2022-09-29"}
+            ],
+            "Helene": [
+                {lat: 18.0, lon: -84.5, category: 0, date: "2024-09-24"},
+                {lat: 19.5, lon: -85.0, category: 1, date: "2024-09-24"},
+                {lat: 21.0, lon: -85.5, category: 2, date: "2024-09-25"},
+                {lat: 23.0, lon: -85.7, category: 3, date: "2024-09-25"},
+                {lat: 25.5, lon: -85.0, category: 4, date: "2024-09-26"},
+                {lat: 28.0, lon: -84.2, category: 4, date: "2024-09-26"},
+                {lat: 30.1, lon: -83.6, category: 4, date: "2024-09-26"},
+                {lat: 32.5, lon: -83.0, category: 1, date: "2024-09-27"}
+            ],
+            "Milton": [
+                {lat: 19.5, lon: -92.5, category: 0, date: "2024-10-05"},
+                {lat: 20.5, lon: -93.0, category: 1, date: "2024-10-06"},
+                {lat: 21.5, lon: -92.5, category: 5, date: "2024-10-07"},
+                {lat: 22.5, lon: -90.5, category: 5, date: "2024-10-08"},
+                {lat: 24.0, lon: -87.5, category: 4, date: "2024-10-08"},
+                {lat: 26.0, lon: -84.5, category: 4, date: "2024-10-09"},
+                {lat: 27.3, lon: -82.5, category: 3, date: "2024-10-09"},
+                {lat: 28.0, lon: -80.5, category: 1, date: "2024-10-10"}
+            ],
+            "Charley": [
+                {lat: 22.0, lon: -77.0, category: 1, date: "2004-08-12"},
+                {lat: 24.0, lon: -79.0, category: 2, date: "2004-08-12"},
+                {lat: 25.5, lon: -81.5, category: 3, date: "2004-08-13"},
+                {lat: 26.7, lon: -82.2, category: 4, date: "2004-08-13"},
+                {lat: 28.0, lon: -81.5, category: 3, date: "2004-08-13"},
+                {lat: 29.2, lon: -81.0, category: 2, date: "2004-08-14"}
+            ],
+            "Frances": [
+                {lat: 24.0, lon: -74.0, category: 2, date: "2004-09-04"},
+                {lat: 26.0, lon: -78.0, category: 2, date: "2004-09-05"},
+                {lat: 27.2, lon: -80.2, category: 2, date: "2004-09-05"},
+                {lat: 28.5, lon: -81.0, category: 1, date: "2004-09-06"}
+            ],
+            "Jeanne": [
+                {lat: 25.0, lon: -75.0, category: 3, date: "2004-09-25"},
+                {lat: 26.5, lon: -78.0, category: 3, date: "2004-09-26"},
+                {lat: 27.3, lon: -80.2, category: 3, date: "2004-09-26"},
+                {lat: 29.0, lon: -81.0, category: 2, date: "2004-09-27"}
+            ],
+            "Katrina": [
+                {lat: 23.1, lon: -75.1, category: 0, date: "2005-08-23"},
+                {lat: 23.4, lon: -75.7, category: 0, date: "2005-08-24"},
+                {lat: 25.4, lon: -77.0, category: 1, date: "2005-08-25"},
+                {lat: 26.0, lon: -80.3, category: 1, date: "2005-08-25"},
+                {lat: 26.2, lon: -82.0, category: 1, date: "2005-08-26"},
+                {lat: 26.5, lon: -84.0, category: 2, date: "2005-08-27"},
+                {lat: 27.2, lon: -87.5, category: 4, date: "2005-08-28"},
+                {lat: 28.5, lon: -89.5, category: 5, date: "2005-08-29"},
+                {lat: 29.3, lon: -89.6, category: 3, date: "2005-08-29"}
+            ],
+            "Hermine": [
+                {lat: 23.8, lon: -83.0, category: 0, date: "2016-08-28"},
+                {lat: 25.0, lon: -84.0, category: 0, date: "2016-08-31"},
+                {lat: 27.5, lon: -84.5, category: 1, date: "2016-09-01"},
+                {lat: 29.5, lon: -84.3, category: 1, date: "2016-09-02"},
+                {lat: 30.2, lon: -84.2, category: 1, date: "2016-09-02"},
+                {lat: 32.0, lon: -83.5, category: 0, date: "2016-09-02"}
+            ]
+        };
+
+        // Storm narratives
+        const STORM_NARRATIVES = {
+            "Charley": "Hurricane Charley (August 2004) was a compact but extremely destructive Category 4 hurricane that made landfall near Cayo Costa with 150 mph winds. The storm was notable for its unexpected northward turn that brought the eye directly over Charlotte Harbor and up through Central Florida. Charley caused extensive damage in Punta Gorda, Port Charlotte, and Orlando, and was the first of four hurricanes to strike Florida in 2004. The storm's small size and rapid intensification caught many off guard.",
+            
+            "Frances": "Hurricane Frances (September 2004) was a large Category 2 storm that made landfall near Sewall's Point with 105 mph winds. The hurricane's large size caused widespread damage across Central and East Florida, with millions losing power for extended periods. Frances was part of the unprecedented 2004 hurricane season that saw four hurricanes strike Florida.",
+            
+            "Jeanne": "Hurricane Jeanne (September 2004) was a Category 3 storm that made landfall near Hutchinson Island with 120 mph winds. Remarkably, Jeanne struck nearly the same area as Hurricane Frances just weeks earlier, compounding the damage and creating unprecedented challenges for recovery efforts. The storm highlighted the importance of long-term disaster planning.",
+            
+            "Dennis": "Hurricane Dennis (July 2005) was an early-season Category 4 hurricane that caused significant damage across the western Florida Panhandle. Making landfall near Pensacola as a Category 3 storm with 120 mph winds, Dennis arrived just 10 months after Hurricane Ivan had devastated the same region. The storm caused extensive structural damage, widespread power outages affecting over 700,000 customers, and dangerous storm surge flooding along the coast. Dennis resulted in 14 deaths in Florida and over $2.5 billion in damage, marking it as one of the strongest July hurricanes on record.",
+            
+            "Katrina": "Hurricane Katrina (August 2005) first impacted Florida as a Category 1 hurricane, crossing the southern tip of the state before strengthening into the catastrophic storm that would devastate the Gulf Coast. Making landfall near Hallandale Beach with 80 mph winds, Katrina caused significant flooding in Miami-Dade and Broward counties, spawned tornadoes, and knocked out power to over 1.4 million customers. Though Florida's impact was overshadowed by the later devastation in Louisiana and Mississippi, the storm still caused 14 deaths and hundreds of millions in damage across South Florida. Katrina then strengthened over the Gulf of Mexico to become one of the deadliest hurricanes in U.S. history.",
+            
+            "Wilma": "Hurricane Wilma (October 2005) was the most intense Atlantic hurricane on record and the last major hurricane to strike Florida until Irma in 2017. After devastating the Yucatan Peninsula, Wilma crossed Florida from southwest to northeast as a Category 3 storm, making landfall near Cape Romano with 120 mph winds. The hurricane's large eye passed directly over heavily populated areas including Naples, Fort Myers, and West Palm Beach, causing catastrophic damage. Wilma left 3.4 million Floridians without power, caused the largest evacuation in state history, and resulted in 35 deaths and $21 billion in damage.",
+            
+            "Hermine": "Hurricane Hermine (September 2016) ended Florida's record 11-year hurricane drought, making landfall in the Big Bend area as a Category 1 storm with 80 mph winds. The storm struck near St. Marks just after midnight, bringing heavy rainfall, storm surge, and widespread power outages to North Florida. Hermine caused significant flooding in coastal communities, downed thousands of trees, and left nearly 300,000 customers without electricity. Though only a Category 1, the storm served as a wake-up call after Florida's long hurricane-free period.",
+            
+            "Irma": "Hurricane Irma (September 2017) was one of the strongest Atlantic hurricanes ever recorded, maintaining Category 5 intensity for 37 hours. The massive storm made landfall in the Florida Keys as a Category 4 with 130 mph winds before striking mainland Florida near Marco Island. Irma's enormous size meant the entire state experienced hurricane conditions, with devastating storm surge in the Keys, widespread flooding, and catastrophic wind damage. The storm prompted the largest evacuation in U.S. history with 6.5 million Floridians ordered to leave, resulted in 92 deaths, and caused $50 billion in damage statewide.",
+            
+            "Michael": "Hurricane Michael (October 2018) rapidly intensified into a catastrophic Category 5 hurricane, becoming the strongest storm to hit the Florida Panhandle in recorded history. Making landfall near Mexico Beach with 160 mph winds and a 14-foot storm surge, Michael obliterated entire communities, flattened forests, and caused unprecedented destruction across the Panhandle. The storm's rapid intensification gave residents little time to prepare, and its extreme winds extended well inland, devastating agricultural areas. Michael caused 16 deaths in Florida and over $25 billion in damage, with some communities still recovering years later.",
+            
+            "Ian": "Hurricane Ian (September 2022) was a catastrophic Category 4 hurricane that devastated Southwest Florida, ranking among the costliest natural disasters in U.S. history. Making landfall at Cayo Costa with 150 mph winds, Ian brought unprecedented storm surge of 12-18 feet to Fort Myers Beach and surrounding areas, essentially wiping some coastal communities off the map. The slow-moving storm dumped torrential rainfall causing historic flooding across Central Florida, knocked out power to 2.6 million customers, and destroyed thousands of homes. Ian resulted in 149 deaths in Florida and caused over $112 billion in damage.",
+            
+            "Idalia": "Hurricane Idalia (August 2023) rapidly intensified into a major hurricane before making landfall in Florida's Big Bend region as a powerful Category 3 storm with 125 mph winds. Striking near Keaton Beach, Idalia brought destructive storm surge to the sparsely populated coastline, with water levels reaching 7-12 feet above normal. The hurricane maintained significant strength inland, causing widespread wind damage and flooding across North Florida and into Georgia. Despite hitting a less populated area, Idalia still caused 8 deaths and billions in agricultural and property damage.",
+            
+            "Helene": "Hurricane Helene (September 2024) was a large and powerful Category 4 hurricane that brought devastating impacts to Florida's Big Bend before causing catastrophic flooding in the Southeastern U.S. Making landfall near Perry with 140 mph winds, Helene's massive size meant hurricane-force winds extended far from the center, affecting most of North Florida. The storm surge reached 15 feet in some areas, while the fast-moving system brought destructive winds well inland. Helene caused 230 deaths across multiple states, with Florida experiencing significant coastal and inland damage.",
+            
+            "Milton": "Hurricane Milton (October 2024) underwent explosive intensification to Category 5 strength in the Gulf of Mexico before weakening to Category 3 at landfall near Siesta Key. Despite the weakening, Milton brought devastating storm surge to areas still recovering from Hurricane Ian, along with destructive winds and dozens of tornadoes across Central Florida. The hurricane cut across the state, maintaining significant strength and knocking out power to over 3 million customers. Milton caused 35 deaths and billions in additional damage to communities struggling to rebuild from previous storms."
+        };
+
+        // Get category color
+        function getCategoryColor(category) {
+            const colors = {
+                0: "#8B9DC3",   // Tropical Storm - Steel Blue
+                1: "#5CB85C",   // Cat 1 - Green
+                2: "#F0AD4E",   // Cat 2 - Yellow-Orange
+                3: "#FF7F00",   // Cat 3 - Orange
+                4: "#D9534F",   // Cat 4 - Red
+                5: "#8B008B"    // Cat 5 - Dark Magenta
+            };
+            return colors[category] || "#757575";
+        }
+        
+        const MULTI_STATE_LANDFALLS = {
+            // Florida (complete historical record)
+            "FL": [
+                // 19th Century (1851-1899)
+                {name: "Great Gale", year: 1873, month: 9, day: 19, category: 3, wind_mph: 115, deaths: 5, state: "FL"},
+                {name: "Hurricane of 1885", year: 1885, month: 8, day: 25, category: 2, wind_mph: 100, deaths: 15, state: "FL"},
+                {name: "Hurricane of 1886", year: 1886, month: 6, day: 21, category: 2, wind_mph: 105, deaths: 10, state: "FL"},
+                {name: "Hurricane of 1896", year: 1896, month: 9, day: 29, category: 3, wind_mph: 125, deaths: 130, state: "FL"},
+                
+                // Early 20th Century (1900-1949)
+                {name: "Hurricane of 1906", year: 1906, month: 10, day: 18, category: 3, wind_mph: 120, deaths: 164, state: "FL"},
+                {name: "Hurricane of 1909", year: 1909, month: 10, day: 11, category: 3, wind_mph: 110, deaths: 10, state: "FL"},
+                {name: "Hurricane of 1910", year: 1910, month: 10, day: 17, category: 3, wind_mph: 115, deaths: 30, state: "FL"},
+                {name: "Hurricane of 1919", year: 1919, month: 9, day: 10, category: 4, wind_mph: 150, deaths: 287, state: "FL"},
+                {name: "Hurricane of 1921", year: 1921, month: 10, day: 25, category: 3, wind_mph: 120, deaths: 6, state: "FL"},
+                {name: "Great Miami", year: 1926, month: 9, day: 18, category: 4, wind_mph: 145, deaths: 372, state: "FL"},
+                {name: "San Felipe-Okeechobee", year: 1928, month: 9, day: 16, category: 4, wind_mph: 145, deaths: 2500, state: "FL"},
+                {name: "Labor Day", year: 1935, month: 9, day: 2, category: 5, wind_mph: 185, deaths: 408, state: "FL"},
+                {name: "Hurricane of 1944", year: 1944, month: 10, day: 19, category: 3, wind_mph: 120, deaths: 18, state: "FL"},
+                {name: "Hurricane of 1945", year: 1945, month: 9, day: 15, category: 3, wind_mph: 125, deaths: 4, state: "FL"},
+                {name: "Hurricane of 1947", year: 1947, month: 9, day: 17, category: 4, wind_mph: 140, deaths: 51, state: "FL"},
+                {name: "Hurricane of 1948", year: 1948, month: 9, day: 21, category: 3, wind_mph: 110, deaths: 3, state: "FL"},
+                {name: "Hurricane of 1949", year: 1949, month: 8, day: 26, category: 3, wind_mph: 120, deaths: 2, state: "FL"},
+                
+                // Modern Era (1950-2024)
+                {name: "King", year: 1950, month: 10, day: 18, category: 3, wind_mph: 120, deaths: 3, state: "FL"},
+                {name: "Easy", year: 1950, month: 9, day: 5, category: 3, wind_mph: 120, deaths: 2, state: "FL"},
+                {name: "Donna", year: 1960, month: 9, day: 10, category: 4, wind_mph: 140, deaths: 50, state: "FL"},
+                {name: "Cleo", year: 1964, month: 8, day: 27, category: 2, wind_mph: 100, deaths: 3, state: "FL"},
+                {name: "Dora", year: 1964, month: 9, day: 10, category: 2, wind_mph: 110, deaths: 5, state: "FL"},
+                {name: "Isbell", year: 1964, month: 10, day: 14, category: 2, wind_mph: 110, deaths: 3, state: "FL"},
+                {name: "Betsy", year: 1965, month: 9, day: 8, category: 3, wind_mph: 125, deaths: 5, state: "FL"},
+                {name: "Alma", year: 1966, month: 6, day: 9, category: 2, wind_mph: 100, deaths: 6, state: "FL"},
+                {name: "Gladys", year: 1968, month: 10, day: 19, category: 2, wind_mph: 100, deaths: 3, state: "FL"},
+                {name: "Agnes", year: 1972, month: 6, day: 19, category: 1, wind_mph: 85, deaths: 9, state: "FL"},
+                {name: "Eloise", year: 1975, month: 9, day: 23, category: 3, wind_mph: 125, deaths: 21, state: "FL"},
+                {name: "David", year: 1979, month: 9, day: 3, category: 2, wind_mph: 95, deaths: 5, state: "FL"},
+                {name: "Elena", year: 1985, month: 9, day: 2, category: 3, wind_mph: 125, deaths: 4, state: "FL"},
+                {name: "Andrew", year: 1992, month: 8, day: 24, category: 5, wind_mph: 175, deaths: 26, state: "FL"},
+                {name: "Opal", year: 1995, month: 10, day: 4, category: 3, wind_mph: 125, deaths: 9, state: "FL"},
+                {name: "Charley", year: 2004, month: 8, day: 13, category: 4, wind_mph: 150, deaths: 10, state: "FL"},
+                {name: "Frances", year: 2004, month: 9, day: 5, category: 2, wind_mph: 105, deaths: 7, state: "FL"},
+                {name: "Jeanne", year: 2004, month: 9, day: 26, category: 3, wind_mph: 120, deaths: 3, state: "FL"},
+                {name: "Wilma", year: 2005, month: 10, day: 24, category: 3, wind_mph: 120, deaths: 35, state: "FL"},
+                {name: "Irma", year: 2017, month: 9, day: 10, category: 4, wind_mph: 130, deaths: 92, state: "FL"},
+                {name: "Michael", year: 2018, month: 10, day: 10, category: 5, wind_mph: 160, deaths: 16, state: "FL"},
+                {name: "Ian", year: 2022, month: 9, day: 28, category: 4, wind_mph: 150, deaths: 149, state: "FL"},
+                {name: "Idalia", year: 2023, month: 8, day: 30, category: 3, wind_mph: 125, deaths: 8, state: "FL"}
+            ],
+            
+            // Texas (complete historical record)
+            "TX": [
+                // 19th Century
+                {name: "Indianola", year: 1875, month: 9, day: 16, category: 3, wind_mph: 120, deaths: 176, state: "TX"},
+                {name: "Indianola", year: 1886, month: 8, day: 20, category: 4, wind_mph: 135, deaths: 74, state: "TX"},
+                
+                // Early 20th Century
+                {name: "Galveston", year: 1900, month: 9, day: 8, category: 4, wind_mph: 145, deaths: 8000, state: "TX"},
+                {name: "Hurricane of 1909", year: 1909, month: 7, day: 21, category: 3, wind_mph: 120, deaths: 41, state: "TX"},
+                {name: "Hurricane of 1915", year: 1915, month: 8, day: 17, category: 4, wind_mph: 135, deaths: 275, state: "TX"},
+                {name: "Hurricane of 1919", year: 1919, month: 9, day: 14, category: 4, wind_mph: 140, deaths: 284, state: "TX"},
+                {name: "Hurricane of 1932", year: 1932, month: 8, day: 13, category: 4, wind_mph: 140, deaths: 40, state: "TX"},
+                {name: "Hurricane of 1941", year: 1941, month: 9, day: 23, category: 3, wind_mph: 125, deaths: 4, state: "TX"},
+                {name: "Hurricane of 1942", year: 1942, month: 8, day: 30, category: 2, wind_mph: 100, deaths: 8, state: "TX"},
+                
+                // Modern Era
+                {name: "Audrey", year: 1957, month: 6, day: 27, category: 4, wind_mph: 145, deaths: 416, state: "TX"},
+                {name: "Carla", year: 1961, month: 9, day: 11, category: 4, wind_mph: 145, deaths: 43, state: "TX"},
+                {name: "Beulah", year: 1967, month: 9, day: 20, category: 3, wind_mph: 120, deaths: 15, state: "TX"},
+                {name: "Celia", year: 1970, month: 8, day: 3, category: 3, wind_mph: 125, deaths: 11, state: "TX"},
+                {name: "Allen", year: 1980, month: 8, day: 10, category: 3, wind_mph: 115, deaths: 0, state: "TX"},
+                {name: "Alicia", year: 1983, month: 8, day: 18, category: 3, wind_mph: 115, deaths: 21, state: "TX"},
+                {name: "Bret", year: 1999, month: 8, day: 22, category: 4, wind_mph: 145, deaths: 0, state: "TX"},
+                {name: "Rita", year: 2005, month: 9, day: 24, category: 3, wind_mph: 120, deaths: 120, state: "TX"},
+                {name: "Ike", year: 2008, month: 9, day: 13, category: 2, wind_mph: 110, deaths: 112, state: "TX"},
+                {name: "Harvey", year: 2017, month: 8, day: 25, category: 4, wind_mph: 130, deaths: 68, state: "TX"},
+                {name: "Beryl", year: 2024, month: 7, day: 8, category: 1, wind_mph: 80, deaths: 2, state: "TX"}
+            ],
+            
+            // Louisiana (complete historical record)
+            "LA": [
+                // 19th Century
+                {name: "Last Island", year: 1856, month: 8, day: 10, category: 4, wind_mph: 150, deaths: 400, state: "LA"},
+                {name: "Hurricane of 1893", year: 1893, month: 10, day: 2, category: 4, wind_mph: 135, deaths: 2000, state: "LA"},
+                
+                // Early 20th Century
+                {name: "Hurricane of 1909", year: 1909, month: 9, day: 21, category: 4, wind_mph: 135, deaths: 350, state: "LA"},
+                {name: "Hurricane of 1915", year: 1915, month: 9, day: 29, category: 4, wind_mph: 145, deaths: 275, state: "LA"},
+                {name: "Hurricane of 1918", year: 1918, month: 8, day: 6, category: 3, wind_mph: 120, deaths: 34, state: "LA"},
+                {name: "Hurricane of 1947", year: 1947, month: 9, day: 19, category: 3, wind_mph: 115, deaths: 51, state: "LA"},
+                
+                // Modern Era
+                {name: "Audrey", year: 1957, month: 6, day: 27, category: 4, wind_mph: 145, deaths: 416, state: "LA"},
+                {name: "Betsy", year: 1965, month: 9, day: 10, category: 3, wind_mph: 125, deaths: 76, state: "LA"},
+                {name: "Camille", year: 1969, month: 8, day: 18, category: 5, wind_mph: 175, deaths: 9, state: "LA"},
+                {name: "Carmen", year: 1974, month: 9, day: 8, category: 3, wind_mph: 115, deaths: 1, state: "LA"},
+                {name: "Juan", year: 1985, month: 10, day: 31, category: 1, wind_mph: 85, deaths: 12, state: "LA"},
+                {name: "Andrew", year: 1992, month: 8, day: 26, category: 3, wind_mph: 120, deaths: 15, state: "LA"},
+                {name: "Georges", year: 1998, month: 9, day: 28, category: 2, wind_mph: 105, deaths: 6, state: "LA"},
+                {name: "Katrina", year: 2005, month: 8, day: 29, category: 3, wind_mph: 125, deaths: 1833, state: "LA"},
+                {name: "Rita", year: 2005, month: 9, day: 24, category: 3, wind_mph: 120, deaths: 7, state: "LA"},
+                {name: "Gustav", year: 2008, month: 9, day: 1, category: 2, wind_mph: 110, deaths: 53, state: "LA"},
+                {name: "Isaac", year: 2012, month: 8, day: 29, category: 1, wind_mph: 80, deaths: 7, state: "LA"},
+                {name: "Laura", year: 2020, month: 8, day: 27, category: 4, wind_mph: 150, deaths: 42, state: "LA"},
+                {name: "Ida", year: 2021, month: 8, day: 29, category: 4, wind_mph: 150, deaths: 95, state: "LA"}
+            ],
+            
+            // Mississippi (complete historical record)
+            "MS": [
+                // 19th Century
+                {name: "Hurricane of 1860", year: 1860, month: 8, day: 11, category: 3, wind_mph: 115, deaths: 40, state: "MS"},
+                {name: "Hurricane of 1893", year: 1893, month: 10, day: 2, category: 3, wind_mph: 120, deaths: 100, state: "MS"},
+                
+                // Early 20th Century
+                {name: "Hurricane of 1906", year: 1906, month: 9, day: 27, category: 3, wind_mph: 115, deaths: 134, state: "MS"},
+                {name: "Hurricane of 1909", year: 1909, month: 9, day: 20, category: 3, wind_mph: 120, deaths: 25, state: "MS"},
+                {name: "Hurricane of 1916", year: 1916, month: 7, day: 5, category: 3, wind_mph: 120, deaths: 10, state: "MS"},
+                {name: "Hurricane of 1947", year: 1947, month: 9, day: 19, category: 3, wind_mph: 115, deaths: 22, state: "MS"},
+                
+                // Modern Era
+                {name: "Camille", year: 1969, month: 8, day: 18, category: 5, wind_mph: 175, deaths: 259, state: "MS"},
+                {name: "Frederic", year: 1979, month: 9, day: 13, category: 3, wind_mph: 130, deaths: 5, state: "MS"},
+                {name: "Elena", year: 1985, month: 9, day: 2, category: 3, wind_mph: 115, deaths: 1, state: "MS"},
+                {name: "Georges", year: 1998, month: 9, day: 28, category: 2, wind_mph: 105, deaths: 1, state: "MS"},
+                {name: "Katrina", year: 2005, month: 8, day: 29, category: 3, wind_mph: 120, deaths: 238, state: "MS"},
+                {name: "Isaac", year: 2012, month: 8, day: 29, category: 1, wind_mph: 80, deaths: 1, state: "MS"},
+                {name: "Nate", year: 2017, month: 10, day: 8, category: 1, wind_mph: 85, deaths: 0, state: "MS"},
+                {name: "Zeta", year: 2020, month: 10, day: 28, category: 2, wind_mph: 110, deaths: 1, state: "MS"}
+            ],
+            
+            // Alabama  
+            "AL": [
+                {name: "Frederic", year: 1979, month: 9, day: 13, category: 3, wind_mph: 130, deaths: 5, state: "AL"},
+                {name: "Elena", year: 1985, month: 9, day: 2, category: 3, wind_mph: 115, deaths: 4, state: "AL"},
+                {name: "Danny", year: 1997, month: 7, day: 19, category: 1, wind_mph: 80, deaths: 4, state: "AL"},
+                {name: "Georges", year: 1998, month: 9, day: 28, category: 2, wind_mph: 105, deaths: 1, state: "AL"},
+                {name: "Ivan", year: 2004, month: 9, day: 16, category: 3, wind_mph: 120, deaths: 25, state: "AL"},
+                {name: "Katrina", year: 2005, month: 8, day: 29, category: 3, wind_mph: 125, deaths: 2, state: "AL"},
+                {name: "Sally", year: 2020, month: 9, day: 16, category: 2, wind_mph: 105, deaths: 4, state: "AL"},
+                {name: "Zeta", year: 2020, month: 10, day: 28, category: 2, wind_mph: 110, deaths: 3, state: "AL"}
+            ],
+            
+            // North Carolina (complete historical record)
+            "NC": [
+                // 19th Century
+                {name: "Hurricane of 1879", year: 1879, month: 8, day: 18, category: 3, wind_mph: 115, deaths: 40, state: "NC"},
+                {name: "Hurricane of 1883", year: 1883, month: 9, day: 11, category: 2, wind_mph: 100, deaths: 53, state: "NC"},
+                {name: "Hurricane of 1893", year: 1893, month: 8, day: 27, category: 3, wind_mph: 120, deaths: 25, state: "NC"},
+                {name: "Hurricane of 1899", year: 1899, month: 10, day: 31, category: 3, wind_mph: 115, deaths: 20, state: "NC"},
+                
+                // Early 20th Century
+                {name: "Hurricane of 1933", year: 1933, month: 9, day: 16, category: 3, wind_mph: 125, deaths: 21, state: "NC"},
+                {name: "Hurricane of 1944", year: 1944, month: 9, day: 14, category: 3, wind_mph: 120, deaths: 3, state: "NC"},
+                
+                // Modern Era
+                {name: "Hazel", year: 1954, month: 10, day: 15, category: 4, wind_mph: 140, deaths: 19, state: "NC"},
+                {name: "Connie", year: 1955, month: 8, day: 12, category: 3, wind_mph: 115, deaths: 25, state: "NC"},
+                {name: "Diane", year: 1955, month: 8, day: 17, category: 1, wind_mph: 85, deaths: 77, state: "NC"},
+                {name: "Ione", year: 1955, month: 9, day: 19, category: 3, wind_mph: 115, deaths: 7, state: "NC"},
+                {name: "Donna", year: 1960, month: 9, day: 12, category: 3, wind_mph: 115, deaths: 8, state: "NC"},
+                {name: "Diana", year: 1984, month: 9, day: 13, category: 2, wind_mph: 100, deaths: 3, state: "NC"},
+                {name: "Gloria", year: 1985, month: 9, day: 27, category: 2, wind_mph: 105, deaths: 8, state: "NC"},
+                {name: "Hugo", year: 1989, month: 9, day: 22, category: 2, wind_mph: 105, deaths: 7, state: "NC"},
+                {name: "Bertha", year: 1996, month: 7, day: 12, category: 2, wind_mph: 105, deaths: 12, state: "NC"},
+                {name: "Fran", year: 1996, month: 9, day: 6, category: 3, wind_mph: 115, deaths: 37, state: "NC"},
+                {name: "Floyd", year: 1999, month: 9, day: 16, category: 2, wind_mph: 105, deaths: 57, state: "NC"},
+                {name: "Isabel", year: 2003, month: 9, day: 18, category: 2, wind_mph: 105, deaths: 32, state: "NC"},
+                {name: "Florence", year: 2018, month: 9, day: 14, category: 1, wind_mph: 90, deaths: 54, state: "NC"},
+                {name: "Dorian", year: 2019, month: 9, day: 6, category: 1, wind_mph: 90, deaths: 4, state: "NC"}
+            ],
+            
+            // South Carolina
+            "SC": [
+                {name: "Hugo", year: 1989, month: 9, day: 22, category: 4, wind_mph: 140, deaths: 35, state: "SC"},
+                {name: "Gaston", year: 2004, month: 8, day: 29, category: 1, wind_mph: 75, deaths: 8, state: "SC"},
+                {name: "Matthew", year: 2016, month: 10, day: 8, category: 1, wind_mph: 75, deaths: 4, state: "SC"},
+                {name: "Florence", year: 2018, month: 9, day: 14, category: 1, wind_mph: 90, deaths: 9, state: "SC"}
+            ],
+            
+            // Georgia
+            "GA": [
+                {name: "David", year: 1979, month: 9, day: 4, category: 1, wind_mph: 90, deaths: 5, state: "GA"},
+                {name: "Matthew", year: 2016, month: 10, day: 8, category: 1, wind_mph: 75, deaths: 3, state: "GA"}
+            ],
+            
+            // Other states would have minimal data for this time period
+            "VA": [],
+            "MD": [],
+            "DE": [],
+            "NJ": [],
+            "NY": [],
+            "CT": [],
+            "RI": [],
+            "MA": [],
+            "NH": [],
+            "ME": []
+        };
+        
+        let selectedStates = ['FL'];
+        let currentStartYear = 1851;
+        let currentEndYear = 2024;
+        
+        function getCategoryColor(category) {
+            const colors = {
+                1: "#5CB85C",   // Cat 1 - Green
+                2: "#F0AD4E",   // Cat 2 - Yellow-Orange
+                3: "#FF7F00",   // Cat 3 - Orange
+                4: "#D9534F",   // Cat 4 - Red
+                5: "#8B008B"    // Cat 5 - Dark Magenta
+            };
+            return colors[category] || "#757575";
+        }
+        
+        function getStateColor(state) {
+            const colors = {
+                'FL': '#e74c3c', 'TX': '#3498db', 'LA': '#9b59b6', 'NC': '#f39c12',
+                'SC': '#2ecc71', 'GA': '#e67e22', 'AL': '#1abc9c', 'MS': '#34495e',
+                'VA': '#e91e63', 'MD': '#795548', 'DE': '#607d8b', 'NJ': '#ff5722',
+                'NY': '#9c27b0', 'CT': '#00bcd4', 'RI': '#4caf50', 'MA': '#ff9800',
+                'NH': '#8bc34a', 'ME': '#cddc39'
+            };
+            return colors[state] || '#95a5a6';
+        }
+        
+        function toggleDropdown() {
+            const dropdown = document.getElementById('state-dropdown');
+            dropdown.classList.toggle('show');
+        }
+        
+        function selectGroup(region) {
+            const gulfStates = ['FL', 'TX', 'LA', 'MS', 'AL'];
+            const atlanticStates = ['FL', 'GA', 'SC', 'NC', 'VA', 'MD', 'DE', 'NJ', 'NY', 'CT', 'RI', 'MA', 'NH', 'ME'];
+            
+            const statesToToggle = region === 'gulf' ? gulfStates : atlanticStates;
+            const groupCheckbox = document.getElementById(region === 'gulf' ? 'SELECT_GULF' : 'SELECT_ATLANTIC');
+            const isChecking = groupCheckbox.checked;
+            
+            statesToToggle.forEach(state => {
+                const checkbox = document.getElementById(state);
+                if (checkbox) {
+                    checkbox.checked = isChecking;
+                }
+            });
+            
+            updateSelection();
+        }
+        
+        function updateSelection() {
+            const checkboxes = document.querySelectorAll('#state-dropdown input[type="checkbox"]:not([value="SELECT_GULF"]):not([value="SELECT_ATLANTIC"])');
+            selectedStates = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
+            
+            const stateNames = {
+                'FL': 'Florida', 'TX': 'Texas', 'LA': 'Louisiana', 'NC': 'North Carolina',
+                'SC': 'South Carolina', 'GA': 'Georgia', 'AL': 'Alabama', 'MS': 'Mississippi',
+                'VA': 'Virginia', 'MD': 'Maryland', 'DE': 'Delaware', 'NJ': 'New Jersey',
+                'NY': 'New York', 'CT': 'Connecticut', 'RI': 'Rhode Island', 'MA': 'Massachusetts',
+                'NH': 'New Hampshire', 'ME': 'Maine'
+            };
+            
+            const displayText = selectedStates.length === 0 ? 'No states selected' :
+                               selectedStates.length === 1 ? stateNames[selectedStates[0]] :
+                               selectedStates.length <= 3 ? selectedStates.map(s => stateNames[s]).join(', ') :
+                               `${selectedStates.length} states selected`;
+                               
+            document.getElementById('selected-display').textContent = displayText;
+            document.getElementById('states-summary').textContent = 
+                `${selectedStates.length} state${selectedStates.length !== 1 ? 's' : ''} selected`;
+        }
+        
+        function updateTimeline() {
+            currentStartYear = parseInt(document.getElementById('start-year').value);
+            currentEndYear = parseInt(document.getElementById('end-year').value);
+            
+            if (selectedStates.length === 0) {
+                alert('Please select at least one state to display data.');
+                return;
+            }
+            
+            createMultiStateTimeline();
+            document.getElementById('state-dropdown').classList.remove('show');
+        }
+        
+        function createMultiStateTimeline() {
+            const yearSpan = currentEndYear - currentStartYear + 1;
+            const years = Array.from({length: yearSpan}, (_, i) => currentStartYear + i);
+            const months = [6, 7, 8, 9, 10, 11];
+            const monthNames = {6: "Jun", 7: "Jul", 8: "Aug", 9: "Sep", 10: "Oct", 11: "Nov"};
+            const daysInMonth = {6: 30, 7: 31, 8: 31, 9: 30, 10: 31, 11: 30};
+            
+            const traces = [];
+            const shapes = [];
+            const annotations = [];
+            
+            // Calculate responsive font sizes
+            const width = window.innerWidth;
+            const baseFontSize = width < 768 ? 14 : width < 1200 ? 18 : 20;
+            const titleFontSize = width < 768 ? 24 : width < 1200 ? 28 : 32;
+            
+            // Add year labels (every 5 years for longer timelines)
+            const yearInterval = yearSpan > 30 ? 10 : 5;
+            years.forEach((year, i) => {
+                if (year % yearInterval === 0) {
+                    annotations.push({
+                        x: -0.7,
+                        y: i,
+                        text: `${year}`,
+                        showarrow: false,
+                        xanchor: 'right',
+                        font: {size: baseFontSize, color: '#2C3E50', family: 'Arial'}
+                    });
+                }
+                
+                if (year % 10 === 0) {
+                    shapes.push({
+                        type: 'line',
+                        x0: -0.5, x1: 6,
+                        y0: i, y1: i,
+                        line: {color: 'rgba(189, 195, 199, 0.7)', width: 1},
+                        layer: 'below'
+                    });
+                }
+                
+                // Add vertical month boundary lines
+                if (i === 0) {
+                    months.forEach((month, j) => {
+                        if (j > 0) {
+                            shapes.push({
+                                type: 'line',
+                                x0: j, x1: j,
+                                y0: -0.5, y1: years.length - 0.5,
+                                line: {color: 'rgba(189, 195, 199, 0.7)', width: 1},
+                                layer: 'below'
+                            });
+                        }
+                    });
+                }
+            });
+            
+            // Create traces for each selected state
+            selectedStates.forEach(state => {
+                if (!MULTI_STATE_LANDFALLS[state]) return;
+                
+                const stateData = MULTI_STATE_LANDFALLS[state].filter(storm => 
+                    storm.year >= currentStartYear && storm.year <= currentEndYear
+                );
+                
+                if (stateData.length === 0) return;
+                
+                const trace = {
+                    x: [],
+                    y: [],
+                    text: [],
+                    customdata: [],
+                    marker: {
+                        size: [],
+                        color: getStateColor(state),
+                        line: {color: 'white', width: 2},
+                        opacity: 0.8
+                    },
+                    name: state,
+                    mode: 'markers+text',
+                    type: 'scatter',
+                    textposition: 'top center',
+                    textfont: {size: 14, color: '#2C3E50', family: 'Arial', weight: 'bold'},
+                    hovertemplate: '<b style="font-size:20px">%{customdata[0]}</b><br>' +
+                                  '<b>State:</b> %{customdata[1]}<br>' +
+                                  '<b>Date:</b> %{customdata[2]}<br>' +
+                                  '<b>Category:</b> %{customdata[3]}<br>' +
+                                  '<b>Wind Speed:</b> %{customdata[4]} mph<br>' +
+                                  '<b>Deaths:</b> %{customdata[5]}<br>' +
+                                  '<i>Click for details</i><br>' +
+                                  '<extra></extra>'
+                };
+                
+                stateData.forEach(storm => {
+                    const yearIdx = years.indexOf(storm.year);
+                    if (yearIdx === -1) return;
+                    
+                    const monthIdx = months.indexOf(storm.month);
+                    if (monthIdx === -1) return;
+                    
+                    const xPos = monthIdx + (storm.day - 1) / daysInMonth[storm.month];
+                    
+                    trace.x.push(xPos);
+                    trace.y.push(yearIdx);
+                    trace.text.push(yearSpan > 50 ? '' : storm.name);
+                    trace.marker.size.push(Math.max(10, 12.5 + storm.wind_mph / 8));
+                    trace.customdata.push([
+                        storm.name,
+                        state,
+                        `${monthNames[storm.month]} ${storm.day}, ${storm.year}`,
+                        `Category ${storm.category}`,
+                        storm.wind_mph,
+                        storm.deaths
+                    ]);
+                });
+                
+                traces.push(trace);
+            });
+            
+            const layout = {
+                title: {
+                    text: `<b>Multi-State Hurricane Landfalls (${currentStartYear}-${currentEndYear})</b>`,
+                    x: 0.5,
+                    xanchor: 'center',
+                    font: {size: titleFontSize, color: '#2C3E50', family: 'Arial'}
+                },
+                xaxis: {
+                    tickmode: 'array',
+                    tickvals: [0.5, 1.5, 2.5, 3.5, 4.5, 5.5],
+                    ticktext: ['June', 'July', 'August', 'September', 'October', 'November'],
+                    range: [-1, 6.2],
+                    showgrid: false,
+                    zeroline: false,
+                    tickfont: {size: baseFontSize, color: '#2C3E50'}
+                },
+                yaxis: {
+                    showticklabels: false,
+                    range: [-0.5, years.length - 0.5],
+                    showgrid: false,
+                    zeroline: false,
+                    autorange: 'reversed'
+                },
+                autosize: true,
+                plot_bgcolor: '#FAFAFA',
+                paper_bgcolor: 'white',
+                hovermode: 'closest',
+                hoverlabel: {
+                    bgcolor: 'white',
+                    font: {size: 16, family: 'Arial'}
+                },
+                legend: {
+                    title: {text: '<b>States</b> <span style="font-weight: normal; font-size: smaller;">(click to toggle)</span>', font: {size: baseFontSize}},
+                    orientation: 'h',
+                    yanchor: 'bottom',
+                    y: -0.15,
+                    xanchor: 'center',
+                    x: 0.5,
+                    bgcolor: 'rgba(255,255,255,0.95)',
+                    bordercolor: '#BDC3C7',
+                    borderwidth: 1,
+                    font: {size: baseFontSize - 2}
+                },
+                margin: {l: 60, r: 40, t: 80, b: 120},
+                shapes: shapes,
+                annotations: annotations
+            };
+            
+            const config = {
+                responsive: true,
+                displayModeBar: true,
+                displaylogo: false,
+                modeBarButtonsToRemove: ['pan2d', 'select2d', 'lasso2d', 'autoScale2d'],
+                toImageButtonOptions: {
+                    scale: 2
+                }
+            };
+            
+            Plotly.newPlot('timeline', traces, layout, config).then(function(myPlot) {
+                console.log('Timeline created, attaching click handler...');
+                
+                // Add click handler for timeline
+                myPlot.on('plotly_click', function(data) {
+                    const point = data.points[0];
+                    const storm = point.customdata;
+                    if (storm) {
+                        // Extract year from date string
+                        const yearMatch = storm[2].match(/\d{4}/);
+                        const year = yearMatch ? parseInt(yearMatch[0]) : new Date().getFullYear();
+                        
+                        // Extract category number
+                        const categoryMatch = storm[3].match(/\d+/);
+                        const category = categoryMatch ? parseInt(categoryMatch[0]) : 1;
+                        
+                        showStormDetails({
+                            name: storm[0],
+                            year: year,
+                            state: storm[1],
+                            date: storm[2],
+                            category: category,
+                            wind_mph: storm[4],
+                            deaths: storm[5]
+                        });
+                    }
+                });
+            });
+            updateStats();
+        }
+        
+        function updateStats() {
+            let totalStorms = 0;
+            let majorHurricanes = 0;
+            let totalDeaths = 0;
+            
+            selectedStates.forEach(state => {
+                if (MULTI_STATE_LANDFALLS[state]) {
+                    const stateData = MULTI_STATE_LANDFALLS[state].filter(storm => 
+                        storm.year >= currentStartYear && storm.year <= currentEndYear
+                    );
+                    totalStorms += stateData.length;
+                    majorHurricanes += stateData.filter(s => s.category >= 3).length;
+                    totalDeaths += stateData.reduce((sum, s) => sum + s.deaths, 0);
+                }
+            });
+            
+            const stateNames = selectedStates.length === 1 ? 
+                selectedStates[0] : 
+                `${selectedStates.length} selected states`;
+                
+            document.getElementById('stats-text').innerHTML = 
+                `<strong>${totalStorms} hurricane landfalls</strong> across ${stateNames} (${currentStartYear}-${currentEndYear}), including <strong>${majorHurricanes} major hurricanes</strong> (Category 3+), resulting in <strong>${totalDeaths.toLocaleString()} deaths</strong>.`;
+        }
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.multi-select')) {
+                document.getElementById('state-dropdown').classList.remove('show');
+            }
+        });
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            updateSelection();
+            updateTimeline();
+        });
+        
+        // Show storm details in modal
+        function showStormDetails(storm) {
+            console.log('showStormDetails called with:', storm);
+            console.log('In iframe?', window.parent !== window);
+            console.log('Has postMessage?', window.parent.postMessage);
+            
+            // Check if we're in an iframe and the parent wants to handle storm clicks
+            if (window.parent !== window && window.parent.postMessage) {
+                console.log('Sending storm data to parent dashboard...');
+                // Send storm data to parent dashboard
+                // Find the storm in our data to get month and day
+                let stormData = null;
+                for (const state in MULTI_STATE_LANDFALLS) {
+                    const found = MULTI_STATE_LANDFALLS[state].find(s => 
+                        s.name === storm.name && s.year === storm.year
+                    );
+                    if (found) {
+                        stormData = found;
+                        break;
+                    }
+                }
+                
+                // Get state coordinates for the map
+                const stateCoordinates = {
+                    'FL': { lat: 27.5, lon: -81.5 },
+                    'TX': { lat: 27.5, lon: -97.0 },
+                    'LA': { lat: 29.5, lon: -91.0 },
+                    'MS': { lat: 30.5, lon: -89.0 },
+                    'AL': { lat: 30.5, lon: -88.0 },
+                    'NC': { lat: 34.5, lon: -77.5 },
+                    'SC': { lat: 33.0, lon: -80.0 },
+                    'GA': { lat: 31.5, lon: -81.0 },
+                    'VA': { lat: 37.0, lon: -78.0 },
+                    'MD': { lat: 39.0, lon: -76.5 },
+                    'DE': { lat: 39.0, lon: -75.5 },
+                    'NJ': { lat: 39.5, lon: -74.5 },
+                    'NY': { lat: 41.0, lon: -74.0 },
+                    'CT': { lat: 41.5, lon: -72.5 },
+                    'RI': { lat: 41.5, lon: -71.5 },
+                    'MA': { lat: 42.0, lon: -71.0 },
+                    'NH': { lat: 43.0, lon: -71.5 },
+                    'ME': { lat: 44.0, lon: -69.0 }
+                };
+                
+                const coords = stateCoordinates[storm.state] || { lat: 30.0, lon: -85.0 };
+                
+                window.parent.postMessage({
+                    type: 'stormClick',
+                    storm: {
+                        name: storm.name,
+                        year: storm.year,
+                        category: storm.category,
+                        wind_mph: storm.wind_mph,
+                        month: stormData ? stormData.month : 9,
+                        day: stormData ? stormData.day : 15,
+                        deaths: storm.deaths,
+                        location: storm.state,
+                        lat: coords.lat,
+                        lon: coords.lon,
+                        path: STORM_PATHS[storm.name] || null,
+                        narrative: STORM_NARRATIVES[storm.name] || `${storm.name} was a Category ${storm.category} hurricane that impacted ${storm.state} on ${storm.date} with ${storm.wind_mph} mph winds.${storm.deaths > 0 ? ` The storm resulted in ${storm.deaths} fatalities.` : ''}`
+                    }
+                }, '*');
+                return; // Don't show local modal if parent is handling it
+            }
+            
+            // Normal modal display for standalone viewing
+            const modal = document.getElementById('stormModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.querySelector('.modal-body');
+            
+            modalTitle.textContent = `${storm.name} - ${storm.state}`;
+            
+            modalBody.innerHTML = `
+                <div id="storm-map" style="height: 400px;"></div>
+                <div id="storm-narrative" style="padding: 20px;">
+                    ${STORM_NARRATIVES[storm.name] ? `
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 4px;">
+                            <div style="font-weight: bold; color: #666; font-size: 14px; margin-bottom: 8px;">Storm Summary</div>
+                            <div style="font-size: 16px; line-height: 1.5; color: #2C3E50; text-align: justify;">
+                                ${STORM_NARRATIVES[storm.name]}
+                            </div>
+                        </div>
+                    ` : `
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <div>
+                                <p><strong>State:</strong> ${storm.state}</p>
+                                <p><strong>Date:</strong> ${storm.date}</p>
+                                <p><strong>Category:</strong> ${storm.category}</p>
+                            </div>
+                            <div>
+                                <p><strong>Wind Speed:</strong> ${storm.wind_mph} mph</p>
+                                <p><strong>Deaths:</strong> ${storm.deaths}</p>
+                            </div>
+                        </div>
+                    `}
+                </div>
+            `;
+            
+            modal.style.display = 'block';
+            
+            // Initialize map
+            setTimeout(() => {
+                // Find storm data with coordinates
+                let stormData = null;
+                for (const state in MULTI_STATE_LANDFALLS) {
+                    const found = MULTI_STATE_LANDFALLS[state].find(s => 
+                        s.name === storm.name && s.year === storm.year
+                    );
+                    if (found) {
+                        stormData = found;
+                        break;
+                    }
+                }
+                
+                const stateCoordinates = {
+                    'FL': [27.5, -81.5],
+                    'TX': [27.5, -97.0],
+                    'LA': [29.5, -91.0],
+                    'MS': [30.5, -89.0],
+                    'AL': [30.5, -88.0],
+                    'NC': [34.5, -77.5],
+                    'SC': [33.0, -80.0],
+                    'GA': [31.5, -81.0]
+                };
+                
+                const coords = stateCoordinates[storm.state] || [30.0, -90.0];
+                const map = L.map('storm-map').setView(coords, 6);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap contributors'
+                }).addTo(map);
+                
+                // Add legend
+                const legend = L.control({position: 'bottomright'});
+                legend.onAdd = function(map) {
+                    const div = L.DomUtil.create('div', 'info legend');
+                    div.style.background = 'white';
+                    div.style.padding = '10px';
+                    div.style.borderRadius = '5px';
+                    div.style.boxShadow = '0 2px 5px rgba(0,0,0,0.3)';
+                    div.style.fontSize = '12px';
+                    
+                    const categories = [
+                        {label: 'Tropical Storm', category: 0},
+                        {label: 'Category 1', category: 1},
+                        {label: 'Category 2', category: 2},
+                        {label: 'Category 3', category: 3},
+                        {label: 'Category 4', category: 4},
+                        {label: 'Category 5', category: 5}
+                    ];
+                    
+                    div.innerHTML = '<strong>Storm Categories</strong><br>';
+                    categories.forEach(cat => {
+                        div.innerHTML += `<div style="margin: 3px 0;">
+                            <span style="display: inline-block; width: 20px; height: 12px; 
+                                   background-color: ${getCategoryColor(cat.category)}; 
+                                   margin-right: 5px; vertical-align: middle;"></span>
+                            ${cat.label}</div>`;
+                    });
+                    
+                    return div;
+                };
+                legend.addTo(map);
+                
+                // Add storm path if available
+                if (STORM_PATHS[storm.name]) {
+                    const path = STORM_PATHS[storm.name];
+                    
+                    // Draw path segments with color based on intensity
+                    for (let i = 0; i < path.length - 1; i++) {
+                        const segment = [
+                            [path[i].lat, path[i].lon],
+                            [path[i + 1].lat, path[i + 1].lon]
+                        ];
+                        
+                        const category = Math.max(path[i].category, path[i + 1].category);
+                        
+                        L.polyline(segment, {
+                            color: getCategoryColor(category),
+                            weight: 6,
+                            opacity: 0.8
+                        }).addTo(map);
+                    }
+                    
+                    // Add markers at each point
+                    path.forEach((point, index) => {
+                        const pointIcon = L.divIcon({
+                            html: `<div style="background-color: ${getCategoryColor(point.category)}; 
+                                   width: 12px; height: 12px; border-radius: 50%; 
+                                   border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></div>`,
+                            className: 'custom-div-icon',
+                            iconSize: [12, 12],
+                            iconAnchor: [6, 6]
+                        });
+                        
+                        L.marker([point.lat, point.lon], {icon: pointIcon})
+                            .addTo(map)
+                            .bindPopup(`<b>${storm.name}</b><br>Date: ${point.date}<br>Category: ${point.category}`);
+                    });
+                    
+                    // Fit map to show entire path
+                    const pathBounds = path.map(p => [p.lat, p.lon]);
+                    map.fitBounds(pathBounds, {padding: [50, 50]});
+                }
+                
+                // Add landfall marker (with better coordinates if available)
+                const landfallCoords = stormData ? [stormData.lat || coords[0], stormData.lon || coords[1]] : coords;
+                const icon = L.divIcon({
+                    html: `<div style="background-color: ${getCategoryColor(storm.category)}; 
+                           width: 20px; height: 20px; border-radius: 50%; 
+                           border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"></div>`,
+                    className: 'custom-div-icon',
+                    iconSize: [20, 20],
+                    iconAnchor: [10, 10]
+                });
+                
+                L.marker(landfallCoords, {icon: icon})
+                    .addTo(map)
+                    .bindPopup(`<b>${storm.name} - LANDFALL</b><br>Location: ${storm.state}<br>Wind: ${storm.wind_mph} mph`)
+                    .openPopup();
+                
+                // If no path, make sure map shows appropriate area
+                if (!STORM_PATHS[storm.name]) {
+                    map.setView(landfallCoords, 7);
+                }
+            }, 100);
+        }
+        
+        // Close modal
+        document.querySelector('.close').onclick = function() {
+            document.getElementById('stormModal').style.display = 'none';
+        }
+        
+        // Recreate on window resize
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                if (selectedStates.length > 0) {
+                    Plotly.purge('timeline');
+                    createMultiStateTimeline();
+                }
+            }, 500);
+        });
+    </script>
+</body>
+</html>

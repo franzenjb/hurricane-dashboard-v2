@@ -390,7 +390,16 @@
         </div>
 
         <!-- Multi-State Tab -->
-        <div x-show="activeTab === 'tracker'" class="h-full flex flex-col" x-cloak>
+        <div x-show="activeTab === 'tracker'" class="h-full flex" x-cloak>
+            <!-- Enhanced Multi-State Hurricane Tracker -->
+            <iframe src="enhanced-multi-state.html" 
+                    class="w-full h-full border-0" 
+                    onload="enableStormPanelInIframes()">
+            </iframe>
+        </div>
+
+        <!-- Original Multi-State (Backup) -->
+        <div x-show="false" class="h-full flex flex-col" x-cloak>
             <!-- Header Banner -->
             <div class="bg-red-500 text-white px-6 py-3">
                 <div class="text-center font-medium">
