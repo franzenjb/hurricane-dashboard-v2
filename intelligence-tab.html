@@ -252,6 +252,15 @@
             selectors.forEach(selectorId => {
                 const select = document.getElementById(selectorId);
                 
+                // Clear existing options
+                select.innerHTML = '';
+                
+                // Add default option
+                const defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.textContent = '-- Select a Storm --';
+                select.appendChild(defaultOption);
+                
                 // Add major storms first
                 const optgroup1 = document.createElement('optgroup');
                 optgroup1.label = 'Major Storms (High Impact)';
