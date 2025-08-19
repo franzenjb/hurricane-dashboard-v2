@@ -954,6 +954,56 @@
             const filename = `AL${stormNumber}${storm.year}_${storm.name}.pdf`;
             return baseUrl + filename;
         }
+        
+        // Listen for AI Assistant filter messages
+        window.addEventListener('message', function(event) {
+            if (event.data && event.data.action === 'applyFilters') {
+                console.log('Database: Applying AI-suggested filters:', event.data.filters);
+                const filters = event.data.filters;
+                
+                // Apply year filters
+                if (filters.yearStart !== undefined) {
+                    document.getElementById('yearStart').value = filters.yearStart;
+                }
+                if (filters.yearEnd !== undefined) {
+                    document.getElementById('yearEnd').value = filters.yearEnd;
+                }
+                
+                // Apply category filters
+                if (filters.categories) {
+                    // Clear all category checkboxes first
+                    document.querySelectorAll('input[id^="cat"]').forEach(cb => cb.checked = false);
+                    // Check the requested categories
+                    filters.categories.forEach(cat => {
+                        const catId = cat === '-1' ? 'catTD' : `cat${cat}`;
+                        const checkbox = document.getElementById(catId);
+                        if (checkbox) checkbox.checked = true;
+                    });
+                } else if (filters.category !== undefined) {
+                    // Clear all and check only the specified category
+                    document.querySelectorAll('input[id^="cat"]').forEach(cb => cb.checked = false);
+                    const catId = filters.category === -1 ? 'catTD' : `cat${filters.category}`;
+                    const checkbox = document.getElementById(catId);
+                    if (checkbox) checkbox.checked = true;
+                }
+                
+                // Apply search filter
+                if (filters.search) {
+                    document.getElementById('searchInput').value = filters.search;
+                }
+                
+                // Apply landfall state filter if provided
+                if (filters.landfallState) {
+                    const stateSelect = document.getElementById('stateFilter');
+                    if (stateSelect) {
+                        stateSelect.value = filters.landfallState;
+                    }
+                }
+                
+                // Trigger the filter update
+                filterStorms();
+            }
+        });
     </script>
 </body>
 </html>

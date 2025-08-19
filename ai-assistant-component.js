@@ -508,10 +508,14 @@ Try asking: "What Category 5 hurricanes hit Florida's east coast in the last 50 
     }
 
     applyFilters(filters) {
-        // Apply filters to the timeline view
+        // Apply filters to all views
         console.log('Applying AI-suggested filters:', filters);
 
-        // Send message to timeline iframe
+        // Get current active tab
+        const alpineComponent = document.querySelector('[x-data]').__x.$data;
+        const activeTab = alpineComponent?.activeTab;
+
+        // Send message to Timeline iframe
         const timelineFrame = document.querySelector('iframe[src*="enhanced-timeline"]');
         if (timelineFrame) {
             timelineFrame.contentWindow.postMessage({
@@ -520,7 +524,30 @@ Try asking: "What Category 5 hurricanes hit Florida's east coast in the last 50 
             }, '*');
         }
 
-        // Also try to apply to the active Alpine.js component if in Database tab
+        // Send message to Regional/Multi-State iframe
+        const regionalFrame = document.querySelector('iframe[src*="enhanced-multi-state"]');
+        if (regionalFrame) {
+            regionalFrame.contentWindow.postMessage({
+                action: 'applyFilters',
+                filters: filters
+            }, '*');
+        }
+
+        // Send message to Database iframe
+        const databaseFrame = document.querySelector('iframe[src*="enhanced-database"]');
+        if (databaseFrame) {
+            databaseFrame.contentWindow.postMessage({
+                action: 'applyFilters',
+                filters: filters
+            }, '*');
+            
+            // If Database tab is active, switch to it or refresh it
+            if (activeTab === 'database') {
+                console.log('Database tab is active, filters will be applied');
+            }
+        }
+
+        // Also try to apply to the active Alpine.js component if in main window
         if (window.Alpine && window.Alpine.store) {
             const store = window.Alpine.store('stormFilters');
             if (store) {
@@ -531,6 +558,17 @@ Try asking: "What Category 5 hurricanes hit Florida's east coast in the last 50 
                 if (filters.category !== undefined) {
                     store.selectedCategories = [filters.category.toString()];
                 }
+            }
+        }
+
+        // Update the main app filters if hurricaneApp is available
+        if (alpineComponent && alpineComponent.filters) {
+            if (filters.yearStart) alpineComponent.filters.yearStart = filters.yearStart;
+            if (filters.yearEnd) alpineComponent.filters.yearEnd = filters.yearEnd;
+            if (filters.search) alpineComponent.filters.search = filters.search;
+            if (filters.categories) alpineComponent.filters.categories = filters.categories;
+            if (filters.category !== undefined) {
+                alpineComponent.filters.categories = [filters.category.toString()];
             }
         }
     }
