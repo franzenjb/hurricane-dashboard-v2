@@ -1277,9 +1277,21 @@
                         const category = categoryMatch ? parseInt(categoryMatch[0]) : 1;
                         
                         // Find the storm_id from the enhanced database
+                        console.log(`=== STORM LOOKUP DEBUG ===`);
+                        console.log(`Looking for: name="${storm[0]}", year=${year}`);
+                        
                         const enhancedStorm = ATLANTIC_STORMS_ENHANCED.find(s => 
                             s.name === storm[0] && s.year === year
                         );
+                        
+                        console.log(`Enhanced storm found:`, enhancedStorm ? 'YES' : 'NO');
+                        if (enhancedStorm) {
+                            console.log(`Storm ID: ${enhancedStorm.storm_id}`);
+                        } else {
+                            // Show some examples from that year to see name differences
+                            const sameYearStorms = ATLANTIC_STORMS_ENHANCED.filter(s => s.year === year).slice(0, 5);
+                            console.log(`Sample storms from ${year}:`, sameYearStorms.map(s => s.name));
+                        }
                         
                         showStormDetails({
                             name: storm[0],
@@ -1432,7 +1444,11 @@
                 const decade = Math.floor(storm.year / 10) * 10;
                 
                 const pointsFile = `./hurdat2_data/points_${decade}s.geojson`;
-                console.log(`Trying to load point data from ${pointsFile} for storm ${storm.storm_id || storm.name}`);
+                console.log(`=== MULTI-STATE TRACK LOADING ===`);
+                console.log(`File: ${pointsFile}`);
+                console.log(`Storm ID: "${storm.storm_id}" (${typeof storm.storm_id})`);
+                console.log(`Storm name: "${storm.name}"`);
+                console.log(`Storm year: ${storm.year}`);
                 
                 let pointsResponse = await fetch(pointsFile);
                 if (pointsResponse.ok) {
