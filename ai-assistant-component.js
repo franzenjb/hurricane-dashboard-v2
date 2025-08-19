@@ -539,24 +539,8 @@ Answer concisely: ${query}`
                 }
             }
             
-            // Fallback to Cloudflare worker if no API key
-            if (!data && !this.anthropicApiKey) {
-                try {
-                    const response = await fetch(this.workerUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            query: query,
-                            context: this.getCurrentContext()
-                        })
-                    });
-                    data = await response.json();
-                } catch (workerError) {
-                    console.log('Worker failed, using fallback intelligence');
-                }
-            }
+            // Skip Cloudflare worker - it has CORS issues
+            // Just use our built-in fallback intelligence
             
             // Hide typing indicator
             this.hideTypingIndicator();
@@ -654,6 +638,26 @@ The 2024 season followed this pattern with Helene (September 26) and Milton (Oct
 • Hurricane Helene brought 15-foot surge despite passing 100 miles west
 • Hurricane Milton threatened direct hit before wobbling south to Sarasota
 • Both storms demonstrated the catastrophic potential for the region`;
+                }
+                // Georgia hurricane questions
+                else if (queryLower.includes('georgia') && (queryLower.includes('category 5') || queryLower.includes('cat 5'))) {
+                    answer = `**No Category 5 hurricanes have ever made landfall in Georgia.**
+
+Georgia has been fortunate in avoiding Category 5 landfalls. The state's hurricane history includes:
+
+**Strongest hurricanes to hit Georgia:**
+• **Hurricane Michael (2018)** - Entered Georgia as Category 3 after Cat 5 landfall in Florida Panhandle
+• **Sea Islands Hurricane (1893)** - Estimated Category 3, killed 1,000-2,000 people
+• **Hurricane David (1979)** - Category 2 at Georgia landfall
+
+**Why Georgia avoids Category 5 landfalls:**
+• Geographic position - storms often weaken crossing Florida first
+• Continental shelf waters cooler than Gulf
+• Storms typically curve northward before reaching Georgia
+• Most Cat 5s weaken significantly before reaching this latitude
+
+The closest Georgia came to a Category 5 impact was Hurricane Michael (2018), which was still a major hurricane (Category 3) when it crossed into Georgia from Florida.`;
+                    filters = { landfallState: 'GA', category: 5 };
                 }
                 // General hurricane questions
                 else {
