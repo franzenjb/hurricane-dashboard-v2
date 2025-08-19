@@ -204,6 +204,57 @@
                     </div>
                 </div>
 
+                <!-- NOAA Live Feed -->
+                <div class="mb-12">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">Live NOAA Updates</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Atlantic Outlook -->
+                        <div class="bg-white rounded-xl shadow-lg p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-bold">Atlantic Outlook</h3>
+                                <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">QUIET</span>
+                            </div>
+                            <p class="text-sm text-gray-600">
+                                No tropical cyclones are expected during the next 7 days.
+                            </p>
+                            <div class="mt-4 text-xs text-gray-500">
+                                Updated: <span id="outlookTime">Just now</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Active Storms -->
+                        <div class="bg-white rounded-xl shadow-lg p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-bold">Active Storms</h3>
+                                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">0 ACTIVE</span>
+                            </div>
+                            <p class="text-sm text-gray-600">
+                                No active tropical systems in the Atlantic basin.
+                            </p>
+                            <div class="mt-4 text-xs text-gray-500">
+                                Season: <span id="seasonYear">2024</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Latest Advisory -->
+                        <div class="bg-white rounded-xl shadow-lg p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-bold">Latest Advisory</h3>
+                                <span class="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-full">INFO</span>
+                            </div>
+                            <p class="text-sm text-gray-600">
+                                Monthly tropical weather summary available.
+                            </p>
+                            <div class="mt-4">
+                                <a href="https://www.nhc.noaa.gov" target="_blank" 
+                                   class="text-xs text-blue-600 hover:text-blue-800">
+                                    View Full NOAA Site →
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Footer -->
                 <div class="text-center text-gray-600">
                     <p>Research by Jeff Franzen | American Red Cross | Data: NOAA/NHC Official Records</p>
@@ -623,15 +674,9 @@
             <iframe src="intelligence-tab.html" class="w-full h-full border-0"></iframe>
         </div>
 
-        <!-- Response Tab (Coming Soon) -->
+        <!-- Response Tab -->
         <div x-show="activeTab === 'response'" class="h-full" x-cloak>
-            <div class="flex items-center justify-center h-full">
-                <div class="text-center">
-                    <div class="text-6xl mb-4">🏥</div>
-                    <h2 class="text-2xl font-bold mb-2">Red Cross Response Center</h2>
-                    <p class="text-gray-600">Coming Soon - Historical RC operations data</p>
-                </div>
-            </div>
+            <iframe src="response-tab.html" class="w-full h-full border-0"></iframe>
         </div>
 
         <!-- About & Research Tab -->

@@ -544,27 +544,37 @@
         function updateComparisonChart() {
             const validStorms = selectedStorms.filter(s => s !== null);
             
+            const chartDiv = document.getElementById('comparisonChart');
+            if (!chartDiv) {
+                console.error('Chart div not found');
+                return;
+            }
+            
             if (validStorms.length === 0) {
                 Plotly.purge('comparisonChart');
+                chartDiv.innerHTML = '<div class="text-center text-gray-500 mt-20">Select storms to compare</div>';
                 return;
             }
             
             const traces = [];
-            const categories = ['Wind (mph)', 'Pressure (mb)', 'Deaths', 'Damage ($M)', 'RC Score'];
+            const categories = ['Wind Speed', 'Pressure', 'Deaths', 'Damage', 'RC Score'];
             
-            validStorms.forEach(storm => {
+            validStorms.forEach((storm, index) => {
+                // Normalize values for radar chart
+                const windNorm = (storm.wind_mph || 0) / 200 * 100; // Normalize to 0-100
+                const pressureNorm = storm.pressure ? ((1050 - storm.pressure) / 150) * 100 : 0; // Lower pressure = stronger
+                const deathsNorm = Math.min((storm.deaths || 0) / 2000 * 100, 100); // Cap at 2000 deaths
+                const damageNorm = Math.min((storm.damage_millions || 0) / 100000 * 100, 100); // Cap at $100B
+                const rcScore = storm.rc_impact_score || 0;
+                
                 traces.push({
                     type: 'scatterpolar',
-                    r: [
-                        storm.wind_mph || 0,
-                        storm.pressure ? 1050 - storm.pressure : 0,
-                        Math.min(storm.deaths || 0, 200),
-                        Math.min((storm.damage_millions || 0) / 100, 200),
-                        storm.rc_impact_score || 0
-                    ],
+                    r: [windNorm, pressureNorm, deathsNorm, damageNorm, rcScore],
                     theta: categories,
                     fill: 'toself',
-                    name: `${storm.name} (${storm.year})`
+                    name: `${storm.name} (${storm.year})`,
+                    marker: { color: ['#dc2626', '#f59e0b', '#10b981'][index] },
+                    opacity: 0.6
                 });
             });
             
@@ -572,14 +582,25 @@
                 polar: {
                     radialaxis: {
                         visible: true,
-                        range: [0, 200]
+                        range: [0, 100],
+                        ticksuffix: '%'
                     }
                 },
                 showlegend: true,
-                title: 'Storm Comparison Radar'
+                title: {
+                    text: 'Storm Comparison (Normalized to 100%)',
+                    font: { size: 16 }
+                },
+                height: 400,
+                margin: { t: 50, r: 50, b: 50, l: 50 }
             };
             
-            Plotly.newPlot('comparisonChart', traces, layout, {responsive: true});
+            const config = {
+                responsive: true,
+                displayModeBar: false
+            };
+            
+            Plotly.newPlot('comparisonChart', traces, layout, config);
         }
 
         // Helper function

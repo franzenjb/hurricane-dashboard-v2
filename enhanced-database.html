@@ -292,7 +292,7 @@
             impact: [],
             category: [],
             special: [],
-            yearStart: 1851,
+            yearStart: 1980, // Default to 1980 as in the HTML
             yearEnd: 2024
         };
 
@@ -350,6 +350,17 @@
                 });
             });
 
+            // Year inputs
+            document.getElementById('yearStart').addEventListener('change', (e) => {
+                activeFilters.yearStart = parseInt(e.target.value);
+                applyFilters();
+            });
+            
+            document.getElementById('yearEnd').addEventListener('change', (e) => {
+                activeFilters.yearEnd = parseInt(e.target.value);
+                applyFilters();
+            });
+
             // Select all checkbox
             document.getElementById('selectAll').addEventListener('change', (e) => {
                 const checkboxes = document.querySelectorAll('.storm-checkbox');
@@ -376,9 +387,7 @@
                 }
 
                 // Year filter
-                const yearStart = parseInt(document.getElementById('yearStart').value);
-                const yearEnd = parseInt(document.getElementById('yearEnd').value);
-                if (storm.year < yearStart || storm.year > yearEnd) return false;
+                if (storm.year < activeFilters.yearStart || storm.year > activeFilters.yearEnd) return false;
 
                 // Impact level filter
                 if (activeFilters.impact?.length > 0) {
@@ -571,24 +580,42 @@
                 filteredStorms;
             
             const csv = convertToCSV(storms);
-            downloadCSV(csv, 'hurricane_data.csv');
+            const timestamp = new Date().toISOString().split('T')[0];
+            const filename = `hurricane_data_${timestamp}_${storms.length}_storms.csv`;
+            downloadCSV(csv, filename);
         }
 
         function convertToCSV(storms) {
-            const headers = ['Name', 'Year', 'Category', 'Impact Level', 'RC Score', 'States', 'Deaths', 'Damage (M)', 'Storm ID'];
+            const headers = ['Name', 'Year', 'Month', 'Category', 'Wind (mph)', 'Pressure (mb)', 'Impact Level', 'RC Score', 'States', 'Deaths', 'Damage ($M)', 'Storm ID', 'Has TCR', 'Data Quality'];
+            
+            // Helper to escape CSV fields
+            const escapeCSV = (field) => {
+                if (field === null || field === undefined) return '';
+                const str = String(field);
+                if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+                    return '"' + str.replace(/"/g, '""') + '"';
+                }
+                return str;
+            };
+            
             const rows = storms.map(s => [
-                s.name,
+                escapeCSV(s.name),
                 s.year,
+                s.month,
                 s.category,
-                s.rc_impact_level || '',
+                s.wind_mph || '',
+                s.pressure || '',
+                escapeCSV(s.rc_impact_level || ''),
                 s.rc_impact_score || 0,
-                s.landfall_states?.join('; ') || '',
-                s.deaths || 0,
+                escapeCSV(s.landfall_states?.join('; ') || ''),
+                s.deaths || '',
                 s.damage_millions || '',
-                s.storm_id
+                s.storm_id,
+                hasTCR(s) ? 'Yes' : 'No',
+                s.data_quality?.completeness_score || 0
             ]);
             
-            return [headers, ...rows].map(row => row.join(',')).join('\n');
+            return [headers.map(escapeCSV), ...rows.map(row => row.map(escapeCSV))].map(row => row.join(',')).join('\n');
         }
 
         function downloadCSV(csv, filename) {
