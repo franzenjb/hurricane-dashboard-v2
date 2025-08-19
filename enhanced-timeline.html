@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="atlantic-storms-enhanced.js"></script>
+    <script src="storm-surge-layer.js"></script>
     <style>
         body { font-family: Arial, sans-serif; margin: 0; padding: 0; overflow: hidden; }
         .container { display: flex; height: 100vh; width: 100vw; }
@@ -158,6 +159,11 @@
                             <div class="stat-label">Deaths</div>
                             <div class="stat-value" id="statDeaths">-</div>
                         </div>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <button onclick="toggleSurgeVisualization()" style="width: 100%; padding: 8px; background: #007cba; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold;">
+                            🌊 Toggle Storm Surge
+                        </button>
                     </div>
                 </div>
             </div>
@@ -648,6 +654,8 @@
         
         // Initialize map
         let map;
+        let surgeLayer = null;
+        
         function initMap() {
             console.log('Initializing Leaflet map...');
             const mapDiv = document.getElementById('map');
@@ -666,12 +674,27 @@
                 maxZoom: 18
             }).addTo(map);
             
+            // Initialize storm surge layer
+            if (typeof StormSurgeLayer !== 'undefined') {
+                surgeLayer = new StormSurgeLayer(map);
+                console.log('Storm surge layer initialized');
+            }
+            
             console.log('Map initialized successfully');
+        }
+        
+        let currentStorm = null;
+        
+        function toggleSurgeVisualization() {
+            if (!surgeLayer || !currentStorm) return;
+            
+            surgeLayer.toggle(currentStorm);
         }
         
         async function showStormOnMap(storm) {
             if (!map) return;
             
+            currentStorm = storm;
             clearMapLayers();
             console.log('=== STORM DEBUG INFO ===');
             console.log('Storm object:', storm);
@@ -953,6 +976,11 @@
                         map.removeLayer(layer);
                     }
                 });
+                
+                // Also clear surge visualization
+                if (surgeLayer) {
+                    surgeLayer.clearSurge();
+                }
             }
         }
         
