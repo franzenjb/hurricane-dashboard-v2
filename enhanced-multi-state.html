@@ -1140,16 +1140,18 @@
                 }
             });
             
-            // Create traces for each selected state
-            selectedStates.forEach(state => {
-                if (!MULTI_STATE_LANDFALLS[state]) return;
-                
-                const stateData = MULTI_STATE_LANDFALLS[state].filter(storm => 
-                    storm.year >= currentStartYear && storm.year <= currentEndYear
+            // Create trace using ATLANTIC_STORMS_ENHANCED data (same as timeline tab)
+            const allStorms = ATLANTIC_STORMS_ENHANCED.filter(storm => {
+                const isSelectedState = selectedStates.some(state => 
+                    storm.landfall_states && storm.landfall_states.includes(state)
                 );
-                
-                if (stateData.length === 0) return;
-                
+                const inYearRange = storm.year >= currentStartYear && storm.year <= currentEndYear;
+                return isSelectedState && inYearRange;
+            });
+            
+            console.log(`Creating plot with ${allStorms.length} storms from ATLANTIC_STORMS_ENHANCED`);
+            
+            if (allStorms.length > 0) {
                 const trace = {
                     x: [],
                     y: [],
@@ -1157,26 +1159,25 @@
                     customdata: [],
                     marker: {
                         size: [],
-                        color: getStateColor(state),
+                        color: [],
                         line: {color: 'white', width: 2},
                         opacity: 0.8
                     },
-                    name: state,
+                    name: 'Hurricanes',
                     mode: 'markers+text',
                     type: 'scatter',
                     textposition: 'top center',
                     textfont: {size: 14, color: '#2C3E50', family: 'Arial', weight: 'bold'},
                     hovertemplate: '<b style="font-size:20px">%{customdata[0]}</b><br>' +
-                                  '<b>State:</b> %{customdata[1]}<br>' +
-                                  '<b>Date:</b> %{customdata[2]}<br>' +
-                                  '<b>Category:</b> %{customdata[3]}<br>' +
-                                  '<b>Wind Speed:</b> %{customdata[4]} mph<br>' +
-                                  '<b>Deaths:</b> %{customdata[5]}<br>' +
+                                  '<b>Year:</b> %{customdata[1]}<br>' +
+                                  '<b>Category:</b> %{customdata[2]}<br>' +
+                                  '<b>Wind Speed:</b> %{customdata[3]} mph<br>' +
+                                  '<b>States:</b> %{customdata[4]}<br>' +
                                   '<i>Click for details</i><br>' +
                                   '<extra></extra>'
                 };
                 
-                stateData.forEach(storm => {
+                allStorms.forEach(storm => {
                     const yearIdx = years.indexOf(storm.year);
                     if (yearIdx === -1) return;
                     
@@ -1189,18 +1190,18 @@
                     trace.y.push(yearIdx);
                     trace.text.push(yearSpan > 50 ? '' : storm.name);
                     trace.marker.size.push(Math.max(10, 12.5 + storm.wind_mph / 8));
+                    trace.marker.color.push(getCategoryColor(storm.category));
                     trace.customdata.push([
                         storm.name,
-                        state,
-                        `${monthNames[storm.month]} ${storm.day}, ${storm.year}`,
+                        storm.year,
                         `Category ${storm.category}`,
                         storm.wind_mph,
-                        storm.deaths
+                        storm.landfall_states ? storm.landfall_states.join(', ') : 'N/A'
                     ]);
                 });
                 
                 traces.push(trace);
-            });
+            }
             
             const layout = {
                 title: {
@@ -1266,26 +1267,28 @@
                 // Add click handler for timeline
                 myPlot.on('plotly_click', function(data) {
                     const point = data.points[0];
-                    const storm = point.customdata;
+                    const pointIndex = point.pointIndex;
+                    console.log(`=== MULTI-STATE CLICK HANDLER ===`);
+                    console.log(`Point index: ${pointIndex}`);
+                    
+                    // Get the FULL storm object from ATLANTIC_STORMS_ENHANCED just like timeline tab
+                    const allStorms = ATLANTIC_STORMS_ENHANCED.filter(storm => {
+                        const isSelectedState = selectedStates.some(state => 
+                            storm.landfall_states && storm.landfall_states.includes(state)
+                        );
+                        const inYearRange = storm.year >= currentStartYear && storm.year <= currentEndYear;
+                        return isSelectedState && inYearRange;
+                    });
+                    
+                    console.log(`Filtered storms count: ${allStorms.length}`);
+                    console.log(`Selected storm:`, allStorms[pointIndex]);
+                    
+                    const storm = allStorms[pointIndex];
                     if (storm) {
-                        // Extract year from date string
-                        const yearMatch = storm[2].match(/\d{4}/);
-                        const year = yearMatch ? parseInt(yearMatch[0]) : new Date().getFullYear();
-                        
-                        // Extract category number
-                        const categoryMatch = storm[3].match(/\d+/);
-                        const category = categoryMatch ? parseInt(categoryMatch[0]) : 1;
-                        
-                        // Just use the hardcoded paths - keep it simple
-                        showStormDetails({
-                            name: storm[0],
-                            year: year,
-                            state: storm[1],
-                            date: storm[2],
-                            category: category,
-                            wind_mph: storm[4],
-                            deaths: storm[5]
-                        });
+                        console.log(`Storm ID: "${storm.storm_id}"`);
+                        showStormDetails(storm); // Pass the FULL storm object with storm_id
+                    } else {
+                        console.log('No storm found at index', pointIndex);
                     }
                 });
             });
@@ -1357,7 +1360,7 @@
             }
         }
         
-        function showStormOnMap(storm) {
+        async function showStormOnMap(storm) {
             if (!map) return;
             
             // Clear existing layers
@@ -1367,39 +1370,26 @@
                 }
             });
             
-            // Simple approach: just use hardcoded paths for the ~12 recent storms that work
-            const path = STORM_PATHS[storm.name];
-            if (path && path.length > 0) {
-                // Draw path segments with color based on intensity
-                for (let i = 0; i < path.length - 1; i++) {
-                    const segment = [
-                        [path[i].lat, path[i].lon],
-                        [path[i + 1].lat, path[i + 1].lon]
-                    ];
-                    
-                    const category = Math.max(path[i].category, path[i + 1].category);
-                    
-                    L.polyline(segment, {
-                        color: getCategoryColor(category),
-                        weight: 6,
-                        opacity: 0.8
-                    }).addTo(map);
-                }
-                
-                // Fit map to show entire path
-                const pathBounds = path.map(p => [p.lat, p.lon]);
-                map.fitBounds(pathBounds, {padding: [20, 20]});
+            // Use IDENTICAL system as timeline tab
+            const trackData = await loadStormTrack(storm);
+            
+            if (trackData) {
+                console.log('Track data loaded, drawing storm track');
+                drawStormTrack(trackData, storm);
             } else {
-                // Show single point for older storms
-                const coords = [30.0, -85.0]; // Default Gulf location
-                L.circleMarker(coords, {
-                    color: getCategoryColor(storm.category),
-                    fillColor: getCategoryColor(storm.category),
-                    fillOpacity: 0.7,
-                    radius: 8
-                }).addTo(map).bindPopup(`<b>${storm.name}</b><br>Category ${storm.category}<br>${storm.wind_mph} mph`);
-                
-                map.setView(coords, 6);
+                console.log('No track data found, showing single point');
+                // Fallback to single point if no track data available
+                if (storm.lat && storm.lon) {
+                    const color = getCategoryColor(storm.category);
+                    L.circleMarker([storm.lat, storm.lon], {
+                        color: color,
+                        fillColor: color,
+                        fillOpacity: 0.7,
+                        radius: 8
+                    }).addTo(map).bindPopup(`<b>${storm.name}</b><br>Category ${storm.category}<br>${storm.wind_mph} mph`);
+                    
+                    map.setView([storm.lat, storm.lon], 6);
+                }
             }
         }
         
