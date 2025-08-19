@@ -590,7 +590,12 @@
             if (!map) return;
             
             clearMapLayers();
-            console.log('Loading storm on map:', storm.name, storm.year, 'ID:', storm.storm_id);
+            console.log('=== STORM DEBUG INFO ===');
+            console.log('Storm object:', storm);
+            console.log('Storm name:', storm.name);
+            console.log('Storm year:', storm.year);
+            console.log('Storm ID:', storm.storm_id);
+            console.log('Storm properties:', Object.keys(storm));
             
             // Try to load the full storm track
             const trackData = await loadStormTrack(storm);
@@ -623,17 +628,28 @@
                 
                 // Try to load point data first (for category-based coloring)
                 const pointsFile = `./hurdat2_data/points_${decade}s.geojson`;
-                console.log(`Trying to load point data from ${pointsFile} for storm ${storm.storm_id}`);
+                console.log(`=== TRACK LOADING DEBUG ===`);
+                console.log(`Decade: ${decade}, File: ${pointsFile}`);
+                console.log(`Looking for storm_id: "${storm.storm_id}"`);
+                console.log(`Storm name: "${storm.name}", year: ${storm.year}`);
                 
                 let pointsResponse = await fetch(pointsFile);
                 if (pointsResponse.ok) {
                     const pointsData = await pointsResponse.json();
+                    console.log(`Loaded ${pointsData.features.length} total features from ${pointsFile}`);
+                    
+                    // Show first few storm_ids for comparison
+                    const sampleIds = pointsData.features.slice(0, 5).map(f => f.properties.storm_id);
+                    console.log(`Sample storm_ids in file:`, sampleIds);
+                    
                     const pointFeatures = pointsData.features.filter(f => 
                         f.properties.storm_id === storm.storm_id
                     );
                     
+                    console.log(`Found ${pointFeatures.length} matching features for storm_id "${storm.storm_id}"`);
+                    
                     if (pointFeatures.length > 0) {
-                        console.log(`Found ${pointFeatures.length} track points for ${storm.name}`);
+                        console.log(`SUCCESS: Found ${pointFeatures.length} track points for ${storm.name}`);
                         return { type: 'points', features: pointFeatures };
                     }
                 }
