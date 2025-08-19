@@ -735,7 +735,16 @@
         }
 
         function convertToCSV(storms) {
-            const headers = ['Name', 'Year', 'Month', 'Category', 'Wind (mph)', 'Pressure (mb)', 'Impact Level', 'RC Score', 'States', 'Deaths', 'Damage ($M)', 'Storm ID', 'Has TCR', 'Data Quality'];
+            // Comprehensive export with ALL available fields
+            const headers = [
+                'Storm ID', 'Name', 'Year', 'Month', 'Day', 'Category', 
+                'Wind (mph)', 'Wind (knots)', 'Pressure (mb)', 'ACE Index',
+                'Latitude', 'Longitude', 'Landfall States', 'Deaths',
+                'RC Impact Level', 'RC Impact Score', 'RC Response', 'RC Operation Type',
+                'Est. Shelters', 'Est. Meals', 'Est. Volunteers',
+                'Has Narrative', 'Has Track Data', 'Has TCR', 'Data Quality Score',
+                'TCR PDF Link', 'Best Track Link', 'Narrative'
+            ];
             
             // Helper to escape CSV fields
             const escapeCSV = (field) => {
@@ -748,20 +757,34 @@
             };
             
             const rows = storms.map(s => [
+                s.storm_id,
                 escapeCSV(s.name),
                 s.year,
                 s.month,
+                s.day,
                 s.category,
                 s.wind_mph || '',
+                s.wind_knots || '',
                 s.pressure || '',
+                s.ace || '',
+                s.lat || '',
+                s.lon || '',
+                escapeCSV(s.landfall_states?.join('; ') || ''),
+                s.deaths || 0,
                 escapeCSV(s.rc_impact_level || ''),
                 s.rc_impact_score || 0,
-                escapeCSV(s.landfall_states?.join('; ') || ''),
-                s.deaths || '',
-                s.damage_millions || '',
-                s.storm_id,
+                s.rc_response?.responded ? 'Yes' : 'No',
+                escapeCSV(s.rc_response?.operation_type || ''),
+                s.rc_response?.estimated_shelters || '',
+                s.rc_response?.estimated_meals || '',
+                s.rc_response?.estimated_volunteers || '',
+                s.data_quality?.has_narrative ? 'Yes' : 'No',
+                s.data_quality?.has_track_data ? 'Yes' : 'No',
                 hasTCR(s) ? 'Yes' : 'No',
-                s.data_quality?.completeness_score || 0
+                s.data_quality?.completeness_score || 0,
+                escapeCSV(s.resources?.tcr_pdf || ''),
+                escapeCSV(s.resources?.best_track || ''),
+                escapeCSV(s.narrative || '')
             ]);
             
             return [headers.map(escapeCSV), ...rows.map(row => row.map(escapeCSV))].map(row => row.join(',')).join('\n');
@@ -786,7 +809,33 @@
         function showNarrative(stormId) {
             const storm = allStorms.find(s => s.storm_id === stormId);
             if (storm?.narrative) {
-                alert(storm.narrative); // Replace with modal
+                // Create a better modal instead of alert
+                const modal = document.createElement('div');
+                modal.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0,0,0,0.5);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 9999;
+                `;
+                
+                modal.innerHTML = `
+                    <div style="background: white; padding: 30px; border-radius: 10px; max-width: 600px; max-height: 80vh; overflow-y: auto; position: relative;">
+                        <button onclick="this.closest('div').parentElement.remove()" style="position: absolute; top: 10px; right: 10px; background: #ED1B2E; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;">✕</button>
+                        <h2 style="margin: 0 0 20px 0; color: #ED1B2E;">${storm.name} (${storm.year})</h2>
+                        <p style="line-height: 1.6; color: #333;">${storm.narrative}</p>
+                    </div>
+                `;
+                
+                document.body.appendChild(modal);
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) modal.remove();
+                });
             }
         }
 
