@@ -1468,20 +1468,43 @@
         }
         
         function updateStats() {
-            let totalStorms = 0;
-            let majorHurricanes = 0;
-            let totalDeaths = 0;
-            
-            selectedStates.forEach(state => {
-                if (MULTI_STATE_LANDFALLS[state]) {
-                    const stateData = MULTI_STATE_LANDFALLS[state].filter(storm => 
-                        storm.year >= currentStartYear && storm.year <= currentEndYear
-                    );
-                    totalStorms += stateData.length;
-                    majorHurricanes += stateData.filter(s => s.category >= 3).length;
-                    totalDeaths += stateData.reduce((sum, s) => sum + s.deaths, 0);
+            // Use ATLANTIC_STORMS_ENHANCED data with same filtering logic as plot
+            const filteredStorms = ATLANTIC_STORMS_ENHANCED.filter(storm => {
+                const isSelectedState = selectedStates.some(state => 
+                    storm.landfall_states && storm.landfall_states.includes(state)
+                );
+                const inYearRange = storm.year >= currentStartYear && storm.year <= currentEndYear;
+                
+                if (!isSelectedState || !inYearRange) return false;
+                
+                // Apply active filters
+                const nameFilter = document.getElementById('nameFilter').value.toLowerCase();
+                const landfallOnly = document.getElementById('landfallOnly').checked;
+                
+                // Get selected categories from checkboxes
+                const selectedCategories = [];
+                const categoryCheckboxes = document.querySelectorAll('#categoryFilter input[type="checkbox"]:checked');
+                categoryCheckboxes.forEach(checkbox => {
+                    selectedCategories.push(parseInt(checkbox.value));
+                });
+                
+                // If name search is active, ONLY filter by name - ignore all other filters
+                if (nameFilter) {
+                    return storm.name.toLowerCase().includes(nameFilter);
                 }
+                
+                // Otherwise apply normal filters
+                if (selectedCategories.length > 0 && !selectedCategories.includes(storm.category)) return false;
+                // Only show hurricane season months (Jun-Dec: months 6-12)
+                if (storm.month < 6 || storm.month > 12) return false;
+                // Filter for landfall storms if checkbox is checked
+                if (landfallOnly && !isLikelyUSLandfall(storm)) return false;
+                return true;
             });
+            
+            const totalStorms = filteredStorms.length;
+            const majorHurricanes = filteredStorms.filter(s => s.category >= 3).length;
+            const totalDeaths = filteredStorms.reduce((sum, s) => sum + (s.deaths || 0), 0);
             
             const stateNames = selectedStates.length === 1 ? 
                 selectedStates[0] : 
