@@ -3,7 +3,8 @@
 
 class AIAssistant {
     constructor() {
-        // Try local backend first, fallback to Cloudflare
+        // Try Vercel first (production), then local backend, then Cloudflare
+        this.vercelUrl = 'https://hurricane-dashboard-v2.vercel.app/api/ai';
         this.localBackendUrl = 'http://localhost:3001/api/hurricane-ai';
         this.workerUrl = 'https://hurricane-ai-simple.jbf-395.workers.dev/';
         this.anthropicApiKey = ''; // DO NOT add key here - use backend instead!
@@ -467,8 +468,24 @@ Try asking: "What Category 5 hurricanes hit Florida's east coast in the last 50 
         try {
             let data = null;
             
-            // Try local backend first (most secure)
-            if (this.useLocalBackend) {
+            // Try Vercel production API first
+            try {
+                console.log('Trying Vercel API');
+                const response = await fetch(this.vercelUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query: query })
+                });
+                if (response.ok) {
+                    data = await response.json();
+                    console.log('✅ Vercel API responded');
+                }
+            } catch (e) {
+                console.log('Vercel API not available:', e);
+            }
+            
+            // Try local backend if Vercel failed
+            if (!data && this.useLocalBackend) {
                 try {
                     console.log('Using local AI backend');
                     const response = await fetch(this.localBackendUrl, {

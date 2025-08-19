@@ -31,3 +31,4 @@ build/
 # API keys - NEVER commit these!
 *api-key*
 *API_KEY*
+.vercel
