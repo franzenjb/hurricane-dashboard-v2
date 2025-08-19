@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Direct AI Test - No Cache</title>
+</head>
+<body>
+    <h1>Direct AI Test</h1>
+    <p>This bypasses all caching and talks directly to the API</p>
+    
+    <input type="text" id="question" value="How many storms hit North Carolina between 1990 and 2000?" style="width: 500px;">
+    <button onclick="testDirect()">Ask AI Directly</button>
+    
+    <div id="result" style="margin-top: 20px; padding: 20px; border: 1px solid #ccc;">
+        <h3>Response will appear here...</h3>
+    </div>
+
+    <script>
+        async function testDirect() {
+            const question = document.getElementById('question').value;
+            const resultDiv = document.getElementById('result');
+            
+            resultDiv.innerHTML = '<p>⏳ Asking AI...</p>';
+            
+            try {
+                console.log('Sending question:', question);
+                
+                const response = await fetch('https://hurricane-dashboard-v2.vercel.app/api/ai', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ query: question })
+                });
+                
+                const data = await response.json();
+                console.log('AI Response:', data);
+                
+                resultDiv.innerHTML = `
+                    <h3>✅ AI Response:</h3>
+                    <p>${data.answer || 'No answer received'}</p>
+                    <hr>
+                    <small>Status: ${response.status} | Time: ${new Date().toLocaleTimeString()}</small>
+                `;
+                
+            } catch (error) {
+                console.error('Error:', error);
+                resultDiv.innerHTML = `
+                    <h3>❌ Error:</h3>
+                    <p>${error.message}</p>
+                `;
+            }
+        }
+        
+        // Test on page load
+        window.onload = () => {
+            console.log('Page loaded at', new Date().toLocaleTimeString());
+            console.log('Ready to test AI directly without any caching');
+        };
+    </script>
+</body>
+</html>
