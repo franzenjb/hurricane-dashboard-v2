@@ -2,6 +2,14 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## 🚨 CRITICAL: ALWAYS COMMIT AND PUSH CHANGES TO GITHUB 🚨
+**AFTER EVERY FILE CHANGE, YOU MUST:**
+1. `git add .`
+2. `git commit -m "description"`  
+3. `git push`
+
+**The user monitors progress through GitHub. Not pushing changes means the user cannot see your work. This is NOT optional.**
+
 ## Architecture Overview
 
 This is a **multi-tab hurricane analytics dashboard** with three distinct implementations:
@@ -26,13 +34,19 @@ This is a **multi-tab hurricane analytics dashboard** with three distinct implem
 # Access at: http://localhost:8000
 ```
 
-### Deployment
+### Deployment - CRITICAL REQUIREMENT
+**⚠️ IMPORTANT: YOU MUST COMMIT AND PUSH ALL CHANGES TO GITHUB IMMEDIATELY AFTER MAKING THEM**
+
 ```bash
-# All changes auto-deploy to GitHub Pages
-git add . && git commit -m "description"
+# REQUIRED AFTER EVERY CHANGE - DO NOT SKIP THIS STEP
+git add .
+git commit -m "description of changes"
 git push
+
 # Live at: https://franzenjb.github.io/hurricane-dashboard-v2/
 ```
+
+**REMINDER TO CLAUDE: The user monitors progress via GitHub commits. You MUST push changes immediately after making them. Do not wait to be asked. This is not optional.**
 
 ## Critical Development Rules
 
