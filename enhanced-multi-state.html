@@ -920,6 +920,20 @@
             };
             return colors[category] || "#757575";
         }
+        
+        function isLikelyUSLandfall(storm) {
+            // Check if storm has landfall_states data
+            if (storm.landfall_states && storm.landfall_states.length > 0) {
+                return true;
+            }
+            
+            // Fallback: Check if max lat > 25 and west of -65 (US coast region)
+            if (storm.lat && storm.lon) {
+                return storm.lat > 25 && storm.lon > -100 && storm.lon < -65;
+            }
+            
+            return false;
+        }
 
         // Initialize map when page loads
         document.addEventListener('DOMContentLoaded', function() {
@@ -1729,13 +1743,35 @@
                     console.log(`=== MULTI-STATE CLICK HANDLER ===`);
                     console.log(`Point index: ${pointIndex}`);
                     
-                    // Get the FULL storm object from ATLANTIC_STORMS_ENHANCED just like timeline tab
+                    // CRITICAL FIX: Apply the EXACT SAME filters as plot creation to avoid index mismatch
+                    const nameFilter = document.getElementById('nameFilter') ? document.getElementById('nameFilter').value.toLowerCase() : '';
+                    const landfallOnly = document.getElementById('landfallOnly') ? document.getElementById('landfallOnly').checked : false;
+                    
+                    // Get selected categories from checkboxes
+                    const selectedCategories = [];
+                    const categoryCheckboxes = document.querySelectorAll('#categoryFilter input[type="checkbox"]:checked');
+                    categoryCheckboxes.forEach(checkbox => {
+                        selectedCategories.push(parseInt(checkbox.value));
+                    });
+                    
                     const allStorms = ATLANTIC_STORMS_ENHANCED.filter(storm => {
                         const isSelectedState = selectedStates.some(state => 
                             storm.landfall_states && storm.landfall_states.includes(state)
                         );
                         const inYearRange = storm.year >= currentStartYear && storm.year <= currentEndYear;
-                        return isSelectedState && inYearRange;
+                        
+                        if (!isSelectedState || !inYearRange) return false;
+                        
+                        // If name search is active, ONLY filter by name
+                        if (nameFilter) {
+                            return storm.name.toLowerCase().includes(nameFilter);
+                        }
+                        
+                        // Otherwise apply normal filters (same as plot creation)
+                        if (selectedCategories.length > 0 && !selectedCategories.includes(storm.category)) return false;
+                        if (storm.month < 6 || storm.month > 12) return false;
+                        if (landfallOnly && !isLikelyUSLandfall(storm)) return false;
+                        return true;
                     });
                     
                     console.log(`Filtered storms count: ${allStorms.length}`);
@@ -1743,7 +1779,7 @@
                     
                     const storm = allStorms[pointIndex];
                     if (storm) {
-                        console.log(`Storm ID: "${storm.storm_id}"`);
+                        console.log(`Storm ID: "${storm.storm_id}", Name: "${storm.name}"`);
                         updateStormInfoPanel(storm);
                         showStormOnMap(storm);
                     } else {
@@ -1827,6 +1863,248 @@
         
         // Note: The actual createMultiStateTimeline function is already defined above (line 1259)
         // This was just a placeholder - removing the duplicate
+        
+        function getCategoryColor(category) {
+            const colors = {
+                0: "#8B9DC3", 1: "#5CB85C", 2: "#F0AD4E", 
+                3: "#FF7F00", 4: "#D9534F", 5: "#8B008B"
+            };
+            return colors[category] || "#757575";
+        }
+        
+        function getMonthName(month) {
+            const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            return months[month-1];
+        }
+        
+        function isLikelyUSLandfall(storm) {
+            if (storm.landfall_states && storm.landfall_states.length > 0) {
+                return true;
+            }
+            if (storm.lat && storm.lon) {
+                return storm.lat > 25 && storm.lon > -100 && storm.lon < -65;
+            }
+            return false;
+        }
+        
+        function updateStormInfoPanel(storm) {
+            // Update category icon
+            const categoryIcon = document.getElementById('categoryIcon');
+            const color = getCategoryColor(storm.category);
+            categoryIcon.style.backgroundColor = color;
+            categoryIcon.textContent = storm.category === 0 ? 'TS' : `C${storm.category}`;
+            
+            // Update storm title
+            document.getElementById('stormTitle').textContent = `${storm.name} (${storm.year})`;
+            
+            // Update stats
+            document.getElementById('statDate').textContent = `${getMonthName(storm.month)} ${storm.day}`;
+            document.getElementById('statWind').textContent = `${storm.wind_mph} mph`;
+            document.getElementById('statLandfall').textContent = storm.landfall_states && storm.landfall_states.length > 0 
+                ? storm.landfall_states.join(', ') 
+                : 'None';
+            document.getElementById('statDeaths').textContent = storm.deaths || '0';
+            
+            // Update narrative panel
+            const narrativeContent = document.getElementById('narrativeContent');
+            if (storm.narrative) {
+                narrativeContent.innerHTML = `<p style="line-height: 1.6; color: #333;">${storm.narrative}</p>`;
+            } else {
+                narrativeContent.innerHTML = `<p style="color: #666; font-style: italic;">No historical narrative available for this storm.</p>`;
+            }
+        }
+        
+        // Initialize map
+        let map;
+        function initMap() {
+            map = L.map('map').setView([25.0, -80.0], 5);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+        }
+        
+        async function showStormOnMap(storm) {
+            if (!map) return;
+            
+            clearMapLayers();
+            console.log('=== STORM DEBUG INFO ===');
+            console.log('Storm object:', storm);
+            console.log('Storm name:', storm.name);
+            console.log('Storm year:', storm.year);
+            console.log('Storm ID:', storm.storm_id);
+            
+            // Try to load the full storm track
+            const trackData = await loadStormTrack(storm);
+            
+            if (trackData) {
+                console.log('Track data loaded, drawing storm track');
+                drawStormTrack(trackData, storm);
+            } else {
+                console.log('No track data found, showing single point');
+                if (storm.lat && storm.lon) {
+                    const color = getCategoryColor(storm.category);
+                    L.circleMarker([storm.lat, storm.lon], {
+                        color: color,
+                        fillColor: color,
+                        fillOpacity: 0.7,
+                        radius: 8
+                    }).addTo(map).bindPopup(`<b>${storm.name}</b><br>Category ${storm.category}<br>${storm.wind_mph} mph`);
+                    
+                    map.setView([storm.lat, storm.lon], 6);
+                }
+            }
+        }
+        
+        async function loadStormTrack(storm) {
+            try {
+                const decade = Math.floor(storm.year / 10) * 10;
+                const pointsFile = `./hurdat2_data/points_${decade}s.geojson`;
+                console.log(`Loading track from: ${pointsFile}`);
+                console.log(`Looking for storm_id: "${storm.storm_id}"`);
+                
+                let pointsResponse = await fetch(pointsFile);
+                if (pointsResponse.ok) {
+                    const pointsData = await pointsResponse.json();
+                    const pointFeatures = pointsData.features.filter(f => 
+                        f.properties.storm_id === storm.storm_id
+                    );
+                    
+                    console.log(`Found ${pointFeatures.length} track points`);
+                    if (pointFeatures.length > 0) {
+                        return { type: 'points', features: pointFeatures };
+                    }
+                }
+                
+                // Fallback to tracks file
+                const tracksFile = `./hurdat2_data/tracks_${decade}s.geojson`;
+                let tracksResponse = await fetch(tracksFile);
+                if (tracksResponse.ok) {
+                    const tracksData = await tracksResponse.json();
+                    const trackFeature = tracksData.features.find(f => 
+                        f.properties.storm_id === storm.storm_id
+                    );
+                    
+                    if (trackFeature) {
+                        return { type: 'track', geometry: trackFeature.geometry };
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading storm track:', error);
+            }
+            return null;
+        }
+        
+        function drawStormTrack(trackData, storm) {
+            if (trackData.type === 'points') {
+                drawRainbowTrack(trackData.features, storm);
+            } else if (trackData.type === 'track') {
+                drawSimpleTrack(trackData.geometry, storm);
+            }
+        }
+        
+        function drawRainbowTrack(pointFeatures, storm) {
+            console.log(`Drawing RAINBOW track with ${pointFeatures.length} points for ${storm.name}`);
+            
+            // Sort points by time
+            pointFeatures.sort((a, b) => {
+                if (a.properties.datetime && b.properties.datetime) {
+                    return new Date(a.properties.datetime) - new Date(b.properties.datetime);
+                }
+                return 0;
+            });
+            
+            const allLatLngs = [];
+            
+            // Draw colored line segments
+            for (let i = 0; i < pointFeatures.length - 1; i++) {
+                const point1 = pointFeatures[i];
+                const point2 = pointFeatures[i + 1];
+                
+                const coord1 = point1.geometry.coordinates;
+                const coord2 = point2.geometry.coordinates;
+                
+                // Calculate category from wind speed
+                const maxWind = point1.properties.max_wind || 0;
+                let category = 0;
+                if (maxWind >= 137) category = 5;
+                else if (maxWind >= 113) category = 4;
+                else if (maxWind >= 96) category = 3;
+                else if (maxWind >= 83) category = 2;
+                else if (maxWind >= 64) category = 1;
+                else category = 0;
+                
+                const latLng1 = [coord1[1], coord1[0]];
+                const latLng2 = [coord2[1], coord2[0]];
+                
+                allLatLngs.push(latLng1);
+                if (i === pointFeatures.length - 2) allLatLngs.push(latLng2);
+                
+                const segmentColor = getCategoryColor(category);
+                
+                L.polyline([latLng1, latLng2], {
+                    color: segmentColor,
+                    weight: 6,
+                    opacity: 1.0
+                }).addTo(map);
+            }
+            
+            // Fit map to track bounds
+            if (allLatLngs.length > 0) {
+                const bounds = L.latLngBounds(allLatLngs);
+                map.fitBounds(bounds, { 
+                    padding: [20, 20],
+                    maxZoom: 8
+                });
+            }
+        }
+        
+        function drawSimpleTrack(trackGeometry, storm) {
+            const coordinates = trackGeometry.coordinates;
+            const trackPoints = coordinates.map(coord => [coord[1], coord[0]]);
+            
+            const trackLine = L.polyline(trackPoints, {
+                color: getCategoryColor(storm.category),
+                weight: 4,
+                opacity: 0.8
+            }).addTo(map);
+            
+            // Add start and end markers
+            if (trackPoints.length > 0) {
+                L.circleMarker(trackPoints[0], {
+                    color: '#00ff00',
+                    fillColor: '#00ff00',
+                    fillOpacity: 0.8,
+                    radius: 8
+                }).addTo(map).bindPopup(`<b>${storm.name} START</b><br>${storm.year}`);
+                
+                L.circleMarker(trackPoints[trackPoints.length - 1], {
+                    color: '#ff0000',
+                    fillColor: '#ff0000',
+                    fillOpacity: 0.8,
+                    radius: 8
+                }).addTo(map).bindPopup(`<b>${storm.name} END</b><br>${storm.year}`);
+            }
+            
+            map.fitBounds(trackLine.getBounds(), { 
+                padding: [20, 20],
+                maxZoom: 8
+            });
+        }
+        
+        function clearMapLayers() {
+            if (map) {
+                map.eachLayer(function (layer) {
+                    if (layer instanceof L.CircleMarker || layer instanceof L.Polyline) {
+                        map.removeLayer(layer);
+                    }
+                });
+            }
+        }
+        
+        // Initialize map on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            initMap();
+        });
         
         // Recreate on window resize
         let resizeTimeout;

@@ -802,6 +802,33 @@
         }
 
 
+        function updateStormInfoPanel(storm) {
+            // Update category icon
+            const categoryIcon = document.getElementById('categoryIcon');
+            const color = getCategoryColor(storm.category);
+            categoryIcon.style.backgroundColor = color;
+            categoryIcon.textContent = storm.category === 0 ? 'TS' : `C${storm.category}`;
+            
+            // Update storm title
+            document.getElementById('stormTitle').textContent = `${storm.name} (${storm.year})`;
+            
+            // Update stats
+            document.getElementById('statDate').textContent = `${getMonthName(storm.month)} ${storm.day}`;
+            document.getElementById('statWind').textContent = `${storm.wind_mph} mph`;
+            document.getElementById('statLandfall').textContent = storm.landfall_states && storm.landfall_states.length > 0 
+                ? storm.landfall_states.join(', ') 
+                : 'None';
+            document.getElementById('statDeaths').textContent = storm.deaths || '0';
+            
+            // Update narrative panel
+            const narrativeContent = document.getElementById('narrativeContent');
+            if (storm.narrative) {
+                narrativeContent.innerHTML = `<p style="line-height: 1.6; color: #333;">${storm.narrative}</p>`;
+            } else {
+                narrativeContent.innerHTML = `<p style="color: #666; font-style: italic;">No historical narrative available for this storm.</p>`;
+            }
+        }
+
         function clearMapLayers() {
             if (map) {
                 map.eachLayer(function (layer) {

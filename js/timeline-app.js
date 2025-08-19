@@ -26,8 +26,13 @@ function hurricaneApp() {
             search: ''
         },
 
-        // Hurricane data embedded directly in the app
-        allStorms: [
+        // Use the master database - same as Timeline and Multi-State tabs
+        get allStorms() {
+            return ATLANTIC_STORMS_ENHANCED;
+        },
+        
+        // Old hardcoded data - REMOVED to use master database instead
+        _oldStorms: [
             // 2024 Recent Storms
             {id: 1, name: 'Helene', category: 4, year: 2024, month: 9, day: 26, windSpeed: 140, pressure: 938, 
              lat: 30.118244, lon: -83.582900, state: 'FL', landfall: 'Big Bend, FL', deaths: 230, 
@@ -797,8 +802,10 @@ function aiAssistant() {
         messages: [],
         currentMessage: '',
         isLoading: false,
+        // Add your Cloudflare Worker URL here
+        workerUrl: 'YOUR_CLOUDFLARE_WORKER_URL', // Replace with your actual worker URL
         
-        sendMessage() {
+        async sendMessage() {
             if (!this.currentMessage.trim() || this.isLoading) return;
             
             this.messages.push({
@@ -812,21 +819,59 @@ function aiAssistant() {
             this.currentMessage = '';
             this.isLoading = true;
             
-            setTimeout(() => {
-                const response = this.generateResponse(userMessage);
+            try {
+                // Call Cloudflare Worker
+                const response = await fetch(this.workerUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        question: userMessage,
+                        context: this.getContextData()
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('API request failed');
+                }
+                
+                const data = await response.json();
+                
+                // Add assistant response
                 this.messages.push({
                     id: Date.now(),
                     role: 'assistant',
-                    content: response,
+                    content: data.answer || 'I apologize, but I encountered an error processing your request.',
                     time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
                 });
+                
+                // Apply filters if the AI suggests them
+                if (data.filters && data.filters.action === 'filter') {
+                    this.applyAIFilters(data.filters.filters);
+                }
+                
+            } catch (error) {
+                console.error('AI Assistant Error:', error);
+                
+                // Fallback to hardcoded responses if API fails
+                const fallbackResponse = this.generateFallbackResponse(userMessage);
+                this.messages.push({
+                    id: Date.now(),
+                    role: 'assistant',
+                    content: fallbackResponse,
+                    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                });
+            } finally {
                 this.isLoading = false;
                 
                 this.$nextTick(() => {
                     const container = this.$refs.chatContainer;
-                    container.scrollTop = container.scrollHeight;
+                    if (container) {
+                        container.scrollTop = container.scrollHeight;
+                    }
                 });
-            }, 1500);
+            }
         },
         
         askQuestion(question) {
@@ -834,7 +879,55 @@ function aiAssistant() {
             this.sendMessage();
         },
         
-        generateResponse(message) {
+        getContextData() {
+            // Get current app context to send to AI
+            const app = Alpine.store('hurricaneApp') || {};
+            return JSON.stringify({
+                totalStorms: this.allStorms ? this.allStorms.length : 0,
+                currentFilters: this.filters || {},
+                selectedStorm: this.selectedStorm ? this.selectedStorm.name : null,
+                activeTab: this.activeTab || 'home',
+                visibleStorms: this.filteredStorms ? this.filteredStorms.length : 0
+            });
+        },
+        
+        applyAIFilters(filters) {
+            // Apply filters suggested by AI
+            if (filters.category !== undefined) {
+                this.filters.categories = [String(filters.category)];
+            }
+            if (filters.yearStart !== undefined) {
+                this.filters.yearStart = filters.yearStart;
+            }
+            if (filters.yearEnd !== undefined) {
+                this.filters.yearEnd = filters.yearEnd;
+            }
+            if (filters.state !== undefined) {
+                this.filters.state = filters.state;
+            }
+            
+            // Update visualization with new filters
+            this.updateVisualization();
+            
+            // Show a notification that filters were applied
+            const filterDesc = [];
+            if (filters.category !== undefined) filterDesc.push(`Category ${filters.category}`);
+            if (filters.yearStart !== undefined || filters.yearEnd !== undefined) {
+                filterDesc.push(`Years ${filters.yearStart || this.filters.yearStart}-${filters.yearEnd || this.filters.yearEnd}`);
+            }
+            if (filters.state) filterDesc.push(`State: ${filters.state}`);
+            
+            if (filterDesc.length > 0) {
+                this.messages.push({
+                    id: Date.now(),
+                    role: 'system',
+                    content: `Applied filters: ${filterDesc.join(', ')}`,
+                    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                });
+            }
+        },
+        
+        generateFallbackResponse(message) {
             const msg = message.toLowerCase();
             
             if (msg.includes('category 5')) {
@@ -843,8 +936,10 @@ function aiAssistant() {
                 return 'The 2004 season was devastating for Florida with 4 hurricanes: Charley (Cat 4), Frances (Cat 2), Ivan (Cat 3), and Jeanne (Cat 3). Set the year filter to 2004 to see them all.';
             } else if (msg.includes('most recent')) {
                 return 'The most recent major hurricanes are Helene and Milton in 2024. Both hit Florida - Helene as Cat 4 in the Big Bend, Milton as Cat 3 at Siesta Key.';
+            } else if (msg.includes('help') || msg.includes('what can')) {
+                return 'I can help you explore hurricane data! Try asking about:\n• Specific hurricanes by name or year\n• Category 5 storms\n• Recent hurricanes\n• Storms by state\n• Historical patterns\n\nNote: Currently using offline mode. Deploy the Cloudflare Worker for enhanced AI responses.';
             } else {
-                return `I can help explore ${this.allStorms ? this.allStorms.length : '25+'} hurricanes in the database! Try asking about specific storms, years, or categories.`;
+                return `I can help explore ${this.allStorms ? this.allStorms.length : '25+'} hurricanes in the database! Try asking about specific storms, years, or categories. (Note: Currently in offline mode)`;
             }
         }
     };
