@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multi-State Hurricane Tracker (1851-2024)</title>
+    <title>Multi-State Hurricane Tracker - Fixed Layout v2</title>
     <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -44,6 +44,7 @@
             background: white;
             height: 100vh;
             width: 100vw;
+            overflow: hidden;
         }
         
         .main-content {
@@ -55,9 +56,10 @@
         .right-sidebar {
             width: 525px;
             background: #f5f5f5;
-            border-left: 2px solid #ccc;
+            border-left: 3px solid #007cba;
             display: flex;
             flex-direction: column;
+            min-height: 100vh;
         }
         
         .storm-info-panel {
