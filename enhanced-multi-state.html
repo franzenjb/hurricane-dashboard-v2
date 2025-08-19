@@ -366,6 +366,42 @@
             white-space: nowrap;
         }
         
+        /* Legend styles */
+        .map-legend {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            z-index: 1000;
+            font-size: 12px;
+        }
+        
+        .legend-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 4px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 4px 0;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 8px;
+            border: 2px solid white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+        
         /* Mobile optimizations */
         @media (max-width: 768px) {
             .controls-header {
@@ -650,6 +686,33 @@
             </div>
             <div class="map-panel">
                 <div id="map"></div>
+                <div class="map-legend">
+                    <div class="legend-title">Hurricane Categories</div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #8B9DC3;"></div>
+                        <span>TS - Tropical Storm</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #5CB85C;"></div>
+                        <span>Cat 1 (74-95 mph)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #F0AD4E;"></div>
+                        <span>Cat 2 (96-110 mph)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #FF7F00;"></div>
+                        <span>Cat 3 (111-129 mph)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #D9534F;"></div>
+                        <span>Cat 4 (130-156 mph)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #8B008B;"></div>
+                        <span>Cat 5 (≥157 mph)</span>
+                    </div>
+                </div>
             </div>
             <div class="narrative-panel" id="narrativePanel">
                 <div class="narrative-header">Historical Narrative</div>
@@ -675,8 +738,12 @@
     </div>
 
     <script>
-        // Initialize map
+        // Initialize map and state variables
         let map;
+        let selectedStates = ['FL']; // Default to Florida
+        let currentStartYear = 2010;
+        let currentEndYear = 2024;
+        
         function initMap() {
             console.log('Initializing Leaflet map for Multi-State tab...');
             const mapDiv = document.getElementById('map');
@@ -696,6 +763,59 @@
             }).addTo(map);
             
             console.log('Map initialized successfully');
+        }
+        
+        // State management functions
+        function updateSelection() {
+            selectedStates = [];
+            const checkboxes = document.querySelectorAll('#state-dropdown input[type="checkbox"]:checked');
+            checkboxes.forEach(cb => {
+                if (!cb.value.startsWith('SELECT_')) {
+                    selectedStates.push(cb.value);
+                }
+            });
+            
+            // Update display
+            const display = document.getElementById('selected-display');
+            const summary = document.getElementById('states-summary');
+            if (selectedStates.length === 0) {
+                display.textContent = 'Select states...';
+                summary.textContent = 'No states selected';
+            } else if (selectedStates.length === 1) {
+                display.textContent = selectedStates[0];
+                summary.textContent = '1 state selected';
+            } else {
+                display.textContent = selectedStates.slice(0, 3).join(', ') + (selectedStates.length > 3 ? '...' : '');
+                summary.textContent = `${selectedStates.length} states selected`;
+            }
+            
+            applyFilters();
+        }
+        
+        function toggleDropdown() {
+            document.getElementById('state-dropdown').classList.toggle('show');
+        }
+        
+        function selectGroup(group) {
+            const gulfStates = ['FL', 'TX', 'LA', 'MS', 'AL'];
+            const atlanticStates = ['GA', 'SC', 'NC', 'VA', 'MD', 'DE', 'NJ', 'NY', 'CT', 'RI', 'MA', 'NH', 'ME'];
+            
+            const states = group === 'gulf' ? gulfStates : atlanticStates;
+            const selectAllCheckbox = document.getElementById(group === 'gulf' ? 'SELECT_GULF' : 'SELECT_ATLANTIC');
+            const isChecked = selectAllCheckbox.checked;
+            
+            states.forEach(state => {
+                const checkbox = document.getElementById(state);
+                if (checkbox) checkbox.checked = isChecked;
+            });
+            
+            updateSelection();
+        }
+        
+        function updateTimeline() {
+            currentStartYear = parseInt(document.getElementById('start-year').value);
+            currentEndYear = parseInt(document.getElementById('end-year').value);
+            applyFilters();
         }
 
         function updateStormInfoPanel(storm) {
@@ -958,15 +1078,94 @@
             
             return false;
         }
+        
+        function applyFilters() {
+            const nameFilter = document.getElementById('nameFilter').value.toLowerCase();
+            const landfallOnly = document.getElementById('landfallOnly').checked;
+            
+            // Get selected categories from checkboxes
+            const selectedCategories = [];
+            const categoryCheckboxes = document.querySelectorAll('#categoryFilter input[type="checkbox"]:checked');
+            categoryCheckboxes.forEach(checkbox => {
+                selectedCategories.push(parseInt(checkbox.value));
+            });
+            
+            // Apply filters to storms for the selected states
+            const allStorms = ATLANTIC_STORMS_ENHANCED.filter(storm => {
+                const isSelectedState = selectedStates.some(state => 
+                    storm.landfall_states && storm.landfall_states.includes(state)
+                );
+                const inYearRange = storm.year >= currentStartYear && storm.year <= currentEndYear;
+                
+                if (!isSelectedState || !inYearRange) return false;
+                
+                // If name search is active, ONLY filter by name - ignore all other filters
+                if (nameFilter) {
+                    return storm.name.toLowerCase().includes(nameFilter);
+                }
+                
+                // Otherwise apply normal filters
+                if (selectedCategories.length > 0 && !selectedCategories.includes(storm.category)) return false;
+                // Only show hurricane season months (Jun-Dec: months 6-12)
+                if (storm.month < 6 || storm.month > 12) return false;
+                // Filter for landfall storms if checkbox is checked
+                if (landfallOnly && !isLikelyUSLandfall(storm)) return false;
+                return true;
+            });
+            
+            // If name search is active and found storms, adjust year range to show results
+            if (nameFilter && allStorms.length > 0) {
+                const stormYears = allStorms.map(s => s.year);
+                const minStormYear = Math.min(...stormYears);
+                const maxStormYear = Math.max(...stormYears);
+                
+                // Only adjust if storms are outside current range
+                if (minStormYear < currentStartYear || maxStormYear > currentEndYear) {
+                    currentStartYear = Math.min(minStormYear, currentStartYear);
+                    currentEndYear = Math.max(maxStormYear, currentEndYear);
+                    
+                    // Update the year input fields
+                    document.getElementById('start-year').value = currentStartYear;
+                    document.getElementById('end-year').value = currentEndYear;
+                    
+                    console.log(`Name search found storms from ${minStormYear}-${maxStormYear}, adjusted range to ${currentStartYear}-${currentEndYear}`);
+                }
+            }
+            
+            // Update the stats banner
+            updateStatsDisplay(allStorms);
+            // Plot storms on map
+            plotStormsOnMap(allStorms);
+        }
+        
+        function updateStatsDisplay(storms) {
+            const statsText = document.getElementById('stats-text');
+            if (storms.length === 0) {
+                statsText.textContent = 'No storms found matching your criteria';
+            } else {
+                const cat5Count = storms.filter(s => s.category === 5).length;
+                const cat4Count = storms.filter(s => s.category === 4).length;
+                const cat3Count = storms.filter(s => s.category === 3).length;
+                statsText.innerHTML = `<strong>${storms.length}</strong> storms found | ` +
+                    `<strong>${cat5Count}</strong> Cat 5 | <strong>${cat4Count}</strong> Cat 4 | <strong>${cat3Count}</strong> Cat 3`;
+            }
+        }
 
-        // Initialize map when page loads
-        document.addEventListener('DOMContentLoaded', function() {
+        // Move initialization to after variables are defined
+        function initializeMapAndData() {
+            console.log('Initializing map and data...');
             initMap();
             // Initialize with default filters to show storm markers
             setTimeout(() => {
-                applyFilters();
+                console.log('Applying initial filters...');
+                if (typeof selectedStates !== 'undefined') {
+                    console.log('Selected states:', selectedStates);
+                    applyFilters();
+                } else {
+                    console.error('selectedStates not defined yet!');
+                }
             }, 500);
-        });
+        }
 
         // EXPANDED MULTI-STATE HURRICANE DATA (1851-2024)
         // Includes historical storms from HURDAT2 database
@@ -1247,7 +1446,11 @@
         }
         
         function plotStormsOnMap(storms) {
-            if (!map) return;
+            console.log('plotStormsOnMap called with', storms.length, 'storms');
+            if (!map) {
+                console.error('Map not initialized!');
+                return;
+            }
             
             // Clear existing storm markers
             map.eachLayer(function(layer) {
@@ -1255,6 +1458,9 @@
                     map.removeLayer(layer);
                 }
             });
+            
+            console.log('Adding storm markers to map...');
+            let markersAdded = 0;
             
             // Add markers for each storm
             storms.forEach(storm => {
@@ -1292,8 +1498,11 @@
                     });
                     
                     marker.addTo(map);
+                    markersAdded++;
                 }
             });
+            
+            console.log('Added', markersAdded, 'markers to map');
             
             // Adjust map view to show all markers if there are any
             if (storms.length > 0) {
@@ -2004,29 +2213,6 @@
             }
         }
         
-        // Initialize map
-        let map;
-        function initMap() {
-            console.log('Initializing Leaflet map for Multi-State tab...');
-            const mapDiv = document.getElementById('map');
-            if (!mapDiv) {
-                console.error('Map div not found!');
-                return;
-            }
-            
-            // Set explicit height for the map div
-            mapDiv.style.height = '100%';
-            mapDiv.style.width = '100%';
-            
-            map = L.map('map').setView([32.0, -85.0], 5); // Centered on Gulf/Atlantic states
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors',
-                maxZoom: 18
-            }).addTo(map);
-            
-            console.log('Map initialized successfully');
-        }
-        
         async function showStormOnMap(storm) {
             if (!map) return;
             
@@ -2208,6 +2394,10 @@
         // Initialize map on page load
         document.addEventListener('DOMContentLoaded', () => {
             initMap();
+            // Apply initial filters to show storm markers
+            setTimeout(() => {
+                applyFilters();
+            }, 500);
         });
         
         // Recreate on window resize

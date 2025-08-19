@@ -52,6 +52,42 @@
         .narrative-header { font-size: 18px; font-weight: bold; color: #333; margin-bottom: 10px; border-bottom: 2px solid #007cba; padding-bottom: 5px; }
         .narrative-subtitle { font-size: 12px; color: #666; margin-bottom: 15px; font-style: italic; }
         .narrative-content { font-size: 16px; line-height: 1.6; color: #555; }
+        
+        /* Legend styles */
+        .map-legend {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            z-index: 1000;
+            font-size: 12px;
+        }
+        
+        .legend-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 4px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 4px 0;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 8px;
+            border: 2px solid white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
     </style>
 </head>
 <body>
@@ -127,6 +163,33 @@
             </div>
             <div class="map-panel">
                 <div id="map"></div>
+                <div class="map-legend">
+                    <div class="legend-title">Hurricane Categories</div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #8B9DC3;"></div>
+                        <span>TS - Tropical Storm</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #5CB85C;"></div>
+                        <span>Cat 1 (74-95 mph)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #F0AD4E;"></div>
+                        <span>Cat 2 (96-110 mph)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #FF7F00;"></div>
+                        <span>Cat 3 (111-129 mph)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #D9534F;"></div>
+                        <span>Cat 4 (130-156 mph)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #8B008B;"></div>
+                        <span>Cat 5 (≥157 mph)</span>
+                    </div>
+                </div>
             </div>
             <div class="narrative-panel" id="narrativePanel">
                 <div class="narrative-header">Historical Narrative</div>
