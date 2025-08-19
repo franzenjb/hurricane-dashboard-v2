@@ -568,31 +568,31 @@
             <!-- Storm Filtering Controls (same as timeline tab) -->
             <div class="filter-controls-section" style="margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #ddd;">
                 <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
-                    <input type="text" id="nameFilter" placeholder="Search by name" style="padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;">
+                    <input type="text" id="nameFilter" placeholder="Search by name" style="padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; color: #333;">
                     <div style="display: flex; align-items: center; gap: 8px;">
-                        <label style="font-weight: bold; font-size: 14px;">Categories:</label>
+                        <label style="font-weight: bold; font-size: 14px; color: #333;">Categories:</label>
                         <div style="display: flex; gap: 12px;" id="categoryFilter">
-                            <label style="display: flex; align-items: center; gap: 4px; cursor: pointer;">
+                            <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; color: #333;">
                                 <input type="checkbox" value="0"> TS
                             </label>
-                            <label style="display: flex; align-items: center; gap: 4px; cursor: pointer;">
+                            <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; color: #333;">
                                 <input type="checkbox" value="1"> Cat 1
                             </label>
-                            <label style="display: flex; align-items: center; gap: 4px; cursor: pointer;">
+                            <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; color: #333;">
                                 <input type="checkbox" value="2"> Cat 2
                             </label>
-                            <label style="display: flex; align-items: center; gap: 4px; cursor: pointer;">
+                            <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; color: #333;">
                                 <input type="checkbox" value="3" checked> Cat 3
                             </label>
-                            <label style="display: flex; align-items: center; gap: 4px; cursor: pointer;">
+                            <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; color: #333;">
                                 <input type="checkbox" value="4" checked> Cat 4
                             </label>
-                            <label style="display: flex; align-items: center; gap: 4px; cursor: pointer;">
+                            <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; color: #333;">
                                 <input type="checkbox" value="5" checked> Cat 5
                             </label>
                         </div>
                     </div>
-                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; color: #333;">
                         <input type="checkbox" id="landfallOnly"> Landfall Only
                     </label>
                     <button onclick="applyFilters()" style="padding: 8px 16px; background: #007cba; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;">Apply Filters</button>
@@ -1312,13 +1312,38 @@
                 }
             });
             
-            // Create trace using ATLANTIC_STORMS_ENHANCED data (same as timeline tab)
+            // Create trace using ATLANTIC_STORMS_ENHANCED data with FILTERING (same as timeline tab)
             const allStorms = ATLANTIC_STORMS_ENHANCED.filter(storm => {
                 const isSelectedState = selectedStates.some(state => 
                     storm.landfall_states && storm.landfall_states.includes(state)
                 );
                 const inYearRange = storm.year >= currentStartYear && storm.year <= currentEndYear;
-                return isSelectedState && inYearRange;
+                
+                if (!isSelectedState || !inYearRange) return false;
+                
+                // Apply active filters (same logic as updateStats)
+                const nameFilter = document.getElementById('nameFilter') ? document.getElementById('nameFilter').value.toLowerCase() : '';
+                const landfallOnly = document.getElementById('landfallOnly') ? document.getElementById('landfallOnly').checked : false;
+                
+                // Get selected categories from checkboxes
+                const selectedCategories = [];
+                const categoryCheckboxes = document.querySelectorAll('#categoryFilter input[type="checkbox"]:checked');
+                categoryCheckboxes.forEach(checkbox => {
+                    selectedCategories.push(parseInt(checkbox.value));
+                });
+                
+                // If name search is active, ONLY filter by name - ignore all other filters
+                if (nameFilter) {
+                    return storm.name.toLowerCase().includes(nameFilter);
+                }
+                
+                // Otherwise apply normal filters
+                if (selectedCategories.length > 0 && !selectedCategories.includes(storm.category)) return false;
+                // Only show hurricane season months (Jun-Dec: months 6-12)
+                if (storm.month < 6 || storm.month > 12) return false;
+                // Filter for landfall storms if checkbox is checked
+                if (landfallOnly && !isLikelyUSLandfall(storm)) return false;
+                return true;
             });
             
             console.log(`Creating plot with ${allStorms.length} storms from ATLANTIC_STORMS_ENHANCED`);
