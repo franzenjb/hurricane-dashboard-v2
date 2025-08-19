@@ -565,13 +565,20 @@
 
         // Actions
         function compareSelected() {
-            if (selectedStorms.size > 0 && selectedStorms.size <= 3) {
-                const ids = Array.from(selectedStorms).join(',');
-                window.parent.postMessage({
-                    action: 'compareStorms',
-                    stormIds: ids
-                }, '*');
+            if (selectedStorms.size === 0) {
+                alert('Please select at least one storm to compare.');
+                return;
             }
+            if (selectedStorms.size > 3) {
+                alert('You can compare up to 3 storms at a time. Please deselect some storms.');
+                return;
+            }
+            
+            const ids = Array.from(selectedStorms).join(',');
+            window.parent.postMessage({
+                action: 'compareStorms',
+                stormIds: ids
+            }, '*');
         }
 
         function exportSelected() {
