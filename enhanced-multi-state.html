@@ -1422,8 +1422,7 @@
                 if (pointsResponse.ok) {
                     const pointsData = await pointsResponse.json();
                     const pointFeatures = pointsData.features.filter(f => 
-                        f.properties.storm_id === storm.storm_id || 
-                        (f.properties.name === storm.name && f.properties.year === storm.year)
+                        f.properties.storm_id === storm.storm_id
                     );
                     
                     if (pointFeatures.length > 0) {
@@ -1443,8 +1442,7 @@
                 
                 const tracksData = await tracksResponse.json();
                 const feature = tracksData.features.find(f => 
-                    f.properties.storm_id === storm.storm_id || 
-                    (f.properties.name === storm.name && f.properties.year === storm.year)
+                    f.properties.storm_id === storm.storm_id
                 );
                 
                 if (feature && feature.geometry.type === 'LineString') {
