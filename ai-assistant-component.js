@@ -4,6 +4,7 @@
 class AIAssistant {
     constructor() {
         this.workerUrl = 'https://hurricane-ai-simple.jbf-395.workers.dev/';
+        this.anthropicApiKey = ''; // ADD YOUR KEY HERE: sk-ant-api-...
         this.isOpen = false;
         this.messages = [];
         this.init();
@@ -444,22 +445,63 @@ Try asking: "What Category 5 hurricanes hit Florida's east coast in the last 50 
         this.showTypingIndicator();
 
         try {
-            // First try the Cloudflare worker
             let data = null;
-            try {
-                const response = await fetch(this.workerUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        query: query,
-                        context: this.getCurrentContext()
-                    })
-                });
-                data = await response.json();
-            } catch (workerError) {
-                console.log('Worker failed, using fallback intelligence');
+            
+            // Try real AI if API key is configured
+            if (this.anthropicApiKey && this.anthropicApiKey.startsWith('sk-ant-')) {
+                try {
+                    console.log('Using direct Anthropic API');
+                    const anthropicResponse = await fetch('https://api.anthropic.com/v1/messages', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'x-api-key': this.anthropicApiKey,
+                            'anthropic-version': '2023-06-01',
+                            'anthropic-dangerous-direct-browser-access': 'true'
+                        },
+                        body: JSON.stringify({
+                            model: 'claude-3-haiku-20240307',
+                            max_tokens: 600,
+                            messages: [{
+                                role: 'user',
+                                content: `You are a hurricane expert with the HURDAT2 database (1,991 storms, 1851-2024).
+                                
+Key facts: Andrew (1992) only Cat 5 to hit FL east coast. Matthew (2016) and Dorian (2019) were Cat 5 but weakened. Michael (2018) Cat 5 in Panhandle. 2024: Helene Cat 4 Big Bend, Milton Cat 3 Sarasota.
+
+Answer concisely: ${query}`
+                            }]
+                        })
+                    });
+                    
+                    if (anthropicResponse.ok) {
+                        const result = await anthropicResponse.json();
+                        data = {
+                            answer: result.content[0].text,
+                            filters: this.extractFilters(query)
+                        };
+                    }
+                } catch (aiError) {
+                    console.log('Direct AI failed:', aiError);
+                }
+            }
+            
+            // Fallback to Cloudflare worker if no API key
+            if (!data && !this.anthropicApiKey) {
+                try {
+                    const response = await fetch(this.workerUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            query: query,
+                            context: this.getCurrentContext()
+                        })
+                    });
+                    data = await response.json();
+                } catch (workerError) {
+                    console.log('Worker failed, using fallback intelligence');
+                }
             }
             
             // Hide typing indicator
@@ -600,6 +642,34 @@ What specific aspect of hurricane history would you like to explore?`;
         }
     }
 
+    extractFilters(query) {
+        const queryLower = query.toLowerCase();
+        let filters = null;
+        
+        if (queryLower.includes('category 5') || queryLower.includes('cat 5')) {
+            filters = { 
+                action: 'filter',
+                filters: { 
+                    category: 5,
+                    yearStart: queryLower.includes('last 50') ? 1974 : 1851,
+                    yearEnd: 2024
+                }
+            };
+        } else if (queryLower.includes('2024')) {
+            filters = {
+                action: 'filter', 
+                filters: { yearStart: 2024, yearEnd: 2024 }
+            };
+        } else if (queryLower.includes('andrew')) {
+            filters = {
+                action: 'filter',
+                filters: { search: 'Andrew', yearStart: 1992, yearEnd: 1992 }
+            };
+        }
+        
+        return filters;
+    }
+    
     getCurrentContext() {
         // Get current filter state from the dashboard
         const context = {
