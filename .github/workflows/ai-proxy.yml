@@ -1,0 +1,44 @@
+name: AI Proxy API
+
+on:
+  workflow_dispatch:
+    inputs:
+      query:
+        description: 'Hurricane question'
+        required: true
+        type: string
+
+jobs:
+  process:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call Anthropic API
+        id: ai_call
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          response=$(curl -s https://api.anthropic.com/v1/messages \
+            -H "Content-Type: application/json" \
+            -H "x-api-key: $ANTHROPIC_API_KEY" \
+            -H "anthropic-version: 2023-06-01" \
+            -d '{
+              "model": "claude-3-haiku-20240307",
+              "max_tokens": 500,
+              "messages": [{
+                "role": "user",
+                "content": "${{ github.event.inputs.query }}"
+              }]
+            }')
+          echo "response=$response" >> $GITHUB_OUTPUT
+      
+      - name: Update response file
+        run: |
+          echo '${{ steps.ai_call.outputs.response }}' > ai-response.json
+          
+      - name: Commit response
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
+          git add ai-response.json
+          git commit -m "AI response for: ${{ github.event.inputs.query }}"
+          git push

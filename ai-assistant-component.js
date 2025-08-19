@@ -3,11 +3,31 @@
 
 class AIAssistant {
     constructor() {
+        // Try local backend first, fallback to Cloudflare
+        this.localBackendUrl = 'http://localhost:3001/api/hurricane-ai';
         this.workerUrl = 'https://hurricane-ai-simple.jbf-395.workers.dev/';
-        this.anthropicApiKey = ''; // ADD YOUR KEY HERE: sk-ant-api-...
+        this.anthropicApiKey = ''; // DO NOT add key here - use backend instead!
         this.isOpen = false;
         this.messages = [];
         this.init();
+        this.checkBackendStatus();
+    }
+    
+    async checkBackendStatus() {
+        try {
+            const response = await fetch(this.localBackendUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query: 'test' })
+            });
+            if (response.ok) {
+                console.log('✅ Local AI backend is running');
+                this.useLocalBackend = true;
+            }
+        } catch (e) {
+            console.log('📍 Local backend not running. Run: node ai-backend.js');
+            this.useLocalBackend = false;
+        }
     }
 
     init() {
@@ -447,8 +467,25 @@ Try asking: "What Category 5 hurricanes hit Florida's east coast in the last 50 
         try {
             let data = null;
             
-            // Try real AI if API key is configured
-            if (this.anthropicApiKey && this.anthropicApiKey.startsWith('sk-ant-')) {
+            // Try local backend first (most secure)
+            if (this.useLocalBackend) {
+                try {
+                    console.log('Using local AI backend');
+                    const response = await fetch(this.localBackendUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ query: query })
+                    });
+                    if (response.ok) {
+                        data = await response.json();
+                    }
+                } catch (e) {
+                    console.log('Local backend failed:', e);
+                }
+            }
+            
+            // Try direct API if key is configured (less secure)
+            if (!data && this.anthropicApiKey && this.anthropicApiKey.startsWith('sk-ant-')) {
                 try {
                     console.log('Using direct Anthropic API');
                     const anthropicResponse = await fetch('https://api.anthropic.com/v1/messages', {
