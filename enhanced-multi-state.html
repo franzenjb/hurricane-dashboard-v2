@@ -2476,6 +2476,49 @@
                 }
             }, 500);
         });
+        
+        // Listen for AI Assistant filter messages
+        window.addEventListener('message', function(event) {
+            if (event.data && event.data.action === 'applyFilters') {
+                console.log('Applying AI-suggested filters:', event.data.filters);
+                const filters = event.data.filters;
+                
+                // Apply year filters
+                if (filters.yearStart) {
+                    document.getElementById('start-year').value = filters.yearStart;
+                    currentStartYear = filters.yearStart;
+                }
+                if (filters.yearEnd) {
+                    document.getElementById('end-year').value = filters.yearEnd;
+                    currentEndYear = filters.yearEnd;
+                }
+                
+                // Apply category filters
+                if (filters.categories) {
+                    document.querySelectorAll('input[name="category"]').forEach(cb => {
+                        cb.checked = filters.categories.includes(cb.value);
+                    });
+                } else if (filters.category !== undefined) {
+                    document.querySelectorAll('input[name="category"]').forEach(cb => {
+                        cb.checked = cb.value == filters.category;
+                    });
+                }
+                
+                // Apply search filter
+                if (filters.search) {
+                    document.getElementById('storm-search').value = filters.search;
+                }
+                
+                // Apply state filter if provided
+                if (filters.states) {
+                    selectedStates = filters.states;
+                    document.getElementById('selected-states').textContent = selectedStates.join(', ');
+                }
+                
+                // Trigger filter update
+                filterStorms();
+            }
+        });
     </script>
 </body>
 </html>
