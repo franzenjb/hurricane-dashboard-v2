@@ -902,6 +902,50 @@
             // Enable storm panel communication for iframe content
             console.log('Enhanced Timeline iframe loaded successfully');
         }
+        
+        // Handle messages from iframes (especially Database tab)
+        window.addEventListener('message', function(event) {
+            // Security check - only accept messages from same origin
+            if (event.origin !== window.location.origin) return;
+            
+            const data = event.data;
+            
+            // Handle different message types
+            switch(data.action) {
+                case 'viewStorm':
+                    // Switch to Timeline tab and show the storm
+                    const storm = ATLANTIC_STORMS_ENHANCED.find(s => s.storm_id === data.stormId);
+                    if (storm) {
+                        // Get Alpine.js component and update
+                        const alpineComponent = document.querySelector('[x-data]').__x.$data;
+                        alpineComponent.activeTab = 'timeline';
+                        alpineComponent.selectedStorm = storm;
+                        console.log('Viewing storm:', storm.name, storm.year);
+                    }
+                    break;
+                    
+                case 'viewOnMap':
+                    // Switch to Timeline tab and show storms on map
+                    const alpineComponent = document.querySelector('[x-data]').__x.$data;
+                    alpineComponent.activeTab = 'timeline';
+                    
+                    if (data.storms && data.storms.length > 0) {
+                        console.log('Viewing', data.storms.length, 'storms on map');
+                        // TODO: Add logic to display multiple storms on the Timeline map
+                        // For now, show the first storm
+                        alpineComponent.selectedStorm = data.storms[0];
+                    }
+                    break;
+                    
+                case 'compareStorms':
+                    // Switch to Intelligence tab for comparison
+                    const alpineComp = document.querySelector('[x-data]').__x.$data;
+                    alpineComp.activeTab = 'intelligence';
+                    console.log('Comparing storms:', data.stormIds);
+                    // TODO: Pass storm IDs to Intelligence tab for comparison
+                    break;
+            }
+        });
     </script>
 </body>
 </html>

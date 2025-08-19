@@ -694,6 +694,23 @@
                 storms: storms
             }, '*');
         }
+        
+        // Check if a storm has a TCR report available
+        function hasTCR(storm) {
+            // TCRs are generally available for storms after 1995
+            // and for significant storms (Cat 3+ or major impact)
+            return storm.year >= 1995 && (storm.category >= 3 || storm.rc_impact_level === 'CATASTROPHIC' || storm.rc_impact_level === 'SEVERE');
+        }
+        
+        // Get the TCR link for a storm
+        function getTCRLink(storm) {
+            // Construct NOAA TCR URL
+            // Format: https://www.nhc.noaa.gov/data/tcr/AL##YYYY_Name.pdf
+            const stormNumber = storm.storm_id.substring(2, 4); // Extract storm number from ID
+            const baseUrl = 'https://www.nhc.noaa.gov/data/tcr/';
+            const filename = `AL${stormNumber}${storm.year}_${storm.name}.pdf`;
+            return baseUrl + filename;
+        }
     </script>
 </body>
 </html>

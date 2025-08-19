@@ -135,6 +135,20 @@ git push
 - **Timeline/Multi-State**: `updateStormInfoPanel()`, `showStormOnMap()`, `getCategoryColor()`, `getMonthName()`
 - **Database**: `StormSidebar.updateStorm()`, `viewStormOnMapDatabase()`
 
+## Future Improvements
+
+### Unified Side Panel Component (Priority)
+Currently, the storm info side panels in Timeline and Regional tabs use duplicated HTML/CSS code. This should be refactored into a single shared JavaScript component that:
+- Provides one source of truth for the panel layout and styling
+- Automatically propagates changes to all tabs that use it
+- Reduces code duplication and maintenance overhead
+- Ensures true consistency across the dashboard
+
+**Proposed Implementation:**
+- Create a `StormPanelComponent.js` that can be imported by all tabs
+- Use consistent data binding from the master `ATLANTIC_STORMS_ENHANCED` database
+- Single update point for any panel modifications
+
 ## Testing Requirements
 
 ### 🧪 **Manual Testing Process**
