@@ -254,7 +254,7 @@ function hurricaneApp() {
                 if (this.filters.state && storm.state !== this.filters.state) return false;
                 if (this.filters.search) {
                     const search = this.filters.search.toLowerCase();
-                    const searchable = `${storm.name} ${storm.impact} ${storm.landfall}`.toLowerCase();
+                    const searchable = `${storm.name} ${storm.narrative || ''} ${storm.landfall_states?.join(' ') || ''}`.toLowerCase();
                     if (!searchable.includes(search)) return false;
                 }
                 return true;
@@ -288,8 +288,8 @@ function hurricaneApp() {
                 hovertext: sortedStorms.map(s => 
                     `<b>${s.name} (${s.year})</b><br>` +
                     `Category ${s.category}<br>` +
-                    `${s.windSpeed} mph<br>` +
-                    `${s.landfall}<br>` +
+                    `${s.wind_mph} mph<br>` +
+                    `${s.landfall_states?.join(', ') || 'No US Landfall'}<br>` +
                     `${this.formatDate(s)}<br>` +
                     `Click for details`
                 ),
@@ -403,8 +403,8 @@ function hurricaneApp() {
                     <div class="p-2">
                         <h3 class="font-bold text-lg">${storm.name} (${storm.year})</h3>
                         <p><strong>Category:</strong> ${storm.category}</p>
-                        <p><strong>Wind:</strong> ${storm.windSpeed} mph</p>
-                        <p><strong>Landfall:</strong> ${storm.landfall}</p>
+                        <p><strong>Wind:</strong> ${storm.wind_mph} mph</p>
+                        <p><strong>Landfall:</strong> ${storm.landfall_states?.join(', ') || 'No US Landfall'}</p>
                     </div>
                 `)
                 .on('click', () => this.selectStorm(storm));
@@ -468,9 +468,9 @@ function hurricaneApp() {
                                     <h3 class="font-bold text-lg mb-2">${storm.name} (${storm.year})</h3>
                                     <div class="space-y-1 text-sm">
                                         <p><strong>Category:</strong> ${storm.category >= 1 ? 'Category ' + storm.category : 'Tropical Storm'}</p>
-                                        <p><strong>Wind Speed:</strong> ${storm.windSpeed} mph</p>
+                                        <p><strong>Wind Speed:</strong> ${storm.wind_mph} mph</p>
                                         <p><strong>Pressure:</strong> ${storm.pressure} mb</p>
-                                        <p><strong>Landfall:</strong> ${storm.landfall}</p>
+                                        <p><strong>Landfall:</strong> ${storm.landfall_states?.join(', ') || 'No US Landfall'}</p>
                                         <p><strong>Date:</strong> ${this.formatDate(storm)}</p>
                                         <p><strong>Deaths:</strong> ${storm.deaths || 0}</p>
                                     </div>
@@ -557,8 +557,8 @@ function hurricaneApp() {
                 this.dbResults = this.allStorms.filter(storm => 
                     storm.name.toLowerCase().includes(search) ||
                     storm.year.toString().includes(search) ||
-                    storm.impact.toLowerCase().includes(search) ||
-                    storm.landfall.toLowerCase().includes(search)
+                    (storm.narrative && storm.narrative.toLowerCase().includes(search)) ||
+                    (storm.landfall_states && storm.landfall_states.join(' ').toLowerCase().includes(search))
                 ).slice(0, 50);
             }
         },
@@ -626,12 +626,12 @@ function hurricaneApp() {
 
             const trace = {
                 x: stateStorms.map(s => s.year),
-                y: stateStorms.map(s => s.windSpeed),
+                y: stateStorms.map(s => s.wind_mph),
                 mode: 'markers',
                 type: 'scatter',
                 name: 'Hurricanes',
                 text: stateStorms.map(s => 
-                    `${s.name}<br>${this.formatDate(s)}<br>Category ${s.category}<br>${s.state}<br>${s.windSpeed} mph`
+                    `${s.name}<br>${this.formatDate(s)}<br>Category ${s.category}<br>${s.state || s.landfall_states?.join(', ') || 'None'}<br>${s.wind_mph} mph`
                 ),
                 marker: {
                     size: stateStorms.map(s => 10 + s.category * 3),
@@ -803,7 +803,7 @@ function aiAssistant() {
         currentMessage: '',
         isLoading: false,
         // Add your Cloudflare Worker URL here
-        workerUrl: 'YOUR_CLOUDFLARE_WORKER_URL', // Replace with your actual worker URL
+        workerUrl: 'https://hurricane-ai-simple.jbf-395.workers.dev/', // Your actual worker URL
         
         async sendMessage() {
             if (!this.currentMessage.trim() || this.isLoading) return;
@@ -827,7 +827,7 @@ function aiAssistant() {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        question: userMessage,
+                        query: userMessage,
                         context: this.getContextData()
                     })
                 });
@@ -838,17 +838,56 @@ function aiAssistant() {
                 
                 const data = await response.json();
                 
+                // Handle your Worker's response format
+                let responseText = '';
+                let shouldApplyFilters = false;
+                
+                if (data.name || data.yearStart || data.landfall !== undefined) {
+                    // Your Worker returned filter parameters
+                    responseText = `Found hurricane data for your query! `;
+                    
+                    if (data.name) {
+                        responseText += `Looking at Hurricane ${data.name}. `;
+                        this.filters.search = data.name;
+                        shouldApplyFilters = true;
+                    }
+                    if (data.yearStart && data.yearEnd) {
+                        responseText += `Filtering storms from ${data.yearStart}-${data.yearEnd}. `;
+                        this.filters.yearStart = data.yearStart;
+                        this.filters.yearEnd = data.yearEnd;
+                        shouldApplyFilters = true;
+                    }
+                    if (data.landfall === true) {
+                        responseText += `Showing only storms that made landfall in the US.`;
+                    }
+                    
+                } else if (data.answer || data.response) {
+                    responseText = data.answer || data.response;
+                } else {
+                    responseText = 'I found some hurricane data, but let me provide a more specific response.';
+                }
+                
                 // Add assistant response
                 this.messages.push({
                     id: Date.now(),
                     role: 'assistant',
-                    content: data.answer || 'I apologize, but I encountered an error processing your request.',
+                    content: responseText,
                     time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
                 });
                 
-                // Apply filters if the AI suggests them
-                if (data.filters && data.filters.action === 'filter') {
-                    this.applyAIFilters(data.filters.filters);
+                // Apply filters if we got them from the Worker
+                if (shouldApplyFilters) {
+                    this.applyFilters();
+                    this.updateTimeline();
+                    // Show system message about applied filters
+                    setTimeout(() => {
+                        this.messages.push({
+                            id: Date.now(),
+                            role: 'system',
+                            content: 'Filters applied to the timeline view!',
+                            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                        });
+                    }, 500);
                 }
                 
             } catch (error) {

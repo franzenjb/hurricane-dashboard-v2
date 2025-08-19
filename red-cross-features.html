@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Red Cross Hurricane Intelligence Platform - Feature Showcase</title>
+    <style>
+        :root {
+            --rc-red: #ED1B2E;
+            --rc-dark-red: #B71234;
+            --rc-gray: #6D6E70;
+            --rc-light-gray: #F5F5F5;
+        }
+        
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
+        }
+        
+        .rc-header {
+            background: var(--rc-red);
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .rc-logo {
+            width: 50px;
+            height: 50px;
+            margin-right: 20px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--rc-red);
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(237, 27, 46, 0.2);
+        }
+        
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        .feature-title {
+            color: var(--rc-dark-red);
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .feature-description {
+            color: var(--rc-gray);
+            line-height: 1.6;
+        }
+        
+        .impact-meter {
+            background: #f0f0f0;
+            border-radius: 20px;
+            height: 30px;
+            overflow: hidden;
+            margin: 15px 0;
+            position: relative;
+        }
+        
+        .impact-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745, #ffc107, #fd7e14, #dc3545, #6f42c1);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            color: white;
+            font-weight: bold;
+            transition: width 1s ease;
+        }
+        
+        .storm-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .comparison-storm {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .response-timeline {
+            position: relative;
+            padding-left: 40px;
+            margin: 20px 0;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-bottom: 20px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -25px;
+            top: 5px;
+            width: 10px;
+            height: 10px;
+            background: var(--rc-red);
+            border-radius: 50%;
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 15px;
+            width: 1px;
+            height: calc(100% - 15px);
+            background: #ddd;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .stat-box {
+            background: var(--rc-light-gray);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--rc-red);
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: var(--rc-gray);
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="rc-header">
+        <div class="rc-logo">RC</div>
+        <div>
+            <h1 style="margin: 0;">Hurricane Intelligence Platform</h1>
+            <p style="margin: 5px 0; opacity: 0.9;">American Red Cross - Disaster Services</p>
+        </div>
+    </div>
+
+    <div class="feature-grid">
+        <!-- Feature 1: TCR Integration -->
+        <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <div class="feature-title">NOAA TCR Integration</div>
+            <div class="feature-description">
+                Automatically fetches and parses Tropical Cyclone Reports with:
+                <ul>
+                    <li>Official NOAA narratives</li>
+                    <li>Verified casualty statistics</li>
+                    <li>Damage assessments</li>
+                    <li>Storm surge & rainfall data</li>
+                    <li>KMZ tracks for Google Earth</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Feature 2: Impact Predictor -->
+        <div class="feature-card">
+            <div class="feature-icon">🎯</div>
+            <div class="feature-title">AI Impact Predictor</div>
+            <div class="feature-description">
+                Uses historical patterns to predict:
+            </div>
+            <div class="impact-meter">
+                <div class="impact-fill" style="width: 85%;">CAT 4 - Extreme</div>
+            </div>
+            <ul style="color: #6D6E70; font-size: 14px;">
+                <li>Shelters needed: 45-60</li>
+                <li>Meals required: 250,000+</li>
+                <li>Volunteers needed: 1,200</li>
+                <li>Blood drive locations: 25</li>
+            </ul>
+        </div>
+
+        <!-- Feature 3: Storm Comparison -->
+        <div class="feature-card">
+            <div class="feature-icon">⚖️</div>
+            <div class="feature-title">Storm Comparison Tool</div>
+            <div class="feature-description">
+                Compare up to 3 storms side-by-side:
+            </div>
+            <div class="storm-comparison">
+                <div class="comparison-storm">
+                    <strong>Katrina</strong><br>
+                    2005<br>
+                    Cat 5<br>
+                    1,833 deaths
+                </div>
+                <div class="comparison-storm">
+                    <strong>Harvey</strong><br>
+                    2017<br>
+                    Cat 4<br>
+                    89 deaths
+                </div>
+                <div class="comparison-storm">
+                    <strong>Ian</strong><br>
+                    2022<br>
+                    Cat 4<br>
+                    150 deaths
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature 4: Red Cross Response History -->
+        <div class="feature-card">
+            <div class="feature-icon">🏥</div>
+            <div class="feature-title">RC Response Archive</div>
+            <div class="feature-description">
+                Complete Red Cross response history:
+            </div>
+            <div class="response-timeline">
+                <div class="timeline-item">
+                    <strong>H-72hrs:</strong> Pre-positioning supplies
+                </div>
+                <div class="timeline-item">
+                    <strong>H-24hrs:</strong> Shelters opening
+                </div>
+                <div class="timeline-item">
+                    <strong>Landfall:</strong> 45 shelters, 2,300 evacuees
+                </div>
+                <div class="timeline-item">
+                    <strong>H+24hrs:</strong> 125,000 meals served
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature 5: Live Dashboard -->
+        <div class="feature-card">
+            <div class="feature-icon">📡</div>
+            <div class="feature-title">Real-Time Updates</div>
+            <div class="feature-description">
+                Live integration with:
+                <ul>
+                    <li>NOAA RSS feeds</li>
+                    <li>NHC advisories</li>
+                    <li>Satellite imagery</li>
+                    <li>Social media monitoring</li>
+                    <li>Emergency management feeds</li>
+                </ul>
+                <div style="margin-top: 10px; padding: 10px; background: #d4edda; border-radius: 5px; color: #155724;">
+                    ✓ Connected - Last update: 2 min ago
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature 6: Response Metrics -->
+        <div class="feature-card">
+            <div class="feature-icon">📈</div>
+            <div class="feature-title">Response Analytics</div>
+            <div class="feature-description">
+                Real-time Red Cross metrics:
+            </div>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-number">847</div>
+                    <div class="stat-label">Volunteers</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">52</div>
+                    <div class="stat-label">Shelters</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">125K</div>
+                    <div class="stat-label">Meals</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">$2.3M</div>
+                    <div class="stat-label">Aid Given</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature 7: Evacuation Zones -->
+        <div class="feature-card">
+            <div class="feature-icon">🗺️</div>
+            <div class="feature-title">Evacuation Intelligence</div>
+            <div class="feature-description">
+                Smart evacuation planning:
+                <ul>
+                    <li>Zone A-E mapping</li>
+                    <li>Population estimates</li>
+                    <li>Shelter capacity tracking</li>
+                    <li>Route optimization</li>
+                    <li>Special needs registry</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Feature 8: Storm Surge Viz -->
+        <div class="feature-card">
+            <div class="feature-icon">🌊</div>
+            <div class="feature-title">3D Surge Visualization</div>
+            <div class="feature-description">
+                Advanced surge modeling:
+                <ul>
+                    <li>SLOSH model integration</li>
+                    <li>Inundation mapping</li>
+                    <li>Time-based animation</li>
+                    <li>Impact on infrastructure</li>
+                </ul>
+                <div style="height: 100px; background: linear-gradient(to top, #0066cc, #00ccff); border-radius: 8px; margin-top: 10px; display: flex; align-items: flex-end; justify-content: center; color: white; padding-bottom: 10px;">
+                    15 ft surge projection
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature 9: Historical Patterns -->
+        <div class="feature-card">
+            <div class="feature-icon">📚</div>
+            <div class="feature-title">Pattern Recognition</div>
+            <div class="feature-description">
+                ML-powered insights:
+                <ul>
+                    <li>Track similarity matching</li>
+                    <li>Rapid intensification alerts</li>
+                    <li>Landfall probability</li>
+                    <li>Historical analogs</li>
+                    <li>Climate trend analysis</li>
+                </ul>
+                <div style="margin-top: 10px; font-size: 14px; color: #28a745;">
+                    ✓ 89% match with Hurricane Dennis (2005)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add some interactivity
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.style.borderLeft = '4px solid #ED1B2E';
+                setTimeout(() => {
+                    this.style.borderLeft = '';
+                }, 2000);
+            });
+        });
+
+        // Animate impact meter
+        setTimeout(() => {
+            document.querySelectorAll('.impact-fill').forEach(fill => {
+                fill.style.width = '0%';
+                setTimeout(() => {
+                    fill.style.width = '85%';
+                }, 100);
+            });
+        }, 500);
+    </script>
+</body>
+</html>
