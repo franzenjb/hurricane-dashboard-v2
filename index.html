@@ -905,8 +905,12 @@
         
         // Handle messages from iframes (especially Database tab)
         window.addEventListener('message', function(event) {
-            // Security check - only accept messages from same origin
-            if (event.origin !== window.location.origin) return;
+            // Security check - accept messages from same origin or local file
+            if (event.origin !== window.location.origin && event.origin !== 'null' && !event.origin.includes('127.0.0.1') && !event.origin.includes('localhost')) {
+                console.log('Blocked message from:', event.origin);
+                return;
+            }
+            console.log('Received message:', event.data);
             
             const data = event.data;
             

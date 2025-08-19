@@ -746,6 +746,7 @@
 
         // Actions
         function compareSelected() {
+            console.log('compareSelected called, selected storms:', selectedStorms.size);
             if (selectedStorms.size === 0) {
                 alert('Please select at least one storm to compare.');
                 return;
@@ -756,6 +757,7 @@
             }
             
             const ids = Array.from(selectedStorms).join(',');
+            console.log('Sending storm IDs to compare:', ids);
             window.parent.postMessage({
                 action: 'compareStorms',
                 stormIds: ids
@@ -839,6 +841,7 @@
         }
 
         function viewStorm(stormId) {
+            console.log('viewStorm called with ID:', stormId);
             window.parent.postMessage({
                 action: 'viewStorm',
                 stormId: stormId
@@ -922,11 +925,13 @@
         }
 
         function viewOnMap() {
+            console.log('viewOnMap called');
             // Send selected storms to map view
             const storms = selectedStorms.size > 0 ? 
                 filteredStorms.filter(s => selectedStorms.has(s.storm_id)) : 
                 filteredStorms.slice(0, 100); // Limit to 100 for performance
             
+            console.log('Sending', storms.length, 'storms to parent');
             window.parent.postMessage({
                 action: 'viewOnMap',
                 storms: storms
