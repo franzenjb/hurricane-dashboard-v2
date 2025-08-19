@@ -464,43 +464,29 @@ Try asking: "What Category 5 hurricanes hit Florida's east coast in the last 50 
         this.showTypingIndicator();
 
         try {
-            let response = null;
-            let data = null;
-
-            // Try Vercel API first
-            try {
-                response = await fetch(this.vercelUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ query })
-                });
-                if (response.ok) {
-                    data = await response.json();
-                }
-            } catch (e) {
-                console.log('Vercel not available');
+            // ONLY use Vercel production API - no fallbacks
+            console.log('🚀 Sending to Vercel AI:', query);
+            const response = await fetch('https://hurricane-dashboard-v2.vercel.app/api/ai', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ query })
+            });
+            
+            console.log('📡 Response status:', response.status);
+            
+            if (!response.ok) {
+                throw new Error(`API returned ${response.status}`);
             }
-
-            // Try local backend if Vercel failed
-            if (!data) {
-                try {
-                    response = await fetch(this.localBackendUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ query })
-                    });
-                    if (response.ok) {
-                        data = await response.json();
-                    }
-                } catch (e) {
-                    console.log('Local backend not available');
-                }
-            }
-
+            
+            const data = await response.json();
+            console.log('📦 AI Response:', data);
+            
             this.hideTypingIndicator();
 
-            // Show response - ONLY real AI, no fallbacks
-            if (data && data.answer) {
+            // Show AI response
+            if (data && data.answer && data.answer !== 'Unable to process') {
                 this.addMessage('assistant', data.answer);
                 
                 // Apply filters if AI suggests them
@@ -509,13 +495,15 @@ Try asking: "What Category 5 hurricanes hit Florida's east coast in the last 50 
                     this.addMessage('system', '✓ Filters applied!');
                 }
             } else {
-                this.addMessage('assistant', 'AI service unavailable. Run locally: ./setup-ai.sh');
+                console.error('Invalid AI response:', data);
+                this.addMessage('assistant', 'I apologize, but I encountered an error processing your question. Please try rephrasing it.');
             }
 
         } catch (error) {
-            console.error('AI Error:', error);
+            console.error('❌ AI Error:', error);
             this.hideTypingIndicator();
-            this.addMessage('assistant', 'AI service error. Check console for details.');
+            // Don't show technical errors to users
+            this.addMessage('assistant', 'I apologize, but I encountered an error. Please try again in a moment.');
         } finally {
             sendBtn.disabled = false;
         }
