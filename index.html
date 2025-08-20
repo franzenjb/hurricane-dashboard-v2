@@ -926,7 +926,7 @@
             switch(data.action) {
                 case 'viewStorm':
                     // Switch to Timeline tab and show the storm
-                    const storm = ATLANTIC_STORMS_ENHANCED.find(s => s.storm_id === data.stormId);
+                    const storm = data.storm || ATLANTIC_STORMS_ENHANCED.find(s => s.storm_id === data.stormId);
                     if (storm) {
                         // Get Alpine.js component and update
                         const alpineComponent = document.querySelector('[x-data]').__x.$data;
@@ -942,7 +942,7 @@
                                     storm: storm
                                 }, '*');
                             }
-                        }, 100);
+                        }, 300);
                     }
                     break;
                     
