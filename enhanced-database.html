@@ -615,6 +615,7 @@
             pageStorms.forEach(storm => {
                 const row = document.createElement('tr');
                 row.className = 'storm-row hover:bg-gray-50';
+                row.setAttribute('data-storm-id', storm.storm_id);
                 if (selectedStorms.has(storm.storm_id)) {
                     row.classList.add('storm-selected');
                 }
