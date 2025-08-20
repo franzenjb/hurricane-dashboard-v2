@@ -683,15 +683,15 @@
                     </td>
                     <td class="px-4 py-3">
                         <div class="flex gap-1">
-                            <button onclick="viewStorm('${storm.storm_id}')" 
+                            <button onclick="event.stopPropagation(); viewStorm('${storm.storm_id}'); return false;" 
                                     class="text-blue-600 hover:text-blue-800 text-xs">View</button>
-                            <button onclick="trackStorm('${storm.storm_id}')" 
+                            <button onclick="event.stopPropagation(); trackStorm('${storm.storm_id}'); return false;" 
                                     class="text-orange-600 hover:text-orange-800 text-xs">Track</button>
                             ${hasTCR(storm) ? 
                                 `<a href="${getTCRLink(storm)}" target="_blank" 
                                     class="text-green-600 hover:text-green-800 text-xs">TCR</a>` : ''}
                             ${storm.narrative ? 
-                                `<button onclick="showNarrative('${storm.storm_id}')" 
+                                `<button onclick="event.stopPropagation(); showNarrative('${storm.storm_id}'); return false;" 
                                          class="text-purple-600 hover:text-purple-800 text-xs">Story</button>` : ''}
                         </div>
                     </td>
@@ -864,12 +864,22 @@
 
         window.viewStorm = function(stormId) {
             console.log('viewStorm called with ID:', stormId);
+            // Prevent any bubbling or default behavior
+            if (window.event) {
+                window.event.stopPropagation();
+                window.event.preventDefault();
+            }
             // Just call trackStorm to show the animation modal
             trackStorm(stormId);
         }
         
         window.trackStorm = function(stormId) {
             console.log('trackStorm called with ID:', stormId);
+            // Prevent any bubbling or default behavior
+            if (window.event) {
+                window.event.stopPropagation();
+                window.event.preventDefault();
+            }
             const storm = allStorms.find(s => s.storm_id === stormId);
             if (storm) {
                 // Create a simple modal using a more straightforward approach
@@ -1264,6 +1274,13 @@
             const filename = `AL${stormNumber}${storm.year}_${storm.name}.pdf`;
             return baseUrl + filename;
         }
+        
+        // Override parent postMessage to debug
+        const originalPostMessage = window.parent.postMessage;
+        window.parent.postMessage = function(data, origin) {
+            console.log('Database sending message to parent:', data);
+            originalPostMessage.call(window.parent, data, origin);
+        };
         
         // Listen for AI Assistant filter messages
         window.addEventListener('message', function(event) {
