@@ -134,6 +134,9 @@
                     <span class="text-sm text-gray-600">
                         <span class="font-bold text-lg text-orange-600" id="selectedCount">0</span> selected
                     </span>
+                    <button id="compareBtn" class="hidden bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors" onclick="showComparison()">
+                        Compare Selected
+                    </button>
                 </div>
             </div>
         </div>
@@ -741,7 +744,12 @@
 
         function updateSelectedCount() {
             document.getElementById('selectedCount').textContent = selectedStorms.size;
-            document.getElementById('compareBtn').disabled = selectedStorms.size === 0 || selectedStorms.size > 3;
+            const compareBtn = document.getElementById('compareBtn');
+            if (selectedStorms.size >= 2 && selectedStorms.size <= 3) {
+                compareBtn.classList.remove('hidden');
+            } else {
+                compareBtn.classList.add('hidden');
+            }
         }
 
         // Actions
@@ -1004,6 +1012,106 @@
                 filterStorms();
             }
         });
+        
+        // Storm Comparison Functions
+        function showComparison() {
+            if (selectedStorms.size < 2 || selectedStorms.size > 3) {
+                alert('Please select 2-3 storms to compare');
+                return;
+            }
+            
+            const modal = document.getElementById('comparisonModal');
+            const content = document.getElementById('comparisonContent');
+            
+            // Get selected storm data
+            const storms = Array.from(selectedStorms).map(id => 
+                allStorms.find(s => s.storm_id === id)
+            ).filter(s => s);
+            
+            // Build comparison table
+            let html = `
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead>
+                            <tr class="border-b-2 border-gray-300">
+                                <th class="px-4 py-2 text-left text-gray-700">Attribute</th>
+                                ${storms.map(s => `<th class="px-4 py-2 text-left">${s.name} (${s.year})</th>`).join('')}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b">
+                                <td class="px-4 py-3 font-semibold">Category</td>
+                                ${storms.map(s => `<td class="px-4 py-3"><span class="px-2 py-1 text-xs font-bold rounded ${getCategoryClass(s.category)}">${s.category === -1 ? 'TD' : s.category === 0 ? 'TS' : 'Cat ' + s.category}</span></td>`).join('')}
+                            </tr>
+                            <tr class="border-b bg-gray-50">
+                                <td class="px-4 py-3 font-semibold">Wind Speed</td>
+                                ${storms.map(s => `<td class="px-4 py-3">${s.wind_mph || 0} mph</td>`).join('')}
+                            </tr>
+                            <tr class="border-b">
+                                <td class="px-4 py-3 font-semibold">RC Impact Score</td>
+                                ${storms.map(s => `<td class="px-4 py-3"><div class="flex items-center"><span class="font-bold ${getScoreColor(s.rc_impact_score)}">${s.rc_impact_score || 0}</span><div class="ml-2 w-16 bg-gray-200 rounded-full h-2"><div class="h-2 rounded-full ${getScoreBarColor(s.rc_impact_score)}" style="width: ${s.rc_impact_score || 0}%"></div></div></div></td>`).join('')}
+                            </tr>
+                            <tr class="border-b bg-gray-50">
+                                <td class="px-4 py-3 font-semibold">Deaths</td>
+                                ${storms.map(s => `<td class="px-4 py-3 ${s.deaths > 100 ? 'text-red-600 font-bold' : ''}">${s.deaths || 0}</td>`).join('')}
+                            </tr>
+                            <tr class="border-b">
+                                <td class="px-4 py-3 font-semibold">Damage</td>
+                                ${storms.map(s => `<td class="px-4 py-3">${s.damage_millions ? '$' + s.damage_millions.toLocaleString() + 'M' : '-'}</td>`).join('')}
+                            </tr>
+                            <tr class="border-b bg-gray-50">
+                                <td class="px-4 py-3 font-semibold">Landfall States</td>
+                                ${storms.map(s => `<td class="px-4 py-3">${s.landfall_states?.join(', ') || '-'}</td>`).join('')}
+                            </tr>
+                            <tr class="border-b">
+                                <td class="px-4 py-3 font-semibold">Date</td>
+                                ${storms.map(s => `<td class="px-4 py-3">${getMonthName(s.month)} ${s.day}, ${s.year}</td>`).join('')}
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="mt-6 grid grid-cols-${storms.length} gap-6">
+                    ${storms.map(s => `
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <h3 class="font-bold text-lg mb-2">${s.name} Narrative</h3>
+                            <p class="text-sm text-gray-700 leading-relaxed">${s.narrative || 'No narrative available'}</p>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            
+            content.innerHTML = html;
+            modal.classList.remove('hidden');
+        }
+        
+        function closeComparison() {
+            document.getElementById('comparisonModal').classList.add('hidden');
+        }
+        
+        function getMonthName(month) {
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            return months[month - 1] || '';
+        }
     </script>
+    
+    <!-- Storm Comparison Modal -->
+    <div id="comparisonModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center">
+                    <h2 class="text-2xl font-bold text-gray-900">Storm Comparison</h2>
+                    <button onclick="closeComparison()" class="text-gray-500 hover:text-gray-700">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div id="comparisonContent" class="p-6">
+                    <!-- Comparison content will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
