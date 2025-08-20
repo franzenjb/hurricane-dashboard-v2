@@ -892,6 +892,32 @@
                     break;
             }
         });
+        
+        // Make viewStormOnMapDatabase available globally for Alpine.js
+        window.viewStormOnMapDatabase = function(storm) {
+            console.log('Storm clicked:', storm.name, storm.year);
+            
+            // Find the enhanced storm data
+            const enhancedStorm = ATLANTIC_STORMS_ENHANCED.find(s => 
+                s.name === storm.name && s.year === storm.year
+            );
+            
+            if (enhancedStorm) {
+                // Update the storm sidebar
+                if (window.StormSidebar) {
+                    StormSidebar.updateStorm(enhancedStorm);
+                } else {
+                    console.error('StormSidebar not loaded');
+                }
+                
+                // Load and display the storm track
+                if (typeof loadStormTrack === 'function') {
+                    loadStormTrack(enhancedStorm);
+                }
+            } else {
+                console.warn('Enhanced storm data not found for:', storm.name, storm.year);
+            }
+        };
     </script>
     
     <!-- Storm Visualizations - Interactive hurricane patterns and replays -->
