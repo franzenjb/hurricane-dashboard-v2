@@ -877,96 +877,189 @@
             console.log('trackStorm called with ID:', stormId);
             const storm = allStorms.find(s => s.storm_id === stormId);
             if (storm) {
-                // Show tracking info in a modal
+                // Create modal container
                 const modal = document.createElement('div');
-                modal.style.cssText = `
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    background: rgba(0,0,0,0.7);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    z-index: 9999;
-                `;
+                modal.className = 'track-modal-overlay';
                 
-                modal.innerHTML = `
-                    <div style="background: white; padding: 30px; border-radius: 10px; max-width: 600px; max-height: 80vh; overflow-y: auto; position: relative;">
-                        <button onclick="this.closest('div').parentElement.remove()" style="position: absolute; top: 10px; right: 10px; background: #ED1B2E; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;">✕</button>
-                        <h2 style="margin: 0 0 20px 0; color: #ED1B2E;">🎯 Tracking ${storm.name} (${storm.year})</h2>
-                        
-                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-                            <h3 style="margin: 0 0 10px 0; color: #003d79;">Storm Details</h3>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                                <div><strong>Category:</strong> ${storm.category === -1 ? 'TD' : storm.category === 0 ? 'TS' : storm.category}</div>
-                                <div><strong>Wind Speed:</strong> ${storm.wind_mph || 0} mph</div>
-                                <div><strong>Date:</strong> ${getMonthName(storm.month)} ${storm.day}, ${storm.year}</div>
-                                <div><strong>Deaths:</strong> ${storm.deaths || 0}</div>
-                                <div><strong>Landfall States:</strong> ${storm.landfall_states?.join(', ') || 'None'}</div>
-                                <div><strong>RC Impact:</strong> ${storm.rc_impact_score || 0}/100</div>
-                            </div>
+                // Set styles individually for better compatibility
+                modal.style.position = 'fixed';
+                modal.style.top = '0';
+                modal.style.left = '0';
+                modal.style.width = '100%';
+                modal.style.height = '100%';
+                modal.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+                modal.style.display = 'flex';
+                modal.style.alignItems = 'center';
+                modal.style.justifyContent = 'center';
+                modal.style.zIndex = '9999';
+                
+                // Create content container
+                const content = document.createElement('div');
+                content.style.backgroundColor = 'white';
+                content.style.padding = '30px';
+                content.style.borderRadius = '10px';
+                content.style.maxWidth = '600px';
+                content.style.maxHeight = '80vh';
+                content.style.overflowY = 'auto';
+                content.style.position = 'relative';
+                content.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+                
+                // Create close button
+                const closeButton = document.createElement('button');
+                closeButton.innerHTML = '✕';
+                closeButton.style.position = 'absolute';
+                closeButton.style.top = '10px';
+                closeButton.style.right = '10px';
+                closeButton.style.backgroundColor = '#ED1B2E';
+                closeButton.style.color = 'white';
+                closeButton.style.border = 'none';
+                closeButton.style.borderRadius = '50%';
+                closeButton.style.width = '30px';
+                closeButton.style.height = '30px';
+                closeButton.style.cursor = 'pointer';
+                closeButton.style.fontSize = '16px';
+                closeButton.style.fontWeight = 'bold';
+                closeButton.onclick = function() {
+                    modal.remove();
+                };
+                
+                // Build content HTML
+                let contentHTML = `
+                    <h2 style="margin: 0 0 20px 0; color: #ED1B2E; font-size: 24px; font-weight: bold;">
+                        🎯 Tracking ${storm.name} (${storm.year})
+                    </h2>
+                    
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                        <h3 style="margin: 0 0 10px 0; color: #003d79; font-size: 18px; font-weight: bold;">Storm Details</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <div><strong>Category:</strong> ${storm.category === -1 ? 'TD' : storm.category === 0 ? 'TS' : 'Cat ' + storm.category}</div>
+                            <div><strong>Wind Speed:</strong> ${storm.wind_mph || 0} mph</div>
+                            <div><strong>Date:</strong> ${getMonthName(storm.month)} ${storm.day}, ${storm.year}</div>
+                            <div><strong>Deaths:</strong> ${storm.deaths || 0}</div>
+                            <div><strong>Landfall States:</strong> ${storm.landfall_states?.join(', ') || 'None'}</div>
+                            <div><strong>RC Impact:</strong> ${storm.rc_impact_score || 0}/100</div>
                         </div>
-                        
-                        <div style="background: #e8f5e9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-                            <h3 style="margin: 0 0 10px 0; color: #4caf50;">🗺️ Track this Storm</h3>
-                            <p style="margin: 5px 0;">To see the animated storm track:</p>
-                            <ol style="margin: 10px 0 10px 20px;">
-                                <li>Click the <strong>"View"</strong> button to see the storm on the Timeline map</li>
-                                <li>Look for the green <strong>"▶️ Animate Storm Track"</strong> button in the map controls</li>
-                                <li>Click it to watch the storm's path animate across the map</li>
-                                <li>Use the speed slider to control animation speed</li>
-                            </ol>
-                            <button onclick="viewStorm('${storm.storm_id}'); this.closest('div').parentElement.remove();" 
-                                    style="width: 100%; padding: 10px; background: #4caf50; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 16px;">
-                                🎬 View & Animate This Storm
-                            </button>
-                        </div>
-                        
-                        ${storm.narrative ? `
-                            <div style="background: #f5f5f5; padding: 15px; border-radius: 8px;">
-                                <h3 style="margin: 0 0 10px 0; color: #666;">📖 Storm Narrative</h3>
-                                <p style="line-height: 1.6; color: #333; margin: 0;">${storm.narrative}</p>
-                            </div>
-                        ` : ''}
+                    </div>
+                    
+                    <div style="background: #e8f5e9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                        <h3 style="margin: 0 0 10px 0; color: #4caf50; font-size: 18px; font-weight: bold;">🗺️ Track this Storm</h3>
+                        <p style="margin: 5px 0;">To see the animated storm track:</p>
+                        <ol style="margin: 10px 0 10px 20px; padding-left: 20px;">
+                            <li>Click the <strong>"View"</strong> button to see the storm on the Timeline map</li>
+                            <li>Look for the green <strong>"▶️ Animate Storm Track"</strong> button in the map controls</li>
+                            <li>Click it to watch the storm's path animate across the map</li>
+                            <li>Use the speed slider to control animation speed</li>
+                        </ol>
+                        <button id="viewAnimateBtn" style="width: 100%; padding: 10px; background: #4caf50; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 16px;">
+                            🎬 View & Animate This Storm
+                        </button>
                     </div>
                 `;
                 
+                if (storm.narrative) {
+                    contentHTML += `
+                        <div style="background: #f5f5f5; padding: 15px; border-radius: 8px;">
+                            <h3 style="margin: 0 0 10px 0; color: #666; font-size: 18px; font-weight: bold;">📖 Storm Narrative</h3>
+                            <p style="line-height: 1.6; color: #333; margin: 0;">${storm.narrative}</p>
+                        </div>
+                    `;
+                }
+                
+                // Set content
+                content.innerHTML = contentHTML;
+                content.appendChild(closeButton);
+                
+                // Add click handler for view button after content is added
+                modal.appendChild(content);
                 document.body.appendChild(modal);
+                
+                // Add event listener for the view button
+                const viewBtn = document.getElementById('viewAnimateBtn');
+                if (viewBtn) {
+                    viewBtn.onclick = function() {
+                        viewStorm(storm.storm_id);
+                        modal.remove();
+                    };
+                }
+                
+                // Click outside to close
+                modal.onclick = function(e) {
+                    if (e.target === modal) {
+                        modal.remove();
+                    }
+                };
             }
         }
 
         function showNarrative(stormId) {
             const storm = allStorms.find(s => s.storm_id === stormId);
             if (storm?.narrative) {
-                // Create a better modal instead of alert
+                // Create modal container
                 const modal = document.createElement('div');
-                modal.style.cssText = `
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    background: rgba(0,0,0,0.5);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    z-index: 9999;
+                modal.className = 'narrative-modal-overlay';
+                
+                // Set styles individually for better compatibility
+                modal.style.position = 'fixed';
+                modal.style.top = '0';
+                modal.style.left = '0';
+                modal.style.width = '100%';
+                modal.style.height = '100%';
+                modal.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+                modal.style.display = 'flex';
+                modal.style.alignItems = 'center';
+                modal.style.justifyContent = 'center';
+                modal.style.zIndex = '9999';
+                
+                // Create content container
+                const content = document.createElement('div');
+                content.style.backgroundColor = 'white';
+                content.style.padding = '30px';
+                content.style.borderRadius = '10px';
+                content.style.maxWidth = '600px';
+                content.style.maxHeight = '80vh';
+                content.style.overflowY = 'auto';
+                content.style.position = 'relative';
+                content.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+                
+                // Create close button
+                const closeButton = document.createElement('button');
+                closeButton.innerHTML = '✕';
+                closeButton.style.position = 'absolute';
+                closeButton.style.top = '10px';
+                closeButton.style.right = '10px';
+                closeButton.style.backgroundColor = '#ED1B2E';
+                closeButton.style.color = 'white';
+                closeButton.style.border = 'none';
+                closeButton.style.borderRadius = '50%';
+                closeButton.style.width = '30px';
+                closeButton.style.height = '30px';
+                closeButton.style.cursor = 'pointer';
+                closeButton.style.fontSize = '16px';
+                closeButton.style.fontWeight = 'bold';
+                closeButton.onclick = function() {
+                    modal.remove();
+                };
+                
+                // Build content HTML
+                content.innerHTML = `
+                    <h2 style="margin: 0 0 20px 0; color: #ED1B2E; font-size: 24px; font-weight: bold;">
+                        ${storm.name} (${storm.year})
+                    </h2>
+                    <p style="line-height: 1.6; color: #333; margin: 0;">
+                        ${storm.narrative}
+                    </p>
                 `;
                 
-                modal.innerHTML = `
-                    <div style="background: white; padding: 30px; border-radius: 10px; max-width: 600px; max-height: 80vh; overflow-y: auto; position: relative;">
-                        <button onclick="this.closest('div').parentElement.remove()" style="position: absolute; top: 10px; right: 10px; background: #ED1B2E; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;">✕</button>
-                        <h2 style="margin: 0 0 20px 0; color: #ED1B2E;">${storm.name} (${storm.year})</h2>
-                        <p style="line-height: 1.6; color: #333;">${storm.narrative}</p>
-                    </div>
-                `;
-                
+                content.appendChild(closeButton);
+                modal.appendChild(content);
                 document.body.appendChild(modal);
-                modal.addEventListener('click', (e) => {
-                    if (e.target === modal) modal.remove();
-                });
+                
+                // Click outside to close
+                modal.onclick = function(e) {
+                    if (e.target === modal) {
+                        modal.remove();
+                    }
+                };
             }
         }
 
