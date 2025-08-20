@@ -908,39 +908,67 @@
                             
                             <div style="background: #e8f5e9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
                                 <h3 style="margin: 0 0 10px 0; color: #4caf50; font-size: 18px; font-weight: bold;">🗺️ Storm Track Animation</h3>
-                                <div id="trackMapContainer" style="height: 400px; width: 100%; border: 2px solid #ddd; border-radius: 8px; margin: 10px 0; position: relative;">
-                                    <div id="trackMap" style="height: 100%; width: 100%; display: block;"></div>
-                                    <div id="cesiumContainer" style="height: 100%; width: 100%; display: none;"></div>
-                                    <div style="position: absolute; top: 10px; right: 10px; z-index: 1000; display: flex; gap: 5px;">
-                                        <button onclick="toggle3DView()" style="padding: 6px 10px; background-color: rgba(0, 0, 0, 0.7); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;">
-                                            🌍 3D View
-                                        </button>
-                                        <button onclick="toggleFullscreen()" style="padding: 6px 10px; background-color: rgba(0, 0, 0, 0.7); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;">
-                                            ⛶ Fullscreen
-                                        </button>
+                                <div id="fullscreenContainer" style="position: relative;">
+                                    <div id="trackMapContainer" style="height: 400px; width: 100%; border: 2px solid #ddd; border-radius: 8px; margin: 10px 0; position: relative;">
+                                        <div id="trackMap" style="height: 100%; width: 100%; display: block;"></div>
+                                        <div id="cesiumContainer" style="height: 100%; width: 100%; display: none;"></div>
+                                        <div style="position: absolute; top: 10px; right: 10px; z-index: 1000; display: flex; gap: 5px;">
+                                            <button onclick="toggle3DView()" style="padding: 6px 10px; background-color: rgba(0, 0, 0, 0.7); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;">
+                                                🌍 3D View
+                                            </button>
+                                            <button onclick="toggleFullscreen()" style="padding: 6px 10px; background-color: rgba(0, 0, 0, 0.7); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;">
+                                                ⛶ Fullscreen
+                                            </button>
+                                        </div>
+                                        <!-- Animation controls overlay for fullscreen mode -->
+                                        <div id="fullscreenControls" style="display: none; position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 1000; background: rgba(0, 0, 0, 0.8); padding: 10px 20px; border-radius: 8px;">
+                                            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                                                <button id="playPauseBtnFS" onclick="toggleAnimation('${storm.storm_id}')" style="padding: 8px 16px; background-color: #4caf50; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">
+                                                    ▶️ Play
+                                                </button>
+                                                <button onclick="stopTrackAnimation()" style="padding: 8px 16px; background-color: #dc3545; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">
+                                                    ⏹️ Stop
+                                                </button>
+                                                <div style="display: flex; align-items: center; gap: 5px;">
+                                                    <button onclick="previousFrame()" style="padding: 6px 12px; background-color: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                                        ◀️
+                                                    </button>
+                                                    <span id="frameCounterFS" style="min-width: 80px; text-align: center; font-weight: bold; color: white;">0 / 0</span>
+                                                    <button onclick="nextFrame()" style="padding: 6px 12px; background-color: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                                        ▶️
+                                                    </button>
+                                                </div>
+                                                <label style="display: flex; align-items: center; gap: 5px; color: white;">
+                                                    Speed: 
+                                                    <input type="range" id="trackAnimationSpeedFS" min="100" max="2000" value="1000" style="width: 100px;">
+                                                    <span id="speedDisplayFS">1.0x</span>
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div style="margin-top: 10px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                                    <button id="playPauseBtn" onclick="toggleAnimation('${storm.storm_id}')" style="padding: 8px 16px; background-color: #4caf50; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">
-                                        ▶️ Play
-                                    </button>
-                                    <button onclick="stopTrackAnimation()" style="padding: 8px 16px; background-color: #dc3545; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">
-                                        ⏹️ Stop
-                                    </button>
-                                    <div style="display: flex; align-items: center; gap: 5px;">
-                                        <button onclick="previousFrame()" style="padding: 6px 12px; background-color: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">
-                                            ◀️
+                                    <!-- Normal controls outside fullscreen -->
+                                    <div id="normalControls" style="margin-top: 10px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                                        <button id="playPauseBtn" onclick="toggleAnimation('${storm.storm_id}')" style="padding: 8px 16px; background-color: #4caf50; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">
+                                            ▶️ Play
                                         </button>
-                                        <span id="frameCounter" style="min-width: 80px; text-align: center; font-weight: bold;">0 / 0</span>
-                                        <button onclick="nextFrame()" style="padding: 6px 12px; background-color: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">
-                                            ▶️
+                                        <button onclick="stopTrackAnimation()" style="padding: 8px 16px; background-color: #dc3545; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">
+                                            ⏹️ Stop
                                         </button>
+                                        <div style="display: flex; align-items: center; gap: 5px;">
+                                            <button onclick="previousFrame()" style="padding: 6px 12px; background-color: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                                ◀️
+                                            </button>
+                                            <span id="frameCounter" style="min-width: 80px; text-align: center; font-weight: bold;">0 / 0</span>
+                                            <button onclick="nextFrame()" style="padding: 6px 12px; background-color: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                                ▶️
+                                            </button>
+                                        </div>
+                                        <label style="display: flex; align-items: center; gap: 5px;">
+                                            Speed: 
+                                            <input type="range" id="trackAnimationSpeed" min="100" max="2000" value="1000" style="width: 100px;">
+                                            <span id="speedDisplay">1.0x</span>
+                                        </label>
                                     </div>
-                                    <label style="display: flex; align-items: center; gap: 5px;">
-                                        Speed: 
-                                        <input type="range" id="trackAnimationSpeed" min="100" max="2000" value="1000" style="width: 100px;">
-                                        <span id="speedDisplay">1.0x</span>
-                                    </label>
                                 </div>
                             </div>
                             
@@ -975,9 +1003,12 @@
                 setTimeout(() => {
                     initializeTrackMap(storm);
                     
-                    // Initialize speed display
+                    // Initialize speed display for both normal and fullscreen controls
                     const speedSlider = document.getElementById('trackAnimationSpeed');
                     const speedDisplay = document.getElementById('speedDisplay');
+                    const speedSliderFS = document.getElementById('trackAnimationSpeedFS');
+                    const speedDisplayFS = document.getElementById('speedDisplayFS');
+                    
                     if (speedSlider && speedDisplay) {
                         const speed = (2100 - speedSlider.value) / 1000;
                         speedDisplay.textContent = speed.toFixed(1) + 'x';
@@ -985,6 +1016,26 @@
                         speedSlider.addEventListener('input', function() {
                             const speed = (2100 - this.value) / 1000;
                             speedDisplay.textContent = speed.toFixed(1) + 'x';
+                            // Sync fullscreen slider
+                            if (speedSliderFS) {
+                                speedSliderFS.value = this.value;
+                                speedDisplayFS.textContent = speed.toFixed(1) + 'x';
+                            }
+                        });
+                    }
+                    
+                    if (speedSliderFS && speedDisplayFS) {
+                        const speed = (2100 - speedSliderFS.value) / 1000;
+                        speedDisplayFS.textContent = speed.toFixed(1) + 'x';
+                        
+                        speedSliderFS.addEventListener('input', function() {
+                            const speed = (2100 - this.value) / 1000;
+                            speedDisplayFS.textContent = speed.toFixed(1) + 'x';
+                            // Sync normal slider
+                            if (speedSlider) {
+                                speedSlider.value = this.value;
+                                speedDisplay.textContent = speed.toFixed(1) + 'x';
+                            }
                         });
                     }
                 }, 100);
@@ -1421,21 +1472,47 @@
         
         // Toggle fullscreen
         window.toggleFullscreen = function() {
+            const fullscreenContainer = document.getElementById('fullscreenContainer');
             const mapContainer = document.getElementById('trackMapContainer');
+            const fullscreenControls = document.getElementById('fullscreenControls');
+            const normalControls = document.getElementById('normalControls');
+            
             if (!document.fullscreenElement) {
-                mapContainer.requestFullscreen().then(() => {
-                    // Resize map when entering fullscreen
+                fullscreenContainer.requestFullscreen().then(() => {
+                    // Show fullscreen controls, hide normal controls
+                    fullscreenControls.style.display = 'block';
+                    normalControls.style.display = 'none';
+                    
+                    // Make map container fill the screen
+                    mapContainer.style.height = '100vh';
+                    mapContainer.style.margin = '0';
+                    mapContainer.style.border = 'none';
+                    mapContainer.style.borderRadius = '0';
+                    
+                    // Resize map/cesium when entering fullscreen
                     setTimeout(() => {
                         if (trackMap) trackMap.invalidateSize();
+                        if (cesiumViewer) cesiumViewer.resize();
                     }, 100);
                 }).catch(err => {
                     console.error('Error entering fullscreen:', err);
                 });
             } else {
                 document.exitFullscreen().then(() => {
-                    // Resize map when exiting fullscreen
+                    // Hide fullscreen controls, show normal controls
+                    fullscreenControls.style.display = 'none';
+                    normalControls.style.display = 'flex';
+                    
+                    // Reset map container to normal size
+                    mapContainer.style.height = '400px';
+                    mapContainer.style.margin = '10px 0';
+                    mapContainer.style.border = '2px solid #ddd';
+                    mapContainer.style.borderRadius = '8px';
+                    
+                    // Resize map/cesium when exiting fullscreen
                     setTimeout(() => {
                         if (trackMap) trackMap.invalidateSize();
+                        if (cesiumViewer) cesiumViewer.resize();
                     }, 100);
                 });
             }
@@ -1456,18 +1533,32 @@
         // Toggle play/pause
         window.toggleAnimation = function(stormId) {
             const btn = document.getElementById('playPauseBtn');
+            const btnFS = document.getElementById('playPauseBtnFS');
+            
             if (!isAnimating) {
                 animateTrack(stormId);
-                btn.innerHTML = '⏸️ Pause';
-                btn.style.backgroundColor = '#ffc107';
+                updatePlayPauseButtons('⏸️ Pause', '#ffc107');
             } else if (isPaused) {
                 resumeAnimation();
-                btn.innerHTML = '⏸️ Pause';
-                btn.style.backgroundColor = '#ffc107';
+                updatePlayPauseButtons('⏸️ Pause', '#ffc107');
             } else {
                 pauseAnimation();
-                btn.innerHTML = '▶️ Play';
-                btn.style.backgroundColor = '#4caf50';
+                updatePlayPauseButtons('▶️ Play', '#4caf50');
+            }
+        }
+        
+        // Helper to update both play/pause buttons
+        window.updatePlayPauseButtons = function(text, color) {
+            const btn = document.getElementById('playPauseBtn');
+            const btnFS = document.getElementById('playPauseBtnFS');
+            
+            if (btn) {
+                btn.innerHTML = text;
+                btn.style.backgroundColor = color;
+            }
+            if (btnFS) {
+                btnFS.innerHTML = text;
+                btnFS.style.backgroundColor = color;
             }
         }
         
@@ -1668,10 +1759,16 @@
                 `).openPopup();
             }
             
-            // Update frame counter
+            // Update frame counter for both normal and fullscreen
             const frameCounter = document.getElementById('frameCounter');
+            const frameCounterFS = document.getElementById('frameCounterFS');
+            const frameText = `${index + 1} / ${currentTrackData.length}`;
+            
             if (frameCounter) {
-                frameCounter.textContent = `${index + 1} / ${currentTrackData.length}`;
+                frameCounter.textContent = frameText;
+            }
+            if (frameCounterFS) {
+                frameCounterFS.textContent = frameText;
             }
         }
         
@@ -1716,10 +1813,16 @@
                 trailPolyline = null;
             }
             
-            // Update frame counter
+            // Update frame counters
             const frameCounter = document.getElementById('frameCounter');
+            const frameCounterFS = document.getElementById('frameCounterFS');
+            const frameText = `1 / ${currentTrackData.length}`;
+            
             if (frameCounter) {
-                frameCounter.textContent = `1 / ${currentTrackData.length}`;
+                frameCounter.textContent = frameText;
+            }
+            if (frameCounterFS) {
+                frameCounterFS.textContent = frameText;
             }
             
             // Display first frame
@@ -1764,17 +1867,17 @@
             isPaused = false;
             currentFrameIndex = 0;
             
-            // Reset button
-            const btn = document.getElementById('playPauseBtn');
-            if (btn) {
-                btn.innerHTML = '▶️ Play';
-                btn.style.backgroundColor = '#4caf50';
-            }
+            // Reset buttons
+            updatePlayPauseButtons('▶️ Play', '#4caf50');
             
-            // Reset frame counter
+            // Reset frame counters
             const frameCounter = document.getElementById('frameCounter');
+            const frameCounterFS = document.getElementById('frameCounterFS');
             if (frameCounter) {
                 frameCounter.textContent = '0 / 0';
+            }
+            if (frameCounterFS) {
+                frameCounterFS.textContent = '0 / 0';
             }
         }
         
