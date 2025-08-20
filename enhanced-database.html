@@ -1100,146 +1100,147 @@
             if (cesiumViewer) return;
             
             try {
-                // Set default Cesium Ion token if not already set
-                if (!Cesium.Ion.defaultAccessToken) {
-                    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJlYWE1OWUxNy1mMWZiLTQzYjYtYTQ0OS1kMWFjYmFkNjc5YzciLCJpZCI6NTc3MzMsImlhdCI6MTYyNzg0NTE4Mn0.XcKpgANiY19MC4bdFUXMVEBToBmqS8kuYpUlxJHYZxk';
-                }
+                console.log('Initializing Cesium with offline imagery...');
                 
-                // Simple Cesium setup with all widgets disabled
-                const cesiumContainer = document.getElementById('cesiumContainer');
+                // Disable default Ion access token to prevent warnings
+                Cesium.Ion.defaultAccessToken = undefined;
                 
-                // Create viewer with widgets disabled
+                // Create viewer with completely offline configuration
                 cesiumViewer = new Cesium.Viewer('cesiumContainer', {
+                    // Use OpenStreetMap tiles which don't require authentication
+                    imageryProvider: new Cesium.TileMapServiceImageryProvider({
+                        url: Cesium.buildModuleUrl('Assets/Textures/NaturalEarthII')
+                    }),
+                    // Simple ellipsoid terrain (no Ion required)
+                    terrainProvider: new Cesium.EllipsoidTerrainProvider(),
+                    // Disable all Ion-dependent widgets
                     animation: false,
                     baseLayerPicker: false,
                     fullscreenButton: false,
                     vrButton: false,
                     geocoder: false,
                     homeButton: false,
-                    infoBox: false,
+                    infoBox: true,
                     sceneModePicker: false,
-                    selectionIndicator: false,
+                    selectionIndicator: true,
                     timeline: false,
                     navigationHelpButton: false,
-                    navigationInstructionsInitiallyVisible: false
+                    navigationInstructionsInitiallyVisible: false,
+                    // Disable Ion-dependent rendering features
+                    skyBox: false,
+                    skyAtmosphere: false,
+                    requestRenderMode: true,
+                    maximumRenderTimeChange: Infinity
                 });
                 
-                // Hide credits
-                cesiumViewer.cesiumWidget.creditContainer.style.display = 'none';
+                // Add custom imagery layer after viewer is created
+                cesiumViewer.imageryLayers.removeAll();
                 
-                // Ensure globe is visible and has a base color
-                cesiumViewer.scene.globe.show = true;
-                cesiumViewer.scene.globe.baseColor = Cesium.Color.DARKBLUE;
-            
-            // Set initial view to Atlantic
-            cesiumViewer.scene.camera.setView({
-                destination: Cesium.Cartesian3.fromDegrees(-60.0, 25.0, 5000000.0),
-                orientation: {
-                    heading: 0.0,
-                    pitch: -Cesium.Math.PI_OVER_TWO,
-                    roll: 0.0
-                }
-            });
-            
-            // Basic visual settings
-            cesiumViewer.scene.globe.enableLighting = false;
-            
-            // Wait a moment then check if globe is visible
-            setTimeout(() => {
-                if (cesiumViewer && cesiumViewer.scene && cesiumViewer.scene.globe) {
-                    console.log('Globe visibility:', cesiumViewer.scene.globe.show);
-                    console.log('Globe ready:', cesiumViewer.scene.globe.tilesLoaded);
-                    
-                    // Force a render
-                    cesiumViewer.scene.requestRender();
-                    
-                    // Try to zoom to globe if not visible
-                    const globe = cesiumViewer.scene.globe;
-                    if (globe.tilesLoaded === false) {
-                        cesiumViewer.camera.setView({
-                            destination: Cesium.Cartesian3.fromDegrees(-75, 25, 10000000)
-                        });
-                    }
-                }
-            }, 1000);
-            
-            // Load and display the storm track in 3D
-            if (currentTrackData && currentTrackData.length > 0) {
-                display3DTrack(currentTrackData);
-            }
-            } catch (error) {
-                console.error('Error initializing Cesium viewer:', error);
-                
-                // Try offline fallback without Cesium Ion
-                try {
-                    console.log('Trying offline Cesium fallback...');
-                    const cesiumContainer = document.getElementById('cesiumContainer');
-                    
-                    // Create viewer without Ion assets
-                    cesiumViewer = new Cesium.Viewer('cesiumContainer', {
-                        imageryProvider: new Cesium.TileMapServiceImageryProvider({
-                            url: Cesium.buildModuleUrl('Assets/Textures/NaturalEarthII')
+                // Try multiple tile providers in order
+                const imageryProviders = [
+                    // Esri World Imagery
+                    {
+                        provider: new Cesium.UrlTemplateImageryProvider({
+                            url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+                            maximumLevel: 19,
+                            credit: new Cesium.Credit('Tiles © Esri')
                         }),
-                        baseLayerPicker: false,
-                        geocoder: false,
-                        navigationHelpButton: false,
-                        animation: false,
-                        timeline: false,
-                        fullscreenButton: false,
-                        vrButton: false,
-                        homeButton: false,
-                        infoBox: false,
-                        selectionIndicator: false,
-                        sceneModePicker: false,
-                        navigationInstructionsInitiallyVisible: false,
-                        terrainProvider: new Cesium.EllipsoidTerrainProvider()
-                    });
-                    
-                    // Set initial view
-                    cesiumViewer.scene.camera.setView({
-                        destination: Cesium.Cartesian3.fromDegrees(-60.0, 25.0, 5000000.0),
-                        orientation: {
-                            heading: 0.0,
-                            pitch: -Cesium.Math.PI_OVER_TWO,
-                            roll: 0.0
-                        }
-                    });
-                    
-                    // Basic visual settings
-                    cesiumViewer.scene.globe.show = true;
-                    cesiumViewer.scene.globe.baseColor = Cesium.Color.DARKBLUE;
-                    cesiumViewer.cesiumWidget.creditContainer.style.display = 'none';
-                    
-                    // Add a simple blue sphere to ensure something is visible
-                    cesiumViewer.entities.add({
-                        position: Cesium.Cartesian3.fromDegrees(0, 0, 0),
-                        ellipsoid: {
-                            radii: new Cesium.Cartesian3(6371000.0, 6371000.0, 6371000.0),
-                            material: Cesium.Color.BLUE.withAlpha(0.3),
-                            outline: true,
-                            outlineColor: Cesium.Color.DARKBLUE
-                        }
-                    });
-                    
-                    console.log('Cesium fallback initialized with blue sphere');
-                    
-                    // Load track if available
-                    if (currentTrackData && currentTrackData.length > 0) {
-                        display3DTrack(currentTrackData);
+                        name: 'Esri World Imagery'
+                    },
+                    // OpenStreetMap
+                    {
+                        provider: new Cesium.UrlTemplateImageryProvider({
+                            url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                            maximumLevel: 19,
+                            credit: new Cesium.Credit('© OpenStreetMap contributors')
+                        }),
+                        name: 'OpenStreetMap'
+                    },
+                    // CartoDB Positron (light basemap)
+                    {
+                        provider: new Cesium.UrlTemplateImageryProvider({
+                            url: 'https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+                            maximumLevel: 19,
+                            credit: new Cesium.Credit('© CartoDB')
+                        }),
+                        name: 'CartoDB'
                     }
-                } catch (fallbackError) {
-                    console.error('Fallback also failed:', fallbackError);
-                    alert('Unable to initialize 3D view. Please check your internet connection and try again.');
-                    // Switch back to 2D view
-                    const trackMapDiv = document.getElementById('trackMap');
-                    const cesiumDiv = document.getElementById('cesiumContainer');
-                    const btn = document.querySelector('[onclick*="toggle3DView"]');
-                    
-                    cesiumDiv.style.display = 'none';
-                    trackMapDiv.style.display = 'block';
-                    if (btn) btn.textContent = '🌍 3D View';
-                    is3DView = false;
+                ];
+                
+                // Try each provider
+                let successfulProvider = null;
+                for (const config of imageryProviders) {
+                    try {
+                        cesiumViewer.imageryLayers.addImageryProvider(config.provider);
+                        console.log(`Successfully loaded ${config.name} imagery`);
+                        successfulProvider = config.name;
+                        break;
+                    } catch (e) {
+                        console.warn(`Failed to load ${config.name}, trying next...`);
+                        cesiumViewer.imageryLayers.removeAll();
+                    }
                 }
+                
+                if (!successfulProvider) {
+                    console.warn('All imagery providers failed, using default offline tiles');
+                    // Use built-in offline imagery as last resort
+                    cesiumViewer.imageryLayers.addImageryProvider(
+                        new Cesium.TileMapServiceImageryProvider({
+                            url: Cesium.buildModuleUrl('Assets/Textures/NaturalEarthII')
+                        })
+                    );
+                }
+                
+                // Configure scene settings
+                cesiumViewer.scene.globe.show = true;
+                cesiumViewer.scene.globe.enableLighting = false;
+                cesiumViewer.scene.globe.depthTestAgainstTerrain = false;
+                cesiumViewer.scene.highDynamicRange = false;
+                
+                // Set background to sky blue instead of stars
+                cesiumViewer.scene.backgroundColor = new Cesium.Color(0.48, 0.68, 0.89, 1.0);
+                cesiumViewer.scene.sun.show = false;
+                cesiumViewer.scene.moon.show = false;
+                cesiumViewer.scene.skyBox = undefined;
+                
+                // Hide credits container
+                if (cesiumViewer.cesiumWidget.creditContainer) {
+                    cesiumViewer.cesiumWidget.creditContainer.style.display = 'none';
+                }
+                
+                // Set initial Atlantic hurricane view
+                cesiumViewer.scene.camera.setView({
+                    destination: Cesium.Cartesian3.fromDegrees(-60.0, 25.0, 5000000.0),
+                    orientation: {
+                        heading: 0.0,
+                        pitch: -Cesium.Math.PI_OVER_TWO,
+                        roll: 0.0
+                    }
+                });
+                
+                // Force initial render
+                cesiumViewer.scene.requestRender();
+                
+                console.log('Cesium initialized successfully with', successfulProvider || 'offline imagery');
+                
+                // Load track if available
+                if (currentTrackData && currentTrackData.length > 0) {
+                    display3DTrack(currentTrackData);
+                }
+                
+            } catch (error) {
+                console.error('Failed to initialize 3D view:', error);
+                alert('Unable to initialize 3D view. Please check your internet connection and try again.');
+                
+                // Switch back to 2D view
+                const trackMapDiv = document.getElementById('trackMap');
+                const cesiumDiv = document.getElementById('cesiumContainer');
+                const btn = document.querySelector('[onclick*="toggle3DView"]');
+                
+                cesiumDiv.style.display = 'none';
+                trackMapDiv.style.display = 'block';
+                if (btn) btn.textContent = '🌍 3D View';
+                is3DView = false;
             }
         }
         
