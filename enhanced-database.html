@@ -456,7 +456,7 @@
         }
 
         // Apply filters
-        function applyFilters() {
+        window.applyFilters = function() {
             filteredStorms = allStorms.filter(storm => {
                 // Search filter
                 if (activeFilters.search) {
@@ -519,7 +519,7 @@
         }
         
         // Sort table by column
-        function sortTable(column) {
+        window.sortTable = function(column) {
             // If clicking the same column, toggle direction
             if (sortColumn === column) {
                 sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
@@ -756,7 +756,7 @@
         }
 
         // Actions
-        function compareSelected() {
+        window.compareSelected = function() {
             console.log('compareSelected called, selected storms:', selectedStorms.size);
             if (selectedStorms.size === 0) {
                 alert('Please select at least one storm to compare.');
@@ -775,7 +775,7 @@
             }, '*');
         }
 
-        function exportSelected() {
+        window.exportSelected = function() {
             const storms = selectedStorms.size > 0 ? 
                 filteredStorms.filter(s => selectedStorms.has(s.storm_id)) : 
                 filteredStorms;
@@ -967,7 +967,7 @@
             }
         }
 
-        function clearFilters() {
+        window.clearFilters = function() {
             activeFilters = {
                 search: '',
                 impact: [],
@@ -986,14 +986,14 @@
             applyFilters();
         }
 
-        function changePageSize() {
+        window.changePageSize = function() {
             pageSize = parseInt(document.getElementById('pageSize').value);
             currentPage = 1;
             renderTable();
             updateCounts();
         }
 
-        function previousPage() {
+        window.previousPage = function() {
             if (currentPage > 1) {
                 currentPage--;
                 renderTable();
@@ -1001,7 +1001,7 @@
             }
         }
 
-        function nextPage() {
+        window.nextPage = function() {
             const totalPages = Math.ceil(filteredStorms.length / pageSize);
             if (currentPage < totalPages) {
                 currentPage++;
@@ -1010,7 +1010,7 @@
             }
         }
 
-        function viewOnMap() {
+        window.viewOnMap = function() {
             console.log('viewOnMap called');
             // Send selected storms to map view
             const storms = selectedStorms.size > 0 ? 
@@ -1092,7 +1092,7 @@
         });
         
         // Storm Comparison Functions
-        function showComparison() {
+        window.showComparison = function() {
             if (selectedStorms.size < 2 || selectedStorms.size > 3) {
                 alert('Please select 2-3 storms to compare');
                 return;
@@ -1163,7 +1163,7 @@
             modal.classList.remove('hidden');
         }
         
-        function closeComparison() {
+        window.closeComparison = function() {
             document.getElementById('comparisonModal').classList.add('hidden');
         }
         
