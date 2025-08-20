@@ -1031,11 +1031,12 @@
         window.initialize3DView = function() {
             if (cesiumViewer) return;
             
-            // Set Cesium Ion default access token (using the default public token)
-            Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJlYWE1OWUxNy1mMWZiLTQzYjYtYTQ0OS1kMWFjYmFkNjc5YzciLCJpZCI6NTc3MzMsImlhdCI6MTYyNzg0NTE4Mn0.XcKpgANiY19MC4bdFUXMVEBToBmqS8kuYpUlxJHYZxk';
-            
-            const cesiumContainer = document.getElementById('cesiumContainer');
-            cesiumViewer = new Cesium.Viewer('cesiumContainer', {
+            try {
+                // Set Cesium Ion default access token (using the default public token)
+                Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJlYWE1OWUxNy1mMWZiLTQzYjYtYTQ0OS1kMWFjYmFkNjc5YzciLCJpZCI6NTc3MzMsImlhdCI6MTYyNzg0NTE4Mn0.XcKpgANiY19MC4bdFUXMVEBToBmqS8kuYpUlxJHYZxk';
+                
+                const cesiumContainer = document.getElementById('cesiumContainer');
+                cesiumViewer = new Cesium.Viewer('cesiumContainer', {
                 terrainProvider: Cesium.createWorldTerrain(),
                 baseLayerPicker: false,
                 navigationHelpButton: false,
@@ -1072,6 +1073,19 @@
             // Load and display the storm track in 3D
             if (currentTrackData && currentTrackData.length > 0) {
                 display3DTrack(currentTrackData);
+            }
+            } catch (error) {
+                console.error('Error initializing Cesium viewer:', error);
+                alert('Unable to initialize 3D view. Please check your internet connection and try again.');
+                // Switch back to 2D view
+                const trackMapDiv = document.getElementById('trackMap');
+                const cesiumDiv = document.getElementById('cesiumContainer');
+                const btn = document.querySelector('[onclick*="toggle3DView"]');
+                
+                cesiumDiv.style.display = 'none';
+                trackMapDiv.style.display = 'block';
+                if (btn) btn.textContent = '🌍 3D View';
+                is3DView = false;
             }
         }
         
@@ -1521,16 +1535,13 @@
                 if (!cesiumAnimationMarker) {
                     cesiumAnimationMarker = cesiumViewer.entities.add({
                         position: Cesium.Cartesian3.fromDegrees(lon, lat, height),
-                        model: {
-                            uri: Cesium.IonResource.fromAssetId(2347923), // Use a default 3D model
-                            scale: 100.0,
-                            minimumPixelSize: 64
-                        },
                         billboard: {
                             image: drawStormIcon(feature.properties.status, wind),
                             scale: 1.5,
                             heightReference: Cesium.HeightReference.NONE,
-                            disableDepthTestDistance: Number.POSITIVE_INFINITY
+                            disableDepthTestDistance: Number.POSITIVE_INFINITY,
+                            verticalOrigin: Cesium.VerticalOrigin.CENTER,
+                            horizontalOrigin: Cesium.HorizontalOrigin.CENTER
                         },
                         label: {
                             text: `${feature.properties.max_wind || 0} mph`,
@@ -1539,23 +1550,34 @@
                             outlineWidth: 2,
                             pixelOffset: new Cesium.Cartesian2(0, -30),
                             disableDepthTestDistance: Number.POSITIVE_INFINITY
-                        }
+                        },
+                        description: generatePopupContent(feature)
                     });
                 } else {
-                    cesiumAnimationMarker.position = Cesium.Cartesian3.fromDegrees(lon, lat, height);
-                    cesiumAnimationMarker.label.text = `${feature.properties.max_wind || 0} mph`;
-                    cesiumAnimationMarker.billboard.image = drawStormIcon(feature.properties.status, wind);
+                    cesiumAnimationMarker.position = new Cesium.ConstantPositionProperty(
+                        Cesium.Cartesian3.fromDegrees(lon, lat, height)
+                    );
+                    if (cesiumAnimationMarker.label) {
+                        cesiumAnimationMarker.label.text = new Cesium.ConstantProperty(`${feature.properties.max_wind || 0} mph`);
+                    }
+                    if (cesiumAnimationMarker.billboard) {
+                        cesiumAnimationMarker.billboard.image = new Cesium.ConstantProperty(drawStormIcon(feature.properties.status, wind));
+                    }
+                    cesiumAnimationMarker.description = new Cesium.ConstantProperty(generatePopupContent(feature));
                 }
                 
-                // Update camera to follow storm
-                cesiumViewer.camera.lookAt(
-                    Cesium.Cartesian3.fromDegrees(lon, lat, height),
-                    new Cesium.Cartesian3(1000000, 1000000, 500000)
+                // Update camera to follow storm smoothly
+                const target = Cesium.Cartesian3.fromDegrees(lon, lat, height);
+                const offset = new Cesium.Cartesian3(
+                    1000000.0,  // East
+                    1000000.0,  // North
+                    500000.0    // Up
                 );
+                
+                cesiumViewer.scene.camera.lookAt(target, offset);
                 
                 // Update info box
                 cesiumViewer.selectedEntity = cesiumAnimationMarker;
-                cesiumAnimationMarker.description = generatePopupContent(feature);
                 
             } else if (trackMap) {
                 // Update 2D marker position
