@@ -1297,9 +1297,14 @@
             // Sort by datetime
             features.sort((a, b) => new Date(a.properties.datetime) - new Date(b.properties.datetime));
             
-            // Create polyline positions
-            const positions = [];
-            const heightProfile = [];
+            // Create polyline positions at ground level for visibility
+            const groundPositions = [];
+            const bounds = {
+                west: Infinity,
+                east: -Infinity,
+                north: -Infinity,
+                south: Infinity
+            };
             
             features.forEach((feature, index) => {
                 const coords = feature.geometry.coordinates;
@@ -1307,26 +1312,29 @@
                 const lat = coords[1];
                 const wind = feature.properties.max_wind || 0;
                 
-                // Use wind speed to determine height (stronger storms shown higher)
-                // Scale: 0-200 mph maps to 0-50000 meters altitude
-                const height = Math.min(wind * 250, 50000);
+                // Track bounds
+                bounds.west = Math.min(bounds.west, lon);
+                bounds.east = Math.max(bounds.east, lon);
+                bounds.north = Math.max(bounds.north, lat);
+                bounds.south = Math.min(bounds.south, lat);
                 
-                positions.push(Cesium.Cartesian3.fromDegrees(lon, lat, height));
-                heightProfile.push(height);
+                // Add ground position for main track line
+                groundPositions.push(Cesium.Cartesian3.fromDegrees(lon, lat, 1000));
                 
-                // Add point entity for each position
+                // Add point entity for each position with slight elevation
                 const status = feature.properties.status || 'TS';
                 const color = getCesiumColor(status, wind);
                 
                 const pointEntity = cesiumViewer.entities.add({
-                    position: Cesium.Cartesian3.fromDegrees(lon, lat, height),
+                    position: Cesium.Cartesian3.fromDegrees(lon, lat, 5000),
                     point: {
-                        pixelSize: 6,
+                        pixelSize: 10,
                         color: color,
                         outlineColor: Cesium.Color.WHITE,
-                        outlineWidth: 2,
+                        outlineWidth: 3,
                         heightReference: Cesium.HeightReference.NONE,
-                        disableDepthTestDistance: Number.POSITIVE_INFINITY
+                        disableDepthTestDistance: Number.POSITIVE_INFINITY,
+                        scaleByDistance: new Cesium.NearFarScalar(1.5e2, 1.5, 8.0e6, 0.2)
                     },
                     properties: feature.properties,
                     description: generatePopupContent(feature)
@@ -1334,47 +1342,89 @@
                 cesiumEntities.push(pointEntity);
             });
             
-            // Create the main track polyline with gradient effect
-            if (positions.length > 1) {
-                const trackEntity = cesiumViewer.entities.add({
-                    polyline: {
-                        positions: positions,
-                        width: 5,
-                        material: new Cesium.PolylineGlowMaterialProperty({
-                            glowPower: 0.2,
-                            color: Cesium.Color.CYAN
-                        }),
-                        clampToGround: false
-                    }
-                });
-                cesiumEntities.push(trackEntity);
-                
-                // Add vertical lines from ground to track points
-                features.forEach((feature, index) => {
-                    const coords = feature.geometry.coordinates;
-                    const lon = coords[0];
-                    const lat = coords[1];
-                    const height = heightProfile[index];
+            // Create the main track polyline at low altitude for visibility
+            if (groundPositions.length > 1) {
+                // Main colored track line segments
+                for (let i = 0; i < features.length - 1; i++) {
+                    const status = features[i].properties.status || 'TS';
+                    const wind = features[i].properties.max_wind || 0;
+                    const segmentColor = getCesiumColor(status, wind);
                     
-                    const verticalLine = cesiumViewer.entities.add({
+                    const trackSegment = cesiumViewer.entities.add({
                         polyline: {
-                            positions: [
-                                Cesium.Cartesian3.fromDegrees(lon, lat, 0),
-                                Cesium.Cartesian3.fromDegrees(lon, lat, height)
-                            ],
-                            width: 2,
+                            positions: [groundPositions[i], groundPositions[i + 1]],
+                            width: 8,
                             material: new Cesium.PolylineGlowMaterialProperty({
-                                glowPower: 0.1,
-                                color: Cesium.Color.fromAlpha(Cesium.Color.WHITE, 0.3)
-                            })
+                                glowPower: 0.25,
+                                color: segmentColor,
+                                taperPower: 0.8
+                            }),
+                            clampToGround: false,
+                            disableDepthTestDistance: Number.POSITIVE_INFINITY
                         }
                     });
-                    cesiumEntities.push(verticalLine);
+                    cesiumEntities.push(trackSegment);
+                }
+                
+                // Add white outline for better visibility
+                const outlineEntity = cesiumViewer.entities.add({
+                    polyline: {
+                        positions: groundPositions,
+                        width: 12,
+                        material: new Cesium.PolylineOutlineMaterialProperty({
+                            color: Cesium.Color.WHITE.withAlpha(0.8),
+                            outlineWidth: 2,
+                            outlineColor: Cesium.Color.BLACK
+                        }),
+                        clampToGround: false,
+                        disableDepthTestDistance: Number.POSITIVE_INFINITY
+                    }
                 });
+                cesiumEntities.push(outlineEntity);
             }
             
-            // Zoom to track
-            cesiumViewer.zoomTo(cesiumViewer.entities);
+            // Set up camera to follow behind the storm path with north up
+            if (groundPositions.length > 1) {
+                // Find the midpoint of the storm track
+                const midIndex = Math.floor(groundPositions.length / 2);
+                const centerLon = (bounds.west + bounds.east) / 2;
+                const centerLat = (bounds.south + bounds.north) / 2;
+                
+                // Calculate appropriate camera distance based on track extent
+                const lonExtent = bounds.east - bounds.west;
+                const latExtent = bounds.north - bounds.south;
+                const maxExtent = Math.max(lonExtent, latExtent);
+                
+                // Set camera distance based on extent (higher for larger storms)
+                const cameraHeight = Math.max(1500000, maxExtent * 150000);
+                
+                // Position camera south of the storm center, looking north
+                // This gives a view from behind the storm as it typically moves north/northeast
+                const cameraLat = bounds.south - (latExtent * 0.3);
+                
+                cesiumViewer.scene.camera.setView({
+                    destination: Cesium.Cartesian3.fromDegrees(centerLon, cameraLat, cameraHeight),
+                    orientation: {
+                        heading: 0.0,  // North is up
+                        pitch: -Cesium.Math.toRadians(45),  // Look down at 45 degree angle
+                        roll: 0.0
+                    }
+                });
+                
+                // Alternative view if the storm moved mostly east-west
+                if (lonExtent > latExtent * 2) {
+                    // Position camera west of the storm, looking east
+                    const cameraLon = bounds.west - (lonExtent * 0.3);
+                    cesiumViewer.scene.camera.setView({
+                        destination: Cesium.Cartesian3.fromDegrees(cameraLon, centerLat, cameraHeight),
+                        orientation: {
+                            heading: Cesium.Math.toRadians(90),  // Look east, north still up
+                            pitch: -Cesium.Math.toRadians(45),
+                            roll: 0.0
+                        }
+                    });
+                }
+            }
         }
         
         // Get Cesium color based on storm status
@@ -1724,52 +1774,79 @@
             // Handle 3D view animation
             if (is3DView && cesiumViewer) {
                 const wind = feature.properties.max_wind || 0;
-                const height = Math.min(wind * 250, 50000);
+                const status = feature.properties.status || 'TS';
+                const markerHeight = 10000; // Fixed low altitude for visibility
                 
                 // Update or create 3D animation marker
                 if (!cesiumAnimationMarker) {
                     cesiumAnimationMarker = cesiumViewer.entities.add({
-                        position: Cesium.Cartesian3.fromDegrees(lon, lat, height),
-                        billboard: {
-                            image: drawStormIcon(feature.properties.status, wind),
-                            scale: 1.5,
+                        position: Cesium.Cartesian3.fromDegrees(lon, lat, markerHeight),
+                        point: {
+                            pixelSize: 20,
+                            color: getCesiumColor(status, wind),
+                            outlineColor: Cesium.Color.WHITE,
+                            outlineWidth: 4,
                             heightReference: Cesium.HeightReference.NONE,
                             disableDepthTestDistance: Number.POSITIVE_INFINITY,
-                            verticalOrigin: Cesium.VerticalOrigin.CENTER,
-                            horizontalOrigin: Cesium.HorizontalOrigin.CENTER
+                            scaleByDistance: new Cesium.NearFarScalar(1.5e2, 2.0, 8.0e6, 0.5)
                         },
                         label: {
-                            text: `${feature.properties.max_wind || 0} mph`,
-                            font: '14pt monospace',
+                            text: `${wind} mph`,
+                            font: 'bold 16pt monospace',
                             style: Cesium.LabelStyle.FILL_AND_OUTLINE,
-                            outlineWidth: 2,
-                            pixelOffset: new Cesium.Cartesian2(0, -30),
-                            disableDepthTestDistance: Number.POSITIVE_INFINITY
+                            outlineWidth: 3,
+                            fillColor: Cesium.Color.WHITE,
+                            outlineColor: Cesium.Color.BLACK,
+                            pixelOffset: new Cesium.Cartesian2(0, -35),
+                            disableDepthTestDistance: Number.POSITIVE_INFINITY,
+                            scaleByDistance: new Cesium.NearFarScalar(1.5e2, 1.0, 8.0e6, 0.5)
                         },
                         description: generatePopupContent(feature)
                     });
                 } else {
+                    // Update position
                     cesiumAnimationMarker.position = new Cesium.ConstantPositionProperty(
-                        Cesium.Cartesian3.fromDegrees(lon, lat, height)
+                        Cesium.Cartesian3.fromDegrees(lon, lat, markerHeight)
                     );
+                    // Update color based on intensity
+                    if (cesiumAnimationMarker.point) {
+                        cesiumAnimationMarker.point.color = new Cesium.ConstantProperty(getCesiumColor(status, wind));
+                    }
+                    // Update label
                     if (cesiumAnimationMarker.label) {
-                        cesiumAnimationMarker.label.text = new Cesium.ConstantProperty(`${feature.properties.max_wind || 0} mph`);
+                        cesiumAnimationMarker.label.text = new Cesium.ConstantProperty(`${wind} mph`);
                     }
-                    if (cesiumAnimationMarker.billboard) {
-                        cesiumAnimationMarker.billboard.image = new Cesium.ConstantProperty(drawStormIcon(feature.properties.status, wind));
-                    }
+                    // Update description
                     cesiumAnimationMarker.description = new Cesium.ConstantProperty(generatePopupContent(feature));
                 }
                 
-                // Update camera to follow storm smoothly
-                const target = Cesium.Cartesian3.fromDegrees(lon, lat, height);
-                const offset = new Cesium.Cartesian3(
-                    1000000.0,  // East
-                    1000000.0,  // North
-                    500000.0    // Up
-                );
+                // Update camera to follow storm with north-up orientation
+                // Position camera behind (south of) the current storm position
+                const cameraDistance = 800000; // meters
+                const cameraLat = lat - 5; // degrees south of storm
                 
-                cesiumViewer.scene.camera.lookAt(target, offset);
+                // Look ahead to next few positions if available to anticipate path
+                let lookAheadLat = lat;
+                let lookAheadLon = lon;
+                if (index < currentTrackData.length - 3) {
+                    // Average next 3 positions for smoother camera tracking
+                    for (let i = 1; i <= 3 && index + i < currentTrackData.length; i++) {
+                        const futureCoords = currentTrackData[index + i].geometry.coordinates;
+                        lookAheadLon += futureCoords[0];
+                        lookAheadLat += futureCoords[1];
+                    }
+                    lookAheadLon /= 4;
+                    lookAheadLat /= 4;
+                }
+                
+                cesiumViewer.scene.camera.setView({
+                    destination: Cesium.Cartesian3.fromDegrees(lookAheadLon, cameraLat, cameraDistance),
+                    orientation: {
+                        heading: 0.0,  // North is always up
+                        pitch: -Cesium.Math.toRadians(30),  // Look down at 30 degree angle
+                        roll: 0.0
+                    }
+                });
                 
                 // Update info box
                 cesiumViewer.selectedEntity = cesiumAnimationMarker;
