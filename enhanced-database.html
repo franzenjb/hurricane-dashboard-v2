@@ -851,7 +851,7 @@
             a.click();
         }
 
-        function viewStorm(stormId) {
+        window.viewStorm = function(stormId) {
             console.log('viewStorm called with ID:', stormId);
             const storm = allStorms.find(s => s.storm_id === stormId);
             if (storm) {
@@ -873,7 +873,7 @@
             }
         }
         
-        function trackStorm(stormId) {
+        window.trackStorm = function(stormId) {
             console.log('trackStorm called with ID:', stormId);
             const storm = allStorms.find(s => s.storm_id === stormId);
             if (storm) {
@@ -938,7 +938,7 @@
             }
         }
 
-        function showNarrative(stormId) {
+        window.showNarrative = function(stormId) {
             const storm = allStorms.find(s => s.storm_id === stormId);
             if (storm?.narrative) {
                 // Create a simple modal using the same approach as trackStorm
@@ -1025,14 +1025,14 @@
         }
         
         // Check if a storm has a TCR report available
-        function hasTCR(storm) {
+        window.hasTCR = function(storm) {
             // TCRs are generally available for storms after 1995
             // and for significant storms (Cat 3+ or major impact)
             return storm.year >= 1995 && (storm.category >= 3 || storm.rc_impact_level === 'CATASTROPHIC' || storm.rc_impact_level === 'SEVERE');
         }
         
         // Get the TCR link for a storm
-        function getTCRLink(storm) {
+        window.getTCRLink = function(storm) {
             // Construct NOAA TCR URL
             // Format: https://www.nhc.noaa.gov/data/tcr/AL##YYYY_Name.pdf
             const stormNumber = storm.storm_id.substring(2, 4); // Extract storm number from ID
