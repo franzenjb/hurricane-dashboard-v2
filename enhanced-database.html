@@ -1030,7 +1030,8 @@
                 bounds.extend(point);
                 
                 // Add circle marker for each point
-                const color = getCategoryColorForMap(feature.properties.category);
+                const cat = feature.properties.ss || feature.properties.category || 0;
+                const color = getCategoryColorForMap(cat);
                 L.circleMarker(point, {
                     radius: 4,
                     fillColor: color,
@@ -1098,12 +1099,15 @@
                 })
             }).addTo(trackMap);
             
-            // Create trail polyline
+            // Create trail polyline  
             trailPolyline = L.polyline([], {
-                color: '#ff0000',
+                color: '#666',
                 weight: 3,
                 opacity: 0.8
             }).addTo(trackMap);
+            
+            // We'll draw colored segments as we go
+            const trailSegments = [];
             
             // Start animation
             let index = 0;
@@ -1123,18 +1127,39 @@
                 // Update marker position
                 animationMarker.setLatLng([lat, lon]);
                 
+                // Update marker color based on intensity
+                const markerCat = feature.properties.ss || feature.properties.category || 0;
+                const markerColor = getCategoryColorForMap(markerCat);
+                animationMarker.setIcon(L.divIcon({
+                    className: 'animation-marker',
+                    html: `<div style="background: ${markerColor}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.5);"></div>`,
+                    iconSize: [16, 16]
+                }));
+                
                 // Add to trail
                 const trail = trailPolyline.getLatLngs();
                 trail.push([lat, lon]);
                 trailPolyline.setLatLngs(trail);
                 
                 // Update popup
+                // Debug: log first feature to see available properties
+                if (index === 0) {
+                    console.log('Storm track feature properties:', feature.properties);
+                }
+                
                 const datetime = new Date(feature.properties.datetime).toLocaleString();
-                const category = feature.properties.category;
-                const wind = feature.properties.wind_mph || 'N/A';
+                const category = feature.properties.ss || feature.properties.category || 'Unknown';
+                const wind = feature.properties.wind || feature.properties.wind_mph || 'N/A';
+                
+                // Format category display
+                let categoryDisplay = category;
+                if (category === -1) categoryDisplay = 'TD';
+                else if (category === 0) categoryDisplay = 'TS';
+                else if (category > 0) categoryDisplay = `Cat ${category}`;
+                
                 animationMarker.bindPopup(`
                     <strong>${datetime}</strong><br>
-                    Category: ${category}<br>
+                    Category: ${categoryDisplay}<br>
                     Wind: ${wind} mph
                 `).openPopup();
                 
