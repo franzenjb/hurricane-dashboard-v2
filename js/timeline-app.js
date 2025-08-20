@@ -19,7 +19,7 @@ function hurricaneApp() {
         // Quick Stats Dashboard
         totalStorms: 0,
         cat5Count: 0,
-        billionDollarCount: 0,
+        majorHurricaneCount: 0,
         landfallCount: 0,
         topStorms: [],
         
@@ -578,10 +578,8 @@ function hurricaneApp() {
             // Category 5 hurricanes
             this.cat5Count = this.allStorms.filter(storm => storm.category === 5).length;
             
-            // Billion-dollar disasters (assuming storms with damage > 1000 million)
-            this.billionDollarCount = this.allStorms.filter(storm => 
-                storm.damage_millions && storm.damage_millions >= 1000
-            ).length;
+            // Major hurricanes (Category 3-5)
+            this.majorHurricaneCount = this.allStorms.filter(storm => storm.category >= 3).length;
             
             // U.S. landfalls
             this.landfallCount = this.allStorms.filter(storm => 
@@ -608,12 +606,12 @@ function hurricaneApp() {
         },
         
         calculateRCImpact(storm) {
-            // Red Cross Impact Score calculation
+            // Red Cross Impact Score calculation (without damage data)
             const score = (
-                storm.category * 20 +
-                (storm.deaths > 100 ? 25 : storm.deaths / 4) +
-                (storm.damage_millions > 10000 ? 25 : storm.damage_millions / 400) +
-                (storm.landfall_states?.length || 0) * 10
+                storm.category * 25 +  // Increased weight since no damage data
+                (storm.deaths > 100 ? 30 : storm.deaths / 3) +
+                (storm.landfall_states?.length || 0) * 15 +  // Increased weight
+                (storm.year < 1950 ? -10 : 0)  // Older storms have less reliable data
             );
             return Math.min(100, Math.round(score));
         },

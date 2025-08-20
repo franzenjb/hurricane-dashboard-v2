@@ -139,9 +139,9 @@
                         <div class="text-xs text-gray-500">Most Destructive</div>
                     </div>
                     <div class="bg-white rounded-lg shadow-lg p-6 transform hover:scale-105 transition-transform">
-                        <div class="text-3xl font-bold text-green-600" x-text="billionDollarCount"></div>
-                        <div class="text-sm text-gray-600 mt-1">Billion-Dollar Disasters</div>
-                        <div class="text-xs text-gray-500">Major Economic Impact</div>
+                        <div class="text-3xl font-bold text-green-600" x-text="majorHurricaneCount"></div>
+                        <div class="text-sm text-gray-600 mt-1">Major Hurricanes</div>
+                        <div class="text-xs text-gray-500">Category 3-5</div>
                     </div>
                     <div class="bg-white rounded-lg shadow-lg p-6 transform hover:scale-105 transition-transform">
                         <div class="text-3xl font-bold text-purple-600" x-text="landfallCount"></div>
@@ -261,7 +261,7 @@
                                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Year</th>
                                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Category</th>
                                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Deaths</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Damage</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Landfall States</th>
                                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">RC Impact</th>
                                 </tr>
                             </thead>
@@ -277,7 +277,7 @@
                                                   x-text="storm.category"></span>
                                         </td>
                                         <td class="px-4 py-3 text-sm" :class="storm.deaths > 1000 ? 'text-red-600 font-bold' : 'text-gray-600'" x-text="storm.deaths?.toLocaleString() || '0'"></td>
-                                        <td class="px-4 py-3 text-sm text-gray-600" x-text="storm.damage_millions ? '$' + storm.damage_millions.toLocaleString() + 'M' : '-'"></td>
+                                        <td class="px-4 py-3 text-sm text-gray-600" x-text="storm.landfall_states?.join(', ') || '-'"></td>
                                         <td class="px-4 py-3">
                                             <div class="flex items-center">
                                                 <span class="text-sm font-bold mr-2" x-text="storm.rc_impact_score || 0"></span>
@@ -987,12 +987,12 @@
         };
         
         window.calculateRCImpact = function(storm) {
-            // Red Cross Impact Score calculation
+            // Red Cross Impact Score calculation (without damage data)
             const score = (
-                storm.category * 20 +
-                (storm.deaths > 100 ? 25 : storm.deaths / 4) +
-                (storm.damage_millions > 10000 ? 25 : storm.damage_millions / 400) +
-                (storm.landfall_states?.length || 0) * 10
+                storm.category * 25 +  // Increased weight since no damage data
+                (storm.deaths > 100 ? 30 : storm.deaths / 3) +
+                (storm.landfall_states?.length || 0) * 15 +  // Increased weight
+                (storm.year < 1950 ? -10 : 0)  // Older storms have less reliable data
             );
             return Math.min(100, Math.round(score));
         };
