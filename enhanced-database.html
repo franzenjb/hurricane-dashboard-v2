@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hurricane Database - Red Cross Intelligence Platform</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="atlantic-storms-enhanced.js"></script>
     <style>
         :root {
@@ -881,7 +883,7 @@
                 const modalHTML = `
                     <div id="trackModal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); display: flex; align-items: center; justify-content: center; z-index: 9999;">
                         <div style="background-color: white; padding: 30px; border-radius: 10px; max-width: 600px; max-height: 80vh; overflow-y: auto; position: relative; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-                            <button onclick="document.getElementById('trackModal').remove()" style="position: absolute; top: 10px; right: 10px; background-color: #ED1B2E; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-size: 16px; font-weight: bold;">✕</button>
+                            <button onclick="if(window.trackMap){window.trackMap.remove();window.trackMap=null;}document.getElementById('trackModal').remove()" style="position: absolute; top: 10px; right: 10px; background-color: #ED1B2E; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-size: 16px; font-weight: bold;">✕</button>
                             
                             <h2 style="margin: 0 0 20px 0; color: #ED1B2E; font-size: 24px; font-weight: bold;">
                                 🎯 Tracking ${storm.name} (${storm.year})
@@ -900,17 +902,19 @@
                             </div>
                             
                             <div style="background: #e8f5e9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-                                <h3 style="margin: 0 0 10px 0; color: #4caf50; font-size: 18px; font-weight: bold;">🗺️ Track this Storm</h3>
-                                <p style="margin: 5px 0;">To see the animated storm track:</p>
-                                <ol style="margin: 10px 0 10px 20px; padding-left: 20px;">
-                                    <li>Click the <strong>"View"</strong> button to see the storm on the Timeline map</li>
-                                    <li>Look for the green <strong>"▶️ Animate Storm Track"</strong> button in the map controls</li>
-                                    <li>Click it to watch the storm's path animate across the map</li>
-                                    <li>Use the speed slider to control animation speed</li>
-                                </ol>
-                                <button onclick="viewStorm('${storm.storm_id}'); document.getElementById('trackModal').remove();" style="width: 100%; padding: 10px; background-color: #4caf50; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 16px;">
-                                    🎬 View & Animate This Storm
-                                </button>
+                                <h3 style="margin: 0 0 10px 0; color: #4caf50; font-size: 18px; font-weight: bold;">🗺️ Storm Track Animation</h3>
+                                <div id="trackMapContainer" style="height: 400px; width: 100%; border: 2px solid #ddd; border-radius: 8px; margin: 10px 0; position: relative;">
+                                    <div id="trackMap" style="height: 100%; width: 100%;"></div>
+                                </div>
+                                <div style="margin-top: 10px;">
+                                    <button onclick="animateTrack('${storm.storm_id}')" style="padding: 8px 16px; background-color: #4caf50; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-right: 10px;">
+                                        ▶️ Animate Track
+                                    </button>
+                                    <button onclick="stopTrackAnimation()" style="padding: 8px 16px; background-color: #dc3545; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">
+                                        ⏹️ Stop
+                                    </button>
+                                    <label style="margin-left: 20px;">Speed: <input type="range" id="trackAnimationSpeed" min="100" max="2000" value="1000" style="width: 100px; vertical-align: middle;"></label>
+                                </div>
                             </div>
                             
                             ${storm.narrative ? `
@@ -932,10 +936,237 @@
                     modal.onclick = function(e) {
                         if (e.target === modal) {
                             modal.remove();
+                            if (window.trackMap) {
+                                window.trackMap.remove();
+                                window.trackMap = null;
+                            }
                         }
                     };
                 }
+                
+                // Initialize the map after modal is inserted
+                setTimeout(() => {
+                    initializeTrackMap(storm);
+                }, 100);
             }
+        }
+        
+        // Global variables for track animation
+        let trackMap = null;
+        let animationInterval = null;
+        let currentTrackData = null;
+        let animationMarker = null;
+        let trailPolyline = null;
+        
+        // Initialize map for track animation
+        window.initializeTrackMap = function(storm) {
+            const mapContainer = document.getElementById('trackMap');
+            if (!mapContainer || trackMap) return;
+            
+            // Create map
+            trackMap = L.map('trackMap').setView([25, -80], 5);
+            
+            // Add tile layer
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(trackMap);
+            
+            // Load and display storm track
+            loadStormTrackForAnimation(storm);
+        }
+        
+        // Load storm track data
+        window.loadStormTrackForAnimation = async function(storm) {
+            try {
+                const decade = Math.floor(storm.year / 10) * 10;
+                const pointsFile = `./hurdat2_data/points_${decade}s.geojson`;
+                
+                const response = await fetch(pointsFile);
+                if (response.ok) {
+                    const data = await response.json();
+                    const features = data.features.filter(f => f.properties.storm_id === storm.storm_id);
+                    
+                    if (features.length > 0) {
+                        currentTrackData = features;
+                        displayStaticTrack(features);
+                    } else {
+                        // Try tracks file as fallback
+                        const tracksFile = `./hurdat2_data/tracks_${decade}s.geojson`;
+                        const tracksResponse = await fetch(tracksFile);
+                        if (tracksResponse.ok) {
+                            const tracksData = await tracksResponse.json();
+                            const trackFeature = tracksData.features.find(f => f.properties.storm_id === storm.storm_id);
+                            if (trackFeature) {
+                                displaySimpleTrack(trackFeature);
+                            }
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading track data:', error);
+            }
+        }
+        
+        // Display static track
+        window.displayStaticTrack = function(features) {
+            if (!trackMap) return;
+            
+            // Sort by datetime
+            features.sort((a, b) => new Date(a.properties.datetime) - new Date(b.properties.datetime));
+            
+            // Create points and bounds
+            const points = [];
+            const bounds = L.latLngBounds();
+            
+            features.forEach(feature => {
+                const coords = feature.geometry.coordinates;
+                const lat = coords[1];
+                const lon = coords[0];
+                const point = [lat, lon];
+                points.push(point);
+                bounds.extend(point);
+                
+                // Add circle marker for each point
+                const color = getCategoryColorForMap(feature.properties.category);
+                L.circleMarker(point, {
+                    radius: 4,
+                    fillColor: color,
+                    color: 'white',
+                    weight: 1,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                }).addTo(trackMap);
+            });
+            
+            // Draw track line
+            if (points.length > 1) {
+                L.polyline(points, {
+                    color: '#666',
+                    weight: 2,
+                    opacity: 0.6
+                }).addTo(trackMap);
+            }
+            
+            // Fit map to track
+            trackMap.fitBounds(bounds.pad(0.1));
+        }
+        
+        // Display simple track
+        window.displaySimpleTrack = function(trackFeature) {
+            if (!trackMap || !trackFeature.geometry.coordinates) return;
+            
+            const coords = trackFeature.geometry.coordinates;
+            const points = coords.map(coord => [coord[1], coord[0]]);
+            
+            // Draw track line
+            L.polyline(points, {
+                color: '#ff0000',
+                weight: 3,
+                opacity: 0.8
+            }).addTo(trackMap);
+            
+            // Add start and end markers
+            if (points.length > 0) {
+                L.marker(points[0]).addTo(trackMap).bindPopup('Start');
+                L.marker(points[points.length - 1]).addTo(trackMap).bindPopup('End');
+                
+                // Fit map to track
+                const bounds = L.latLngBounds(points);
+                trackMap.fitBounds(bounds.pad(0.1));
+            }
+        }
+        
+        // Animate track
+        window.animateTrack = function(stormId) {
+            if (!currentTrackData || currentTrackData.length === 0) {
+                alert('No track data available for animation');
+                return;
+            }
+            
+            // Clear any existing animation
+            stopTrackAnimation();
+            
+            // Create animated marker
+            animationMarker = L.marker([0, 0], {
+                icon: L.divIcon({
+                    className: 'animation-marker',
+                    html: '<div style="background: red; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.5);"></div>',
+                    iconSize: [16, 16]
+                })
+            }).addTo(trackMap);
+            
+            // Create trail polyline
+            trailPolyline = L.polyline([], {
+                color: '#ff0000',
+                weight: 3,
+                opacity: 0.8
+            }).addTo(trackMap);
+            
+            // Start animation
+            let index = 0;
+            const speed = document.getElementById('trackAnimationSpeed').value;
+            
+            animationInterval = setInterval(() => {
+                if (index >= currentTrackData.length) {
+                    stopTrackAnimation();
+                    return;
+                }
+                
+                const feature = currentTrackData[index];
+                const coords = feature.geometry.coordinates;
+                const lat = coords[1];
+                const lon = coords[0];
+                
+                // Update marker position
+                animationMarker.setLatLng([lat, lon]);
+                
+                // Add to trail
+                const trail = trailPolyline.getLatLngs();
+                trail.push([lat, lon]);
+                trailPolyline.setLatLngs(trail);
+                
+                // Update popup
+                const datetime = new Date(feature.properties.datetime).toLocaleString();
+                const category = feature.properties.category;
+                const wind = feature.properties.wind_mph || 'N/A';
+                animationMarker.bindPopup(`
+                    <strong>${datetime}</strong><br>
+                    Category: ${category}<br>
+                    Wind: ${wind} mph
+                `).openPopup();
+                
+                index++;
+            }, speed);
+        }
+        
+        // Stop animation
+        window.stopTrackAnimation = function() {
+            if (animationInterval) {
+                clearInterval(animationInterval);
+                animationInterval = null;
+            }
+            if (animationMarker) {
+                trackMap.removeLayer(animationMarker);
+                animationMarker = null;
+            }
+            if (trailPolyline) {
+                trackMap.removeLayer(trailPolyline);
+                trailPolyline = null;
+            }
+        }
+        
+        // Get category color for map
+        window.getCategoryColorForMap = function(category) {
+            const colors = {
+                '-1': '#94a3b8', // TD - Slate
+                '0': '#3b82f6',  // TS - Blue
+                '1': '#10b981',  // Cat 1 - Green
+                '2': '#f59e0b',  // Cat 2 - Yellow/Amber
+                '3': '#f97316',  // Cat 3 - Orange
+                '4': '#ef4444',  // Cat 4 - Red
+                '5': '#7c3aed'   // Cat 5 - Purple
+            };
+            return colors[category] || '#6b7280';
         }
 
         window.showNarrative = function(stormId) {
