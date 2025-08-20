@@ -908,15 +908,31 @@
                                 <h3 style="margin: 0 0 10px 0; color: #4caf50; font-size: 18px; font-weight: bold;">🗺️ Storm Track Animation</h3>
                                 <div id="trackMapContainer" style="height: 400px; width: 100%; border: 2px solid #ddd; border-radius: 8px; margin: 10px 0; position: relative;">
                                     <div id="trackMap" style="height: 100%; width: 100%;"></div>
+                                    <button onclick="toggleFullscreen()" style="position: absolute; top: 10px; right: 10px; z-index: 1000; padding: 6px 10px; background-color: rgba(0, 0, 0, 0.7); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;">
+                                        ⛶ Fullscreen
+                                    </button>
                                 </div>
-                                <div style="margin-top: 10px;">
-                                    <button onclick="animateTrack('${storm.storm_id}')" style="padding: 8px 16px; background-color: #4caf50; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-right: 10px;">
-                                        ▶️ Animate Track
+                                <div style="margin-top: 10px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                                    <button id="playPauseBtn" onclick="toggleAnimation('${storm.storm_id}')" style="padding: 8px 16px; background-color: #4caf50; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">
+                                        ▶️ Play
                                     </button>
                                     <button onclick="stopTrackAnimation()" style="padding: 8px 16px; background-color: #dc3545; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">
                                         ⏹️ Stop
                                     </button>
-                                    <label style="margin-left: 20px;">Speed: <input type="range" id="trackAnimationSpeed" min="100" max="2000" value="1000" style="width: 100px; vertical-align: middle;"></label>
+                                    <div style="display: flex; align-items: center; gap: 5px;">
+                                        <button onclick="previousFrame()" style="padding: 6px 12px; background-color: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                            ◀️
+                                        </button>
+                                        <span id="frameCounter" style="min-width: 80px; text-align: center; font-weight: bold;">0 / 0</span>
+                                        <button onclick="nextFrame()" style="padding: 6px 12px; background-color: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                            ▶️
+                                        </button>
+                                    </div>
+                                    <label style="display: flex; align-items: center; gap: 5px;">
+                                        Speed: 
+                                        <input type="range" id="trackAnimationSpeed" min="100" max="2000" value="1000" style="width: 100px;">
+                                        <span id="speedDisplay">1.0x</span>
+                                    </label>
                                 </div>
                             </div>
                             
@@ -950,6 +966,19 @@
                 // Initialize the map after modal is inserted
                 setTimeout(() => {
                     initializeTrackMap(storm);
+                    
+                    // Initialize speed display
+                    const speedSlider = document.getElementById('trackAnimationSpeed');
+                    const speedDisplay = document.getElementById('speedDisplay');
+                    if (speedSlider && speedDisplay) {
+                        const speed = (2100 - speedSlider.value) / 1000;
+                        speedDisplay.textContent = speed.toFixed(1) + 'x';
+                        
+                        speedSlider.addEventListener('input', function() {
+                            const speed = (2100 - this.value) / 1000;
+                            speedDisplay.textContent = speed.toFixed(1) + 'x';
+                        });
+                    }
                 }, 100);
             }
         }
@@ -960,6 +989,9 @@
         let currentTrackData = null;
         let animationMarker = null;
         let trailPolyline = null;
+        let currentFrameIndex = 0;
+        let isAnimating = false;
+        let isPaused = false;
         
         // Initialize map for track animation
         window.initializeTrackMap = function(storm) {
@@ -1080,6 +1112,220 @@
             }
         }
         
+        // Toggle fullscreen
+        window.toggleFullscreen = function() {
+            const mapContainer = document.getElementById('trackMapContainer');
+            if (!document.fullscreenElement) {
+                mapContainer.requestFullscreen().then(() => {
+                    // Resize map when entering fullscreen
+                    setTimeout(() => {
+                        if (trackMap) trackMap.invalidateSize();
+                    }, 100);
+                }).catch(err => {
+                    console.error('Error entering fullscreen:', err);
+                });
+            } else {
+                document.exitFullscreen().then(() => {
+                    // Resize map when exiting fullscreen
+                    setTimeout(() => {
+                        if (trackMap) trackMap.invalidateSize();
+                    }, 100);
+                });
+            }
+        }
+        
+        // Update speed display
+        document.addEventListener('DOMContentLoaded', function() {
+            const speedSlider = document.getElementById('trackAnimationSpeed');
+            const speedDisplay = document.getElementById('speedDisplay');
+            if (speedSlider && speedDisplay) {
+                speedSlider.addEventListener('input', function() {
+                    const speed = (2100 - this.value) / 1000;
+                    speedDisplay.textContent = speed.toFixed(1) + 'x';
+                });
+            }
+        });
+        
+        // Toggle play/pause
+        window.toggleAnimation = function(stormId) {
+            const btn = document.getElementById('playPauseBtn');
+            if (!isAnimating) {
+                animateTrack(stormId);
+                btn.innerHTML = '⏸️ Pause';
+                btn.style.backgroundColor = '#ffc107';
+            } else if (isPaused) {
+                resumeAnimation();
+                btn.innerHTML = '⏸️ Pause';
+                btn.style.backgroundColor = '#ffc107';
+            } else {
+                pauseAnimation();
+                btn.innerHTML = '▶️ Play';
+                btn.style.backgroundColor = '#4caf50';
+            }
+        }
+        
+        // Pause animation
+        window.pauseAnimation = function() {
+            if (animationInterval) {
+                clearInterval(animationInterval);
+                animationInterval = null;
+                isPaused = true;
+            }
+        }
+        
+        // Resume animation
+        window.resumeAnimation = function() {
+            if (isPaused && currentTrackData) {
+                isPaused = false;
+                const speed = document.getElementById('trackAnimationSpeed').value;
+                continueAnimation(speed);
+            }
+        }
+        
+        // Navigate to previous frame
+        window.previousFrame = function() {
+            if (!currentTrackData || currentFrameIndex <= 0) return;
+            
+            // Stop any running animation
+            if (animationInterval) {
+                clearInterval(animationInterval);
+                animationInterval = null;
+            }
+            
+            currentFrameIndex--;
+            displayFrame(currentFrameIndex);
+        }
+        
+        // Navigate to next frame
+        window.nextFrame = function() {
+            if (!currentTrackData || currentFrameIndex >= currentTrackData.length - 1) return;
+            
+            // Stop any running animation
+            if (animationInterval) {
+                clearInterval(animationInterval);
+                animationInterval = null;
+            }
+            
+            currentFrameIndex++;
+            displayFrame(currentFrameIndex);
+        }
+        
+        // Display a specific frame
+        window.displayFrame = function(index) {
+            if (!currentTrackData || index < 0 || index >= currentTrackData.length) return;
+            
+            const feature = currentTrackData[index];
+            const coords = feature.geometry.coordinates;
+            const lat = coords[1];
+            const lon = coords[0];
+            
+            // Update marker position
+            if (!animationMarker) {
+                animationMarker = L.marker([lat, lon], {
+                    icon: L.divIcon({
+                        className: 'animation-marker',
+                        html: '<div style="background: red; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.5);"></div>',
+                        iconSize: [16, 16]
+                    })
+                }).addTo(trackMap);
+            } else {
+                animationMarker.setLatLng([lat, lon]);
+            }
+            
+            // Update marker color based on intensity
+            const markerStatus = feature.properties.status || 'TS';
+            const markerWind = feature.properties.max_wind || 0;
+            const markerColor = getStatusColorForMap(markerStatus, markerWind);
+            animationMarker.setIcon(L.divIcon({
+                className: 'animation-marker',
+                html: `<div style="background: ${markerColor}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.5);"></div>`,
+                iconSize: [16, 16]
+            }));
+            
+            // Update trail
+            if (!trailPolyline) {
+                trailPolyline = L.polyline([], {
+                    color: '#666',
+                    weight: 3,
+                    opacity: 0.8
+                }).addTo(trackMap);
+            }
+            
+            // Build trail up to current point
+            const trailPoints = [];
+            for (let i = 0; i <= index; i++) {
+                const f = currentTrackData[i];
+                trailPoints.push([f.geometry.coordinates[1], f.geometry.coordinates[0]]);
+            }
+            trailPolyline.setLatLngs(trailPoints);
+            
+            // Update popup with storm info
+            const dateObj = new Date(feature.properties.datetime);
+            const dateStr = dateObj.toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric', 
+                year: 'numeric' 
+            });
+            const timeStr = dateObj.toLocaleTimeString('en-US', { 
+                hour: 'numeric', 
+                minute: '2-digit' 
+            });
+            const datetime = `${dateStr} ${timeStr}`;
+            
+            const status = feature.properties.status || 'Unknown';
+            const wind = feature.properties.max_wind || 0;
+            
+            // Format status display with proper names and hurricane categories
+            let categoryDisplay = status;
+            const statusMap = {
+                'TD': 'Tropical Depression',
+                'TS': 'Tropical Storm', 
+                'HU': 'Hurricane',
+                'EX': 'Extratropical',
+                'SD': 'Subtropical Depression',
+                'SS': 'Subtropical Storm',
+                'LO': 'Low',
+                'DB': 'Disturbance'
+            };
+            
+            // For hurricanes, add category based on wind speed
+            if (status === 'HU' && wind >= 74) {
+                let category = 1;
+                if (wind >= 157) category = 5;
+                else if (wind >= 130) category = 4;
+                else if (wind >= 111) category = 3;
+                else if (wind >= 96) category = 2;
+                categoryDisplay = `Category ${category} Hurricane`;
+            } else if (statusMap[status]) {
+                categoryDisplay = statusMap[status];
+            }
+            
+            animationMarker.bindPopup(`
+                <strong>${datetime}</strong><br>
+                <strong>${categoryDisplay}</strong><br>
+                Wind Speed: ${wind} mph
+            `).openPopup();
+            
+            // Update frame counter
+            const frameCounter = document.getElementById('frameCounter');
+            if (frameCounter) {
+                frameCounter.textContent = `${index + 1} / ${currentTrackData.length}`;
+            }
+        }
+        
+        // Continue animation from current frame
+        window.continueAnimation = function(speed) {
+            animationInterval = setInterval(() => {
+                if (currentFrameIndex >= currentTrackData.length - 1) {
+                    stopTrackAnimation();
+                    return;
+                }
+                
+                currentFrameIndex++;
+                displayFrame(currentFrameIndex);
+            }, speed);
+        }
+        
         // Animate track
         window.animateTrack = function(stormId) {
             if (!currentTrackData || currentTrackData.length === 0) {
@@ -1087,116 +1333,39 @@
                 return;
             }
             
+            // Reset state
+            currentFrameIndex = 0;
+            isAnimating = true;
+            isPaused = false;
+            
             // Clear any existing animation
-            stopTrackAnimation();
+            if (animationInterval) {
+                clearInterval(animationInterval);
+                animationInterval = null;
+            }
             
-            // Create animated marker
-            animationMarker = L.marker([0, 0], {
-                icon: L.divIcon({
-                    className: 'animation-marker',
-                    html: '<div style="background: red; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.5);"></div>',
-                    iconSize: [16, 16]
-                })
-            }).addTo(trackMap);
+            // Remove existing markers/trails
+            if (animationMarker) {
+                trackMap.removeLayer(animationMarker);
+                animationMarker = null;
+            }
+            if (trailPolyline) {
+                trackMap.removeLayer(trailPolyline);
+                trailPolyline = null;
+            }
             
-            // Create trail polyline  
-            trailPolyline = L.polyline([], {
-                color: '#666',
-                weight: 3,
-                opacity: 0.8
-            }).addTo(trackMap);
+            // Update frame counter
+            const frameCounter = document.getElementById('frameCounter');
+            if (frameCounter) {
+                frameCounter.textContent = `1 / ${currentTrackData.length}`;
+            }
             
-            // We'll draw colored segments as we go
-            const trailSegments = [];
+            // Display first frame
+            displayFrame(0);
             
             // Start animation
-            let index = 0;
             const speed = document.getElementById('trackAnimationSpeed').value;
-            
-            animationInterval = setInterval(() => {
-                if (index >= currentTrackData.length) {
-                    stopTrackAnimation();
-                    return;
-                }
-                
-                const feature = currentTrackData[index];
-                const coords = feature.geometry.coordinates;
-                const lat = coords[1];
-                const lon = coords[0];
-                
-                // Update marker position
-                animationMarker.setLatLng([lat, lon]);
-                
-                // Update marker color based on intensity
-                const markerStatus = feature.properties.status || 'TS';
-                const markerWind = feature.properties.max_wind || 0;
-                const markerColor = getStatusColorForMap(markerStatus, markerWind);
-                animationMarker.setIcon(L.divIcon({
-                    className: 'animation-marker',
-                    html: `<div style="background: ${markerColor}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.5);"></div>`,
-                    iconSize: [16, 16]
-                }));
-                
-                // Add to trail
-                const trail = trailPolyline.getLatLngs();
-                trail.push([lat, lon]);
-                trailPolyline.setLatLngs(trail);
-                
-                // Update popup
-                // Debug: log first feature to see available properties
-                if (index === 0) {
-                    console.log('Storm track feature properties:', feature.properties);
-                }
-                
-                // Parse and format the date properly
-                const dateObj = new Date(feature.properties.datetime);
-                const dateStr = dateObj.toLocaleDateString('en-US', { 
-                    month: 'short', 
-                    day: 'numeric', 
-                    year: 'numeric' 
-                });
-                const timeStr = dateObj.toLocaleTimeString('en-US', { 
-                    hour: 'numeric', 
-                    minute: '2-digit' 
-                });
-                const datetime = `${dateStr} ${timeStr}`;
-                
-                const status = feature.properties.status || 'Unknown';
-                const wind = feature.properties.max_wind || 0;
-                
-                // Format status display with proper names and hurricane categories
-                let categoryDisplay = status;
-                const statusMap = {
-                    'TD': 'Tropical Depression',
-                    'TS': 'Tropical Storm', 
-                    'HU': 'Hurricane',
-                    'EX': 'Extratropical',
-                    'SD': 'Subtropical Depression',
-                    'SS': 'Subtropical Storm',
-                    'LO': 'Low',
-                    'DB': 'Disturbance'
-                };
-                
-                // For hurricanes, add category based on wind speed
-                if (status === 'HU' && wind >= 74) {
-                    let category = 1;
-                    if (wind >= 157) category = 5;
-                    else if (wind >= 130) category = 4;
-                    else if (wind >= 111) category = 3;
-                    else if (wind >= 96) category = 2;
-                    categoryDisplay = `Category ${category} Hurricane`;
-                } else if (statusMap[status]) {
-                    categoryDisplay = statusMap[status];
-                }
-                
-                animationMarker.bindPopup(`
-                    <strong>${datetime}</strong><br>
-                    <strong>${categoryDisplay}</strong><br>
-                    Wind Speed: ${wind} mph
-                `).openPopup();
-                
-                index++;
-            }, speed);
+            continueAnimation(speed);
         }
         
         // Stop animation
@@ -1212,6 +1381,24 @@
             if (trailPolyline) {
                 trackMap.removeLayer(trailPolyline);
                 trailPolyline = null;
+            }
+            
+            // Reset state
+            isAnimating = false;
+            isPaused = false;
+            currentFrameIndex = 0;
+            
+            // Reset button
+            const btn = document.getElementById('playPauseBtn');
+            if (btn) {
+                btn.innerHTML = '▶️ Play';
+                btn.style.backgroundColor = '#4caf50';
+            }
+            
+            // Reset frame counter
+            const frameCounter = document.getElementById('frameCounter');
+            if (frameCounter) {
+                frameCounter.textContent = '0 / 0';
             }
         }
         
