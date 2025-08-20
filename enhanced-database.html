@@ -1088,16 +1088,7 @@
                 
                 const cesiumContainer = document.getElementById('cesiumContainer');
                 cesiumViewer = new Cesium.Viewer('cesiumContainer', {
-                    // Use Bing Maps aerial imagery for realistic Earth view
-                    imageryProvider: new Cesium.BingMapsImageryProvider({
-                        url: 'https://dev.virtualearth.net',
-                        key: 'Av63hPkCmH18oGG_9nFYLjfLpHcYqE6KAOmgKKhH0Y7JYJaf5icgLBWMCB0bvXP6', // Default Cesium key
-                        mapStyle: Cesium.BingMapsStyle.AERIAL_WITH_LABELS
-                    }),
-                    terrainProvider: Cesium.createWorldTerrain({
-                        requestWaterMask: true,
-                        requestVertexNormals: true
-                    }),
+                    // Start with simple imagery provider
                     baseLayerPicker: false,
                     navigationHelpButton: false,
                     animation: false,
@@ -1109,10 +1100,37 @@
                     selectionIndicator: false,
                     sceneModePicker: false,
                     navigationInstructionsInitiallyVisible: false,
-                    // Better performance settings
+                    // Show globe immediately
+                    globe: true,
+                    skyBox: true,
+                    skyAtmosphere: true,
+                    // Performance settings
                     requestRenderMode: true,
                     maximumRenderTimeChange: Infinity
                 });
+                
+                // Ensure globe is visible and opaque
+                cesiumViewer.scene.globe.show = true;
+                cesiumViewer.scene.globe.baseColor = Cesium.Color.BLUE;
+                
+                // Add terrain after viewer is created
+                cesiumViewer.terrainProvider = Cesium.createWorldTerrain({
+                    requestWaterMask: true,
+                    requestVertexNormals: true
+                });
+                
+                // Try to add better imagery
+                try {
+                    const bingImagery = cesiumViewer.imageryLayers.addImageryProvider(
+                        new Cesium.BingMapsImageryProvider({
+                            url: 'https://dev.virtualearth.net',
+                            key: 'Av63hPkCmH18oGG_9nFYLjfLpHcYqE6KAOmgKKhH0Y7JYJaf5icgLBWMCB0bvXP6',
+                            mapStyle: Cesium.BingMapsStyle.AERIAL_WITH_LABELS
+                        })
+                    );
+                } catch (e) {
+                    console.log('Bing Maps failed, using default imagery');
+                }
             
             // Set initial view to Atlantic
             cesiumViewer.scene.camera.setView({
@@ -1134,23 +1152,15 @@
             cesiumViewer.scene.globe.showGroundAtmosphere = true;
             
             // Enhanced visual settings
-            cesiumViewer.scene.globe.depthTestAgainstTerrain = true;
-            cesiumViewer.scene.globe.tileCacheSize = 1000;
+            cesiumViewer.scene.globe.depthTestAgainstTerrain = false;
+            cesiumViewer.scene.globe.tileCacheSize = 100;
             
-            // Add subtle ambient occlusion
-            cesiumViewer.scene.postProcessStages.ambientOcclusion.enabled = true;
-            cesiumViewer.scene.postProcessStages.ambientOcclusion.uniforms.ambientOcclusionOnly = false;
-            cesiumViewer.scene.postProcessStages.ambientOcclusion.uniforms.intensity = 2.0;
-            cesiumViewer.scene.postProcessStages.ambientOcclusion.uniforms.bias = 0.1;
-            cesiumViewer.scene.postProcessStages.ambientOcclusion.uniforms.lengthCap = 0.03;
-            cesiumViewer.scene.postProcessStages.ambientOcclusion.uniforms.stepSize = 1.0;
-            cesiumViewer.scene.postProcessStages.ambientOcclusion.uniforms.blurStepSize = 0.86;
+            // Ensure globe is rendered
+            cesiumViewer.scene.backgroundColor = Cesium.Color.BLACK;
+            cesiumViewer.scene.globe.baseColor = Cesium.Color.fromCssColorString('#1a1a2e');
             
-            // Set time to show current lighting
-            cesiumViewer.clock.currentTime = Cesium.JulianDate.now();
-            
-            // Better water rendering
-            cesiumViewer.scene.globe.oceanNormalMapUrl = Cesium.buildModuleUrl('Assets/Textures/waterNormals.jpg');
+            // Force render
+            cesiumViewer.scene.requestRender();
             
             // Load and display the storm track in 3D
             if (currentTrackData && currentTrackData.length > 0) {
@@ -1159,15 +1169,11 @@
             } catch (error) {
                 console.error('Error initializing Cesium viewer:', error);
                 
-                // Try fallback with OpenStreetMap imagery
+                // Try simpler fallback
                 try {
                     const cesiumContainer = document.getElementById('cesiumContainer');
                     cesiumViewer = new Cesium.Viewer('cesiumContainer', {
-                        // Fallback to OpenStreetMap
-                        imageryProvider: new Cesium.OpenStreetMapImageryProvider({
-                            url: 'https://a.tile.openstreetmap.org/'
-                        }),
-                        terrainProvider: Cesium.createWorldTerrain(),
+                        // Use default Cesium Ion imagery
                         baseLayerPicker: false,
                         navigationHelpButton: false,
                         animation: false,
@@ -1178,7 +1184,8 @@
                         infoBox: true,
                         selectionIndicator: false,
                         sceneModePicker: false,
-                        navigationInstructionsInitiallyVisible: false
+                        navigationInstructionsInitiallyVisible: false,
+                        terrainProvider: new Cesium.EllipsoidTerrainProvider()
                     });
                     
                     // Set initial view
