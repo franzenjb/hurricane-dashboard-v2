@@ -928,9 +928,20 @@
                     // Switch to Timeline tab and show the storm
                     const storm = data.storm || ATLANTIC_STORMS_ENHANCED.find(s => s.storm_id === data.stormId);
                     if (storm) {
-                        // Get Alpine.js component and update
-                        const alpineComponent = document.querySelector('[x-data]').__x.$data;
-                        alpineComponent.activeTab = 'timeline';
+                        // Try to get Alpine component, but fallback to direct manipulation
+                        // Simply click the Timeline tab button
+                        const timelineBtn = document.querySelector('button[\\x40click*="timeline"]') || 
+                                          document.querySelector('[\\x40click*="timeline"]') ||
+                                          Array.from(document.querySelectorAll('button')).find(btn => 
+                                              btn.textContent.includes('Timeline') || 
+                                              btn.innerHTML.includes('Timeline')
+                                          );
+                        if (timelineBtn) {
+                            timelineBtn.click();
+                        } else {
+                            console.error('Could not find Timeline tab button');
+                        }
+                        
                         console.log('Viewing storm:', storm.name, storm.year);
                         
                         // Wait for tab switch, then send storm to Timeline iframe
@@ -942,14 +953,20 @@
                                     storm: storm
                                 }, '*');
                             }
-                        }, 300);
+                        }, 500);
                     }
                     break;
                     
                 case 'viewOnMap':
                     // Switch to Timeline tab and show storms on map
-                    const alpineComponent = document.querySelector('[x-data]').__x.$data;
-                    alpineComponent.activeTab = 'timeline';
+                    try {
+                        const alpineEl = document.querySelector('[x-data]');
+                        if (alpineEl && alpineEl.__x) {
+                            alpineEl.__x.$data.activeTab = 'timeline';
+                        }
+                    } catch (e) {
+                        console.warn('Could not access Alpine component:', e);
+                    }
                     
                     if (data.storms && data.storms.length > 0) {
                         console.log('Viewing', data.storms.length, 'storms on map');
@@ -963,14 +980,20 @@
                                     storms: data.storms
                                 }, '*');
                             }
-                        }, 100);
+                        }, 500);
                     }
                     break;
                     
                 case 'compareStorms':
                     // Switch to Intelligence tab for comparison
-                    const alpineComp = document.querySelector('[x-data]').__x.$data;
-                    alpineComp.activeTab = 'intelligence';
+                    try {
+                        const alpineEl = document.querySelector('[x-data]');
+                        if (alpineEl && alpineEl.__x) {
+                            alpineEl.__x.$data.activeTab = 'intelligence';
+                        }
+                    } catch (e) {
+                        console.warn('Could not access Alpine component:', e);
+                    }
                     console.log('Comparing storms:', data.stormIds);
                     // TODO: Pass storm IDs to Intelligence tab for comparison
                     break;
@@ -980,10 +1003,16 @@
         // Make functions available globally for Alpine.js
         window.viewTopStorm = function(storm) {
             // Get Alpine component and switch to database tab
-            const alpineComponent = document.querySelector('[x-data]').__x.$data;
-            alpineComponent.activeTab = 'database';
-            alpineComponent.dbSearch = storm.name;
-            alpineComponent.searchDatabase();
+            try {
+                const alpineEl = document.querySelector('[x-data]');
+                if (alpineEl && alpineEl.__x) {
+                    alpineEl.__x.$data.activeTab = 'database';
+                    alpineEl.__x.$data.dbSearch = storm.name;
+                    alpineEl.__x.$data.searchDatabase();
+                }
+            } catch (e) {
+                console.warn('Could not access Alpine component:', e);
+            }
         };
         
         window.calculateRCImpact = function(storm) {
