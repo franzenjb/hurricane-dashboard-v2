@@ -248,6 +248,55 @@
                         </div>
                     </div>
                 </div>
+                
+                <!-- Top 10 Most Impactful Storms -->
+                <div class="mt-12">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">🌪️ Top 10 Most Impactful Storms (by RC Impact Score)</h2>
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                        <table class="min-w-full">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Rank</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Storm</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Year</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Category</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Deaths</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Damage</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">RC Impact</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <template x-for="(storm, index) in topStorms" :key="storm.storm_id">
+                                    <tr class="hover:bg-gray-50 cursor-pointer" @click="viewTopStorm(storm)">
+                                        <td class="px-4 py-3 text-sm font-bold" :class="index < 3 ? 'text-red-600' : 'text-gray-700'" x-text="index + 1"></td>
+                                        <td class="px-4 py-3 text-sm font-medium text-gray-900" x-text="storm.name"></td>
+                                        <td class="px-4 py-3 text-sm text-gray-600" x-text="storm.year"></td>
+                                        <td class="px-4 py-3">
+                                            <span class="px-2 py-1 text-xs font-bold rounded" 
+                                                  :class="storm.category === 5 ? 'bg-purple-600 text-white' : storm.category === 4 ? 'bg-red-600 text-white' : storm.category === 3 ? 'bg-orange-600 text-white' : 'bg-yellow-600 text-white'"
+                                                  x-text="storm.category"></span>
+                                        </td>
+                                        <td class="px-4 py-3 text-sm" :class="storm.deaths > 1000 ? 'text-red-600 font-bold' : 'text-gray-600'" x-text="storm.deaths?.toLocaleString() || '0'"></td>
+                                        <td class="px-4 py-3 text-sm text-gray-600" x-text="storm.damage_millions ? '$' + storm.damage_millions.toLocaleString() + 'M' : '-'"></td>
+                                        <td class="px-4 py-3">
+                                            <div class="flex items-center">
+                                                <span class="text-sm font-bold mr-2" x-text="storm.rc_impact_score || 0"></span>
+                                                <div class="w-20 bg-gray-200 rounded-full h-2">
+                                                    <div class="h-2 rounded-full" 
+                                                         :class="storm.rc_impact_score > 90 ? 'bg-red-600' : storm.rc_impact_score > 75 ? 'bg-orange-600' : storm.rc_impact_score > 50 ? 'bg-yellow-500' : 'bg-green-500'"
+                                                         :style="`width: ${storm.rc_impact_score || 0}%`"></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-4 text-center">
+                        Click any storm to view detailed information in the Database tab
+                    </p>
+                </div>
 
                 <!-- NOAA Live Feed -->
                 <div class="mb-12">
@@ -929,6 +978,14 @@
         });
         
         // Make functions available globally for Alpine.js
+        window.viewTopStorm = function(storm) {
+            // Get Alpine component and switch to database tab
+            const alpineComponent = document.querySelector('[x-data]').__x.$data;
+            alpineComponent.activeTab = 'database';
+            alpineComponent.dbSearch = storm.name;
+            alpineComponent.searchDatabase();
+        };
+        
         window.calculateRCImpact = function(storm) {
             // Red Cross Impact Score calculation
             const score = (

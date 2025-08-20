@@ -21,6 +21,7 @@ function hurricaneApp() {
         cat5Count: 0,
         billionDollarCount: 0,
         landfallCount: 0,
+        topStorms: [],
         
         filters: {
             yearStart: 1980,
@@ -592,11 +593,17 @@ function hurricaneApp() {
                 storm.rc_impact_score = this.calculateRCImpact(storm);
             });
             
+            // Get top 10 storms by RC Impact Score
+            this.topStorms = [...this.allStorms]
+                .sort((a, b) => (b.rc_impact_score || 0) - (a.rc_impact_score || 0))
+                .slice(0, 10);
+            
             console.log('Quick Stats:', {
                 total: this.totalStorms,
                 cat5: this.cat5Count,
                 billionDollar: this.billionDollarCount,
-                landfalls: this.landfallCount
+                landfalls: this.landfallCount,
+                topStorms: this.topStorms.map(s => s.name + ' ' + s.year)
             });
         },
         
@@ -614,6 +621,21 @@ function hurricaneApp() {
         viewStormOnMap(storm) {
             this.activeTab = 'timeline';
             this.selectStorm(storm);
+        },
+        
+        viewTopStorm(storm) {
+            // Switch to database tab and highlight the storm
+            this.activeTab = 'database';
+            this.dbSearch = storm.name;
+            this.searchDatabase();
+            
+            // Scroll to database section after tab switch
+            setTimeout(() => {
+                const dbSection = document.querySelector('[x-show="activeTab === \'database\'"]');
+                if (dbSection) {
+                    dbSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            }, 100);
         },
 
         viewStormOnMapDatabase(storm) {
