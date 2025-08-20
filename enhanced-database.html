@@ -1030,8 +1030,8 @@
                 bounds.extend(point);
                 
                 // Add circle marker for each point
-                const cat = feature.properties.ss || feature.properties.category || 0;
-                const color = getCategoryColorForMap(cat);
+                const status = feature.properties.status || 'TS';
+                const color = getStatusColorForMap(status, feature.properties.max_wind);
                 L.circleMarker(point, {
                     radius: 4,
                     fillColor: color,
@@ -1128,8 +1128,9 @@
                 animationMarker.setLatLng([lat, lon]);
                 
                 // Update marker color based on intensity
-                const markerCat = feature.properties.ss || feature.properties.category || 0;
-                const markerColor = getCategoryColorForMap(markerCat);
+                const markerStatus = feature.properties.status || 'TS';
+                const markerWind = feature.properties.max_wind || 0;
+                const markerColor = getStatusColorForMap(markerStatus, markerWind);
                 animationMarker.setIcon(L.divIcon({
                     className: 'animation-marker',
                     html: `<div style="background: ${markerColor}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.5);"></div>`,
@@ -1148,14 +1149,24 @@
                 }
                 
                 const datetime = new Date(feature.properties.datetime).toLocaleString();
-                const category = feature.properties.ss || feature.properties.category || 'Unknown';
-                const wind = feature.properties.wind || feature.properties.wind_mph || 'N/A';
+                const status = feature.properties.status || 'Unknown';
+                const wind = feature.properties.max_wind || 'N/A';
                 
-                // Format category display
-                let categoryDisplay = category;
-                if (category === -1) categoryDisplay = 'TD';
-                else if (category === 0) categoryDisplay = 'TS';
-                else if (category > 0) categoryDisplay = `Cat ${category}`;
+                // Format status display with proper names
+                let categoryDisplay = status;
+                const statusMap = {
+                    'TD': 'Tropical Depression',
+                    'TS': 'Tropical Storm', 
+                    'HU': 'Hurricane',
+                    'EX': 'Extratropical',
+                    'SD': 'Subtropical Depression',
+                    'SS': 'Subtropical Storm',
+                    'LO': 'Low',
+                    'DB': 'Disturbance'
+                };
+                if (statusMap[status]) {
+                    categoryDisplay = statusMap[status];
+                }
                 
                 animationMarker.bindPopup(`
                     <strong>${datetime}</strong><br>
@@ -1183,7 +1194,33 @@
             }
         }
         
-        // Get category color for map
+        // Get color based on status and wind speed
+        window.getStatusColorForMap = function(status, wind) {
+            // For hurricanes, determine category by wind speed
+            if (status === 'HU' && wind) {
+                if (wind >= 157) return '#7c3aed'; // Cat 5 - Purple
+                if (wind >= 130) return '#ef4444'; // Cat 4 - Red  
+                if (wind >= 111) return '#f97316'; // Cat 3 - Orange
+                if (wind >= 96) return '#f59e0b';  // Cat 2 - Yellow
+                if (wind >= 74) return '#10b981';  // Cat 1 - Green
+            }
+            
+            // Colors for other status types
+            const statusColors = {
+                'TD': '#94a3b8', // Tropical Depression - Slate
+                'TS': '#3b82f6', // Tropical Storm - Blue
+                'HU': '#10b981', // Hurricane (default) - Green
+                'EX': '#6b7280', // Extratropical - Gray
+                'SD': '#94a3b8', // Subtropical Depression - Slate
+                'SS': '#60a5fa', // Subtropical Storm - Light Blue
+                'LO': '#d1d5db', // Low - Light Gray
+                'DB': '#e5e7eb'  // Disturbance - Very Light Gray
+            };
+            
+            return statusColors[status] || '#6b7280';
+        }
+        
+        // Keep old function for backwards compatibility
         window.getCategoryColorForMap = function(category) {
             const colors = {
                 '-1': '#94a3b8', // TD - Slate
