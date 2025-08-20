@@ -165,6 +165,19 @@
                             🌊 Toggle Storm Surge
                         </button>
                     </div>
+                    <div style="margin-top: 8px;">
+                        <button id="animateBtn" onclick="toggleStormAnimation()" style="width: 100%; padding: 8px; background: #28a745; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold;">
+                            ▶️ Animate Storm Track
+                        </button>
+                    </div>
+                    <div id="animationControls" style="display: none; margin-top: 8px;">
+                        <input type="range" id="animationSpeed" min="50" max="1000" value="500" style="width: 100%;">
+                        <div style="display: flex; justify-content: space-between; font-size: 11px; color: #666;">
+                            <span>Slow</span>
+                            <span>Speed</span>
+                            <span>Fast</span>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="map-panel">
@@ -692,6 +705,10 @@
         }
         
         let currentStorm = null;
+        let currentTrackData = null;
+        let animationRunning = false;
+        let animationFrame = null;
+        let animatedMarker = null;
         
         function toggleSurgeVisualization() {
             if (!surgeLayer || !currentStorm) return;
@@ -713,12 +730,16 @@
             
             // Try to load the full storm track
             const trackData = await loadStormTrack(storm);
+            currentTrackData = trackData; // Save for animation
             
             if (trackData) {
                 console.log('Track data loaded, drawing storm track');
                 // Draw the full storm track
                 drawStormTrack(trackData, storm);
+                // Enable animation button if we have track data
+                document.getElementById('animateBtn').disabled = false;
             } else {
+                document.getElementById('animateBtn').disabled = true;
                 console.log('No track data found, showing single point');
                 // Fallback to single point if no track data available
                 if (storm.lat && storm.lon) {
@@ -989,6 +1010,142 @@
                 if (surgeLayer) {
                     surgeLayer.clearSurge();
                 }
+            }
+            
+            // Stop animation if running
+            if (animationRunning) {
+                stopAnimation();
+            }
+        }
+        
+        // Animation Functions
+        function toggleStormAnimation() {
+            if (!currentTrackData || !currentTrackData.features) return;
+            
+            if (animationRunning) {
+                stopAnimation();
+            } else {
+                startAnimation();
+            }
+        }
+        
+        function startAnimation() {
+            if (!currentTrackData || !currentTrackData.features) return;
+            
+            animationRunning = true;
+            updateAnimationButton();
+            document.getElementById('animationControls').style.display = 'block';
+            
+            // Get point features
+            const pointFeatures = currentTrackData.features.filter(f => 
+                f.geometry.type === 'Point' && 
+                f.properties.storm_id === currentStorm.storm_id
+            );
+            
+            if (pointFeatures.length === 0) return;
+            
+            // Sort points by time
+            pointFeatures.sort((a, b) => {
+                if (a.properties.datetime && b.properties.datetime) {
+                    return new Date(a.properties.datetime) - new Date(b.properties.datetime);
+                }
+                return 0;
+            });
+            
+            // Clear existing tracks
+            clearMapLayers();
+            
+            // Animate through points
+            let currentIndex = 0;
+            const speed = document.getElementById('animationSpeed').value;
+            
+            function animate() {
+                if (!animationRunning || currentIndex >= pointFeatures.length) {
+                    if (currentIndex >= pointFeatures.length) {
+                        // Animation complete
+                        stopAnimation();
+                    }
+                    return;
+                }
+                
+                const point = pointFeatures[currentIndex];
+                const coord = point.geometry.coordinates;
+                const category = point.properties.category || 0;
+                const color = getCategoryColor(category);
+                const datetime = point.properties.datetime;
+                
+                // Create marker for current position
+                const marker = L.circleMarker([coord[1], coord[0]], {
+                    color: '#000',
+                    weight: 2,
+                    fillColor: color,
+                    fillOpacity: 0.8,
+                    radius: 10
+                }).addTo(map);
+                
+                // Update popup
+                let popupContent = `<b>${currentStorm.name}</b><br>`;
+                if (datetime) {
+                    const date = new Date(datetime);
+                    popupContent += `${date.toLocaleString()}<br>`;
+                }
+                popupContent += `Category: ${category}<br>`;
+                if (point.properties.wind_mph) {
+                    popupContent += `Wind: ${point.properties.wind_mph} mph`;
+                }
+                marker.bindPopup(popupContent).openPopup();
+                
+                // Draw trail
+                if (currentIndex > 0) {
+                    const prevPoint = pointFeatures[currentIndex - 1];
+                    const prevCoord = prevPoint.geometry.coordinates;
+                    const prevCategory = prevPoint.properties.category || 0;
+                    const prevColor = getCategoryColor(prevCategory);
+                    
+                    L.polyline([[prevCoord[1], prevCoord[0]], [coord[1], coord[0]]], {
+                        color: prevColor,
+                        weight: 3,
+                        opacity: 0.7
+                    }).addTo(map);
+                }
+                
+                // Center map on current position
+                map.setView([coord[1], coord[0]], map.getZoom());
+                
+                currentIndex++;
+                
+                // Schedule next frame
+                animationFrame = setTimeout(() => {
+                    animate();
+                }, 1100 - speed); // Invert speed so higher value = faster
+            }
+            
+            animate();
+        }
+        
+        function stopAnimation() {
+            animationRunning = false;
+            if (animationFrame) {
+                clearTimeout(animationFrame);
+                animationFrame = null;
+            }
+            updateAnimationButton();
+            document.getElementById('animationControls').style.display = 'none';
+            
+            // Redraw the full track
+            if (currentTrackData && currentStorm) {
+                drawStormTrack(currentTrackData, currentStorm);
+            }
+        }
+        
+        function updateAnimationButton() {
+            const btn = document.getElementById('animateBtn');
+            if (animationRunning) {
+                btn.innerHTML = '⏸️ Pause Animation';
+                btn.style.background = '#dc3545';
+            } else {
+                btn.innerHTML = '▶️ Animate Storm Track';
+                btn.style.background = '#28a745';
             }
         }
         
