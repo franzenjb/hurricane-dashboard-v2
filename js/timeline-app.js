@@ -16,6 +16,12 @@ function hurricaneApp() {
         dbSearch: '',
         dbResults: [],
         
+        // Quick Stats Dashboard
+        totalStorms: 0,
+        cat5Count: 0,
+        billionDollarCount: 0,
+        landfallCount: 0,
+        
         filters: {
             yearStart: 1980,
             yearEnd: 2024,
@@ -185,6 +191,7 @@ function hurricaneApp() {
                 this.updateVisualization();
                 this.updateStateComparison();
                 this.searchDatabase();
+                this.calculateQuickStats();
                 
                 // Watch for tab changes to refresh timeline and initialize sidebar
                 this.$watch('activeTab', (newTab) => {
@@ -561,6 +568,47 @@ function hurricaneApp() {
                     (storm.landfall_states && storm.landfall_states.join(' ').toLowerCase().includes(search))
                 ).slice(0, 50);
             }
+        },
+        
+        calculateQuickStats() {
+            // Total storms
+            this.totalStorms = this.allStorms.length;
+            
+            // Category 5 hurricanes
+            this.cat5Count = this.allStorms.filter(storm => storm.category === 5).length;
+            
+            // Billion-dollar disasters (assuming storms with damage > 1000 million)
+            this.billionDollarCount = this.allStorms.filter(storm => 
+                storm.damage_millions && storm.damage_millions >= 1000
+            ).length;
+            
+            // U.S. landfalls
+            this.landfallCount = this.allStorms.filter(storm => 
+                storm.landfall_states && storm.landfall_states.length > 0
+            ).length;
+            
+            // Add RC Impact Score to all storms
+            this.allStorms.forEach(storm => {
+                storm.rc_impact_score = this.calculateRCImpact(storm);
+            });
+            
+            console.log('Quick Stats:', {
+                total: this.totalStorms,
+                cat5: this.cat5Count,
+                billionDollar: this.billionDollarCount,
+                landfalls: this.landfallCount
+            });
+        },
+        
+        calculateRCImpact(storm) {
+            // Red Cross Impact Score calculation
+            const score = (
+                storm.category * 20 +
+                (storm.deaths > 100 ? 25 : storm.deaths / 4) +
+                (storm.damage_millions > 10000 ? 25 : storm.damage_millions / 400) +
+                (storm.landfall_states?.length || 0) * 10
+            );
+            return Math.min(100, Math.round(score));
         },
 
         viewStormOnMap(storm) {
