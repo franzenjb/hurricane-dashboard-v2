@@ -1148,11 +1148,23 @@
                     console.log('Storm track feature properties:', feature.properties);
                 }
                 
-                const datetime = new Date(feature.properties.datetime).toLocaleString();
-                const status = feature.properties.status || 'Unknown';
-                const wind = feature.properties.max_wind || 'N/A';
+                // Parse and format the date properly
+                const dateObj = new Date(feature.properties.datetime);
+                const dateStr = dateObj.toLocaleDateString('en-US', { 
+                    month: 'short', 
+                    day: 'numeric', 
+                    year: 'numeric' 
+                });
+                const timeStr = dateObj.toLocaleTimeString('en-US', { 
+                    hour: 'numeric', 
+                    minute: '2-digit' 
+                });
+                const datetime = `${dateStr} ${timeStr}`;
                 
-                // Format status display with proper names
+                const status = feature.properties.status || 'Unknown';
+                const wind = feature.properties.max_wind || 0;
+                
+                // Format status display with proper names and hurricane categories
                 let categoryDisplay = status;
                 const statusMap = {
                     'TD': 'Tropical Depression',
@@ -1164,14 +1176,23 @@
                     'LO': 'Low',
                     'DB': 'Disturbance'
                 };
-                if (statusMap[status]) {
+                
+                // For hurricanes, add category based on wind speed
+                if (status === 'HU' && wind >= 74) {
+                    let category = 1;
+                    if (wind >= 157) category = 5;
+                    else if (wind >= 130) category = 4;
+                    else if (wind >= 111) category = 3;
+                    else if (wind >= 96) category = 2;
+                    categoryDisplay = `Category ${category} Hurricane`;
+                } else if (statusMap[status]) {
                     categoryDisplay = statusMap[status];
                 }
                 
                 animationMarker.bindPopup(`
                     <strong>${datetime}</strong><br>
-                    Category: ${categoryDisplay}<br>
-                    Wind: ${wind} mph
+                    <strong>${categoryDisplay}</strong><br>
+                    Wind Speed: ${wind} mph
                 `).openPopup();
                 
                 index++;
