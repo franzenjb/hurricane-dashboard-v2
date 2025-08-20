@@ -1100,25 +1100,36 @@
             if (cesiumViewer) return;
             
             try {
-                // Simple Cesium setup that definitely works
+                // Set default Cesium Ion token if not already set
+                if (!Cesium.Ion.defaultAccessToken) {
+                    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJlYWE1OWUxNy1mMWZiLTQzYjYtYTQ0OS1kMWFjYmFkNjc5YzciLCJpZCI6NTc3MzMsImlhdCI6MTYyNzg0NTE4Mn0.XcKpgANiY19MC4bdFUXMVEBToBmqS8kuYpUlxJHYZxk';
+                }
+                
+                // Simple Cesium setup with all widgets disabled
                 const cesiumContainer = document.getElementById('cesiumContainer');
                 
-                // Create viewer with minimal options
-                cesiumViewer = new Cesium.Viewer('cesiumContainer');
+                // Create viewer with widgets disabled
+                cesiumViewer = new Cesium.Viewer('cesiumContainer', {
+                    animation: false,
+                    baseLayerPicker: false,
+                    fullscreenButton: false,
+                    vrButton: false,
+                    geocoder: false,
+                    homeButton: false,
+                    infoBox: false,
+                    sceneModePicker: false,
+                    selectionIndicator: false,
+                    timeline: false,
+                    navigationHelpButton: false,
+                    navigationInstructionsInitiallyVisible: false
+                });
                 
-                // Remove unnecessary widgets
-                cesiumViewer.animation.container.style.display = 'none';
-                cesiumViewer.timeline.container.style.display = 'none';
+                // Hide credits
                 cesiumViewer.cesiumWidget.creditContainer.style.display = 'none';
-                cesiumViewer.fullscreenButton.container.style.display = 'none';
-                cesiumViewer.vrButton.container.style.display = 'none';
-                cesiumViewer.homeButton.container.style.display = 'none';
-                cesiumViewer.sceneModePicker.container.style.display = 'none';
-                cesiumViewer.baseLayerPicker.container.style.display = 'none';
-                cesiumViewer.navigationHelpButton.container.style.display = 'none';
                 
-                // Ensure globe is visible
+                // Ensure globe is visible and has a base color
                 cesiumViewer.scene.globe.show = true;
+                cesiumViewer.scene.globe.baseColor = Cesium.Color.DARKBLUE;
             
             // Set initial view to Atlantic
             cesiumViewer.scene.camera.setView({
@@ -1159,19 +1170,25 @@
             } catch (error) {
                 console.error('Error initializing Cesium viewer:', error);
                 
-                // Try simpler fallback
+                // Try offline fallback without Cesium Ion
                 try {
+                    console.log('Trying offline Cesium fallback...');
                     const cesiumContainer = document.getElementById('cesiumContainer');
+                    
+                    // Create viewer without Ion assets
                     cesiumViewer = new Cesium.Viewer('cesiumContainer', {
-                        // Use default Cesium Ion imagery
+                        imageryProvider: new Cesium.TileMapServiceImageryProvider({
+                            url: Cesium.buildModuleUrl('Assets/Textures/NaturalEarthII')
+                        }),
                         baseLayerPicker: false,
+                        geocoder: false,
                         navigationHelpButton: false,
                         animation: false,
                         timeline: false,
                         fullscreenButton: false,
                         vrButton: false,
                         homeButton: false,
-                        infoBox: true,
+                        infoBox: false,
                         selectionIndicator: false,
                         sceneModePicker: false,
                         navigationInstructionsInitiallyVisible: false,
@@ -1189,9 +1206,22 @@
                     });
                     
                     // Basic visual settings
-                    cesiumViewer.scene.globe.enableLighting = true;
-                    cesiumViewer.scene.skyAtmosphere.show = true;
-                    cesiumViewer.scene.globe.showGroundAtmosphere = true;
+                    cesiumViewer.scene.globe.show = true;
+                    cesiumViewer.scene.globe.baseColor = Cesium.Color.DARKBLUE;
+                    cesiumViewer.cesiumWidget.creditContainer.style.display = 'none';
+                    
+                    // Add a simple blue sphere to ensure something is visible
+                    cesiumViewer.entities.add({
+                        position: Cesium.Cartesian3.fromDegrees(0, 0, 0),
+                        ellipsoid: {
+                            radii: new Cesium.Cartesian3(6371000.0, 6371000.0, 6371000.0),
+                            material: Cesium.Color.BLUE.withAlpha(0.3),
+                            outline: true,
+                            outlineColor: Cesium.Color.DARKBLUE
+                        }
+                    });
+                    
+                    console.log('Cesium fallback initialized with blue sphere');
                     
                     // Load track if available
                     if (currentTrackData && currentTrackData.length > 0) {
