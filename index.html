@@ -903,7 +903,7 @@
 
 
     <script src="js/timeline-app.js"></script>
-    <script src="noaa-live-updates.js"></script>
+    <script src="noaa-live-updates-v2.js"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     
     <script>
@@ -1063,9 +1063,10 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize NOAA live updates
-            if (window.noaaLiveUpdates) {
-                window.noaaLiveUpdates.startAutoRefresh(15); // Update every 15 minutes
-                console.log('NOAA live updates initialized');
+            if (window.NOAALiveUpdatesV2) {
+                window.noaaUpdates = new window.NOAALiveUpdatesV2();
+                window.noaaUpdates.startAutoRefresh(15); // Update every 15 minutes
+                console.log('NOAA live updates V2 initialized');
             }
         });
     </script>
