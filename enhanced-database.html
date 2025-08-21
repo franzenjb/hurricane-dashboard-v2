@@ -285,7 +285,7 @@
             <!-- Year Range -->
             <div class="flex items-center gap-4 mt-4">
                 <label class="text-sm font-bold text-gray-700">Years:</label>
-                <input type="number" id="yearStart" min="1851" max="2024" value="1980" class="w-20 px-2 py-1 border rounded">
+                <input type="number" id="yearStart" min="1851" max="2024" value="1900" class="w-20 px-2 py-1 border rounded">
                 <span>to</span>
                 <input type="number" id="yearEnd" min="1851" max="2024" value="2024" class="w-20 px-2 py-1 border rounded">
                 <button onclick="applyFilters()" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Apply</button>
@@ -397,16 +397,23 @@
         let activeFilters = {
             search: '',
             impact: [],
-            category: [],
+            category: ['1', '2', '3', '4', '5'], // Default to Cat 1-5 only
             special: [],
             state: [],
-            yearStart: 1980, // Default to 1980 as in the HTML
+            yearStart: 1900, // Default to 1900
             yearEnd: 2024
         };
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             updateStats();
+            
+            // Set default category filters as active in UI
+            ['1', '2', '3', '4', '5'].forEach(cat => {
+                const chip = document.querySelector(`.filter-chip[data-filter="category"][data-value="${cat}"]`);
+                if (chip) chip.classList.add('active');
+            });
+            
             applyFilters();
             setupEventListeners();
         });

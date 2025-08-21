@@ -10,67 +10,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **The user monitors progress through GitHub. Not pushing changes means the user cannot see your work. This is NOT optional.**
 
-## Git Best Practices - IMPORTANT
-
-### Understanding Git Push Behavior
-When you interrupt a Git push that's in progress:
-- **If interrupted before completion**: The changes aren't on the remote repository yet
-- **Your local commits are safe**: Git handles interrupted operations gracefully
-- **Only committed changes get pushed**: Uncommitted changes stay local until committed
-
-### Safe Git Workflow - ALWAYS FOLLOW THIS
-```bash
-# 1. Check what's staged/unstaged
-git status
-
-# 2. Check what commits will be pushed
-git log origin/main..HEAD
-
-# 3. Stage and commit your changes
-git add .
-git commit -m "Descriptive message of changes"
-
-# 4. Push to remote
-git push
-
-# If push is interrupted, simply run git push again
-```
-
-### Key Points
-- **Commits are local first**: Changes must be committed locally before they can be pushed
-- **Interrupted pushes are safe**: Your local repository retains all commits
-- **Always commit before pushing**: Uncommitted changes won't be included in push
-- **Check status first**: Use `git status` to understand what will be included
-
-## Architecture Overview
-
-This is a **multi-tab hurricane analytics dashboard** with three distinct implementations:
-
-### 🏗️ **Core Structure**
-- **`index.html`**: Main dashboard container with Alpine.js tabs
-- **Tab 1 - Timeline**: `enhanced-timeline.html` (iframe-embedded)  
-- **Tab 2 - Multi-State**: `enhanced-multi-state.html` (iframe-embedded)
-- **Tab 3 - Database**: Built into `index.html` (native Alpine.js)
-
-### 📊 **Data Architecture**
-- **Primary Dataset**: `atlantic-storms-enhanced.js` (1,991 storms from HURDAT2 1851-2024)
-- **Track Visualization**: `hurdat2_data/points_[decade]s.geojson` files for rainbow track rendering
-- **Fallback Tracks**: `hurdat2_data/tracks_[decade]s.geojson` for simple line tracks
-
 ## Development Commands
 
 ### Local Development
 ```bash
 # Start local server (required - CORS restrictions prevent file:// usage)
 ./run-local.sh
-# Access at: http://localhost:8000
+# Opens at: http://localhost:8000
 ```
 
-### Deployment - CRITICAL REQUIREMENT
-**⚠️ IMPORTANT: YOU MUST COMMIT AND PUSH ALL CHANGES TO GITHUB IMMEDIATELY AFTER MAKING THEM**
-
+### Deployment
 ```bash
-# REQUIRED AFTER EVERY CHANGE - DO NOT SKIP THIS STEP
+# REQUIRED AFTER EVERY CHANGE
 git add .
 git commit -m "description of changes"
 git push
@@ -78,96 +29,207 @@ git push
 # Live at: https://franzenjb.github.io/hurricane-dashboard-v2/
 ```
 
-**REMINDER TO CLAUDE: The user monitors progress via GitHub commits. You MUST push changes immediately after making them. Do not wait to be asked. This is not optional.**
+### Running Tests & Validation
+```bash
+# Test AI Assistant endpoint
+./test-ai-assistant.sh
+
+# Test specific AI queries
+./test-cat5-query.sh
+
+# Database quality check
+node database-qa-tool.js
+
+# Search storm data
+node search-nc-storms.js
+```
+
+## Architecture Overview
+
+### Multi-Tab Dashboard System
+The platform uses an iframe-based architecture with Alpine.js for state management:
+
+```
+index.html (Main Container)
+├── enhanced-timeline.html (Timeline Tab - iframe)
+├── enhanced-multi-state.html (Regional Tab - iframe)  
+├── enhanced-database.html (Database Tab - iframe)
+├── intelligence-tab.html (Intelligence Tab - iframe)
+└── response-tab.html (Response Tab - iframe)
+```
+
+### Core Data Flow
+```
+atlantic-storms-enhanced.js (1,991 storms)
+    ↓
+Browser loads full dataset
+    ↓
+Each tab filters/displays differently
+    ↓
+Cross-frame messaging via postMessage()
+```
+
+### Storm Track System
+- **Points files**: `hurdat2_data/points_[decade]s.geojson` - Individual storm points with wind/status data
+- **Tracks files**: `hurdat2_data/tracks_[decade]s.geojson` - Simple polyline tracks
+- **Loading pattern**: Try points first (for rainbow tracks), fallback to tracks
 
 ## Critical Development Rules
 
-### ⚠️ **File Editing Priority**
-**ALWAYS edit the embedded iframe files, not backup versions in `index.html`:**
-- ✅ Edit `enhanced-timeline.html` for Timeline tab changes
-- ✅ Edit `enhanced-multi-state.html` for Multi-State tab changes  
-- ✅ Edit `index.html` directly only for Database tab changes
-- ❌ Never edit the backup/original implementations in `index.html`
+### 1. Tab-Specific File Editing
+- **Timeline changes**: Edit `enhanced-timeline.html` 
+- **Regional changes**: Edit `enhanced-multi-state.html`
+- **Database changes**: Edit `enhanced-database.html`
+- **Never edit backup implementations in index.html**
 
-### 🎯 **Tab-Specific Implementations**
-1. **Timeline Tab** (`enhanced-timeline.html`):
-   - Uses `updateStormInfoPanel()` + `showStormOnMap()` functions
-   - Has vertical year slider component
-   - Category-based filtering with checkboxes
+### 2. Cross-Frame Communication
+All tabs communicate via postMessage:
+```javascript
+// Send to parent
+window.parent.postMessage({
+    action: 'viewStorm',
+    storm: stormData
+}, '*');
 
-2. **Multi-State Tab** (`enhanced-multi-state.html`):
-   - Uses same `updateStormInfoPanel()` + `showStormOnMap()` functions as Timeline
-   - Multi-state selector dropdown
-   - Plotly timeline scatter plot
+// Listen in parent
+window.addEventListener('message', (event) => {
+    if (event.data.action === 'viewStorm') {
+        // Handle storm viewing
+    }
+});
+```
 
-3. **Database Tab** (in `index.html`):
-   - Uses `StormSidebar` component from `storm-sidebar-component.js`
-   - Clickable table rows trigger `viewStormOnMapDatabase()`
-   - Search functionality with Alpine.js
+### 3. Function Naming Conventions
+**Timeline/Regional tabs**:
+- `updateStormInfoPanel()` - Updates sidebar
+- `showStormOnMap()` - Displays track
+- `getCategoryColor()` - Returns hex color
+- `drawRainbowTrack()` - Multi-color track
 
-## Storm Data Integration
+**Database tab**:
+- `viewStorm()` - Opens animation modal
+- `trackStorm()` - Starts tracking animation
+- `showComparison()` - Storm comparison modal
+- `exportSelected()` - CSV export
 
-### 🌪️ **Track Visualization System**
-- **Rainbow Tracks**: Load `points_[decade]s.geojson` → `drawRainbowTrack()` with category-based coloring
-- **Simple Tracks**: Load `tracks_[decade]s.geojson` → `drawSimpleTrack()` with single color
-- **Track Loading**: `loadStormTrack(storm)` tries points first, falls back to tracks
+### 4. Cesium 3D Visualization
+- Must disable Ion access token: `Cesium.Ion.defaultAccessToken = undefined`
+- Use offline imagery providers (Esri, OSM, CartoDB)
+- Camera follows behind storm in movement direction
+- Track displayed at low altitude with colored segments
 
-### 📍 **Storm Object Structure**
+### 5. Animation System
+- 2D uses Leaflet with dynamic markers
+- 3D uses Cesium with chase cam view
+- Frame-by-frame control with play/pause
+- Fullscreen mode includes controls
+
+## Data Structure
+
+### Storm Object
 ```javascript
 {
-  storm_id: "AL092022",      // Primary key for track data
-  name: "IAN",
-  year: 2022, month: 9, day: 22,
-  category: 5, wind_mph: 140,
-  landfall_states: ["FL", "NC", "SC"],
-  narrative: "Full storm description..."
+    storm_id: "AL092022",           // HURDAT2 ID
+    name: "IAN",                    
+    year: 2022,
+    month: 9,
+    day: 22,
+    category: 5,                    // -1=TD, 0=TS, 1-5=Hurricane
+    wind_mph: 160,
+    landfall_states: ["FL", "SC"],
+    deaths: 156,
+    damage_millions: 112900,
+    rc_impact_score: 95,            // 0-100 Red Cross impact
+    rc_impact_level: "CATASTROPHIC", // MINOR|MODERATE|MAJOR|SEVERE|CATASTROPHIC
+    narrative: "Description...",
+    resources: {
+        tcr_pdf: "https://...",     // Tropical Cyclone Report
+        nhc_archive: "https://..."
+    }
 }
 ```
 
-## Consistency Requirements
+### GeoJSON Track Point
+```javascript
+{
+    type: "Feature",
+    geometry: {
+        type: "Point",
+        coordinates: [-82.5, 27.5]
+    },
+    properties: {
+        storm_id: "AL092022",
+        datetime: "2022-09-28T18:00:00",
+        status: "HU",               // TD|TS|HU|EX|SS|SD|LO|DB
+        max_wind: 155,
+        min_pressure: 937
+    }
+}
+```
 
-### 🎨 **Visual Consistency**
-- Timeline and Multi-State tabs must look identical (same sidebar, styling, functions)
-- Both use timeline-style `updateStormInfoPanel()` not `StormSidebar` component
-- Database tab uses different `StormSidebar` component with two-column layout
+## Common Issues & Solutions
 
-### 🔧 **Function Naming Patterns**
-- **Timeline/Multi-State**: `updateStormInfoPanel()`, `showStormOnMap()`, `getCategoryColor()`, `getMonthName()`
-- **Database**: `StormSidebar.updateStorm()`, `viewStormOnMapDatabase()`
+### CORS Errors
+- **Cause**: Opening HTML files directly (file://)
+- **Solution**: Use `./run-local.sh` or access via GitHub Pages
 
-## Future Improvements
+### Missing Storm Tracks
+- **Cause**: storm_id mismatch between database and GeoJSON files
+- **Solution**: Check decade calculation and file naming
 
-### Unified Side Panel Component (Priority)
-Currently, the storm info side panels in Timeline and Regional tabs use duplicated HTML/CSS code. This should be refactored into a single shared JavaScript component that:
-- Provides one source of truth for the panel layout and styling
-- Automatically propagates changes to all tabs that use it
-- Reduces code duplication and maintenance overhead
-- Ensures true consistency across the dashboard
+### 3D Globe Shows Stars
+- **Cause**: Cesium Ion authentication failure
+- **Solution**: Ensure Ion token is undefined, use offline providers
 
-**Proposed Implementation:**
-- Create a `StormPanelComponent.js` that can be imported by all tabs
-- Use consistent data binding from the master `ATLANTIC_STORMS_ENHANCED` database
-- Single update point for any panel modifications
+### Animation Controls Missing in Fullscreen
+- **Cause**: Controls outside fullscreen container
+- **Solution**: Duplicate controls inside fullscreenContainer div
 
-## Testing Requirements
+### Database Showing Old Storms First
+- **Cause**: Default filters include all categories from 1851
+- **Solution**: Set default filters to Cat 1-5, 1900-present, sorted newest first
 
-### 🧪 **Manual Testing Process**
-1. Run `./run-local.sh` and verify http://localhost:8000 loads
-2. Test storm clicks in each tab - should populate sidebar with:
-   - Correct category icon and color
-   - Storm stats (date, wind, landfall states)
-   - Narrative text
-   - Rainbow track visualization on map
-3. Console should show "Found X track points - RAINBOW TRACK" for successful track loads
+## AI Assistant Integration
 
-### 🚨 **Common Issues**
-- **Gray tracks with "barbells"**: Usually means StormSidebar component vs timeline functions mismatch
-- **CORS errors**: Must use web server, not file:// URLs
-- **Missing tracks**: Check storm_id matching between `ATLANTIC_STORMS_ENHANCED` and GeoJSON files
+### Current Implementation
+- Frontend: `ai-assistant-component.js` sends queries to worker
+- Worker: Deployed at `https://hurricane-ai-simple.jbf-395.workers.dev/`
+- Fallback: Pattern matching if API unavailable
 
-## Data Sources Reference
+### Worker Deployment
+```bash
+# Deploy to Cloudflare Workers
+1. Update code in worker dashboard
+2. Add ANTHROPIC_API_KEY environment variable
+3. Test: curl -X POST [worker-url] -d '{"query":"test"}'
+```
 
-- **HURDAT2**: Official NHC Atlantic hurricane database (1851-2024)
-- **Enhanced Narratives**: AI-generated storm impact descriptions
-- **Landfall Detection**: Multi-state landfall analysis for regional tracking
-- **Research Contact**: jeff.franzen2@redcross.org
+## Testing Checklist
+
+### Before Committing
+1. **Run locally**: `./run-local.sh` and test all tabs
+2. **Check console**: No errors in browser console
+3. **Test animations**: Both 2D and 3D views work
+4. **Verify filters**: Database filters apply correctly
+5. **Cross-tab communication**: Clicking storms updates other tabs
+
+### Storm Track Testing
+1. Click any storm in Timeline/Regional/Database
+2. Verify rainbow track appears (console: "Found X track points")
+3. Test animation controls (play/pause/frame nav)
+4. Toggle 3D view and verify globe shows Earth
+5. Check fullscreen mode includes controls
+
+## Performance Considerations
+
+### Large Dataset Handling
+- 1,991 storms loaded in browser memory
+- GeoJSON files loaded on-demand by decade
+- Use pagination in database (default 50 per page)
+- Limit map displays to avoid browser freezing
+
+### Optimization Tips
+- Filter storms before rendering
+- Use requestAnimationFrame for smooth animations
+- Dispose of Cesium entities when switching views
+- Clear Leaflet layers before adding new ones
