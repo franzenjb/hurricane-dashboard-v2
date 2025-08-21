@@ -68,7 +68,7 @@ class NOAALiveUpdates {
             
             // Process each storm
             const processedStorms = atlanticStorms.map(storm => {
-                const windMph = storm.intensity || storm.maxWindMph || 0;
+                const windMph = parseInt(storm.intensity) || parseInt(storm.maxWindMph) || 0;
                 const category = this.getCategory(windMph);
                 
                 return {
@@ -274,19 +274,13 @@ class NOAALiveUpdates {
                 this.fetchActiveStorms()
             ]);
             
-            // Update Atlantic Outlook
-            this.updateOutlookDisplay(outlook);
-            
-            // Update Active Storms
-            this.updateStormsDisplay(storms);
-            
-            // Update season year
-            const seasonYear = document.getElementById('seasonYear');
-            if (seasonYear) {
-                seasonYear.textContent = new Date().getFullYear();
-            }
+            // Update combined display
+            this.updateCombinedDisplay(storms, outlook);
             
             console.log('Dashboard updated successfully');
+            console.log('Active storms:', storms.activeStorms.length);
+            console.log('Formation outlook:', outlook.formation_chance_7day + '%');
+            
             return { outlook, storms };
             
         } catch (error) {
@@ -295,93 +289,161 @@ class NOAALiveUpdates {
         }
     }
 
-    // Update outlook display
-    updateOutlookDisplay(outlook) {
-        const outlookStatus = document.querySelector('.bg-white .text-green-800');
-        const outlookText = document.querySelector('.bg-white .text-gray-600');
-        const outlookTime = document.getElementById('outlookTime');
+    // Update combined display
+    updateCombinedDisplay(storms, outlook) {
+        const statusBadge = document.getElementById('noaaStatusBadge');
+        const mainContent = document.getElementById('noaaMainContent');
+        const updateTime = document.getElementById('noaaUpdateTime');
         
-        if (outlookStatus) {
-            outlookStatus.textContent = outlook.status;
-            outlookStatus.className = `px-2 py-1 text-xs rounded-full ${this.getStatusColor(outlook.status)}`;
+        // Determine overall status
+        let overallStatus = 'QUIET';
+        let statusColor = 'bg-green-100 text-green-800';
+        
+        if (storms.activeStorms.length > 0) {
+            const hasHurricane = storms.activeStorms.some(s => s.category >= 1);
+            const hasMajor = storms.activeStorms.some(s => s.category >= 3);
+            
+            if (hasMajor) {
+                overallStatus = `${storms.activeStorms.length} ACTIVE - MAJOR HURRICANE`;
+                statusColor = 'bg-red-100 text-red-800';
+            } else if (hasHurricane) {
+                overallStatus = `${storms.activeStorms.length} ACTIVE - HURRICANE`;
+                statusColor = 'bg-orange-100 text-orange-800';
+            } else {
+                overallStatus = `${storms.activeStorms.length} ACTIVE`;
+                statusColor = 'bg-yellow-100 text-yellow-800';
+            }
+        } else if (outlook && (outlook.formation_chance_48hr >= 40 || outlook.formation_chance_7day >= 40)) {
+            overallStatus = 'MONITORING AREA';
+            statusColor = 'bg-yellow-100 text-yellow-800';
         }
         
-        if (outlookText) {
-            if (outlook.formation_chance_7day > 0 || outlook.formation_chance_48hr > 0) {
-                outlookText.innerHTML = `
-                    <div class="space-y-1">
-                        <div class="flex justify-between">
-                            <span>48 hours:</span>
-                            <span class="font-semibold">${outlook.formation_chance_48hr}%</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>7 days:</span>
-                            <span class="font-semibold">${outlook.formation_chance_7day}%</span>
-                        </div>
-                        ${outlook.areas_of_interest.length > 0 ? `
-                            <div class="text-xs mt-2 text-gray-500">
-                                Monitoring: ${outlook.areas_of_interest.map(a => a.name).join(', ')}
+        if (statusBadge) {
+            statusBadge.textContent = overallStatus;
+            statusBadge.className = `px-3 py-1 ${statusColor} text-sm rounded-full font-semibold`;
+        }
+        
+        // Build main content
+        let contentHTML = '';
+        
+        // Active storms section
+        if (storms.activeStorms.length > 0) {
+            contentHTML += `
+                <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                    <h4 class="font-bold text-red-800 mb-3">Active Tropical Cyclones</h4>
+                    <div class="space-y-3">
+            `;
+            
+            storms.activeStorms.forEach(storm => {
+                const catColor = this.getCategoryColorClasses(storm.category);
+                const catName = this.getCategoryName(storm.category);
+                
+                contentHTML += `
+                    <div class="bg-white rounded border border-red-200 p-3">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <span class="inline-block w-3 h-3 rounded-full ${catColor.dot}"></span>
+                                    <span class="font-bold">${catName} ${storm.name}</span>
+                                </div>
+                                <div class="text-sm text-gray-700 mt-1">
+                                    Wind: ${storm.wind_mph} mph • Pressure: ${storm.pressure_mb || 'N/A'} mb
+                                </div>
+                                <div class="text-xs text-gray-600 mt-1">
+                                    ${storm.position.lat.toFixed(1)}°N, ${Math.abs(storm.position.lon).toFixed(1)}°W • ${storm.movement}
+                                </div>
                             </div>
-                        ` : ''}
+                            <a href="https://www.nhc.noaa.gov/graphics_${storm.id.toLowerCase().replace('al', 'at')}.shtml" 
+                               target="_blank" 
+                               class="text-xs bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700">
+                                Track →
+                            </a>
+                        </div>
                     </div>
                 `;
-            } else {
-                outlookText.textContent = outlook.discussion;
-            }
+            });
+            
+            contentHTML += `
+                    </div>
+                </div>
+            `;
         }
         
-        if (outlookTime) {
-            outlookTime.textContent = this.getTimeAgo(new Date(outlook.lastUpdate));
+        // Formation outlook section
+        if (outlook && (outlook.formation_chance_48hr > 0 || outlook.formation_chance_7day > 0)) {
+            const outlookColor = outlook.formation_chance_7day >= 70 ? 'orange' : 
+                               outlook.formation_chance_7day >= 40 ? 'yellow' : 'blue';
+            
+            contentHTML += `
+                <div class="bg-${outlookColor}-50 border border-${outlookColor}-200 rounded-lg p-4">
+                    <h4 class="font-bold text-${outlookColor}-800 mb-2">Formation Outlook</h4>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-${outlookColor}-800">${outlook.formation_chance_48hr}%</div>
+                            <div class="text-xs text-gray-600">48 hours</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-${outlookColor}-800">${outlook.formation_chance_7day}%</div>
+                            <div class="text-xs text-gray-600">7 days</div>
+                        </div>
+                    </div>
+                    ${outlook.areas_of_interest.length > 0 ? `
+                        <div class="text-sm text-gray-700 mt-3">
+                            Monitoring: ${outlook.areas_of_interest.map(a => a.name).join(', ')}
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+        
+        // Quiet period message
+        if (storms.activeStorms.length === 0 && (!outlook || (outlook.formation_chance_48hr === 0 && outlook.formation_chance_7day === 0))) {
+            contentHTML = `
+                <div class="text-center py-8">
+                    <svg class="w-16 h-16 mx-auto text-green-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <p class="text-lg font-semibold text-gray-700">All Clear in the Atlantic Basin</p>
+                    <p class="text-sm text-gray-600 mt-2">No tropical cyclone activity expected in the next 7 days</p>
+                </div>
+            `;
+        }
+        
+        if (mainContent) {
+            mainContent.innerHTML = contentHTML;
+        }
+        
+        if (updateTime) {
+            updateTime.textContent = this.getTimeAgo(new Date());
         }
     }
 
-    // Update storms display
-    updateStormsDisplay(storms) {
-        const stormsCount = document.querySelector('.text-blue-800');
-        const stormsList = document.querySelector('.bg-white:nth-child(2) .text-gray-600');
-        
-        if (stormsCount) {
-            stormsCount.textContent = `${storms.activeStorms.length} ACTIVE`;
-            
-            // Update color based on storm count
-            const bgColor = storms.activeStorms.length > 0 ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800';
-            stormsCount.className = `px-2 py-1 text-xs rounded-full ${bgColor}`;
-        }
-        
-        if (stormsList) {
-            if (storms.activeStorms.length > 0) {
-                stormsList.innerHTML = storms.activeStorms.map(storm => {
-                    const catColor = this.getCategoryColor(storm.category);
-                    return `
-                        <div class="border-b border-gray-200 pb-2 mb-2 last:border-0">
-                            <div class="flex items-center gap-2">
-                                <span class="inline-block w-3 h-3 rounded-full ${catColor}"></span>
-                                <span class="font-bold text-sm">${storm.status} ${storm.name}</span>
-                            </div>
-                            <div class="text-xs text-gray-600 mt-1">
-                                Wind: ${storm.wind_mph} mph | Pressure: ${storm.pressure_mb || 'N/A'} mb
-                            </div>
-                            <div class="text-xs text-gray-500">
-                                Location: ${storm.position.lat.toFixed(1)}°N, ${Math.abs(storm.position.lon).toFixed(1)}°W
-                            </div>
-                            <div class="text-xs text-gray-500">
-                                Movement: ${storm.movement}
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            } else {
-                stormsList.innerHTML = `
-                    <div class="text-center text-gray-500">
-                        <p>No active tropical cyclones in the Atlantic basin.</p>
-                        ${storms.basinStatus === 'error' ? 
-                            '<p class="text-xs text-red-600 mt-2">Error loading data</p>' : 
-                            ''
-                        }
-                    </div>
-                `;
-            }
-        }
+    // Get category name
+    getCategoryName(category) {
+        const names = {
+            '-1': 'Tropical Depression',
+            '0': 'Tropical Storm',
+            '1': 'Category 1 Hurricane',
+            '2': 'Category 2 Hurricane',
+            '3': 'Category 3 Hurricane',
+            '4': 'Category 4 Hurricane',
+            '5': 'Category 5 Hurricane'
+        };
+        return names[category] || 'Unknown';
+    }
+    
+    // Get category color classes
+    getCategoryColorClasses(category) {
+        const colors = {
+            '-1': { dot: 'bg-blue-300', text: 'text-blue-700' },
+            '0': { dot: 'bg-green-400', text: 'text-green-700' },
+            '1': { dot: 'bg-yellow-400', text: 'text-yellow-700' },
+            '2': { dot: 'bg-orange-400', text: 'text-orange-700' },
+            '3': { dot: 'bg-red-500', text: 'text-red-700' },
+            '4': { dot: 'bg-red-700', text: 'text-red-800' },
+            '5': { dot: 'bg-purple-700', text: 'text-purple-800' }
+        };
+        return colors[category] || { dot: 'bg-gray-400', text: 'text-gray-700' };
     }
 
     // Get status color classes

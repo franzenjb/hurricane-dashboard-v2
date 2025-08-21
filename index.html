@@ -300,50 +300,41 @@
 
                 <!-- NOAA Live Feed -->
                 <div class="mb-12">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">Live NOAA Updates</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <!-- Atlantic Outlook -->
-                        <div class="bg-white rounded-xl shadow-lg p-6">
-                            <div class="flex items-center justify-between mb-4">
-                                <h3 class="text-lg font-bold">Atlantic Outlook</h3>
-                                <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">QUIET</span>
-                            </div>
-                            <p class="text-sm text-gray-600">
-                                No tropical cyclones are expected during the next 7 days.
-                            </p>
-                            <div class="mt-4 text-xs text-gray-500">
-                                Updated: <span id="outlookTime">Just now</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Active Storms -->
-                        <div class="bg-white rounded-xl shadow-lg p-6">
-                            <div class="flex items-center justify-between mb-4">
-                                <h3 class="text-lg font-bold">Active Storms</h3>
-                                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">0 ACTIVE</span>
-                            </div>
-                            <div class="text-sm text-gray-600 max-h-32 overflow-y-auto">
-                                No active tropical systems in the Atlantic basin.
-                            </div>
-                            <div class="mt-4 text-xs text-gray-500">
-                                Season: <span id="seasonYear">2025</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Latest Advisory -->
-                        <div class="bg-white rounded-xl shadow-lg p-6">
-                            <div class="flex items-center justify-between mb-4">
-                                <h3 class="text-lg font-bold">Latest Advisory</h3>
-                                <span class="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-full">INFO</span>
-                            </div>
-                            <p class="text-sm text-gray-600">
-                                Monthly tropical weather summary available.
-                            </p>
-                            <div class="mt-4">
-                                <a href="https://www.nhc.noaa.gov" target="_blank" 
-                                   class="text-xs text-blue-600 hover:text-blue-800">
-                                    View Full NOAA Site →
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">Live NOAA Atlantic Hurricane Activity</h2>
+                    <div class="bg-white rounded-xl shadow-lg p-6" id="noaaLiveSummary">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-bold flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-red-600 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
+                                    <circle cx="10" cy="10" r="3"/>
+                                </svg>
+                                Current Atlantic Basin Status
+                            </h3>
+                            <div class="flex items-center gap-2">
+                                <span id="noaaStatusBadge" class="px-3 py-1 bg-gray-100 text-gray-800 text-sm rounded-full font-semibold">Loading...</span>
+                                <a href="https://www.nhc.noaa.gov/" target="_blank" 
+                                   class="text-sm bg-blue-600 text-white px-3 py-1 rounded-full hover:bg-blue-700 transition">
+                                    Visit NHC →
                                 </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Main Summary Content -->
+                        <div id="noaaMainContent" class="space-y-4">
+                            <div class="text-gray-600">
+                                <div class="animate-pulse">
+                                    <div class="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                                    <div class="h-4 bg-gray-200 rounded w-1/2"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Last Update Time -->
+                        <div class="mt-4 pt-4 border-t border-gray-200 flex justify-between items-center">
+                            <div class="text-xs text-gray-500">
+                                Last updated: <span id="noaaUpdateTime">Connecting...</span>
+                            </div>
+                            <div class="text-xs text-gray-500">
+                                Auto-refresh every 15 minutes
                             </div>
                         </div>
                     </div>
