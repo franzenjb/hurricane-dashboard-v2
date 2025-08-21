@@ -87,7 +87,7 @@
                         class="px-3 py-1.5 rounded text-sm font-medium transition-colors">
                     🏠 Home
                 </button>
-                <button @click="activeTab = 'timeline'" 
+                <button @click="activeTab = 'timeline'; setTimeout(window.sendLiveStormsToTimeline, 500)" 
                         :class="activeTab === 'timeline' ? 'bg-red-600 text-white' : 'text-gray-700 hover:bg-gray-100'"
                         class="px-3 py-1.5 rounded text-sm font-medium transition-colors">
                     📅 Timeline
@@ -1058,6 +1058,27 @@
                 window.noaaUpdates = new window.NOAALiveUpdatesV2();
                 window.noaaUpdates.startAutoRefresh(15); // Update every 15 minutes
                 console.log('NOAA live updates V2 initialized');
+                
+                // Send live storms to timeline when data updates
+                window.sendLiveStormsToTimeline = function() {
+                    if (window.noaaUpdates) {
+                        window.noaaUpdates.fetchActiveStorms().then(data => {
+                            if (data && data.activeStorms && data.activeStorms.length > 0) {
+                                const timelineFrame = document.querySelector('iframe[src="enhanced-timeline.html"]');
+                                if (timelineFrame && timelineFrame.contentWindow) {
+                                    console.log('Sending', data.activeStorms.length, 'live storms to timeline');
+                                    timelineFrame.contentWindow.postMessage({
+                                        action: 'updateLiveStorms',
+                                        storms: data.activeStorms
+                                    }, '*');
+                                }
+                            }
+                        });
+                    }
+                };
+                
+                // Send live storms after a delay to ensure iframe is loaded
+                setTimeout(window.sendLiveStormsToTimeline, 2000);
             }
         });
     </script>

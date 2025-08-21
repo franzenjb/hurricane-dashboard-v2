@@ -1288,6 +1288,35 @@
             const data = event.data;
             
             switch(data.action) {
+                case 'updateLiveStorms':
+                    // Receive live storms from parent frame
+                    if (data.storms && Array.isArray(data.storms)) {
+                        console.log('Received', data.storms.length, 'live storms from parent');
+                        // Convert NOAA format to our storm format
+                        liveStorms = data.storms.map(storm => ({
+                            storm_id: storm.id.toUpperCase(),
+                            name: storm.name,
+                            year: new Date().getFullYear(),
+                            month: new Date().getMonth() + 1,
+                            day: new Date().getDate(),
+                            category: storm.category,
+                            wind_mph: storm.wind_mph,
+                            lat: storm.position.lat,
+                            lon: storm.position.lon,
+                            movement: storm.movement,
+                            pressure_mb: storm.pressure_mb,
+                            is_live: true,
+                            landfall_states: [],
+                            deaths: 0,
+                            damage_millions: 0,
+                            narrative: `LIVE TRACKING: ${storm.name} is currently a ${getCategoryName(storm.category)} with ${storm.wind_mph} mph winds. Last position: ${storm.position.lat.toFixed(1)}°N, ${Math.abs(storm.position.lon).toFixed(1)}°W. Movement: ${storm.movement}.`
+                        }));
+                        
+                        // Refresh the timeline
+                        applyFilters();
+                    }
+                    break;
+                    
                 case 'displayStorm':
                     // Display a single storm from Database tab
                     if (data.storm) {
