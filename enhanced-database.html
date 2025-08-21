@@ -1383,47 +1383,41 @@
                 cesiumEntities.push(outlineEntity);
             }
             
-            // Set up camera to follow behind the storm path with north up
+            // Set up camera to follow behind the storm's initial path
             if (groundPositions.length > 1) {
-                // Find the midpoint of the storm track
-                const midIndex = Math.floor(groundPositions.length / 2);
-                const centerLon = (bounds.west + bounds.east) / 2;
-                const centerLat = (bounds.south + bounds.north) / 2;
+                // Calculate the general direction of storm movement
+                const startCoords = features[0].geometry.coordinates;
+                const endCoords = features[features.length - 1].geometry.coordinates;
                 
-                // Calculate appropriate camera distance based on track extent
+                // Calculate bearing from start to end
+                const dLon = (endCoords[0] - startCoords[0]) * Math.PI / 180;
+                const lat1 = startCoords[1] * Math.PI / 180;
+                const lat2 = endCoords[1] * Math.PI / 180;
+                const y = Math.sin(dLon) * Math.cos(lat2);
+                const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
+                const overallHeading = Math.atan2(y, x);
+                
+                // Calculate track extent for camera distance
                 const lonExtent = bounds.east - bounds.west;
                 const latExtent = bounds.north - bounds.south;
                 const maxExtent = Math.max(lonExtent, latExtent);
                 
-                // Set camera distance based on extent (higher for larger storms)
-                const cameraHeight = Math.max(1500000, maxExtent * 150000);
+                // Position camera behind the storm's starting position
+                const cameraDistanceDegrees = maxExtent * 0.5;
+                const cameraLon = startCoords[0] - (Math.sin(overallHeading) * cameraDistanceDegrees);
+                const cameraLat = startCoords[1] - (Math.cos(overallHeading) * cameraDistanceDegrees);
                 
-                // Position camera south of the storm center, looking north
-                // This gives a view from behind the storm as it typically moves north/northeast
-                const cameraLat = bounds.south - (latExtent * 0.3);
+                // Set camera height based on track extent
+                const cameraHeight = Math.max(800000, maxExtent * 100000);
                 
                 cesiumViewer.scene.camera.setView({
-                    destination: Cesium.Cartesian3.fromDegrees(centerLon, cameraLat, cameraHeight),
+                    destination: Cesium.Cartesian3.fromDegrees(cameraLon, cameraLat, cameraHeight),
                     orientation: {
-                        heading: 0.0,  // North is up
-                        pitch: -Cesium.Math.toRadians(45),  // Look down at 45 degree angle
+                        heading: overallHeading,  // Face direction of overall storm movement
+                        pitch: -Cesium.Math.toRadians(30),  // Look down at 30 degree angle
                         roll: 0.0
                     }
                 });
-                
-                // Alternative view if the storm moved mostly east-west
-                if (lonExtent > latExtent * 2) {
-                    // Position camera west of the storm, looking east
-                    const cameraLon = bounds.west - (lonExtent * 0.3);
-                    cesiumViewer.scene.camera.setView({
-                        destination: Cesium.Cartesian3.fromDegrees(cameraLon, centerLat, cameraHeight),
-                        orientation: {
-                            heading: Cesium.Math.toRadians(90),  // Look east, north still up
-                            pitch: -Cesium.Math.toRadians(45),
-                            roll: 0.0
-                        }
-                    });
-                }
             }
         }
         
@@ -1820,30 +1814,51 @@
                     cesiumAnimationMarker.description = new Cesium.ConstantProperty(generatePopupContent(feature));
                 }
                 
-                // Update camera to follow storm with north-up orientation
-                // Position camera behind (south of) the current storm position
-                const cameraDistance = 800000; // meters
-                const cameraLat = lat - 5; // degrees south of storm
+                // Update camera to follow behind storm in direction of movement
+                // Calculate storm movement direction
+                let heading = 0;
+                let cameraLon = lon;
+                let cameraLat = lat;
                 
-                // Look ahead to next few positions if available to anticipate path
-                let lookAheadLat = lat;
-                let lookAheadLon = lon;
-                if (index < currentTrackData.length - 3) {
-                    // Average next 3 positions for smoother camera tracking
-                    for (let i = 1; i <= 3 && index + i < currentTrackData.length; i++) {
-                        const futureCoords = currentTrackData[index + i].geometry.coordinates;
-                        lookAheadLon += futureCoords[0];
-                        lookAheadLat += futureCoords[1];
-                    }
-                    lookAheadLon /= 4;
-                    lookAheadLat /= 4;
+                if (index > 0) {
+                    // Get previous position to calculate movement direction
+                    const prevCoords = currentTrackData[index - 1].geometry.coordinates;
+                    const prevLon = prevCoords[0];
+                    const prevLat = prevCoords[1];
+                    
+                    // Calculate bearing from previous to current position
+                    const dLon = (lon - prevLon) * Math.PI / 180;
+                    const lat1 = prevLat * Math.PI / 180;
+                    const lat2 = lat * Math.PI / 180;
+                    const y = Math.sin(dLon) * Math.cos(lat2);
+                    const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
+                    heading = Math.atan2(y, x);
+                    
+                    // Position camera behind the storm based on movement direction
+                    const cameraDistanceDegrees = 2.5; // degrees behind storm
+                    cameraLon = lon - (Math.sin(heading) * cameraDistanceDegrees);
+                    cameraLat = lat - (Math.cos(heading) * cameraDistanceDegrees);
                 }
                 
+                // Look ahead to anticipate storm path
+                let targetLon = lon;
+                let targetLat = lat;
+                if (index < currentTrackData.length - 2) {
+                    // Look at a point ahead of current position
+                    const futureCoords = currentTrackData[Math.min(index + 2, currentTrackData.length - 1)].geometry.coordinates;
+                    targetLon = futureCoords[0];
+                    targetLat = futureCoords[1];
+                }
+                
+                // Set camera position and orientation
+                const cameraHeight = 400000; // 400km altitude
+                const targetHeight = 10000; // Target point altitude
+                
                 cesiumViewer.scene.camera.setView({
-                    destination: Cesium.Cartesian3.fromDegrees(lookAheadLon, cameraLat, cameraDistance),
+                    destination: Cesium.Cartesian3.fromDegrees(cameraLon, cameraLat, cameraHeight),
                     orientation: {
-                        heading: 0.0,  // North is always up
-                        pitch: -Cesium.Math.toRadians(30),  // Look down at 30 degree angle
+                        heading: heading,  // Face direction of storm movement
+                        pitch: -Cesium.Math.toRadians(25),  // Look down at 25 degree angle
                         roll: 0.0
                     }
                 });
