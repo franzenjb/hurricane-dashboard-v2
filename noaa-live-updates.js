@@ -15,13 +15,28 @@ class NOAALiveUpdates {
 
     async fetchActiveStorms() {
         try {
+            console.log('Fetching active storms from:', this.feeds.activeStorms);
             const response = await fetch(this.feeds.activeStorms);
-            if (!response.ok) throw new Error('Failed to fetch active storms');
+            
+            if (!response.ok) {
+                console.error('NOAA API response not OK:', response.status);
+                throw new Error(`Failed to fetch active storms: ${response.status}`);
+            }
             
             const data = await response.json();
+            console.log('Active storms data received:', data);
             return this.processActiveStorms(data);
         } catch (error) {
             console.error('Error fetching active storms:', error);
+            // Return sample data during development/testing
+            if (error.message.includes('CORS') || error.message.includes('Failed to fetch')) {
+                console.log('Using fallback data due to CORS/network issues');
+                return {
+                    activeStorms: [],
+                    basinStatus: 'Data unavailable - CORS restriction',
+                    error: true
+                };
+            }
             return { activeStorms: [], basinStatus: 'unknown' };
         }
     }
@@ -172,6 +187,8 @@ class NOAALiveUpdates {
     }
 
     async updateDashboard() {
+        console.log('Updating NOAA dashboard...');
+        
         // Update both outlook and active storms
         const [outlook, storms] = await Promise.all([
             this.fetchAtlanticOutlook(),
@@ -184,12 +201,19 @@ class NOAALiveUpdates {
         const outlookTime = document.getElementById('outlookTime');
 
         if (outlookStatus) {
-            outlookStatus.textContent = outlook.status;
-            outlookStatus.className = `px-2 py-1 text-xs rounded-full ${this.getStatusColor(outlook.status)}`;
+            if (outlook.error) {
+                outlookStatus.textContent = 'ERROR';
+                outlookStatus.className = 'px-2 py-1 text-xs rounded-full bg-red-100 text-red-800';
+            } else {
+                outlookStatus.textContent = outlook.status;
+                outlookStatus.className = `px-2 py-1 text-xs rounded-full ${this.getStatusColor(outlook.status)}`;
+            }
         }
         
         if (outlookText) {
-            if (outlook.formation_chance_7day > 0) {
+            if (outlook.error) {
+                outlookText.textContent = 'Unable to fetch NOAA data. Check console for details.';
+            } else if (outlook.formation_chance_7day > 0) {
                 outlookText.textContent = `${outlook.formation_chance_48hr}% chance in 48 hours, ${outlook.formation_chance_7day}% chance in 7 days.`;
             } else {
                 outlookText.textContent = outlook.discussion;
