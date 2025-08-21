@@ -83,7 +83,7 @@ class NOAALiveUpdates {
                         lat: parseFloat(storm.latitudeNumeric) || parseFloat(storm.latitude) || parseFloat(storm.lat) || 0,
                         lon: parseFloat(storm.longitudeNumeric) || parseFloat(storm.longitude) || parseFloat(storm.lon) || 0
                     },
-                    movement: storm.movement || storm.movementText || 'Stationary',
+                    movement: storm.movementText || this.formatMovement(storm.movementDir, storm.movementSpeed) || 'Stationary',
                     lastUpdate: storm.lastUpdate || new Date().toISOString()
                 };
             });
@@ -243,6 +243,34 @@ class NOAALiveUpdates {
         };
         return statusMap[classification] || classification || 'Unknown';
     }
+    
+    // Format movement from direction and speed
+    formatMovement(dir, speed) {
+        if (!dir && !speed) return null;
+        if (speed === 0 || speed === '0') return 'Stationary';
+        
+        const directions = {
+            0: 'N', 22.5: 'NNE', 45: 'NE', 67.5: 'ENE',
+            90: 'E', 112.5: 'ESE', 135: 'SE', 157.5: 'SSE',
+            180: 'S', 202.5: 'SSW', 225: 'SW', 247.5: 'WSW',
+            270: 'W', 292.5: 'WNW', 315: 'NW', 337.5: 'NNW', 360: 'N'
+        };
+        
+        // Find closest direction
+        const numDir = parseFloat(dir) || 0;
+        let closest = 0;
+        let minDiff = 360;
+        
+        for (let angle in directions) {
+            const diff = Math.abs(numDir - parseFloat(angle));
+            if (diff < minDiff) {
+                minDiff = diff;
+                closest = angle;
+            }
+        }
+        
+        return `${directions[closest]} at ${speed} mph`;
+    }
 
     // Get default outlook for quiet periods
     getDefaultOutlook() {
@@ -353,7 +381,7 @@ class NOAALiveUpdates {
                                     ${storm.position.lat.toFixed(1)}°N, ${Math.abs(storm.position.lon).toFixed(1)}°W • ${storm.movement}
                                 </div>
                             </div>
-                            <a href="https://www.nhc.noaa.gov/graphics_${storm.id.toLowerCase().replace('al', 'at')}.shtml" 
+                            <a href="https://www.nhc.noaa.gov/graphics_${storm.id.toLowerCase().replace('al', 'at').replace('025', '5')}.shtml" 
                                target="_blank" 
                                class="text-xs bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700">
                                 Track →
