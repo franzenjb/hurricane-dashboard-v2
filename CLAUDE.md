@@ -60,7 +60,7 @@ index.html (Main Container)
 
 ### Core Data Flow
 ```
-atlantic-storms-enhanced.js (1,991 storms)
+atlantic-storms-enhanced.js (1,992 storms)
     ↓
 Browser loads full dataset
     ↓
@@ -223,7 +223,7 @@ window.addEventListener('message', (event) => {
 ## Performance Considerations
 
 ### Large Dataset Handling
-- 1,991 storms loaded in browser memory
+- 1,992 storms loaded in browser memory
 - GeoJSON files loaded on-demand by decade
 - Use pagination in database (default 50 per page)
 - Limit map displays to avoid browser freezing
@@ -233,3 +233,29 @@ window.addEventListener('message', (event) => {
 - Use requestAnimationFrame for smooth animations
 - Dispose of Cesium entities when switching views
 - Clear Leaflet layers before adding new ones
+
+## Critical Data Integrity
+
+### HURDAT2 Data Accuracy
+- Database must show PEAK INTENSITY values from HURDAT2
+- Death counts are manually maintained and must be preserved during updates
+- Storm IDs must match exactly between database and GeoJSON files
+- Galveston Hurricane (AL011900) = 8,000 deaths, Category 4
+- Hurricane Andrew (AL241992) must be present in database
+
+### Known Data Issues
+- Some AI-generated narratives contain factual errors
+- Landfall state detection can be inaccurate for complex storm paths
+- Pre-1900 death counts are often estimates
+
+## NOAA Live Updates
+
+### Current Implementation
+- Uses `noaa-live-updates.js` to fetch current Atlantic outlook
+- CORS proxy required: `https://api.allorigins.win/raw?url=`
+- Updates every 15 minutes automatically
+- Falls back to static data if CORS fails
+
+### NOAA Endpoints
+- Active storms: `https://www.nhc.noaa.gov/CurrentStorms.json`
+- RSS feed: `https://www.nhc.noaa.gov/nhc_at.xml`
