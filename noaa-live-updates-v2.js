@@ -80,8 +80,8 @@ class NOAALiveUpdates {
                     wind_knots: Math.round(windMph / 1.15078),
                     pressure_mb: storm.pressure || storm.minimumPressure || null,
                     position: {
-                        lat: storm.latitude || storm.lat || 0,
-                        lon: storm.longitude || storm.lon || 0
+                        lat: parseFloat(storm.latitudeNumeric) || parseFloat(storm.latitude) || parseFloat(storm.lat) || 0,
+                        lon: parseFloat(storm.longitudeNumeric) || parseFloat(storm.longitude) || parseFloat(storm.lon) || 0
                     },
                     movement: storm.movement || storm.movementText || 'Stationary',
                     lastUpdate: storm.lastUpdate || new Date().toISOString()
@@ -485,9 +485,13 @@ class NOAALiveUpdates {
 
     // Show error message
     showError(message) {
-        const outlookText = document.querySelector('.bg-white .text-gray-600');
-        if (outlookText) {
-            outlookText.innerHTML = `<span class="text-red-600">${message}</span>`;
+        const mainContent = document.getElementById('noaaMainContent');
+        if (mainContent) {
+            mainContent.innerHTML = `<div class="text-red-600 text-center py-4">${message}</div>`;
+        }
+        const updateTime = document.getElementById('noaaUpdateTime');
+        if (updateTime) {
+            updateTime.textContent = 'Error - ' + this.getTimeAgo(new Date());
         }
     }
 
