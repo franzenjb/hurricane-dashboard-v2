@@ -322,9 +322,9 @@
                                 <h3 class="text-lg font-bold">Active Storms</h3>
                                 <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">0 ACTIVE</span>
                             </div>
-                            <p class="text-sm text-gray-600">
+                            <div class="text-sm text-gray-600 max-h-32 overflow-y-auto">
                                 No active tropical systems in the Atlantic basin.
-                            </p>
+                            </div>
                             <div class="mt-4 text-xs text-gray-500">
                                 Season: <span id="seasonYear">2024</span>
                             </div>
@@ -903,6 +903,7 @@
 
 
     <script src="js/timeline-app.js"></script>
+    <script src="noaa-live-updates.js"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     
     <script>
@@ -1057,5 +1058,16 @@
     
     <!-- Red Cross Operational Tools -->
     <script src="redcross-tools.js"></script>
+    
+    <!-- Initialize NOAA Live Updates -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize NOAA live updates
+            if (window.noaaLiveUpdates) {
+                window.noaaLiveUpdates.startAutoRefresh(15); // Update every 15 minutes
+                console.log('NOAA live updates initialized');
+            }
+        });
+    </script>
 </body>
 </html>
