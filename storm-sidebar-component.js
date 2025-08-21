@@ -278,10 +278,30 @@ const StormSidebar = {
             allLatLngs.push(currentCoords);
             
             // Use the higher category of the two points for segment color
-            const category = Math.max(
-                current.properties.usa_status || 0,
-                next.properties.usa_status || 0
-            );
+            // Handle both old format (max_wind) and new format (usa_status)
+            let category = 0;
+            
+            // First try usa_status (newer data format)
+            if (current.properties.usa_status !== undefined || next.properties.usa_status !== undefined) {
+                category = Math.max(
+                    current.properties.usa_status || 0,
+                    next.properties.usa_status || 0
+                );
+            } else {
+                // Fall back to calculating from max_wind (older data format)
+                const maxWind = Math.max(
+                    current.properties.max_wind || 0,
+                    next.properties.max_wind || 0
+                );
+                
+                // Calculate category from wind speed in knots
+                if (maxWind >= 137) category = 5;      // 157+ mph  
+                else if (maxWind >= 113) category = 4; // 130-156 mph
+                else if (maxWind >= 96) category = 3;  // 111-129 mph
+                else if (maxWind >= 83) category = 2;  // 96-110 mph
+                else if (maxWind >= 64) category = 1;  // 74-95 mph
+                else category = 0;                     // <74 mph (TS/TD)
+            }
             
             const segmentColor = this.getCategoryColor(category);
             
