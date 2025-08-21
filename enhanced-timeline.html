@@ -778,6 +778,42 @@
 
         async function loadStormTrack(storm) {
             try {
+                // For live storms, create track from current position
+                if (storm.is_live) {
+                    console.log('Creating live storm track for', storm.name);
+                    const liveTrack = {
+                        type: 'points',
+                        features: [{
+                            type: 'Feature',
+                            geometry: {
+                                type: 'Point',
+                                coordinates: [storm.lon, storm.lat]
+                            },
+                            properties: {
+                                storm_id: storm.storm_id,
+                                datetime: new Date().toISOString(),
+                                status: 'HU',
+                                category: storm.category,
+                                wind_mph: storm.wind_mph,
+                                pressure: storm.pressure_mb,
+                                is_live: true
+                            }
+                        }]
+                    };
+                    
+                    currentTrackData = liveTrack;
+                    drawStormTrack(liveTrack, storm);
+                    
+                    // Update animation button for live storm
+                    const btn = document.getElementById('animateBtn');
+                    if (btn) {
+                        btn.innerHTML = '🔴 Live Position - Auto Updates';
+                        btn.style.background = '#dc3545';
+                        btn.disabled = true;
+                    }
+                    return liveTrack;
+                }
+                
                 // Determine which decade file to load  
                 const decade = Math.floor(storm.year / 10) * 10;
                 
