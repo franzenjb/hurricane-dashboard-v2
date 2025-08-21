@@ -74,6 +74,12 @@ Cross-frame messaging via postMessage()
 - **Tracks files**: `hurdat2_data/tracks_[decade]s.geojson` - Simple polyline tracks
 - **Loading pattern**: Try points first (for rainbow tracks), fallback to tracks
 
+### NOAA Live Updates System (NEW)
+- **Worker URL**: `https://noaa-hurricane-proxy.jbf-395.workers.dev`
+- **Client**: `noaa-live-updates-v2.js` fetches every 15 minutes
+- **Integration**: Parent sends live storms to Timeline via postMessage
+- **Display**: Home tab shows active storms, Timeline shows with red star markers
+
 ## Critical Development Rules
 
 ### 1. Tab-Specific File Editing
@@ -97,6 +103,23 @@ window.addEventListener('message', (event) => {
         // Handle storm viewing
     }
 });
+
+// Send live storms to Timeline (NEW)
+window.sendLiveStormsToTimeline = function() {
+    if (window.noaaUpdates) {
+        window.noaaUpdates.fetchActiveStorms().then(data => {
+            if (data && data.activeStorms && data.activeStorms.length > 0) {
+                const timelineFrame = document.querySelector('iframe[src="enhanced-timeline.html"]');
+                if (timelineFrame && timelineFrame.contentWindow) {
+                    timelineFrame.contentWindow.postMessage({
+                        action: 'updateLiveStorms',
+                        storms: data.activeStorms
+                    }, '*');
+                }
+            }
+        });
+    }
+};
 ```
 
 ### 3. Function Naming Conventions
@@ -167,6 +190,21 @@ window.addEventListener('message', (event) => {
 }
 ```
 
+### NOAA Live Storm Format (NEW)
+```javascript
+{
+    id: "AL052025",
+    name: "ERIN",
+    status: "Hurricane",
+    category: 1,
+    wind_mph: 85,
+    pressure_mb: 985,
+    position: { lat: 35.5, lon: -65.0 },
+    movement: "NE at 18 mph",
+    is_live: true
+}
+```
+
 ## Common Issues & Solutions
 
 ### CORS Errors
@@ -188,6 +226,10 @@ window.addEventListener('message', (event) => {
 ### Database Showing Old Storms First
 - **Cause**: Default filters include all categories from 1851
 - **Solution**: Set default filters to Cat 1-5, 1900-present, sorted newest first
+
+### Live Storms Not Showing in Timeline (NEW)
+- **Cause**: Iframe timing and communication issues
+- **Solution**: Call `sendLiveStormsToTimeline()` after tab switch with delay
 
 ## AI Assistant Integration
 
@@ -212,6 +254,7 @@ window.addEventListener('message', (event) => {
 3. **Test animations**: Both 2D and 3D views work
 4. **Verify filters**: Database filters apply correctly
 5. **Cross-tab communication**: Clicking storms updates other tabs
+6. **Live storms**: Check NOAA updates display on home tab
 
 ### Storm Track Testing
 1. Click any storm in Timeline/Regional/Database
@@ -251,11 +294,16 @@ window.addEventListener('message', (event) => {
 ## NOAA Live Updates
 
 ### Current Implementation
-- Uses `noaa-live-updates.js` to fetch current Atlantic outlook
-- CORS proxy required: `https://api.allorigins.win/raw?url=`
+- Uses `noaa-live-updates-v2.js` to fetch current Atlantic outlook
+- Cloudflare Worker proxy: `https://noaa-hurricane-proxy.jbf-395.workers.dev`
 - Updates every 15 minutes automatically
-- Falls back to static data if CORS fails
+- Parent-iframe communication for Timeline integration
 
 ### NOAA Endpoints
 - Active storms: `https://www.nhc.noaa.gov/CurrentStorms.json`
-- RSS feed: `https://www.nhc.noaa.gov/nhc_at.xml`
+- RSS feed: `https://www.nhc.noaa.gov/rss_update.xml`
+
+### Timeline Integration
+- Live storms (2025+) appear with red star markers
+- Special "LIVE TRACKING" narratives
+- Must manually trigger update when switching tabs
