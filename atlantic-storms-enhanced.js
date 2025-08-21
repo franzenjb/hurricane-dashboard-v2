@@ -18649,7 +18649,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 34,
     "lon": -89.8,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 8000,
     "landfall_states": [
       "AL",
       "GA",
@@ -24219,7 +24219,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 40.2,
     "lon": -90.3,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 275,
     "landfall_states": [
       "AL",
       "LA",
@@ -25522,7 +25522,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 33.2,
     "lon": -88.5,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 772,
     "landfall_states": [
       "AL",
       "FL"
@@ -28250,7 +28250,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 37.4,
     "lon": -83,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 372,
     "landfall_states": [
       "FL"
     ],
@@ -28893,7 +28893,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 45.5,
     "lon": -82.2,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 4078,
     "landfall_states": [
       "FL",
       "GA",
@@ -32560,7 +32560,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 57,
     "lon": -83.4,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 408,
     "landfall_states": [
       "FL",
       "GA",
@@ -34231,7 +34231,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 32.3,
     "lon": -46,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 682,
     "landfall_states": [],
     "narrative": null,
     "resources": {
@@ -42436,7 +42436,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 32.1,
     "lon": -87.6,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 53,
     "landfall_states": [
       "FL",
       "GA",
@@ -42584,7 +42584,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 62.5,
     "lon": -86.4,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 95,
     "landfall_states": [
       "FL"
     ],
@@ -42983,7 +42983,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 48.5,
     "lon": -77.8,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 72,
     "landfall_states": [
       "CT",
       "MA",
@@ -43037,7 +43037,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 48.5,
     "lon": -69.8,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 1000,
     "landfall_states": [],
     "narrative": null,
     "resources": {
@@ -43085,7 +43085,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 59.5,
     "lon": -76.5,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 29,
     "landfall_states": [
       "MA",
       "ME"
@@ -43376,7 +43376,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 58.1,
     "lon": -80,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 1000,
     "landfall_states": [
       "NC",
       "PA",
@@ -45119,7 +45119,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 38.8,
     "lon": -65.8,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 416,
     "landfall_states": [],
     "narrative": null,
     "resources": {
@@ -45510,7 +45510,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 57,
     "lon": -78.6,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 1,
     "landfall_states": [
       "NC",
       "SC"
@@ -46013,7 +46013,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 16.7,
     "lon": -65.5,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 22,
     "landfall_states": [],
     "narrative": null,
     "resources": {
@@ -46617,7 +46617,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 44.2,
     "lon": -74.7,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 364,
     "landfall_states": [],
     "narrative": null,
     "resources": {
@@ -47270,7 +47270,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 18.5,
     "lon": -91.1,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 43,
     "landfall_states": [],
     "narrative": null,
     "resources": {
@@ -48141,7 +48141,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 49,
     "lon": -79.7,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 7193,
     "landfall_states": [
       "NC",
       "SC"
@@ -48642,7 +48642,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 32,
     "lon": -29.9,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 5,
     "landfall_states": [],
     "narrative": null,
     "resources": {
@@ -48690,7 +48690,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 47.5,
     "lon": -72.4,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 38,
     "landfall_states": [],
     "narrative": null,
     "resources": {
@@ -49336,7 +49336,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 30,
     "lon": -84,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 81,
     "landfall_states": [
       "FL"
     ],
@@ -51835,7 +51835,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 43,
     "lon": -74.7,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 259,
     "landfall_states": [],
     "narrative": null,
     "resources": {
@@ -55041,7 +55041,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 41.7,
     "lon": -89,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 128,
     "landfall_states": [
       "FL",
       "GA",
@@ -55095,7 +55095,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 31.5,
     "lon": -69,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 128,
     "landfall_states": [],
     "narrative": null,
     "resources": {
@@ -56990,7 +56990,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 43.5,
     "lon": -70,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 8,
     "landfall_states": [],
     "narrative": null,
     "resources": {
@@ -61927,7 +61927,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 39,
     "lon": -96,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 2068,
     "landfall_states": [
       "LA",
       "MD",
@@ -61981,7 +61981,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 32.7,
     "lon": -79.8,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 14,
     "landfall_states": [],
     "narrative": null,
     "resources": {
@@ -62926,7 +62926,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 28.9,
     "lon": -102.9,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 269,
     "landfall_states": [
       "TX"
     ],
@@ -65269,7 +65269,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 28.1,
     "lon": -100.5,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 21,
     "landfall_states": [
       "FL"
     ],
@@ -66494,7 +66494,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 44.5,
     "lon": -80.5,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 4,
     "landfall_states": [
       "SC"
     ],
@@ -66795,7 +66795,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 56.6,
     "lon": -76.2,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 14,
     "landfall_states": [
       "MA",
       "ME",
@@ -68492,7 +68492,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 43.1,
     "lon": -60.5,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 433,
     "landfall_states": [],
     "narrative": null,
     "resources": {
@@ -68588,7 +68588,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 33,
     "lon": -94.5,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 53,
     "landfall_states": [
       "LA",
       "MS",
@@ -69711,7 +69711,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 58,
     "lon": -81.8,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 107,
     "landfall_states": [
       "NC",
       "PA",
@@ -71076,7 +71076,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 39.5,
     "lon": -53.1,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 18,
     "landfall_states": [],
     "narrative": null,
     "resources": {
@@ -73380,7 +73380,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 33.9,
     "lon": -84,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 63,
     "landfall_states": [
       "FL",
       "GA",
@@ -74372,7 +74372,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 63,
     "lon": -96.2,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 37,
     "landfall_states": [
       "FL",
       "GA",
@@ -75154,7 +75154,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 57,
     "lon": -74.3,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 604,
     "landfall_states": [],
     "narrative": null,
     "resources": {
@@ -75459,7 +75459,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 39.5,
     "lon": -42,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 19325,
     "landfall_states": [],
     "narrative": null,
     "resources": {
@@ -75895,7 +75895,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 45.5,
     "lon": -80.1,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 85,
     "landfall_states": [
       "MD",
       "NC",
@@ -80349,7 +80349,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 43.1,
     "lon": -71.5,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 35,
     "landfall_states": [
       "MA",
       "ME"
@@ -80400,7 +80400,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 38.4,
     "lon": -94.2,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 48,
     "landfall_states": [
       "AL",
       "FL",
@@ -80504,7 +80504,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 38.8,
     "lon": -83.9,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 124,
     "landfall_states": [
       "FL",
       "GA",
@@ -80608,7 +80608,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 44.5,
     "lon": -47.8,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 3037,
     "landfall_states": [],
     "narrative": null,
     "resources": {
@@ -81348,7 +81348,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 40.1,
     "lon": -89.6,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 1833,
     "landfall_states": [
       "FL",
       "LA",
@@ -81642,7 +81642,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 39.5,
     "lon": -94.1,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 120,
     "landfall_states": [
       "FL",
       "LA",
@@ -81790,7 +81790,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 43.6,
     "lon": -31.8,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 87,
     "landfall_states": [],
     "narrative": null,
     "resources": {
@@ -84069,7 +84069,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 47.2,
     "lon": -95.3,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 195,
     "landfall_states": [
       "FL",
       "TX"
@@ -87433,7 +87433,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 38.4,
     "lon": -94.1,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 5,
     "landfall_states": [
       "FL",
       "LA",
@@ -87870,7 +87870,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 41.5,
     "lon": -80.7,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 233,
     "landfall_states": [
       "NJ",
       "NY",
@@ -90899,7 +90899,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 38.2,
     "lon": -97.6,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 89,
     "landfall_states": [
       "AL",
       "LA",
@@ -90952,7 +90952,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 36.8,
     "lon": -90.1,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 92,
     "landfall_states": [
       "AL",
       "FL",
@@ -91148,7 +91148,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 48,
     "lon": -73.1,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 2975,
     "landfall_states": [
       "PR",
       "VI"
@@ -91643,7 +91643,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 42.2,
     "lon": -82.6,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 57,
     "landfall_states": [
       "MA",
       "NC",
@@ -92139,7 +92139,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 62.4,
     "lon": -58.5,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 74,
     "landfall_states": [],
     "narrative": null,
     "resources": {
@@ -96112,7 +96112,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 35.3,
     "lon": -83.7,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 156,
     "landfall_states": [
       "FL",
       "NC",
@@ -96356,7 +96356,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 22.4,
     "lon": -94.9,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 5,
     "landfall_states": [],
     "narrative": null,
     "resources": {
@@ -96938,7 +96938,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 29.7,
     "lon": -103.3,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 8,
     "landfall_states": [
       "TX"
     ],
@@ -97775,7 +97775,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 49.7,
     "lon": -69.3,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 10,
     "landfall_states": [
       "VI"
     ],
@@ -97925,7 +97925,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 38.1,
     "lon": -88.1,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 230,
     "landfall_states": [
       "FL",
       "GA",
@@ -98026,7 +98026,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 22.6,
     "lon": -49.5,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 24,
     "landfall_states": [],
     "narrative": null,
     "resources": {
@@ -98170,7 +98170,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 29.5,
     "lon": -95.5,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 24,
     "landfall_states": [
       "FL"
     ],
