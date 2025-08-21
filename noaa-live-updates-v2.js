@@ -381,7 +381,7 @@ class NOAALiveUpdates {
                                     ${storm.position.lat.toFixed(1)}°N, ${Math.abs(storm.position.lon).toFixed(1)}°W • ${storm.movement}
                                 </div>
                             </div>
-                            <a href="https://www.nhc.noaa.gov/graphics_${storm.id.toLowerCase().replace('al', 'at').replace('025', '5')}.shtml" 
+                            <a href="https://www.nhc.noaa.gov/graphics_at${storm.binNumber ? storm.binNumber.slice(-1) : '5'}.shtml" 
                                target="_blank" 
                                class="text-xs bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700">
                                 Track →

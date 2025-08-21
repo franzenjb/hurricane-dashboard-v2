@@ -306,10 +306,10 @@
             const icon = document.getElementById('categoryIcon');
             const title = document.getElementById('stormTitle');
             
-            // Update header
-            title.textContent = storm.name;
+            // Update header - add LIVE indicator for current storms
+            title.textContent = storm.is_live ? `🔴 LIVE: ${storm.name}` : storm.name;
             icon.textContent = storm.category === 0 ? 'TS' : storm.category;
-            icon.style.backgroundColor = getCategoryColor(storm.category);
+            icon.style.backgroundColor = storm.is_live ? '#FF0000' : getCategoryColor(storm.category);
             
             // Update stats using static data
             document.getElementById('statDate').textContent = `${getMonthName(storm.month)} ${storm.day}, ${storm.year}`;
@@ -318,9 +318,9 @@
             if (storm.landfall_states && storm.landfall_states.length > 0) {
                 document.getElementById('statLandfall').textContent = storm.landfall_states.join(', ');
             } else {
-                document.getElementById('statLandfall').textContent = 'No US Landfall';
+                document.getElementById('statLandfall').textContent = storm.is_live ? 'Currently at Sea' : 'No US Landfall';
             }
-            document.getElementById('statDeaths').textContent = storm.deaths || '0';
+            document.getElementById('statDeaths').textContent = storm.is_live ? 'Active Storm' : (storm.deaths || '0');
             
             // Update narrative panel
             const narrativeContent = document.getElementById('narrativeContent');
@@ -332,7 +332,7 @@
         }
         
         function createTimeline() {
-            console.log('Creating timeline with', filteredStorms.length, 'storms');
+            console.log('Creating timeline with', filteredStorms.length, 'storms (including', liveStorms.length, 'live)');
             
             // IMPORTANT: Atlantic Hurricane Timeline Axis Convention
             // X-axis = MONTHS (horizontal: Jun, Jul, Aug, Sep, Oct, Nov)
@@ -348,8 +348,9 @@
                 textposition: 'top center',
                 marker: {
                     size: filteredStorms.map(s => 10 + s.wind_mph / 10),
-                    color: filteredStorms.map(s => getCategoryColor(s.category)),
-                    line: { color: 'white', width: 2 }
+                    color: filteredStorms.map(s => s.is_live ? '#FF0000' : getCategoryColor(s.category)),
+                    line: { color: s => s.is_live ? '#FFF' : 'white', width: s => s.is_live ? 3 : 2 },
+                    symbol: filteredStorms.map(s => s.is_live ? 'star' : 'circle')
                 },
                 hovertemplate: '<b>%{text}</b><br>Date: %{customdata[2]}<br>Year: %{customdata[3]}<br>Category: %{customdata[0]}<br>Wind: %{customdata[1]} mph<extra></extra>',
                 customdata: filteredStorms.map(s => [
@@ -597,7 +598,10 @@
                 selectedCategories.push(parseInt(checkbox.value));
             });
             
-            filteredStorms = ATLANTIC_STORMS_ENHANCED.filter(storm => {
+            // Combine historical storms with live storms
+            const allStorms = [...ATLANTIC_STORMS_ENHANCED, ...liveStorms];
+            
+            filteredStorms = allStorms.filter(storm => {
                 // If name search is active, ONLY filter by name - ignore all other filters
                 if (nameFilter) {
                     return storm.name.toLowerCase().includes(nameFilter);
@@ -1165,6 +1169,61 @@
             }
         }
         
+        // Live storms tracking
+        let liveStorms = [];
+        
+        // Fetch live storms from NOAA
+        async function fetchLiveStorms() {
+            try {
+                // Check if parent frame has NOAA data
+                if (window.parent && window.parent.noaaUpdates) {
+                    const response = await window.parent.noaaUpdates.fetchActiveStorms();
+                    if (response && response.activeStorms) {
+                        // Convert NOAA format to our storm format
+                        liveStorms = response.activeStorms.map(storm => ({
+                            storm_id: storm.id.toUpperCase(),
+                            name: storm.name,
+                            year: new Date().getFullYear(),
+                            month: new Date().getMonth() + 1,
+                            day: new Date().getDate(),
+                            category: storm.category,
+                            wind_mph: storm.wind_mph,
+                            lat: storm.position.lat,
+                            lon: storm.position.lon,
+                            movement: storm.movement,
+                            pressure_mb: storm.pressure_mb,
+                            is_live: true, // Mark as live storm
+                            landfall_states: [], // Will be updated if makes landfall
+                            deaths: 0,
+                            damage_millions: 0,
+                            narrative: `LIVE TRACKING: ${storm.name} is currently a ${getCategoryName(storm.category)} with ${storm.wind_mph} mph winds. Last position: ${storm.position.lat.toFixed(1)}°N, ${Math.abs(storm.position.lon).toFixed(1)}°W. Movement: ${storm.movement}.`
+                        }));
+                        
+                        console.log('Fetched', liveStorms.length, 'live storms from NOAA');
+                        
+                        // Refresh the timeline with live storms included
+                        applyFilters();
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching live storms:', error);
+            }
+        }
+        
+        // Helper to get category name
+        function getCategoryName(category) {
+            const names = {
+                '-1': 'Tropical Depression',
+                '0': 'Tropical Storm',
+                '1': 'Category 1 Hurricane',
+                '2': 'Category 2 Hurricane',
+                '3': 'Category 3 Hurricane',
+                '4': 'Category 4 Hurricane',
+                '5': 'Category 5 Hurricane'
+            };
+            return names[category] || 'Unknown';
+        }
+        
         // Initialize when page loads
         document.addEventListener('DOMContentLoaded', () => {
             console.log('DOM loaded, applying initial filters...');
@@ -1177,6 +1236,12 @@
             }
             
             applyFilters(); // Use applyFilters() to respect default checkbox settings
+            
+            // Fetch live storms
+            fetchLiveStorms();
+            
+            // Refresh live storms every 5 minutes
+            setInterval(fetchLiveStorms, 5 * 60 * 1000);
         });
         
         // Handle messages from parent frame (Database tab integration)
