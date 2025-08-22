@@ -591,10 +591,37 @@ function hurricaneApp() {
                 storm.rc_impact_score = this.calculateRCImpact(storm);
             });
             
-            // Get top 10 storms by RC Impact Score
-            this.topStorms = [...this.allStorms]
-                .sort((a, b) => (b.rc_impact_score || 0) - (a.rc_impact_score || 0))
-                .slice(0, 10);
+            // Get top 10 most impactful storms from past 20 years (2004-2024)
+            // Priority based on known major hurricanes from research
+            const recentMajorStorms = [
+                'KATRINA-2005',    // $125B damage, 1800+ deaths
+                'HARVEY-2017',     // $125B damage  
+                'IAN-2022',        // $114B damage, 156 deaths
+                'IRMA-2017',       // Part of $339B 2017 season
+                'MARIA-2017',      // 2900+ deaths, deadliest of 21st century
+                'SANDY-2012',      // $65B damage, major Northeast impact
+                'IKE-2008',        // $38B damage, major Texas impact
+                'MICHAEL-2018',    // Cat 5 at landfall, $25B damage
+                'HELENE-2024',     // $78.7B damage, deadliest since Maria
+                'MILTON-2024'      // Cat 5, recent major impact
+            ];
+            
+            this.topStorms = recentMajorStorms.map(stormKey => {
+                const [name, year] = stormKey.split('-');
+                return this.allStorms.find(s => 
+                    s.name === name && s.year === parseInt(year)
+                );
+            }).filter(s => s); // Remove any not found
+            
+            // If we don't have 10, fill with other high-impact recent storms
+            if (this.topStorms.length < 10) {
+                const additionalStorms = [...this.allStorms]
+                    .filter(s => s.year >= 2004 && s.year <= 2024)
+                    .filter(s => !this.topStorms.includes(s))
+                    .sort((a, b) => (b.rc_impact_score || 0) - (a.rc_impact_score || 0))
+                    .slice(0, 10 - this.topStorms.length);
+                this.topStorms.push(...additionalStorms);
+            }
             
             console.log('Quick Stats:', {
                 total: this.totalStorms,
