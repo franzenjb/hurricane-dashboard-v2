@@ -226,25 +226,25 @@
         <!-- Spider/Radar Chart -->
         <div class="bg-white rounded-lg shadow-md p-6 mb-6">
             <h2 class="text-xl font-bold mb-4">Multi-Factor Spider Chart</h2>
-            <div id="comparisonChart" style="height: 450px;"></div>
+            <div id="comparisonChart" style="height: 650px;"></div>
         </div>
         
         <!-- Scatter Plot -->
         <div class="bg-white rounded-lg shadow-md p-6 mb-6">
             <h2 class="text-xl font-bold mb-4">Wind vs Pressure Analysis</h2>
-            <div id="scatterChart" style="height: 450px;"></div>
+            <div id="scatterChart" style="height: 650px;"></div>
         </div>
         
         <!-- Time Series -->
         <div class="bg-white rounded-lg shadow-md p-6 mb-6">
             <h2 class="text-xl font-bold mb-4">Historical Intensity Trend</h2>
-            <div id="timeSeriesChart" style="height: 400px;"></div>
+            <div id="timeSeriesChart" style="height: 650px;"></div>
         </div>
         
         <!-- Bar Chart -->
         <div class="bg-white rounded-lg shadow-md p-6">
             <h2 class="text-xl font-bold mb-4">Impact Metrics Comparison</h2>
-            <div id="barChart" style="height: 400px;"></div>
+            <div id="barChart" style="height: 650px;"></div>
         </div>
     </div>
 
@@ -698,15 +698,17 @@
                     orientation: 'h',
                     x: 0.5,
                     xanchor: 'center',
-                    y: -0.15,
-                    yanchor: 'top'
+                    y: -0.08,
+                    yanchor: 'top',
+                    font: { size: 12 },
+                    itemwidth: 100
                 },
                 title: {
                     text: 'Multi-Factor Storm Analysis',
                     font: { size: 16 }
                 },
-                height: 400,
-                margin: { t: 60, r: 80, b: 80, l: 80 },  // Increased bottom margin for legend
+                height: 650,
+                margin: { t: 70, r: 100, b: 150, l: 100 },  // Much more space for legend
                 paper_bgcolor: 'white',
                 font: { family: 'system-ui, sans-serif' }
             };
@@ -753,11 +755,12 @@
                 type: 'scatter',
                 name: 'All Hurricanes',
                 marker: {
-                    size: 4,
-                    color: '#6b7280',  // Much darker gray (was #e5e7eb)
-                    opacity: 0.7        // More opaque (was 0.5)
+                    size: 6,  // Bigger dots (was 4)
+                    color: '#6b7280',
+                    opacity: 0.6
                 },
-                hoverinfo: 'skip'
+                hovertemplate: '<b>%{text}</b><br>Wind: %{y} mph<br>Pressure: %{x} mb<extra></extra>',
+                text: backgroundStorms.map(s => `${s.name} (${s.year})`)
             }];
             
             // Add selected storms
@@ -795,22 +798,48 @@
                     title: 'Maximum Wind Speed (mph)',
                     gridcolor: '#e5e7eb'
                 },
-                height: 450,
+                height: 650,
                 showlegend: true,
                 legend: {
                     orientation: 'h',
                     x: 0.5,
                     xanchor: 'center',
-                    y: -0.12,
-                    yanchor: 'top'
+                    y: -0.08,
+                    yanchor: 'top',
+                    font: { size: 12 },
+                    itemwidth: 120
                 },
-                margin: { t: 50, r: 50, b: 80, l: 50 },  // Bottom margin for legend
+                margin: { t: 70, r: 70, b: 150, l: 70 },  // Much more space for legend
                 hovermode: 'closest',
                 paper_bgcolor: 'white',
                 plot_bgcolor: '#f9fafb'
             };
             
             Plotly.newPlot('scatterChart', traces, layout, { responsive: true, displayModeBar: false });
+            
+            // Add click handler for storm details
+            document.getElementById('scatterChart').on('plotly_click', function(data) {
+                if (data.points && data.points[0]) {
+                    const point = data.points[0];
+                    if (point.data.name === 'All Hurricanes') {
+                        const stormIndex = point.pointIndex;
+                        const storm = backgroundStorms[stormIndex];
+                        if (storm) {
+                            // Show storm in first empty slot or replace first slot
+                            if (!selectedStorms[0]) {
+                                document.getElementById('storm1Select').value = storm.storm_id;
+                                selectStorm(1);
+                            } else if (!selectedStorms[1]) {
+                                document.getElementById('storm2Select').value = storm.storm_id;
+                                selectStorm(2);
+                            } else if (!selectedStorms[2]) {
+                                document.getElementById('storm3Select').value = storm.storm_id;
+                                selectStorm(3);
+                            }
+                        }
+                    }
+                }
+            });
         }
         
         // Add Time Series Chart
@@ -842,11 +871,12 @@
                 type: 'scatter',
                 name: 'All Cat 1-5 Hurricanes',
                 marker: {
-                    size: 4,
+                    size: 6,  // Bigger dots
                     color: '#9ca3af',
-                    opacity: 0.4
+                    opacity: 0.5
                 },
-                hoverinfo: 'skip'
+                hovertemplate: '<b>%{text}</b><br>Year: %{x}<br>Wind: %{y} mph<extra></extra>',
+                text: backgroundStorms.map(s => `${s.name}`)
             });
             
             // Add selected storms with larger markers
@@ -874,21 +904,42 @@
                 title: 'Historical Intensity Context',
                 xaxis: { title: 'Year', gridcolor: '#e5e7eb' },
                 yaxis: { title: 'Wind Speed (mph)', gridcolor: '#e5e7eb' },
-                height: 400,
+                height: 650,
                 showlegend: true,
                 legend: {
                     orientation: 'h',
                     x: 0.5,
                     xanchor: 'center',
-                    y: -0.15,
+                    y: -0.08,
                     yanchor: 'top'
                 },
-                margin: { t: 50, r: 50, b: 80, l: 50 },  // Bottom margin for legend
+                margin: { t: 70, r: 70, b: 150, l: 70 },  // Much more space
                 paper_bgcolor: 'white',
                 plot_bgcolor: '#f9fafb'
             };
             
             Plotly.newPlot('timeSeriesChart', traces, layout, { responsive: true, displayModeBar: false });
+            
+            // Add click handler for storm selection
+            document.getElementById('timeSeriesChart').on('plotly_click', function(data) {
+                if (data.points && data.points[0]) {
+                    const point = data.points[0];
+                    if (point.data.name === 'All Cat 1-5 Hurricanes') {
+                        const stormIndex = point.pointIndex;
+                        const storm = backgroundStorms[stormIndex];
+                        if (storm && !selectedStorms.find(s => s && s.storm_id === storm.storm_id)) {
+                            // Add to next available slot
+                            for (let i = 0; i < 3; i++) {
+                                if (!selectedStorms[i]) {
+                                    document.getElementById(`storm${i+1}Select`).value = storm.storm_id;
+                                    selectStorm(i+1);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
         }
         
         // Add Bar Chart
@@ -939,16 +990,16 @@
             const layout = {
                 title: 'Storm Impact Metrics',
                 barmode: 'group',
-                height: 400,
+                height: 650,
                 showlegend: true,
                 legend: {
-                    orientation: 'h',
-                    x: 0.5,
-                    xanchor: 'center',
-                    y: -0.15,
+                    orientation: 'v',  // Vertical legend on side for bar chart
+                    x: 1.02,
+                    xanchor: 'left',
+                    y: 1,
                     yanchor: 'top'
                 },
-                margin: { t: 50, r: 50, b: 100, l: 50 },  // Extra bottom margin for bar chart legend
+                margin: { t: 70, r: 150, b: 70, l: 70 },  // Right margin for legend
                 xaxis: { gridcolor: '#e5e7eb' },
                 yaxis: { title: 'Value', gridcolor: '#e5e7eb' },
                 paper_bgcolor: 'white',
