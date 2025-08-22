@@ -862,24 +862,7 @@
                 text: backgroundStorms.map(s => `${s.name}`)
             });
             
-            // Add labels for Category 5 storms
-            const cat5Storms = backgroundStorms.filter(s => s.category === 5);
-            if (cat5Storms.length > 0) {
-                traces.push({
-                    x: cat5Storms.map(s => s.year),
-                    y: cat5Storms.map(s => s.wind_mph),
-                    mode: 'text',
-                    type: 'scatter',
-                    showlegend: false,
-                    text: cat5Storms.map(s => s.name),
-                    textfont: {
-                        size: 8,
-                        color: '#7c3aed'  // Purple for Cat 5
-                    },
-                    textposition: 'top center',
-                    hoverinfo: 'skip'
-                });
-            }
+            // Don't add labels for background storms - only for selected storms
             
             // Add selected storms with larger markers
             validStorms.forEach((storm, index) => {
