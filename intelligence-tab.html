@@ -698,15 +698,14 @@
                 showlegend: true,
                 legend: {
                     orientation: 'h',
-                    x: 0.1,  // Start from left side
+                    x: 0,
                     xanchor: 'left',
-                    y: -0.12,
+                    y: -0.08,
                     yanchor: 'top',
-                    font: { size: 11 },
+                    font: { size: 10 },
                     itemsizing: 'constant',
-                    // Remove itemwidth to allow natural spacing
-                    tracegroupgap: 20,  // Space between items
-                    traceorder: 'normal',
+                    entrywidth: 0.25,  // Each item takes 25% of plot width
+                    entrywidthmode: 'fraction',
                     xref: 'paper',
                     yref: 'paper'
                 },
@@ -715,7 +714,7 @@
                     font: { size: 16 }
                 },
                 height: 650,
-                margin: { t: 70, r: 100, b: 120, l: 100 },  // Adjusted margins for legend
+                margin: { t: 70, r: 100, b: 100, l: 100 },  // Adjusted margins for legend
                 paper_bgcolor: 'white',
                 font: { family: 'system-ui, sans-serif' }
             };
@@ -829,18 +828,18 @@
                 showlegend: true,
                 legend: {
                     orientation: 'h',
-                    x: 0.1,
+                    x: 0,
                     xanchor: 'left',
-                    y: -0.12,
+                    y: -0.08,
                     yanchor: 'top',
-                    font: { size: 11 },
+                    font: { size: 10 },
                     itemsizing: 'constant',
-                    tracegroupgap: 20,
-                    traceorder: 'normal',
+                    entrywidth: 0.25,
+                    entrywidthmode: 'fraction',
                     xref: 'paper',
                     yref: 'paper'
                 },
-                margin: { t: 70, r: 50, b: 120, l: 70 },  // Adjusted margins for legend
+                margin: { t: 70, r: 50, b: 100, l: 70 },  // Adjusted margins for legend
                 hovermode: 'closest',
                 paper_bgcolor: 'white',
                 plot_bgcolor: '#f9fafb'
@@ -959,19 +958,18 @@
                 showlegend: true,
                 legend: {
                     orientation: 'h',
-                    x: 0.1,  // Start from left side
+                    x: 0,
                     xanchor: 'left',
-                    y: -0.12,
+                    y: -0.08,
                     yanchor: 'top',
-                    font: { size: 11 },
+                    font: { size: 10 },
                     itemsizing: 'constant',
-                    // Remove itemwidth to allow natural spacing
-                    tracegroupgap: 20,  // Space between items
-                    traceorder: 'normal',
+                    entrywidth: 0.25,  // Each item takes 25% of plot width
+                    entrywidthmode: 'fraction',
                     xref: 'paper',
                     yref: 'paper'
                 },
-                margin: { t: 70, r: 50, b: 120, l: 70 },  // Adjusted margins for legend
+                margin: { t: 70, r: 50, b: 100, l: 70 },  // Adjusted margins for legend
                 paper_bgcolor: 'white',
                 plot_bgcolor: '#f9fafb'
             };
@@ -1052,18 +1050,18 @@
                 showlegend: true,
                 legend: {
                     orientation: 'h',
-                    x: 0.1,
+                    x: 0,
                     xanchor: 'left',
-                    y: -0.12,
+                    y: -0.08,
                     yanchor: 'top',
-                    font: { size: 11 },
+                    font: { size: 10 },
                     itemsizing: 'constant',
-                    tracegroupgap: 20,
-                    traceorder: 'normal',
+                    entrywidth: 0.25,
+                    entrywidthmode: 'fraction',
                     xref: 'paper',
                     yref: 'paper'
                 },
-                margin: { t: 70, r: 50, b: 120, l: 70 },  // Adjusted margins for legend
+                margin: { t: 70, r: 50, b: 100, l: 70 },  // Adjusted margins for legend
                 xaxis: { gridcolor: '#e5e7eb' },
                 yaxis: { title: 'Value', gridcolor: '#e5e7eb' },
                 paper_bgcolor: 'white',
