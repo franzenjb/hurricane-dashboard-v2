@@ -222,34 +222,29 @@
             </div>
         </div>
 
-        <!-- Comparison Charts -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-            <!-- Spider/Radar Chart -->
-            <div class="bg-white rounded-lg shadow-md p-6">
-                <h2 class="text-xl font-bold mb-4">Multi-Factor Spider Chart</h2>
-                <div id="comparisonChart" style="height: 400px;"></div>
-            </div>
-            
-            <!-- Scatter Plot -->
-            <div class="bg-white rounded-lg shadow-md p-6">
-                <h2 class="text-xl font-bold mb-4">Wind vs Pressure Analysis</h2>
-                <div id="scatterChart" style="height: 400px;"></div>
-            </div>
+        <!-- Comparison Charts - Full Width -->
+        <!-- Spider/Radar Chart -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4">Multi-Factor Spider Chart</h2>
+            <div id="comparisonChart" style="height: 450px;"></div>
         </div>
         
-        <!-- Additional Analysis Charts -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <!-- Time Series -->
-            <div class="bg-white rounded-lg shadow-md p-6">
-                <h2 class="text-xl font-bold mb-4">Historical Intensity Trend</h2>
-                <div id="timeSeriesChart" style="height: 350px;"></div>
-            </div>
-            
-            <!-- Bar Chart -->
-            <div class="bg-white rounded-lg shadow-md p-6">
-                <h2 class="text-xl font-bold mb-4">Impact Metrics Comparison</h2>
-                <div id="barChart" style="height: 350px;"></div>
-            </div>
+        <!-- Scatter Plot -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4">Wind vs Pressure Analysis</h2>
+            <div id="scatterChart" style="height: 450px;"></div>
+        </div>
+        
+        <!-- Time Series -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4">Historical Intensity Trend</h2>
+            <div id="timeSeriesChart" style="height: 400px;"></div>
+        </div>
+        
+        <!-- Bar Chart -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-bold mb-4">Impact Metrics Comparison</h2>
+            <div id="barChart" style="height: 400px;"></div>
         </div>
     </div>
 
@@ -754,8 +749,8 @@
                 name: 'All Hurricanes',
                 marker: {
                     size: 4,
-                    color: '#e5e7eb',
-                    opacity: 0.5
+                    color: '#6b7280',  // Much darker gray (was #e5e7eb)
+                    opacity: 0.7        // More opaque (was 0.5)
                 },
                 hoverinfo: 'skip'
             }];
@@ -795,7 +790,7 @@
                     title: 'Maximum Wind Speed (mph)',
                     gridcolor: '#e5e7eb'
                 },
-                height: 400,
+                height: 450,  // Increased height for full width
                 showlegend: true,
                 hovermode: 'closest',
                 paper_bgcolor: 'white',
@@ -833,10 +828,10 @@
                     type: 'scatter',
                     name: `Cat ${storm.category}±1 trend`,
                     line: {
-                        color: ['#fecaca', '#fed7aa', '#bbf7d0'][index],
-                        width: 1
+                        color: ['#dc2626', '#f59e0b', '#10b981'][index],  // Much darker, solid colors
+                        width: 2  // Thicker line for visibility
                     },
-                    opacity: 0.3,
+                    opacity: 0.5,  // More opaque (was 0.3)
                     hoverinfo: 'skip'
                 });
                 
@@ -859,7 +854,7 @@
                 title: 'Historical Intensity Context',
                 xaxis: { title: 'Year', gridcolor: '#e5e7eb' },
                 yaxis: { title: 'Wind Speed (mph)', gridcolor: '#e5e7eb' },
-                height: 350,
+                height: 400,  // Increased height for full width
                 showlegend: true,
                 paper_bgcolor: 'white',
                 plot_bgcolor: '#f9fafb'
@@ -916,7 +911,7 @@
             const layout = {
                 title: 'Storm Impact Metrics',
                 barmode: 'group',
-                height: 350,
+                height: 400,  // Increased height for full width
                 xaxis: { gridcolor: '#e5e7eb' },
                 yaxis: { title: 'Value', gridcolor: '#e5e7eb' },
                 paper_bgcolor: 'white',
