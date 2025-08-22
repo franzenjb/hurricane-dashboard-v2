@@ -232,12 +232,14 @@
         <!-- Scatter Plot -->
         <div class="bg-white rounded-lg shadow-md p-6 mb-6">
             <h2 class="text-xl font-bold mb-4">Wind vs Pressure Analysis</h2>
+            <p class="text-sm text-gray-600 mb-2">💡 Click any gray dot to add that storm to comparison</p>
             <div id="scatterChart" style="height: 650px;"></div>
         </div>
         
         <!-- Time Series -->
         <div class="bg-white rounded-lg shadow-md p-6 mb-6">
             <h2 class="text-xl font-bold mb-4">Historical Intensity Trend</h2>
+            <p class="text-sm text-gray-600 mb-2">💡 Click any gray dot to add that storm to comparison</p>
             <div id="timeSeriesChart" style="height: 650px;"></div>
         </div>
         
@@ -698,17 +700,18 @@
                     orientation: 'h',
                     x: 0.5,
                     xanchor: 'center',
-                    y: -0.08,
+                    y: -0.05,
                     yanchor: 'top',
-                    font: { size: 12 },
-                    itemwidth: 100
+                    font: { size: 14 },
+                    itemsizing: 'constant',
+                    tracegroupgap: 30
                 },
                 title: {
                     text: 'Multi-Factor Storm Analysis',
                     font: { size: 16 }
                 },
                 height: 650,
-                margin: { t: 70, r: 100, b: 150, l: 100 },  // Much more space for legend
+                margin: { t: 70, r: 100, b: 100, l: 100 },  // Adjusted for cleaner layout
                 paper_bgcolor: 'white',
                 font: { family: 'system-ui, sans-serif' }
             };
@@ -754,6 +757,7 @@
                 mode: 'markers',
                 type: 'scatter',
                 name: 'All Hurricanes',
+                showlegend: false,  // Hide from legend to reduce clutter
                 marker: {
                     size: 6,  // Bigger dots (was 4)
                     color: '#6b7280',
@@ -804,12 +808,13 @@
                     orientation: 'h',
                     x: 0.5,
                     xanchor: 'center',
-                    y: -0.08,
+                    y: -0.05,
                     yanchor: 'top',
-                    font: { size: 12 },
-                    itemwidth: 120
+                    font: { size: 14 },  // Larger font
+                    itemsizing: 'constant',
+                    tracegroupgap: 30  // More space between items
                 },
-                margin: { t: 70, r: 70, b: 150, l: 70 },  // Much more space for legend
+                margin: { t: 70, r: 70, b: 100, l: 70 },  // Adjusted for cleaner legend
                 hovermode: 'closest',
                 paper_bgcolor: 'white',
                 plot_bgcolor: '#f9fafb'
@@ -870,6 +875,7 @@
                 mode: 'markers',
                 type: 'scatter',
                 name: 'All Cat 1-5 Hurricanes',
+                showlegend: false,  // Hide from legend to reduce clutter
                 marker: {
                     size: 6,  // Bigger dots
                     color: '#9ca3af',
@@ -910,10 +916,13 @@
                     orientation: 'h',
                     x: 0.5,
                     xanchor: 'center',
-                    y: -0.08,
-                    yanchor: 'top'
+                    y: -0.05,
+                    yanchor: 'top',
+                    font: { size: 14 },
+                    itemsizing: 'constant',
+                    tracegroupgap: 30
                 },
-                margin: { t: 70, r: 70, b: 150, l: 70 },  // Much more space
+                margin: { t: 70, r: 70, b: 100, l: 70 },  // Adjusted
                 paper_bgcolor: 'white',
                 plot_bgcolor: '#f9fafb'
             };
