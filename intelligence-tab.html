@@ -328,6 +328,14 @@
                 // Handle input change
                 searchInput.addEventListener('input', function() {
                     const selectedText = this.value;
+                    
+                    // If input is cleared, reset the selection
+                    if (!selectedText || selectedText === '') {
+                        select.value = '';
+                        select.dispatchEvent(new Event('change'));
+                        return;
+                    }
+                    
                     // Find matching storm
                     const matchingStorm = landfallHurricanes.find(storm => 
                         `${storm.name} (${storm.year}) - Cat ${storm.category}` === selectedText
@@ -336,6 +344,29 @@
                         select.value = matchingStorm.storm_id;
                         select.dispatchEvent(new Event('change'));
                     }
+                });
+                
+                // Add clear button next to input
+                const clearBtn = document.createElement('button');
+                clearBtn.textContent = '✕';
+                clearBtn.className = 'ml-2 px-2 py-1 text-gray-500 hover:text-red-600';
+                clearBtn.title = 'Clear selection';
+                clearBtn.onclick = function() {
+                    searchInput.value = '';
+                    select.value = '';
+                    select.dispatchEvent(new Event('change'));
+                };
+                
+                // Wrap input and button in a div
+                const inputWrapper = document.createElement('div');
+                inputWrapper.className = 'flex items-center';
+                searchInput.parentNode.replaceChild(inputWrapper, searchInput);
+                inputWrapper.appendChild(searchInput);
+                inputWrapper.appendChild(clearBtn);
+                
+                // Allow clicking in input to select all text for easy replacement
+                searchInput.addEventListener('click', function() {
+                    this.select();
                 });
             });
         }
@@ -729,36 +760,18 @@
                 text: backgroundStorms.map(s => `${s.name} (${s.year})`)
             }];
             
-            // Add text labels for major storms (visible when zoomed)
-            const majorBackgroundStorms = backgroundStorms.filter(s => s.category >= 4 || s.wind_mph >= 150);
-            if (majorBackgroundStorms.length > 0) {
-                traces.push({
-                    x: majorBackgroundStorms.map(s => s.pressure),
-                    y: majorBackgroundStorms.map(s => s.wind_mph),
-                    mode: 'text',
-                    type: 'scatter',
-                    showlegend: false,
-                    text: majorBackgroundStorms.map(s => s.name),
-                    textfont: {
-                        size: 8,
-                        color: '#374151'
-                    },
-                    textposition: 'top center',
-                    hoverinfo: 'skip'
-                });
-            }
+            // Don't add labels for background storms - only selected storms get labels
             
             // Add selected storms
             validStorms.forEach((storm, index) => {
                 if (storm.pressure && storm.wind_mph) {
+                    // Add marker without text
                     traces.push({
                         x: [storm.pressure],
                         y: [storm.wind_mph],
-                        mode: 'markers+text',
+                        mode: 'markers',
                         type: 'scatter',
                         name: `${storm.name} (${storm.year})`,
-                        text: [storm.name],
-                        textposition: 'top center',
                         marker: {
                             size: 15,
                             color: ['#dc2626', '#f59e0b', '#10b981'][index],
@@ -768,6 +781,25 @@
                             `Wind: ${storm.wind_mph} mph<br>` +
                             `Pressure: ${storm.pressure} mb<br>` +
                             `Category: ${storm.category}<extra></extra>`
+                    });
+                    
+                    // Add text label separately with dynamic offset
+                    const yRange = Math.max(...allStorms.map(s => s.wind_mph)) - Math.min(...allStorms.map(s => s.wind_mph));
+                    const labelOffset = yRange * 0.02; // 2% of range
+                    traces.push({
+                        x: [storm.pressure],
+                        y: [storm.wind_mph + labelOffset],
+                        mode: 'text',
+                        type: 'scatter',
+                        text: [`<b>${storm.name}</b>`],
+                        textposition: 'top center',
+                        textfont: {
+                            size: 11,
+                            color: ['#dc2626', '#f59e0b', '#10b981'][index],
+                            family: 'Arial, sans-serif'
+                        },
+                        hoverinfo: 'skip',
+                        showlegend: false
                     });
                 }
             });
@@ -873,8 +905,11 @@
                     textposition: 'top center',
                     hoverinfo: 'skip',
                     texttemplate: '%{text}',
-                    // Add offset to move text higher
-                    y: cat5Storms.map(s => s.wind_mph + 8)  // Move labels 8 mph higher
+                    // Dynamic offset based on data range for zoom-responsive positioning
+                    y: cat5Storms.map(s => {
+                        const yRange = Math.max(...allStorms.map(st => st.wind_mph)) - Math.min(...allStorms.map(st => st.wind_mph));
+                        return s.wind_mph + (yRange * 0.025); // 2.5% of range
+                    })
                 });
             }
             
@@ -898,19 +933,21 @@
                     showlegend: false
                 });
                 
-                // Add the text label separately with offset
+                // Add the text label separately with percentage-based offset
+                // Use 2% of the y-axis range for consistent spacing regardless of zoom
+                const yRange = Math.max(...allStorms.map(s => s.wind_mph)) - Math.min(...allStorms.map(s => s.wind_mph));
+                const labelOffset = yRange * 0.02; // 2% of range
                 traces.push({
                     x: [storm.year],
-                    y: [storm.wind_mph + 7],  // Move label 7 mph higher
+                    y: [storm.wind_mph + labelOffset],  // Dynamic offset based on data range
                     mode: 'text',
                     type: 'scatter',
-                    text: [storm.name],
+                    text: [`<b>${storm.name}</b>`],  // Make text bold
                     textposition: 'top center',
                     textfont: {
-                        size: 10,
+                        size: 11,
                         color: ['#dc2626', '#f59e0b', '#10b981'][index],
-                        family: 'Arial, sans-serif',
-                        weight: 'bold'
+                        family: 'Arial, sans-serif'
                     },
                     hoverinfo: 'skip',
                     showlegend: false
