@@ -222,10 +222,34 @@
             </div>
         </div>
 
-        <!-- Comparison Chart -->
-        <div class="bg-white rounded-lg shadow-md p-6">
-            <h2 class="text-xl font-bold mb-4">Comparative Analysis</h2>
-            <div id="comparisonChart" style="height: 400px;"></div>
+        <!-- Comparison Charts -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <!-- Spider/Radar Chart -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-bold mb-4">Multi-Factor Spider Chart</h2>
+                <div id="comparisonChart" style="height: 400px;"></div>
+            </div>
+            
+            <!-- Scatter Plot -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-bold mb-4">Wind vs Pressure Analysis</h2>
+                <div id="scatterChart" style="height: 400px;"></div>
+            </div>
+        </div>
+        
+        <!-- Additional Analysis Charts -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Time Series -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-bold mb-4">Historical Intensity Trend</h2>
+                <div id="timeSeriesChart" style="height: 350px;"></div>
+            </div>
+            
+            <!-- Bar Chart -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-bold mb-4">Impact Metrics Comparison</h2>
+                <div id="barChart" style="height: 350px;"></div>
+            </div>
         </div>
     </div>
 
@@ -243,13 +267,16 @@
         document.addEventListener('DOMContentLoaded', () => {
             populateStormSelectors();
             updateComparisonChart();
+            updateScatterChart();
+            updateTimeSeriesChart();
+            updateBarChart();
         });
 
-        // Populate storm selectors
+        // Populate storm selectors with search capability
         function populateStormSelectors() {
             const selectors = ['storm1Select', 'storm2Select', 'storm3Select'];
             
-            // Filter for Category 1-5 hurricanes with U.S. landfall, sorted newest first
+            // Get Category 1-5 hurricanes with landfall, sorted newest first
             const landfallHurricanes = allStorms
                 .filter(s => s.category >= 1 && s.category <= 5 && s.landfall_states && s.landfall_states.length > 0)
                 .sort((a, b) => {
@@ -261,8 +288,18 @@
                     return (b.day || 0) - (a.day || 0);
                 });
             
-            selectors.forEach(selectorId => {
+            selectors.forEach((selectorId, idx) => {
                 const select = document.getElementById(selectorId);
+                
+                // Add search input above select
+                const searchInput = document.createElement('input');
+                searchInput.type = 'text';
+                searchInput.placeholder = 'Search storms by name or year...';
+                searchInput.className = 'w-full px-3 py-1 mb-2 border rounded-lg text-sm';
+                searchInput.id = selectorId + 'Search';
+                
+                // Insert search before select
+                select.parentNode.insertBefore(searchInput, select);
                 
                 // Clear existing options
                 select.innerHTML = '';
@@ -270,59 +307,78 @@
                 // Add default option
                 const defaultOption = document.createElement('option');
                 defaultOption.value = '';
-                defaultOption.textContent = '-- Select a Hurricane --';
+                defaultOption.textContent = '-- Select a Hurricane (Cat 1-5 with landfall) --';
                 select.appendChild(defaultOption);
                 
-                // Add most recent major hurricanes at the top
-                const recentMajor = landfallHurricanes
-                    .filter(s => s.year >= 2020 && s.category >= 3)
-                    .slice(0, 10);
-                
-                if (recentMajor.length > 0) {
-                    const recentGroup = document.createElement('optgroup');
-                    recentGroup.label = '⭐ Recent Major Hurricanes (2020-2024)';
-                    recentGroup.style.fontWeight = 'bold';
-                    
-                    recentMajor.forEach(storm => {
-                        const option = document.createElement('option');
-                        option.value = storm.storm_id;
-                        const states = storm.landfall_states.join(', ');
-                        option.textContent = `${storm.name} (${storm.year}) - Cat ${storm.category} - ${states}`;
-                        option.style.color = storm.category >= 4 ? '#dc2626' : '#ea580c';
-                        recentGroup.appendChild(option);
-                    });
-                    
-                    select.appendChild(recentGroup);
-                }
-                
-                // Group remaining storms by decade for better organization
-                const decades = {};
-                landfallHurricanes.forEach(storm => {
-                    const decade = Math.floor(storm.year / 10) * 10;
-                    if (!decades[decade]) {
-                        decades[decade] = [];
+                // Function to populate options based on search
+                const populateOptions = (searchTerm = '') => {
+                    // Clear current options except default
+                    while (select.options.length > 1) {
+                        select.remove(1);
                     }
-                    decades[decade].push(storm);
-                });
-                
-                // Add storm options grouped by decade (newest decades first)
-                const sortedDecades = Object.keys(decades)
-                    .map(d => parseInt(d))  // Convert to numbers for proper sorting
-                    .sort((a, b) => b - a);  // Sort descending (newest first)
-                
-                sortedDecades.forEach(decade => {
-                    const optgroup = document.createElement('optgroup');
-                    optgroup.label = `${decade}s`;
                     
-                    decades[decade].forEach(storm => {
-                        const option = document.createElement('option');
-                        option.value = storm.storm_id;
-                        const states = storm.landfall_states.join(', ');
-                        option.textContent = `${storm.name} (${storm.year}) - Cat ${storm.category} - ${states}`;
-                        optgroup.appendChild(option);
+                    // Filter storms based on search
+                    let filteredStorms = landfallHurricanes;
+                    if (searchTerm) {
+                        const term = searchTerm.toLowerCase();
+                        filteredStorms = landfallHurricanes.filter(storm => 
+                            storm.name.toLowerCase().includes(term) ||
+                            storm.year.toString().includes(term) ||
+                            storm.landfall_states.join(' ').toLowerCase().includes(term)
+                        );
+                    }
+                    
+                    // Update default option with count
+                    select.options[0].textContent = searchTerm 
+                        ? `-- ${filteredStorms.length} hurricanes found --`
+                        : `-- ${landfallHurricanes.length} Cat 1-5 hurricanes with landfall --`;
+                
+                    // Group storms by decade for better organization
+                    const decades = {};
+                    filteredStorms.forEach(storm => {
+                        const decade = Math.floor(storm.year / 10) * 10;
+                        if (!decades[decade]) {
+                            decades[decade] = [];
+                        }
+                        decades[decade].push(storm);
                     });
                     
-                    select.appendChild(optgroup);
+                    // Add storm options grouped by decade (newest first)
+                    const sortedDecades = Object.keys(decades)
+                        .map(d => parseInt(d))
+                        .sort((a, b) => b - a);
+                    
+                    sortedDecades.forEach(decade => {
+                        const optgroup = document.createElement('optgroup');
+                        optgroup.label = `${decade}s (${decades[decade].length} storms)`;
+                        
+                        decades[decade].forEach(storm => {
+                            const option = document.createElement('option');
+                            option.value = storm.storm_id;
+                            const catText = storm.category >= 0 ? `Cat ${storm.category}` : 'TD';
+                            const states = storm.landfall_states ? storm.landfall_states.join(', ') : 'No landfall';
+                            const windText = storm.wind_mph ? `${storm.wind_mph} mph` : '';
+                            option.textContent = `${storm.name} (${storm.year}) - ${catText} - ${windText} - ${states}`;
+                            
+                            // Color code by intensity
+                            if (storm.category >= 5) option.style.color = '#7c3aed';
+                            else if (storm.category >= 4) option.style.color = '#dc2626';
+                            else if (storm.category >= 3) option.style.color = '#ea580c';
+                            else if (storm.category >= 1) option.style.color = '#0891b2';
+                            
+                            optgroup.appendChild(option);
+                        });
+                        
+                        select.appendChild(optgroup);
+                    });
+                };
+                
+                // Initial population
+                populateOptions();
+                
+                // Add search event listener
+                searchInput.addEventListener('input', (e) => {
+                    populateOptions(e.target.value);
                 });
             });
         }
@@ -348,6 +404,9 @@
             }
             
             updateComparisonChart();
+            updateScatterChart();
+            updateTimeSeriesChart();
+            updateBarChart();
         }
 
         // Update storm card
@@ -592,24 +651,35 @@
             }
             
             const traces = [];
-            const categories = ['Wind Speed', 'Pressure', 'Deaths', 'Damage', 'RC Score'];
+            // Use real data factors
+            const categories = ['Wind Speed', 'Pressure', 'ACE Index', 'Category', 'Deaths', 'States Hit', 'Peak Month'];
             
             validStorms.forEach((storm, index) => {
-                // Normalize values for radar chart
-                const windNorm = (storm.wind_mph || 0) / 200 * 100; // Normalize to 0-100
-                const pressureNorm = storm.pressure ? ((1050 - storm.pressure) / 150) * 100 : 0; // Lower pressure = stronger
-                const deathsNorm = Math.min((storm.deaths || 0) / 2000 * 100, 100); // Cap at 2000 deaths
-                const damageNorm = Math.min((storm.damage_millions || 0) / 100000 * 100, 100); // Cap at $100B
-                const rcScore = storm.rc_impact_score || 0;
+                // Calculate real values
+                const windNorm = (storm.wind_mph || 0) / 200 * 100; // Max wind ~200mph
+                const pressureNorm = storm.pressure ? ((1013 - storm.pressure) / 113) * 100 : 50; // 900-1013mb range
+                const aceNorm = Math.min((storm.ace || 0) / 80 * 100, 100); // ACE max ~80
+                const categoryNorm = (storm.category / 5) * 100; // Category 0-5
+                const deathsNorm = Math.min(Math.log10((storm.deaths || 1) + 1) / 4 * 100, 100); // Log scale for deaths
+                const statesNorm = ((storm.landfall_states?.length || 0) / 5) * 100; // Max ~5 states
+                const monthNorm = ((storm.month - 1) / 11) * 100; // Month 1-12 normalized
                 
                 traces.push({
                     type: 'scatterpolar',
-                    r: [windNorm, pressureNorm, deathsNorm, damageNorm, rcScore],
+                    r: [windNorm, pressureNorm, aceNorm, categoryNorm, deathsNorm, statesNorm, monthNorm],
                     theta: categories,
                     fill: 'toself',
                     name: `${storm.name} (${storm.year})`,
                     marker: { color: ['#dc2626', '#f59e0b', '#10b981'][index] },
-                    opacity: 0.6
+                    opacity: 0.6,
+                    hovertemplate: `<b>${storm.name} (${storm.year})</b><br>` +
+                        'Wind: ' + storm.wind_mph + ' mph<br>' +
+                        'Pressure: ' + (storm.pressure || 'N/A') + ' mb<br>' +
+                        'ACE: ' + (storm.ace?.toFixed(1) || 'N/A') + '<br>' +
+                        'Category: ' + storm.category + '<br>' +
+                        'Deaths: ' + (storm.deaths || 0) + '<br>' +
+                        'States: ' + (storm.landfall_states?.join(', ') || 'None') + '<br>' +
+                        'Month: ' + storm.month + '<extra></extra>'
                 });
             });
             
@@ -618,16 +688,27 @@
                     radialaxis: {
                         visible: true,
                         range: [0, 100],
-                        ticksuffix: '%'
-                    }
+                        ticksuffix: '%',
+                        gridcolor: '#e5e7eb'
+                    },
+                    angularaxis: {
+                        gridcolor: '#e5e7eb'
+                    },
+                    bgcolor: '#f9fafb'
                 },
                 showlegend: true,
+                legend: {
+                    x: 0,
+                    y: 1
+                },
                 title: {
-                    text: 'Storm Comparison (Normalized to 100%)',
+                    text: 'Multi-Factor Storm Analysis',
                     font: { size: 16 }
                 },
                 height: 400,
-                margin: { t: 50, r: 50, b: 50, l: 50 }
+                margin: { t: 60, r: 80, b: 40, l: 80 },
+                paper_bgcolor: 'white',
+                font: { family: 'system-ui, sans-serif' }
             };
             
             const config = {
@@ -645,6 +726,204 @@
             if (score >= 40) return '#f59e0b';
             if (score >= 20) return '#10b981';
             return '#3b82f6';
+        }
+        
+        // Add Scatter Chart function
+        function updateScatterChart() {
+            const validStorms = selectedStorms.filter(s => s !== null);
+            const chartDiv = document.getElementById('scatterChart');
+            if (!chartDiv) return;
+            
+            if (validStorms.length === 0) {
+                Plotly.purge('scatterChart');
+                chartDiv.innerHTML = '<div class="text-center text-gray-500 mt-20">Select storms to analyze</div>';
+                return;
+            }
+            
+            // Add all hurricanes as background context
+            const backgroundStorms = allStorms.filter(s => 
+                s.category >= 1 && s.pressure && s.wind_mph && 
+                s.landfall_states && s.landfall_states.length > 0
+            );
+            
+            const traces = [{
+                x: backgroundStorms.map(s => s.pressure),
+                y: backgroundStorms.map(s => s.wind_mph),
+                mode: 'markers',
+                type: 'scatter',
+                name: 'All Hurricanes',
+                marker: {
+                    size: 4,
+                    color: '#e5e7eb',
+                    opacity: 0.5
+                },
+                hoverinfo: 'skip'
+            }];
+            
+            // Add selected storms
+            validStorms.forEach((storm, index) => {
+                if (storm.pressure && storm.wind_mph) {
+                    traces.push({
+                        x: [storm.pressure],
+                        y: [storm.wind_mph],
+                        mode: 'markers+text',
+                        type: 'scatter',
+                        name: `${storm.name} (${storm.year})`,
+                        text: [storm.name],
+                        textposition: 'top center',
+                        marker: {
+                            size: 15,
+                            color: ['#dc2626', '#f59e0b', '#10b981'][index],
+                            line: { color: 'white', width: 2 }
+                        },
+                        hovertemplate: `<b>${storm.name} (${storm.year})</b><br>` +
+                            `Wind: ${storm.wind_mph} mph<br>` +
+                            `Pressure: ${storm.pressure} mb<br>` +
+                            `Category: ${storm.category}<extra></extra>`
+                    });
+                }
+            });
+            
+            const layout = {
+                title: 'Wind-Pressure Relationship',
+                xaxis: {
+                    title: 'Minimum Pressure (mb)',
+                    autorange: 'reversed',
+                    gridcolor: '#e5e7eb'
+                },
+                yaxis: {
+                    title: 'Maximum Wind Speed (mph)',
+                    gridcolor: '#e5e7eb'
+                },
+                height: 400,
+                showlegend: true,
+                hovermode: 'closest',
+                paper_bgcolor: 'white',
+                plot_bgcolor: '#f9fafb'
+            };
+            
+            Plotly.newPlot('scatterChart', traces, layout, { responsive: true, displayModeBar: false });
+        }
+        
+        // Add Time Series Chart
+        function updateTimeSeriesChart() {
+            const validStorms = selectedStorms.filter(s => s !== null);
+            const chartDiv = document.getElementById('timeSeriesChart');
+            if (!chartDiv) return;
+            
+            if (validStorms.length === 0) {
+                Plotly.purge('timeSeriesChart');
+                chartDiv.innerHTML = '<div class="text-center text-gray-500 mt-20">Select storms to see trends</div>';
+                return;
+            }
+            
+            // Get historical context - similar category storms
+            const traces = [];
+            
+            validStorms.forEach((storm, index) => {
+                const similarStorms = allStorms.filter(s => 
+                    Math.abs(s.category - storm.category) <= 1 &&
+                    s.landfall_states && s.landfall_states.length > 0
+                ).sort((a, b) => a.year - b.year);
+                
+                traces.push({
+                    x: similarStorms.map(s => s.year),
+                    y: similarStorms.map(s => s.wind_mph),
+                    mode: 'lines',
+                    type: 'scatter',
+                    name: `Cat ${storm.category}±1 trend`,
+                    line: {
+                        color: ['#fecaca', '#fed7aa', '#bbf7d0'][index],
+                        width: 1
+                    },
+                    opacity: 0.3,
+                    hoverinfo: 'skip'
+                });
+                
+                // Highlight selected storm
+                traces.push({
+                    x: [storm.year],
+                    y: [storm.wind_mph],
+                    mode: 'markers',
+                    type: 'scatter',
+                    name: `${storm.name} (${storm.year})`,
+                    marker: {
+                        size: 15,
+                        color: ['#dc2626', '#f59e0b', '#10b981'][index],
+                        line: { color: 'white', width: 2 }
+                    }
+                });
+            });
+            
+            const layout = {
+                title: 'Historical Intensity Context',
+                xaxis: { title: 'Year', gridcolor: '#e5e7eb' },
+                yaxis: { title: 'Wind Speed (mph)', gridcolor: '#e5e7eb' },
+                height: 350,
+                showlegend: true,
+                paper_bgcolor: 'white',
+                plot_bgcolor: '#f9fafb'
+            };
+            
+            Plotly.newPlot('timeSeriesChart', traces, layout, { responsive: true, displayModeBar: false });
+        }
+        
+        // Add Bar Chart
+        function updateBarChart() {
+            const validStorms = selectedStorms.filter(s => s !== null);
+            const chartDiv = document.getElementById('barChart');
+            if (!chartDiv) return;
+            
+            if (validStorms.length === 0) {
+                Plotly.purge('barChart');
+                chartDiv.innerHTML = '<div class="text-center text-gray-500 mt-20">Select storms to compare metrics</div>';
+                return;
+            }
+            
+            const stormNames = validStorms.map(s => `${s.name} (${s.year})`);
+            
+            const traces = [
+                {
+                    x: stormNames,
+                    y: validStorms.map(s => s.wind_mph || 0),
+                    name: 'Wind (mph)',
+                    type: 'bar',
+                    marker: { color: '#dc2626' }
+                },
+                {
+                    x: stormNames,
+                    y: validStorms.map(s => s.ace || 0),
+                    name: 'ACE Index',
+                    type: 'bar',
+                    marker: { color: '#f59e0b' }
+                },
+                {
+                    x: stormNames,
+                    y: validStorms.map(s => (s.landfall_states?.length || 0) * 20),
+                    name: 'States Hit (x20)',
+                    type: 'bar',
+                    marker: { color: '#10b981' }
+                },
+                {
+                    x: stormNames,
+                    y: validStorms.map(s => Math.min(s.deaths || 0, 200)),
+                    name: 'Deaths (capped at 200)',
+                    type: 'bar',
+                    marker: { color: '#7c3aed' }
+                }
+            ];
+            
+            const layout = {
+                title: 'Storm Impact Metrics',
+                barmode: 'group',
+                height: 350,
+                xaxis: { gridcolor: '#e5e7eb' },
+                yaxis: { title: 'Value', gridcolor: '#e5e7eb' },
+                paper_bgcolor: 'white',
+                plot_bgcolor: '#f9fafb'
+            };
+            
+            Plotly.newPlot('barChart', traces, layout, { responsive: true, displayModeBar: false });
         }
 
         // Auto-select some storms for demo
