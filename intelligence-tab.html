@@ -697,24 +697,25 @@
                 },
                 showlegend: true,
                 legend: {
-                    orientation: 'h',
-                    x: 0,
-                    xanchor: 'left',
-                    y: -0.08,
+                    orientation: 'h',  // Horizontal
+                    x: 0.5,  // Center it
+                    xanchor: 'center',
+                    y: -0.2,  // Position BELOW the chart with space
                     yanchor: 'top',
                     font: { size: 10 },
+                    bgcolor: 'rgba(255,255,255,0.95)',
+                    bordercolor: '#ddd',
+                    borderwidth: 1,
                     itemsizing: 'constant',
-                    entrywidth: 0.25,  // Each item takes 25% of plot width
-                    entrywidthmode: 'fraction',
-                    xref: 'paper',
-                    yref: 'paper'
+                    itemwidth: null,  // Let items size naturally
+                    tracegroupgap: 5  // Small gap between items
                 },
                 title: {
                     text: 'Multi-Factor Storm Analysis',
                     font: { size: 16 }
                 },
                 height: 650,
-                margin: { t: 70, r: 100, b: 100, l: 100 },  // Adjusted margins for legend
+                margin: { t: 70, r: 100, b: 180, l: 100 },  // Large bottom margin for legend below
                 paper_bgcolor: 'white',
                 font: { family: 'system-ui, sans-serif' }
             };
@@ -827,19 +828,20 @@
                 height: 650,
                 showlegend: true,
                 legend: {
-                    orientation: 'h',
-                    x: 0,
-                    xanchor: 'left',
-                    y: -0.08,
+                    orientation: 'h',  // Horizontal
+                    x: 0.5,  // Center it
+                    xanchor: 'center',
+                    y: -0.2,  // Position BELOW the chart with space
                     yanchor: 'top',
                     font: { size: 10 },
+                    bgcolor: 'rgba(255,255,255,0.95)',
+                    bordercolor: '#ddd',
+                    borderwidth: 1,
                     itemsizing: 'constant',
-                    entrywidth: 0.25,
-                    entrywidthmode: 'fraction',
-                    xref: 'paper',
-                    yref: 'paper'
+                    itemwidth: null,  // Let items size naturally
+                    tracegroupgap: 5  // Small gap between items
                 },
-                margin: { t: 70, r: 50, b: 100, l: 70 },  // Adjusted margins for legend
+                margin: { t: 70, r: 70, b: 180, l: 70 },  // Large bottom margin for legend below
                 hovermode: 'closest',
                 paper_bgcolor: 'white',
                 plot_bgcolor: '#f9fafb'
@@ -957,19 +959,20 @@
                 height: 650,
                 showlegend: true,
                 legend: {
-                    orientation: 'h',
-                    x: 0,
-                    xanchor: 'left',
-                    y: -0.08,
+                    orientation: 'h',  // Horizontal
+                    x: 0.5,  // Center it
+                    xanchor: 'center',
+                    y: -0.2,  // Position BELOW the chart with space
                     yanchor: 'top',
                     font: { size: 10 },
+                    bgcolor: 'rgba(255,255,255,0.95)',
+                    bordercolor: '#ddd',
+                    borderwidth: 1,
                     itemsizing: 'constant',
-                    entrywidth: 0.25,  // Each item takes 25% of plot width
-                    entrywidthmode: 'fraction',
-                    xref: 'paper',
-                    yref: 'paper'
+                    itemwidth: null,  // Let items size naturally
+                    tracegroupgap: 5  // Small gap between items
                 },
-                margin: { t: 70, r: 50, b: 100, l: 70 },  // Adjusted margins for legend
+                margin: { t: 70, r: 70, b: 180, l: 70 },  // Large bottom margin for legend below
                 paper_bgcolor: 'white',
                 plot_bgcolor: '#f9fafb'
             };
@@ -1049,19 +1052,20 @@
                 height: 650,
                 showlegend: true,
                 legend: {
-                    orientation: 'h',
-                    x: 0,
-                    xanchor: 'left',
-                    y: -0.08,
+                    orientation: 'h',  // Horizontal
+                    x: 0.5,  // Center it
+                    xanchor: 'center',
+                    y: -0.2,  // Position BELOW the chart with space
                     yanchor: 'top',
                     font: { size: 10 },
+                    bgcolor: 'rgba(255,255,255,0.95)',
+                    bordercolor: '#ddd',
+                    borderwidth: 1,
                     itemsizing: 'constant',
-                    entrywidth: 0.25,
-                    entrywidthmode: 'fraction',
-                    xref: 'paper',
-                    yref: 'paper'
+                    itemwidth: null,  // Let items size naturally
+                    tracegroupgap: 5  // Small gap between items
                 },
-                margin: { t: 70, r: 50, b: 100, l: 70 },  // Adjusted margins for legend
+                margin: { t: 70, r: 70, b: 180, l: 70 },  // Large bottom margin for legend below
                 xaxis: { gridcolor: '#e5e7eb' },
                 yaxis: { title: 'Value', gridcolor: '#e5e7eb' },
                 paper_bgcolor: 'white',
