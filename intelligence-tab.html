@@ -244,10 +244,6 @@
         </div>
         
         <!-- Bar Chart -->
-        <div class="bg-white rounded-lg shadow-md p-6">
-            <h2 class="text-xl font-bold mb-4">Impact Metrics Comparison</h2>
-            <div id="barChart" style="height: 650px;"></div>
-        </div>
     </div>
 
     <script>
@@ -266,7 +262,6 @@
             updateComparisonChart();
             updateScatterChart();
             updateTimeSeriesChart();
-            updateBarChart();
         });
 
         // Populate storm selectors with search capability
@@ -368,7 +363,6 @@
             updateComparisonChart();
             updateScatterChart();
             updateTimeSeriesChart();
-            updateBarChart();
         }
 
         // Update storm card
@@ -956,66 +950,6 @@
                     }
                 }
             });
-        }
-        
-        // Add Bar Chart
-        function updateBarChart() {
-            const validStorms = selectedStorms.filter(s => s !== null);
-            const chartDiv = document.getElementById('barChart');
-            if (!chartDiv) return;
-            
-            if (validStorms.length === 0) {
-                Plotly.purge('barChart');
-                chartDiv.innerHTML = '<div class="text-center text-gray-500 mt-20">Select storms to compare metrics</div>';
-                return;
-            }
-            
-            const stormNames = validStorms.map(s => `${s.name} (${s.year})`);
-            
-            const traces = [
-                {
-                    x: stormNames,
-                    y: validStorms.map(s => s.wind_mph || 0),
-                    name: 'Wind (mph)',
-                    type: 'bar',
-                    marker: { color: '#dc2626' }
-                },
-                {
-                    x: stormNames,
-                    y: validStorms.map(s => s.ace || 0),
-                    name: 'ACE Index',
-                    type: 'bar',
-                    marker: { color: '#f59e0b' }
-                },
-                {
-                    x: stormNames,
-                    y: validStorms.map(s => (s.landfall_states?.length || 0) * 20),
-                    name: 'States Hit (x20)',
-                    type: 'bar',
-                    marker: { color: '#10b981' }
-                },
-                {
-                    x: stormNames,
-                    y: validStorms.map(s => Math.min(s.deaths || 0, 200)),
-                    name: 'Deaths (capped at 200)',
-                    type: 'bar',
-                    marker: { color: '#7c3aed' }
-                }
-            ];
-            
-            const layout = {
-                title: 'Storm Impact Metrics',
-                barmode: 'group',
-                height: 650,
-                showlegend: false,
-                margin: { t: 70, r: 70, b: 140, l: 70 },
-                xaxis: { gridcolor: '#e5e7eb' },
-                yaxis: { title: 'Value', gridcolor: '#e5e7eb' },
-                paper_bgcolor: 'white',
-                plot_bgcolor: '#f9fafb'
-            };
-            
-            Plotly.newPlot('barChart', traces, layout, { responsive: true, displayModeBar: false });
         }
 
         // Auto-select some storms for demo
