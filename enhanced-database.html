@@ -12,9 +12,283 @@
     <script src="atlantic-storms-enhanced.js"></script>
     <style>
         :root {
-            --rc-red: #ED1B2E;
-            --rc-dark-red: #B71234;
-            --rc-gray: #6D6E70;
+            --arc-red: #ED1B2E;
+            --arc-dark-red: #B71234;
+            --arc-gray: #6D6E70;
+            --arc-light-gray: #F5F5F5;
+            --arc-dark: #231F20;
+        }
+        
+        /* Compact design */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        }
+        
+        /* Collapsible filter panel */
+        .filter-panel {
+            position: fixed;
+            left: -320px;
+            top: 52px;
+            width: 320px;
+            height: calc(100vh - 52px);
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            transition: left 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .filter-panel.open {
+            left: 0;
+        }
+        
+        /* Floating filter toggle */
+        .filter-toggle {
+            position: fixed;
+            left: 16px;
+            top: 72px;
+            width: 36px;
+            height: 36px;
+            background: var(--arc-red);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(237, 27, 46, 0.3);
+            z-index: 999;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        
+        .filter-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(237, 27, 46, 0.4);
+        }
+        
+        .filter-panel.open + .filter-toggle {
+            left: 336px;
+        }
+        
+        /* Compact header */
+        .compact-header {
+            height: 52px;
+            background: white;
+            border-bottom: 3px solid var(--arc-red);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1001;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        /* Main content adjustment */
+        .main-content {
+            padding-top: 52px;
+            transition: margin-left 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        
+        .main-content.shifted {
+            margin-left: 320px;
+        }
+        
+        /* Inline stats bar */
+        .stats-bar {
+            background: linear-gradient(90deg, #fafafa 0%, #f5f5f5 100%);
+            border-bottom: 1px solid #e5e7eb;
+            padding: 8px 16px;
+            display: flex;
+            gap: 24px;
+            overflow-x: auto;
+            font-size: 13px;
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+        
+        .stat-value {
+            font-weight: 700;
+            color: var(--arc-red);
+            font-size: 18px;
+        }
+        
+        .stat-label {
+            color: var(--arc-gray);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Filter styles */
+        .filter-section {
+            padding: 16px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .filter-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--arc-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+        
+        .filter-chip {
+            display: inline-block;
+            padding: 4px 10px;
+            margin: 2px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        
+        .filter-chip:hover {
+            background: var(--arc-light-gray);
+            transform: translateY(-1px);
+        }
+        
+        .filter-chip.active {
+            background: var(--arc-red);
+            color: white;
+            border-color: var(--arc-red);
+        }
+        
+        /* Category-specific colors */
+        .filter-cat5.active { background: #8B008B; border-color: #8B008B; }
+        .filter-cat4.active { background: #D9534F; border-color: #D9534F; }
+        .filter-cat3.active { background: #FF7F00; border-color: #FF7F00; }
+        .filter-cat2.active { background: #F0AD4E; border-color: #F0AD4E; }
+        .filter-cat1.active { background: #5CB85C; border-color: #5CB85C; }
+        
+        /* Compact table */
+        .data-table {
+            font-size: 13px;
+        }
+        
+        .data-table th {
+            padding: 8px 12px;
+            background: #fafafa;
+            font-weight: 600;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--arc-gray);
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .data-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .storm-row:hover {
+            background: rgba(237, 27, 46, 0.02);
+        }
+        
+        /* Impact badges */
+        .impact-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        
+        .impact-catastrophic { 
+            background: linear-gradient(90deg, #7F1D1D, #991B1B); 
+            color: white;
+        }
+        .impact-severe { 
+            background: linear-gradient(90deg, #DC2626, #EF4444); 
+            color: white;
+        }
+        .impact-major { 
+            background: linear-gradient(90deg, #EA580C, #F97316); 
+            color: white;
+        }
+        .impact-moderate { 
+            background: linear-gradient(90deg, #F59E0B, #FCD34D); 
+            color: #7C2D12;
+        }
+        .impact-minor { 
+            background: linear-gradient(90deg, #10B981, #34D399); 
+            color: white;
+        }
+        
+        /* Action buttons */
+        .btn-view {
+            padding: 4px 8px;
+            background: var(--arc-red);
+            color: white;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+        
+        .btn-view:hover {
+            background: var(--arc-dark-red);
+            transform: translateY(-1px);
+        }
+        
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 3px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #999;
+        }
+        
+        /* Loading animation */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .loading {
+            animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .filter-panel {
+                width: 280px;
+                left: -280px;
+            }
+            
+            .filter-panel.open + .filter-toggle {
+                left: 296px;
+            }
+            
+            .main-content.shifted {
+                margin-left: 280px;
+            }
         }
         
         /* Cesium container fixes */
@@ -34,102 +308,10 @@
             display: block !important;
         }
         
-        .rc-red { background-color: var(--rc-red); }
-        .rc-dark-red { background-color: var(--rc-dark-red); }
-        
-        .impact-catastrophic { background: linear-gradient(90deg, #7F1D1D, #991B1B); }
-        .impact-severe { background: linear-gradient(90deg, #DC2626, #EF4444); }
-        .impact-major { background: linear-gradient(90deg, #EA580C, #F97316); }
-        .impact-moderate { background: linear-gradient(90deg, #F59E0B, #FCD34D); }
-        .impact-minor { background: linear-gradient(90deg, #10B981, #34D399); }
-        
-        .data-quality-bar {
-            height: 4px;
-            background: #e5e7eb;
-            border-radius: 2px;
-            overflow: hidden;
-        }
-        
-        .data-quality-fill {
-            height: 100%;
-            transition: width 0.3s;
-        }
-        
-        .tcr-available { color: #10B981; }
-        .tcr-unavailable { color: #EF4444; }
-        
-        .storm-row:hover { background: #f9fafb; }
-        .storm-selected { background: #fef2f2 !important; }
-        
-        .compare-checkbox {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-        }
-        
-        .filter-chip {
-            display: inline-block;
-            padding: 6px 14px;
-            margin: 2px;
-            background: #f3f4f6;
-            border: 1px solid #e5e7eb;
-            border-radius: 6px;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-weight: 500;
-        }
-        
-        .filter-chip:hover {
-            background: #e5e7eb;
-            transform: translateY(-1px);
-        }
-        
-        .filter-chip.active {
-            background: var(--rc-red);
-            color: white;
-            border-color: var(--rc-red);
-        }
-        
-        /* Category-specific colors */
-        .filter-cat5.active { background: #8B008B; border-color: #8B008B; }
-        .filter-cat4.active { background: #D9534F; border-color: #D9534F; }
-        .filter-cat3.active { background: #FF7F00; border-color: #FF7F00; }
-        .filter-cat2.active { background: #F0AD4E; border-color: #F0AD4E; }
-        .filter-cat1.active { background: #5CB85C; border-color: #5CB85C; }
-        
-        .stats-card {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-        
-        .stats-number {
-            font-size: 32px;
-            font-weight: bold;
-            color: var(--rc-red);
-        }
-        
-        .loading-spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid var(--rc-red);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
         .sortable-header {
             cursor: pointer;
             user-select: none;
             position: relative;
-            padding-right: 20px;
         }
         
         .sortable-header:hover {
@@ -137,16 +319,13 @@
         }
         
         .sort-indicator {
-            position: absolute;
-            right: 4px;
-            top: 50%;
-            transform: translateY(-50%);
+            margin-left: 4px;
             font-size: 10px;
-            color: #6b7280;
+            color: #9ca3af;
         }
         
         .sort-indicator.active {
-            color: var(--rc-red);
+            color: var(--arc-red);
         }
         
         /* Ensure Leaflet map displays properly in modal */
@@ -161,254 +340,227 @@
     <script src="tcr-links.js"></script>
 </head>
 <body class="bg-gray-50">
-    <!-- Header -->
-    <div class="bg-white shadow-md border-b-4 border-red-600">
-        <div class="max-w-7xl mx-auto px-4 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                    <div class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center text-white font-bold mr-4">RC</div>
-                    <div>
-                        <h1 class="text-2xl font-bold text-gray-900">Hurricane Intelligence Database</h1>
-                        <p class="text-sm text-gray-600">American Red Cross - Disaster Services</p>
-                    </div>
+    <!-- Compact Header -->
+    <div class="compact-header">
+        <div class="h-full px-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center text-white font-bold text-xs">RC</div>
+                <div>
+                    <h1 class="text-base font-bold text-gray-900 leading-tight">Hurricane Intelligence Database</h1>
+                    <p class="text-xs text-gray-600 leading-tight">American Red Cross Disaster Services</p>
                 </div>
-                <div class="flex items-center space-x-4">
-                    <span class="text-sm text-gray-600">
-                        <span class="font-bold text-2xl text-red-600" id="totalStorms">1,991</span> storms
-                    </span>
-                    <span class="text-sm text-gray-600">
-                        <span class="font-bold text-lg text-orange-600" id="selectedCount">0</span> selected
-                    </span>
-                    <button id="compareBtn" class="hidden bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors" onclick="showComparison()">
-                        Compare Selected
-                    </button>
+            </div>
+            <div class="flex items-center gap-6">
+                <div class="flex items-center gap-4 text-xs">
+                    <span><strong class="text-lg text-red-600" id="totalStorms">1,991</strong> storms</span>
+                    <span><strong class="text-lg text-orange-600" id="selectedCount">0</strong> selected</span>
                 </div>
+                <button onclick="exportSelected()" class="px-3 py-1.5 bg-green-600 text-white text-xs font-medium rounded hover:bg-green-700 transition-colors flex items-center gap-1">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    Export
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Stats Bar -->
-    <div class="bg-gray-100 py-4">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="grid grid-cols-2 md:grid-cols-6 gap-4">
-                <div class="stats-card">
-                    <div class="stats-number" id="catastrophicCount">0</div>
-                    <div class="text-xs text-gray-600">CATASTROPHIC</div>
-                </div>
-                <div class="stats-card">
-                    <div class="stats-number" id="severeCount">0</div>
-                    <div class="text-xs text-gray-600">SEVERE</div>
-                </div>
-                <div class="stats-card">
-                    <div class="stats-number" id="rcResponseCount">0</div>
-                    <div class="text-xs text-gray-600">RC RESPONSES</div>
-                </div>
-                <div class="stats-card">
-                    <div class="stats-number" id="tcrCount">0</div>
-                    <div class="text-xs text-gray-600">TCR REPORTS</div>
-                </div>
-                <div class="stats-card">
-                    <div class="stats-number" id="cat5Count">0</div>
-                    <div class="text-xs text-gray-600">CATEGORY 5</div>
-                </div>
-                <div class="stats-card">
-                    <div class="stats-number" id="narrativeCount">0</div>
-                    <div class="text-xs text-gray-600">NARRATIVES</div>
-                </div>
+    <!-- Collapsible Filter Panel -->
+    <div class="filter-panel" id="filterPanel">
+        <div class="p-4 border-b border-gray-200">
+            <input type="text" id="searchInput" placeholder="Search storms..." 
+                   class="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent">
+        </div>
+        
+        <!-- Impact Level -->
+        <div class="filter-section">
+            <div class="filter-title">Impact Level</div>
+            <div class="flex flex-wrap gap-1">
+                <span class="filter-chip" data-filter="impact" data-value="CATASTROPHIC">Catastrophic</span>
+                <span class="filter-chip" data-filter="impact" data-value="SEVERE">Severe</span>
+                <span class="filter-chip" data-filter="impact" data-value="MAJOR">Major</span>
+                <span class="filter-chip" data-filter="impact" data-value="MODERATE">Moderate</span>
+                <span class="filter-chip" data-filter="impact" data-value="MINOR">Minor</span>
             </div>
         </div>
+        
+        <!-- Category -->
+        <div class="filter-section">
+            <div class="filter-title">Category</div>
+            <div class="flex flex-wrap gap-1">
+                <span class="filter-chip filter-cat5" data-filter="category" data-value="5">Cat 5</span>
+                <span class="filter-chip filter-cat4" data-filter="category" data-value="4">Cat 4</span>
+                <span class="filter-chip filter-cat3" data-filter="category" data-value="3">Cat 3</span>
+                <span class="filter-chip filter-cat2" data-filter="category" data-value="2">Cat 2</span>
+                <span class="filter-chip filter-cat1" data-filter="category" data-value="1">Cat 1</span>
+                <span class="filter-chip" data-filter="category" data-value="0">TS</span>
+                <span class="filter-chip" data-filter="category" data-value="-1">TD</span>
+            </div>
+        </div>
+        
+        <!-- Data Filters -->
+        <div class="filter-section">
+            <div class="filter-title">Data Filters</div>
+            <div class="flex flex-wrap gap-1">
+                <span class="filter-chip" data-filter="special" data-value="rc_response">RC Response</span>
+                <span class="filter-chip" data-filter="special" data-value="has_tcr">Has TCR</span>
+                <span class="filter-chip" data-filter="special" data-value="has_narrative">Has Narrative</span>
+                <span class="filter-chip" data-filter="special" data-value="high_quality">High Quality</span>
+                <span class="filter-chip" data-filter="special" data-value="us_landfall">US Landfall</span>
+            </div>
+        </div>
+        
+        <!-- States -->
+        <div class="filter-section">
+            <div class="filter-title">Landfall States</div>
+            <div class="grid grid-cols-3 gap-1">
+                <span class="filter-chip text-center" data-filter="state" data-value="FL">FL</span>
+                <span class="filter-chip text-center" data-filter="state" data-value="TX">TX</span>
+                <span class="filter-chip text-center" data-filter="state" data-value="LA">LA</span>
+                <span class="filter-chip text-center" data-filter="state" data-value="NC">NC</span>
+                <span class="filter-chip text-center" data-filter="state" data-value="SC">SC</span>
+                <span class="filter-chip text-center" data-filter="state" data-value="GA">GA</span>
+                <span class="filter-chip text-center" data-filter="state" data-value="AL">AL</span>
+                <span class="filter-chip text-center" data-filter="state" data-value="MS">MS</span>
+                <span class="filter-chip text-center" data-filter="state" data-value="VA">VA</span>
+                <span class="filter-chip text-center" data-filter="state" data-value="NY">NY</span>
+                <span class="filter-chip text-center" data-filter="state" data-value="NJ">NJ</span>
+                <span class="filter-chip text-center" data-filter="state" data-value="MA">MA</span>
+            </div>
+        </div>
+        
+        <!-- Year Range -->
+        <div class="filter-section">
+            <div class="filter-title">Year Range</div>
+            <div class="flex items-center gap-2">
+                <input type="number" id="yearStart" min="1851" max="2024" value="1900" 
+                       class="w-20 px-2 py-1 text-sm border border-gray-200 rounded">
+                <span class="text-gray-500 text-sm">to</span>
+                <input type="number" id="yearEnd" min="1851" max="2024" value="2024" 
+                       class="w-20 px-2 py-1 text-sm border border-gray-200 rounded">
+            </div>
+            <div class="flex gap-2 mt-3">
+                <button onclick="applyFilters()" class="flex-1 px-3 py-1.5 bg-red-600 text-white text-xs font-medium rounded hover:bg-red-700 transition-colors">
+                    Apply
+                </button>
+                <button onclick="clearFilters()" class="flex-1 px-3 py-1.5 bg-gray-500 text-white text-xs font-medium rounded hover:bg-gray-600 transition-colors">
+                    Clear
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Toggle Button -->
+    <div class="filter-toggle" onclick="toggleFilters()">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
+        </svg>
     </div>
 
     <!-- Main Content -->
-    <div class="max-w-7xl mx-auto px-4 py-6">
-        <!-- Filters -->
-        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-            <h2 class="text-xl font-bold mb-5 text-gray-800">Advanced Filters</h2>
-            
-            <!-- Search Bar -->
-            <div class="mb-6">
-                <input type="text" id="searchInput" placeholder="Search by name, year, state..." 
-                       class="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent">
+    <div class="main-content" id="mainContent">
+        <!-- Inline Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <span class="stat-value" id="catastrophicCount">0</span>
+                <span class="stat-label">Catastrophic</span>
             </div>
-            
-            <!-- Filter Sections in Grid -->
-            <div class="space-y-5">
-                <!-- Storm Classification Row -->
-                <div class="border-b border-gray-200 pb-5">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Impact Level -->
-                        <div>
-                            <label class="text-sm font-semibold text-gray-700 mb-2 block">IMPACT LEVEL</label>
-                            <div class="flex flex-wrap gap-2">
-                                <span class="filter-chip" data-filter="impact" data-value="CATASTROPHIC">Catastrophic</span>
-                                <span class="filter-chip" data-filter="impact" data-value="SEVERE">Severe</span>
-                                <span class="filter-chip" data-filter="impact" data-value="MAJOR">Major</span>
-                                <span class="filter-chip" data-filter="impact" data-value="MODERATE">Moderate</span>
-                                <span class="filter-chip" data-filter="impact" data-value="MINOR">Minor</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Category -->
-                        <div>
-                            <label class="text-sm font-semibold text-gray-700 mb-2 block">CATEGORY</label>
-                            <div class="flex flex-wrap gap-2">
-                                <span class="filter-chip filter-cat5" data-filter="category" data-value="5">Cat 5</span>
-                                <span class="filter-chip filter-cat4" data-filter="category" data-value="4">Cat 4</span>
-                                <span class="filter-chip filter-cat3" data-filter="category" data-value="3">Cat 3</span>
-                                <span class="filter-chip filter-cat2" data-filter="category" data-value="2">Cat 2</span>
-                                <span class="filter-chip filter-cat1" data-filter="category" data-value="1">Cat 1</span>
-                                <span class="filter-chip" data-filter="category" data-value="0">TS</span>
-                                <span class="filter-chip" data-filter="category" data-value="-1">TD</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Data Filters Row -->
-                <div class="border-b border-gray-200 pb-5">
-                    <label class="text-sm font-semibold text-gray-700 mb-2 block">DATA FILTERS</label>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="filter-chip" data-filter="special" data-value="rc_response">RC Response</span>
-                        <span class="filter-chip" data-filter="special" data-value="has_tcr">Has TCR</span>
-                        <span class="filter-chip" data-filter="special" data-value="has_narrative">Has Narrative</span>
-                        <span class="filter-chip" data-filter="special" data-value="high_quality">High Quality Data</span>
-                        <span class="filter-chip" data-filter="special" data-value="exclude_td">Exclude TD</span>
-                        <span class="filter-chip" data-filter="special" data-value="us_landfall">US Landfall Only</span>
-                    </div>
-                </div>
-                
-                <!-- Landfall States -->
-                <div class="border-b border-gray-200 pb-5">
-                    <label class="text-sm font-semibold text-gray-700 mb-2 block">LANDFALL STATES</label>
-                    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
-                        <span class="filter-chip text-center" data-filter="state" data-value="FL">Florida</span>
-                        <span class="filter-chip text-center" data-filter="state" data-value="TX">Texas</span>
-                        <span class="filter-chip text-center" data-filter="state" data-value="LA">Louisiana</span>
-                        <span class="filter-chip text-center" data-filter="state" data-value="NC">North Carolina</span>
-                        <span class="filter-chip text-center" data-filter="state" data-value="SC">South Carolina</span>
-                        <span class="filter-chip text-center" data-filter="state" data-value="GA">Georgia</span>
-                        <span class="filter-chip text-center" data-filter="state" data-value="AL">Alabama</span>
-                        <span class="filter-chip text-center" data-filter="state" data-value="MS">Mississippi</span>
-                        <span class="filter-chip text-center" data-filter="state" data-value="VA">Virginia</span>
-                        <span class="filter-chip text-center" data-filter="state" data-value="NY">New York</span>
-                        <span class="filter-chip text-center" data-filter="state" data-value="NJ">New Jersey</span>
-                        <span class="filter-chip text-center" data-filter="state" data-value="MA">Massachusetts</span>
-                        <span class="filter-chip text-center" data-filter="state" data-value="CT">Connecticut</span>
-                        <span class="filter-chip text-center" data-filter="state" data-value="RI">Rhode Island</span>
-                        <span class="filter-chip text-center" data-filter="state" data-value="ME">Maine</span>
-                        <span class="filter-chip text-center" data-filter="state" data-value="MD">Maryland</span>
-                        <span class="filter-chip text-center" data-filter="state" data-value="DE">Delaware</span>
-                    </div>
-                </div>
-                
-                <!-- Year Range -->
-                <div class="flex flex-wrap items-center gap-4">
-                    <label class="text-sm font-semibold text-gray-700">YEAR RANGE</label>
+            <div class="stat-item">
+                <span class="stat-value" id="severeCount">0</span>
+                <span class="stat-label">Severe</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="rcResponseCount">0</span>
+                <span class="stat-label">RC Responses</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="tcrCount">0</span>
+                <span class="stat-label">TCR Reports</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="cat5Count">0</span>
+                <span class="stat-label">Category 5</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="narrativeCount">0</span>
+                <span class="stat-label">Narratives</span>
+            </div>
+        </div>
+
+        <!-- Data Table Container -->
+        <div class="px-4 py-3">
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div class="px-4 py-2 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
+                    <span class="text-xs text-gray-600">
+                        Showing <span id="visibleCount" class="font-bold text-gray-800">0</span> of <span id="totalCount" class="font-bold text-gray-800">1991</span> storms
+                    </span>
                     <div class="flex items-center gap-2">
-                        <input type="number" id="yearStart" min="1851" max="2024" value="1900" 
-                               class="w-24 px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent">
-                        <span class="text-gray-500">to</span>
-                        <input type="number" id="yearEnd" min="1851" max="2024" value="2024" 
-                               class="w-24 px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent">
-                        <button onclick="applyFilters()" class="px-5 py-2 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition-colors">
-                            Apply
-                        </button>
-                        <button onclick="clearFilters()" class="px-5 py-2 bg-gray-500 text-white font-medium rounded-lg hover:bg-gray-600 transition-colors">
-                            Clear All
-                        </button>
+                        <select id="pageSize" onchange="changePageSize()" class="px-2 py-1 text-xs border border-gray-200 rounded">
+                            <option value="25">25 per page</option>
+                            <option value="50" selected>50 per page</option>
+                            <option value="100">100 per page</option>
+                            <option value="500">500 per page</option>
+                        </select>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- Actions Bar -->
-        <div class="bg-white rounded-lg shadow-md p-4 mb-4 flex justify-between items-center">
-            <div class="flex gap-2">
-                <button onclick="exportSelected()" class="px-5 py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                    </svg>
-                    Export CSV
-                </button>
-            </div>
-            <div class="text-sm text-gray-600 font-medium">
-                Showing <span id="visibleCount" class="font-bold text-gray-800">0</span> of <span id="totalCount" class="font-bold text-gray-800">1991</span> storms
-            </div>
-        </div>
-
-        <!-- Data Table -->
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-            <div class="overflow-x-auto">
-                <table class="min-w-full">
-                    <thead class="bg-gray-100">
-                        <tr>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                                <input type="checkbox" id="selectAll" class="compare-checkbox">
-                            </th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider sortable-header" onclick="sortTable('storm_id')">
-                                ID <span class="sort-indicator" id="sort-storm_id">⇅</span>
-                            </th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider sortable-header" onclick="sortTable('name')">
-                                Name <span class="sort-indicator" id="sort-name">⇅</span>
-                            </th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider sortable-header" onclick="sortTable('year')">
-                                Year <span class="sort-indicator" id="sort-year">⇅</span>
-                            </th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider sortable-header" onclick="sortTable('category')">
-                                Cat <span class="sort-indicator" id="sort-category">⇅</span>
-                            </th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider sortable-header" onclick="sortTable('impact')">
-                                Impact <span class="sort-indicator" id="sort-impact">⇅</span>
-                            </th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider sortable-header" onclick="sortTable('rc_score')">
-                                RC Score <span class="sort-indicator" id="sort-rc_score">⇅</span>
-                            </th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider sortable-header" onclick="sortTable('states')">
-                                States <span class="sort-indicator" id="sort-states">⇅</span>
-                            </th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider sortable-header" onclick="sortTable('deaths')">
-                                Deaths <span class="sort-indicator" id="sort-deaths">⇅</span>
-                            </th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider sortable-header" onclick="sortTable('damage')">
-                                Damage <span class="sort-indicator" id="sort-damage">⇅</span>
-                            </th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider sortable-header" onclick="sortTable('quality')">
-                                Quality <span class="sort-indicator" id="sort-quality">⇅</span>
-                            </th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">TCR</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="stormTableBody" class="bg-white divide-y divide-gray-200">
-                        <!-- Storms will be populated here -->
-                    </tbody>
-                </table>
-            </div>
-            
-            <!-- Loading indicator -->
-            <div id="loadingIndicator" class="hidden p-8 text-center">
-                <div class="loading-spinner mx-auto"></div>
-                <p class="mt-4 text-gray-600">Loading storms...</p>
-            </div>
-        </div>
-
-        <!-- Pagination -->
-        <div class="mt-4 flex justify-between items-center">
-            <div>
-                <select id="pageSize" onchange="changePageSize()" class="px-3 py-1 border rounded">
-                    <option value="25">25 per page</option>
-                    <option value="50">50 per page</option>
-                    <option value="100">100 per page</option>
-                    <option value="500">500 per page</option>
-                </select>
-            </div>
-            <div class="flex gap-2">
-                <button onclick="previousPage()" class="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400" id="prevBtn">Previous</button>
-                <span class="px-3 py-1">Page <span id="currentPage">1</span> of <span id="totalPages">1</span></span>
-                <button onclick="nextPage()" class="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400" id="nextBtn">Next</button>
+                
+                <!-- Data Table -->
+                <div class="overflow-x-auto">
+                    <table class="min-w-full data-table">
+                        <thead>
+                            <tr>
+                                <th class="text-left">
+                                    <input type="checkbox" id="selectAll" class="w-4 h-4">
+                                </th>
+                                <th class="text-left sortable-header" onclick="sortTable('storm_id')">
+                                    ID<span class="sort-indicator" id="sort-storm_id">⇅</span>
+                                </th>
+                                <th class="text-left sortable-header" onclick="sortTable('name')">
+                                    Name<span class="sort-indicator" id="sort-name">⇅</span>
+                                </th>
+                                <th class="text-left sortable-header" onclick="sortTable('year')">
+                                    Year<span class="sort-indicator" id="sort-year">⇅</span>
+                                </th>
+                                <th class="text-left sortable-header" onclick="sortTable('category')">
+                                    Cat<span class="sort-indicator" id="sort-category">⇅</span>
+                                </th>
+                                <th class="text-left sortable-header" onclick="sortTable('impact')">
+                                    Impact<span class="sort-indicator" id="sort-impact">⇅</span>
+                                </th>
+                                <th class="text-left sortable-header" onclick="sortTable('rc_score')">
+                                    RC<span class="sort-indicator" id="sort-rc_score">⇅</span>
+                                </th>
+                                <th class="text-left sortable-header" onclick="sortTable('states')">
+                                    States<span class="sort-indicator" id="sort-states">⇅</span>
+                                </th>
+                                <th class="text-left sortable-header" onclick="sortTable('deaths')">
+                                    Deaths<span class="sort-indicator" id="sort-deaths">⇅</span>
+                                </th>
+                                <th class="text-left sortable-header" onclick="sortTable('damage')">
+                                    Damage<span class="sort-indicator" id="sort-damage">⇅</span>
+                                </th>
+                                <th class="text-left">TCR</th>
+                                <th class="text-left">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="stormTableBody" class="divide-y divide-gray-200">
+                            <!-- Storms will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                <div class="px-4 py-3 bg-gray-50 border-t border-gray-200 flex justify-center items-center gap-2">
+                    <button onclick="previousPage()" class="px-3 py-1 text-xs bg-white border border-gray-300 rounded hover:bg-gray-50" id="prevBtn">Previous</button>
+                    <span class="px-3 py-1 text-xs">Page <span id="currentPage">1</span> of <span id="totalPages">1</span></span>
+                    <button onclick="nextPage()" class="px-3 py-1 text-xs bg-white border border-gray-300 rounded hover:bg-gray-50" id="nextBtn">Next</button>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- Modals will be added by JavaScript -->
+    <div id="modalsContainer"></div>
 
     <script>
         // Global variables
@@ -418,16 +570,24 @@
         let currentPage = 1;
         let pageSize = 50;
         let sortColumn = 'year';
-        let sortDirection = 'desc'; // 'asc' or 'desc'
+        let sortDirection = 'desc';
         let activeFilters = {
             search: '',
             impact: [],
-            category: ['1', '2', '3', '4', '5'], // Default to Cat 1-5 only
+            category: ['1', '2', '3', '4', '5'],
             special: [],
             state: [],
-            yearStart: 1900, // Default to 1900
+            yearStart: 1900,
             yearEnd: 2024
         };
+
+        // Toggle filters panel
+        function toggleFilters() {
+            const panel = document.getElementById('filterPanel');
+            const content = document.getElementById('mainContent');
+            panel.classList.toggle('open');
+            content.classList.toggle('shifted');
+        }
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
@@ -456,8 +616,6 @@
                 allStorms.filter(s => s.category === 5).length;
             document.getElementById('narrativeCount').textContent = 
                 allStorms.filter(s => s.narrative).length;
-            
-            // Estimate TCR availability (post-1995 storms likely have TCRs)
             document.getElementById('tcrCount').textContent = 
                 allStorms.filter(s => s.year >= 1995).length;
         }
@@ -518,240 +676,183 @@
         }
 
         // Apply filters
-        window.applyFilters = function() {
+        function applyFilters() {
             filteredStorms = allStorms.filter(storm => {
                 // Search filter
                 if (activeFilters.search) {
-                    const searchStr = `${storm.name} ${storm.year} ${storm.landfall_states?.join(' ')}`.toLowerCase();
-                    if (!searchStr.includes(activeFilters.search)) return false;
+                    const searchTerm = activeFilters.search;
+                    const matchesSearch = 
+                        storm.name?.toLowerCase().includes(searchTerm) ||
+                        storm.storm_id?.toLowerCase().includes(searchTerm) ||
+                        storm.year?.toString().includes(searchTerm) ||
+                        storm.landfall_states?.some(s => s.toLowerCase().includes(searchTerm));
+                    if (!matchesSearch) return false;
                 }
-
-                // Year filter
-                if (storm.year < activeFilters.yearStart || storm.year > activeFilters.yearEnd) return false;
-
-                // Impact level filter
-                if (activeFilters.impact?.length > 0) {
+                
+                // Impact filter
+                if (activeFilters.impact.length > 0) {
                     if (!activeFilters.impact.includes(storm.rc_impact_level)) return false;
                 }
-
+                
                 // Category filter
-                if (activeFilters.category?.length > 0) {
-                    if (!activeFilters.category.includes(storm.category.toString())) return false;
+                if (activeFilters.category.length > 0) {
+                    if (!activeFilters.category.includes(storm.category?.toString())) return false;
                 }
-
+                
                 // Special filters
-                if (activeFilters.special?.includes('rc_response')) {
+                if (activeFilters.special.includes('rc_response')) {
                     if (!storm.rc_response?.responded) return false;
                 }
-                if (activeFilters.special?.includes('has_tcr')) {
-                    if (storm.year < 1995) return false; // TCRs mostly available post-1995
+                if (activeFilters.special.includes('has_tcr')) {
+                    if (storm.year < 1995) return false;
                 }
-                if (activeFilters.special?.includes('has_narrative')) {
+                if (activeFilters.special.includes('has_narrative')) {
                     if (!storm.narrative) return false;
                 }
-                if (activeFilters.special?.includes('high_quality')) {
-                    if (storm.data_quality?.completeness_score < 80) return false;
+                if (activeFilters.special.includes('high_quality')) {
+                    if (!storm.data_quality || storm.data_quality < 80) return false;
                 }
-                if (activeFilters.special?.includes('exclude_td')) {
-                    if (storm.category === -1) return false; // Exclude tropical depressions
-                }
-                if (activeFilters.special?.includes('us_landfall')) {
+                if (activeFilters.special.includes('us_landfall')) {
                     if (!storm.landfall_states || storm.landfall_states.length === 0) return false;
                 }
                 
-                // State landfall filter
-                if (activeFilters.state?.length > 0) {
-                    if (!storm.landfall_states || storm.landfall_states.length === 0) return false;
-                    // Check if storm made landfall in any of the selected states
-                    const hasSelectedLandfall = storm.landfall_states.some(state => 
-                        activeFilters.state.includes(state)
-                    );
-                    if (!hasSelectedLandfall) return false;
+                // State filter
+                if (activeFilters.state.length > 0) {
+                    if (!storm.landfall_states || !storm.landfall_states.some(s => activeFilters.state.includes(s))) return false;
                 }
-
+                
+                // Year filter
+                if (storm.year < activeFilters.yearStart || storm.year > activeFilters.yearEnd) return false;
+                
                 return true;
             });
-
-            // Apply sorting after filtering
-            sortData();
             
+            // Sort filtered storms
+            sortFilteredStorms();
+            
+            // Reset to first page
             currentPage = 1;
-            renderTable();
-            updateCounts();
+            
+            // Update display
+            updateTable();
         }
-        
-        // Sort table by column
-        window.sortTable = function(column) {
-            // If clicking the same column, toggle direction
-            if (sortColumn === column) {
-                sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
-            } else {
-                // New column, default to descending for numeric, ascending for text
-                sortColumn = column;
-                sortDirection = ['year', 'category', 'rc_score', 'deaths', 'damage', 'quality'].includes(column) ? 'desc' : 'asc';
-            }
-            
-            // Update sort indicators
-            document.querySelectorAll('.sort-indicator').forEach(indicator => {
-                indicator.textContent = '⇅';
-                indicator.classList.remove('active');
-            });
-            
-            const indicator = document.getElementById(`sort-${column}`);
-            if (indicator) {
-                indicator.textContent = sortDirection === 'asc' ? '↑' : '↓';
-                indicator.classList.add('active');
-            }
-            
-            sortData();
-            renderTable();
-        }
-        
-        // Sort the filtered data
-        function sortData() {
+
+        // Sort filtered storms
+        function sortFilteredStorms() {
             filteredStorms.sort((a, b) => {
-                let aVal, bVal;
+                let aVal = a[sortColumn];
+                let bVal = b[sortColumn];
                 
-                switch(sortColumn) {
-                    case 'storm_id':
-                        aVal = a.storm_id || '';
-                        bVal = b.storm_id || '';
-                        break;
-                    case 'name':
-                        aVal = a.name || '';
-                        bVal = b.name || '';
-                        break;
-                    case 'year':
-                        aVal = a.year;
-                        bVal = b.year;
-                        break;
-                    case 'category':
-                        aVal = a.category;
-                        bVal = b.category;
-                        break;
-                    case 'impact':
-                        const impactOrder = {'CATASTROPHIC': 5, 'SEVERE': 4, 'MAJOR': 3, 'MODERATE': 2, 'MINOR': 1};
-                        aVal = impactOrder[a.rc_impact_level] || 0;
-                        bVal = impactOrder[b.rc_impact_level] || 0;
-                        break;
-                    case 'rc_score':
-                        aVal = a.rc_impact_score || 0;
-                        bVal = b.rc_impact_score || 0;
-                        break;
-                    case 'states':
-                        aVal = a.landfall_states?.length || 0;
-                        bVal = b.landfall_states?.length || 0;
-                        break;
-                    case 'deaths':
-                        aVal = a.deaths || 0;
-                        bVal = b.deaths || 0;
-                        break;
-                    case 'damage':
-                        aVal = a.damage_millions || 0;
-                        bVal = b.damage_millions || 0;
-                        break;
-                    case 'quality':
-                        aVal = a.data_quality?.completeness_score || 0;
-                        bVal = b.data_quality?.completeness_score || 0;
-                        break;
-                    default:
-                        return 0;
+                // Handle special cases
+                if (sortColumn === 'impact') {
+                    const impactOrder = { 'CATASTROPHIC': 5, 'SEVERE': 4, 'MAJOR': 3, 'MODERATE': 2, 'MINOR': 1 };
+                    aVal = impactOrder[a.rc_impact_level] || 0;
+                    bVal = impactOrder[b.rc_impact_level] || 0;
+                } else if (sortColumn === 'states') {
+                    aVal = a.landfall_states?.join(', ') || '';
+                    bVal = b.landfall_states?.join(', ') || '';
+                } else if (sortColumn === 'damage') {
+                    aVal = a.damage_millions || 0;
+                    bVal = b.damage_millions || 0;
+                } else if (sortColumn === 'rc_score') {
+                    aVal = a.rc_impact_score || 0;
+                    bVal = b.rc_impact_score || 0;
                 }
                 
-                // Compare values
+                // Handle null/undefined
+                if (aVal === null || aVal === undefined) aVal = '';
+                if (bVal === null || bVal === undefined) bVal = '';
+                
+                // Compare
                 if (aVal < bVal) return sortDirection === 'asc' ? -1 : 1;
                 if (aVal > bVal) return sortDirection === 'asc' ? 1 : -1;
                 return 0;
             });
         }
 
-        // Render table
-        function renderTable() {
-            const tbody = document.getElementById('stormTableBody');
-            tbody.innerHTML = '';
-
-            const start = (currentPage - 1) * pageSize;
-            const end = start + pageSize;
-            const pageStorms = filteredStorms.slice(start, end);
-
-            pageStorms.forEach(storm => {
-                const row = document.createElement('tr');
-                row.className = 'storm-row hover:bg-gray-50';
-                row.setAttribute('data-storm-id', storm.storm_id);
-                if (selectedStorms.has(storm.storm_id)) {
-                    row.classList.add('storm-selected');
-                }
-
-                // Determine impact badge color
-                let impactClass = 'impact-minor';
-                if (storm.rc_impact_level === 'CATASTROPHIC') impactClass = 'impact-catastrophic';
-                else if (storm.rc_impact_level === 'SEVERE') impactClass = 'impact-severe';
-                else if (storm.rc_impact_level === 'MAJOR') impactClass = 'impact-major';
-                else if (storm.rc_impact_level === 'MODERATE') impactClass = 'impact-moderate';
-
-                row.innerHTML = `
-                    <td class="px-4 py-3">
-                        <input type="checkbox" class="storm-checkbox compare-checkbox" 
-                               data-storm-id="${storm.storm_id}"
-                               ${selectedStorms.has(storm.storm_id) ? 'checked' : ''}>
-                    </td>
-                    <td class="px-4 py-3 text-xs font-mono text-gray-600">${storm.storm_id}</td>
-                    <td class="px-4 py-3 font-semibold">${storm.name}</td>
-                    <td class="px-4 py-3">${storm.year}</td>
-                    <td class="px-4 py-3">
-                        <span class="px-2 py-1 text-xs font-bold rounded ${getCategoryClass(storm.category)}">
-                            ${storm.category === -1 ? 'TD' : storm.category === 0 ? 'TS' : storm.category}
-                        </span>
-                    </td>
-                    <td class="px-4 py-3">
-                        <span class="px-2 py-1 text-xs text-white rounded ${impactClass}">
-                            ${storm.rc_impact_level || 'N/A'}
-                        </span>
-                    </td>
-                    <td class="px-4 py-3">
-                        <div class="flex items-center">
-                            <span class="font-bold ${getScoreColor(storm.rc_impact_score)}">${storm.rc_impact_score || 0}</span>
-                            <div class="ml-2 w-12 bg-gray-200 rounded-full h-2">
-                                <div class="h-2 rounded-full ${getScoreBarColor(storm.rc_impact_score)}" 
-                                     style="width: ${storm.rc_impact_score || 0}%"></div>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="px-4 py-3 text-xs">${storm.landfall_states?.join(', ') || '-'}</td>
-                    <td class="px-4 py-3">${storm.deaths || 0}</td>
-                    <td class="px-4 py-3">${storm.damage_millions ? '$' + storm.damage_millions.toLocaleString() + 'M' : '-'}</td>
-                    <td class="px-4 py-3">
-                        <div class="data-quality-bar w-16">
-                            <div class="data-quality-fill ${getQualityColor(storm.data_quality?.completeness_score)}" 
-                                 style="width: ${storm.data_quality?.completeness_score || 0}%"></div>
-                        </div>
-                        <span class="text-xs text-gray-600">${storm.data_quality?.completeness_score || 0}%</span>
-                    </td>
-                    <td class="px-4 py-3">
-                        ${hasTCR(storm) ? 
-                            '<span class="tcr-available">✓</span>' : 
-                            '<span class="tcr-unavailable">✗</span>'}
-                    </td>
-                    <td class="px-4 py-3">
-                        <div class="flex gap-1">
-                            <button onclick="event.stopPropagation(); viewStorm('${storm.storm_id}'); return false;" 
-                                    class="text-blue-600 hover:text-blue-800 text-xs">View</button>
-                            <button onclick="event.stopPropagation(); trackStorm('${storm.storm_id}'); return false;" 
-                                    class="text-orange-600 hover:text-orange-800 text-xs">Track</button>
-                            ${hasTCR(storm) ? 
-                                `<a href="${getTCRLink(storm)}" target="_blank" 
-                                    class="text-green-600 hover:text-green-800 text-xs">TCR</a>` : ''}
-                            ${storm.narrative ? 
-                                `<button onclick="event.stopPropagation(); showNarrative('${storm.storm_id}'); return false;" 
-                                         class="text-purple-600 hover:text-purple-800 text-xs">Story</button>` : ''}
-                        </div>
-                    </td>
-                `;
-
-                tbody.appendChild(row);
+        // Sort table
+        function sortTable(column) {
+            // Update sort direction
+            if (sortColumn === column) {
+                sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortColumn = column;
+                sortDirection = 'asc';
+            }
+            
+            // Update indicators
+            document.querySelectorAll('.sort-indicator').forEach(ind => {
+                ind.classList.remove('active');
+                ind.textContent = '⇅';
             });
+            
+            const indicator = document.getElementById(`sort-${column}`);
+            if (indicator) {
+                indicator.classList.add('active');
+                indicator.textContent = sortDirection === 'asc' ? '↑' : '↓';
+            }
+            
+            // Resort and update
+            sortFilteredStorms();
+            updateTable();
+        }
 
-            // Add checkbox listeners
+        // Update table display
+        function updateTable() {
+            const tbody = document.getElementById('stormTableBody');
+            const startIndex = (currentPage - 1) * pageSize;
+            const endIndex = startIndex + pageSize;
+            const pageStorms = filteredStorms.slice(startIndex, endIndex);
+            
+            // Update counts
+            document.getElementById('visibleCount').textContent = filteredStorms.length;
+            document.getElementById('totalCount').textContent = allStorms.length;
+            document.getElementById('selectedCount').textContent = selectedStorms.size;
+            
+            // Update pagination
+            const totalPages = Math.ceil(filteredStorms.length / pageSize);
+            document.getElementById('currentPage').textContent = currentPage;
+            document.getElementById('totalPages').textContent = totalPages;
+            document.getElementById('prevBtn').disabled = currentPage === 1;
+            document.getElementById('nextBtn').disabled = currentPage === totalPages;
+            
+            // Build table HTML
+            tbody.innerHTML = pageStorms.map(storm => {
+                const isSelected = selectedStorms.has(storm.storm_id);
+                const impactClass = `impact-${(storm.rc_impact_level || 'minor').toLowerCase()}`;
+                const hasTCR = storm.year >= 1995;
+                
+                return `
+                    <tr class="storm-row ${isSelected ? 'storm-selected' : ''}">
+                        <td>
+                            <input type="checkbox" class="storm-checkbox w-4 h-4" 
+                                   data-storm-id="${storm.storm_id}" 
+                                   ${isSelected ? 'checked' : ''}>
+                        </td>
+                        <td class="font-mono text-xs">${storm.storm_id || '-'}</td>
+                        <td class="font-semibold">${storm.name || 'Unnamed'}</td>
+                        <td>${storm.year || '-'}</td>
+                        <td>${getCategoryDisplay(storm.category)}</td>
+                        <td>
+                            ${storm.rc_impact_level ? 
+                                `<span class="impact-badge ${impactClass}">${storm.rc_impact_level}</span>` : 
+                                '-'}
+                        </td>
+                        <td>${storm.rc_impact_score || '-'}</td>
+                        <td class="text-xs">${storm.landfall_states?.join(', ') || '-'}</td>
+                        <td>${storm.deaths ? storm.deaths.toLocaleString() : '-'}</td>
+                        <td>${storm.damage_millions ? `$${storm.damage_millions.toLocaleString()}M` : '-'}</td>
+                        <td>
+                            ${hasTCR ? '<span class="text-green-600 text-xs">✓</span>' : '<span class="text-gray-400 text-xs">-</span>'}
+                        </td>
+                        <td>
+                            <button onclick="viewStorm('${storm.storm_id}')" class="btn-view">View</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            
+            // Re-attach checkbox listeners
             document.querySelectorAll('.storm-checkbox').forEach(cb => {
                 cb.addEventListener('change', (e) => {
                     const stormId = e.target.dataset.stormId;
@@ -765,1420 +866,25 @@
             });
         }
 
-        // Helper functions
-        function getCategoryClass(category) {
-            const classes = {
-                '-1': 'bg-gray-200 text-gray-800',  // TD - Tropical Depression
-                0: 'bg-blue-200 text-blue-800',      // TS - Tropical Storm
-                1: 'bg-green-200 text-green-800',    // Category 1
-                2: 'bg-yellow-200 text-yellow-800',  // Category 2
-                3: 'bg-orange-200 text-orange-800',  // Category 3
-                4: 'bg-red-200 text-red-800',        // Category 4
-                5: 'bg-purple-200 text-purple-800'   // Category 5
-            };
-            return classes[category] || 'bg-gray-200 text-gray-800';
+        // Get category display
+        function getCategoryDisplay(category) {
+            if (category === 5) return '<span style="color: #8B008B; font-weight: bold;">5</span>';
+            if (category === 4) return '<span style="color: #D9534F; font-weight: bold;">4</span>';
+            if (category === 3) return '<span style="color: #FF7F00; font-weight: bold;">3</span>';
+            if (category === 2) return '<span style="color: #F0AD4E; font-weight: bold;">2</span>';
+            if (category === 1) return '<span style="color: #5CB85C; font-weight: bold;">1</span>';
+            if (category === 0) return '<span style="color: #5DADE2;">TS</span>';
+            if (category === -1) return '<span style="color: #95A5A6;">TD</span>';
+            return '-';
         }
 
-        function getScoreColor(score) {
-            if (score >= 80) return 'text-red-600';
-            if (score >= 60) return 'text-orange-600';
-            if (score >= 40) return 'text-yellow-600';
-            return 'text-green-600';
-        }
-
-        function getScoreBarColor(score) {
-            if (score >= 80) return 'bg-red-600';
-            if (score >= 60) return 'bg-orange-600';
-            if (score >= 40) return 'bg-yellow-600';
-            return 'bg-green-600';
-        }
-
-        function getQualityColor(score) {
-            if (score >= 80) return 'bg-green-500';
-            if (score >= 60) return 'bg-yellow-500';
-            if (score >= 40) return 'bg-orange-500';
-            return 'bg-red-500';
-        }
-
-        function updateCounts() {
-            document.getElementById('visibleCount').textContent = filteredStorms.length;
-            document.getElementById('totalCount').textContent = allStorms.length;
-            document.getElementById('totalPages').textContent = Math.ceil(filteredStorms.length / pageSize);
-            document.getElementById('currentPage').textContent = currentPage;
-        }
-
+        // Update selected count
         function updateSelectedCount() {
             document.getElementById('selectedCount').textContent = selectedStorms.size;
-            const compareBtn = document.getElementById('compareBtn');
-            if (selectedStorms.size >= 2 && selectedStorms.size <= 3) {
-                compareBtn.classList.remove('hidden');
-            } else {
-                compareBtn.classList.add('hidden');
-            }
         }
 
-        // Actions
-        window.compareSelected = function() {
-            console.log('compareSelected called, selected storms:', selectedStorms.size);
-            if (selectedStorms.size === 0) {
-                alert('Please select at least one storm to compare.');
-                return;
-            }
-            if (selectedStorms.size > 3) {
-                alert('You can compare up to 3 storms at a time. Please deselect some storms.');
-                return;
-            }
-            
-            const ids = Array.from(selectedStorms).join(',');
-            console.log('Sending storm IDs to compare:', ids);
-            window.parent.postMessage({
-                action: 'compareStorms',
-                stormIds: ids
-            }, '*');
-        }
-
-        window.exportSelected = function() {
-            const storms = selectedStorms.size > 0 ? 
-                filteredStorms.filter(s => selectedStorms.has(s.storm_id)) : 
-                filteredStorms;
-            
-            const csv = convertToCSV(storms);
-            const timestamp = new Date().toISOString().split('T')[0];
-            const filename = `hurricane_data_${timestamp}_${storms.length}_storms.csv`;
-            downloadCSV(csv, filename);
-        }
-
-        function convertToCSV(storms) {
-            // Comprehensive export with ALL available fields
-            const headers = [
-                'Storm ID', 'Name', 'Year', 'Month', 'Day', 'Category', 
-                'Wind (mph)', 'Wind (knots)', 'Pressure (mb)', 'ACE Index',
-                'Latitude', 'Longitude', 'Landfall States', 'Deaths',
-                'RC Impact Level', 'RC Impact Score', 'RC Response', 'RC Operation Type',
-                'Est. Shelters', 'Est. Meals', 'Est. Volunteers',
-                'Has Narrative', 'Has Track Data', 'Has TCR', 'Data Quality Score',
-                'TCR PDF Link', 'Best Track Link', 'Narrative'
-            ];
-            
-            // Helper to escape CSV fields
-            const escapeCSV = (field) => {
-                if (field === null || field === undefined) return '';
-                const str = String(field);
-                if (str.includes(',') || str.includes('"') || str.includes('\n')) {
-                    return '"' + str.replace(/"/g, '""') + '"';
-                }
-                return str;
-            };
-            
-            const rows = storms.map(s => [
-                s.storm_id,
-                escapeCSV(s.name),
-                s.year,
-                s.month,
-                s.day,
-                s.category,
-                s.wind_mph || '',
-                s.wind_knots || '',
-                s.pressure || '',
-                s.ace || '',
-                s.lat || '',
-                s.lon || '',
-                escapeCSV(s.landfall_states?.join('; ') || ''),
-                s.deaths || 0,
-                escapeCSV(s.rc_impact_level || ''),
-                s.rc_impact_score || 0,
-                s.rc_response?.responded ? 'Yes' : 'No',
-                escapeCSV(s.rc_response?.operation_type || ''),
-                s.rc_response?.estimated_shelters || '',
-                s.rc_response?.estimated_meals || '',
-                s.rc_response?.estimated_volunteers || '',
-                s.data_quality?.has_narrative ? 'Yes' : 'No',
-                s.data_quality?.has_track_data ? 'Yes' : 'No',
-                hasTCR(s) ? 'Yes' : 'No',
-                s.data_quality?.completeness_score || 0,
-                escapeCSV(s.resources?.tcr_pdf || ''),
-                escapeCSV(s.resources?.best_track || ''),
-                escapeCSV(s.narrative || '')
-            ]);
-            
-            return [headers.map(escapeCSV), ...rows.map(row => row.map(escapeCSV))].map(row => row.join(',')).join('\n');
-        }
-
-        function downloadCSV(csv, filename) {
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            a.click();
-        }
-
-        window.viewStorm = function(stormId) {
-            console.log('viewStorm called with ID:', stormId);
-            // Prevent any bubbling or default behavior
-            if (window.event) {
-                window.event.stopPropagation();
-                window.event.preventDefault();
-            }
-            // Just call trackStorm to show the animation modal
-            trackStorm(stormId);
-        }
-        
-        window.trackStorm = function(stormId) {
-            console.log('trackStorm called with ID:', stormId);
-            // Prevent any bubbling or default behavior
-            if (window.event) {
-                window.event.stopPropagation();
-                window.event.preventDefault();
-            }
-            const storm = allStorms.find(s => s.storm_id === stormId);
-            if (storm) {
-                // Create a simple modal using a more straightforward approach
-                const modalHTML = `
-                    <div id="trackModal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); display: flex; align-items: center; justify-content: center; z-index: 9999;">
-                        <div style="background-color: white; padding: 30px; border-radius: 10px; width: 90%; max-width: 900px; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-                            <button onclick="if(window.trackMap){window.trackMap.remove();window.trackMap=null;}document.getElementById('trackModal').remove()" style="position: absolute; top: 10px; right: 10px; background-color: #ED1B2E; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-size: 16px; font-weight: bold;">✕</button>
-                            
-                            <h2 style="margin: 0 0 20px 0; color: #ED1B2E; font-size: 24px; font-weight: bold;">
-                                🎯 Tracking ${storm.name} (${storm.year})
-                            </h2>
-                            
-                            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-                                <h3 style="margin: 0 0 10px 0; color: #003d79; font-size: 18px; font-weight: bold;">Storm Details</h3>
-                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                                    <div><strong>Category:</strong> ${storm.category === -1 ? 'TD' : storm.category === 0 ? 'TS' : 'Cat ' + storm.category}</div>
-                                    <div><strong>Wind Speed:</strong> ${storm.wind_mph || 0} mph</div>
-                                    <div><strong>Date:</strong> ${getMonthName(storm.month)} ${storm.day}, ${storm.year}</div>
-                                    <div><strong>Deaths:</strong> ${storm.deaths || 0}</div>
-                                    <div><strong>Landfall States:</strong> ${storm.landfall_states?.join(', ') || 'None'}</div>
-                                    <div><strong>RC Impact:</strong> ${storm.rc_impact_score || 0}/100</div>
-                                </div>
-                            </div>
-                            
-                            <div style="background: #e8f5e9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-                                <h3 style="margin: 0 0 10px 0; color: #4caf50; font-size: 18px; font-weight: bold;">🗺️ Storm Track Animation</h3>
-                                <div id="fullscreenContainer" style="position: relative;">
-                                    <div id="trackMapContainer" style="height: 400px; width: 100%; border: 2px solid #ddd; border-radius: 8px; margin: 10px 0; position: relative;">
-                                        <div id="trackMap" style="height: 100%; width: 100%; display: block;"></div>
-                                        <div id="cesiumContainer" style="height: 100%; width: 100%; display: none; position: absolute; top: 0; left: 0;"></div>
-                                        <div style="position: absolute; top: 10px; right: 10px; z-index: 1000; display: flex; gap: 5px;">
-                                            <button onclick="toggle3DView()" style="padding: 6px 10px; background-color: rgba(0, 0, 0, 0.7); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;">
-                                                🌍 3D View
-                                            </button>
-                                            <button onclick="toggleFullscreen()" style="padding: 6px 10px; background-color: rgba(0, 0, 0, 0.7); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;">
-                                                ⛶ Fullscreen
-                                            </button>
-                                        </div>
-                                        <!-- Animation controls overlay for fullscreen mode -->
-                                        <div id="fullscreenControls" style="display: none; position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 1000; background: rgba(0, 0, 0, 0.8); padding: 10px 20px; border-radius: 8px;">
-                                            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                                                <button id="playPauseBtnFS" onclick="toggleAnimation('${storm.storm_id}')" style="padding: 8px 16px; background-color: #4caf50; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">
-                                                    ▶️ Play
-                                                </button>
-                                                <button onclick="stopTrackAnimation()" style="padding: 8px 16px; background-color: #dc3545; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">
-                                                    ⏹️ Stop
-                                                </button>
-                                                <div style="display: flex; align-items: center; gap: 5px;">
-                                                    <button onclick="previousFrame()" style="padding: 6px 12px; background-color: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">
-                                                        ◀️
-                                                    </button>
-                                                    <span id="frameCounterFS" style="min-width: 80px; text-align: center; font-weight: bold; color: white;">0 / 0</span>
-                                                    <button onclick="nextFrame()" style="padding: 6px 12px; background-color: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">
-                                                        ▶️
-                                                    </button>
-                                                </div>
-                                                <label style="display: flex; align-items: center; gap: 5px; color: white;">
-                                                    Speed: 
-                                                    <input type="range" id="trackAnimationSpeedFS" min="100" max="2000" value="1000" style="width: 100px;">
-                                                    <span id="speedDisplayFS">1.0x</span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Normal controls outside fullscreen -->
-                                    <div id="normalControls" style="margin-top: 10px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                                        <button id="playPauseBtn" onclick="toggleAnimation('${storm.storm_id}')" style="padding: 8px 16px; background-color: #4caf50; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">
-                                            ▶️ Play
-                                        </button>
-                                        <button onclick="stopTrackAnimation()" style="padding: 8px 16px; background-color: #dc3545; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">
-                                            ⏹️ Stop
-                                        </button>
-                                        <div style="display: flex; align-items: center; gap: 5px;">
-                                            <button onclick="previousFrame()" style="padding: 6px 12px; background-color: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">
-                                                ◀️
-                                            </button>
-                                            <span id="frameCounter" style="min-width: 80px; text-align: center; font-weight: bold;">0 / 0</span>
-                                            <button onclick="nextFrame()" style="padding: 6px 12px; background-color: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">
-                                                ▶️
-                                            </button>
-                                        </div>
-                                        <label style="display: flex; align-items: center; gap: 5px;">
-                                            Speed: 
-                                            <input type="range" id="trackAnimationSpeed" min="100" max="2000" value="1000" style="width: 100px;">
-                                            <span id="speedDisplay">1.0x</span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            ${storm.narrative ? `
-                                <div style="background: #f5f5f5; padding: 15px; border-radius: 8px;">
-                                    <h3 style="margin: 0 0 10px 0; color: #666; font-size: 18px; font-weight: bold;">📖 Storm Narrative</h3>
-                                    <p style="line-height: 1.6; color: #333; margin: 0;">${storm.narrative}</p>
-                                </div>
-                            ` : ''}
-                        </div>
-                    </div>
-                `;
-                
-                // Insert the modal into the page
-                document.body.insertAdjacentHTML('beforeend', modalHTML);
-                
-                // Add click outside to close
-                const modal = document.getElementById('trackModal');
-                if (modal) {
-                    modal.onclick = function(e) {
-                        if (e.target === modal) {
-                            modal.remove();
-                            if (window.trackMap) {
-                                window.trackMap.remove();
-                                window.trackMap = null;
-                            }
-                        }
-                    };
-                }
-                
-                // Initialize the map after modal is inserted
-                setTimeout(() => {
-                    initializeTrackMap(storm);
-                    
-                    // Initialize speed display for both normal and fullscreen controls
-                    const speedSlider = document.getElementById('trackAnimationSpeed');
-                    const speedDisplay = document.getElementById('speedDisplay');
-                    const speedSliderFS = document.getElementById('trackAnimationSpeedFS');
-                    const speedDisplayFS = document.getElementById('speedDisplayFS');
-                    
-                    if (speedSlider && speedDisplay) {
-                        const speed = (2100 - speedSlider.value) / 1000;
-                        speedDisplay.textContent = speed.toFixed(1) + 'x';
-                        
-                        speedSlider.addEventListener('input', function() {
-                            const speed = (2100 - this.value) / 1000;
-                            speedDisplay.textContent = speed.toFixed(1) + 'x';
-                            // Sync fullscreen slider
-                            if (speedSliderFS) {
-                                speedSliderFS.value = this.value;
-                                speedDisplayFS.textContent = speed.toFixed(1) + 'x';
-                            }
-                        });
-                    }
-                    
-                    if (speedSliderFS && speedDisplayFS) {
-                        const speed = (2100 - speedSliderFS.value) / 1000;
-                        speedDisplayFS.textContent = speed.toFixed(1) + 'x';
-                        
-                        speedSliderFS.addEventListener('input', function() {
-                            const speed = (2100 - this.value) / 1000;
-                            speedDisplayFS.textContent = speed.toFixed(1) + 'x';
-                            // Sync normal slider
-                            if (speedSlider) {
-                                speedSlider.value = this.value;
-                                speedDisplay.textContent = speed.toFixed(1) + 'x';
-                            }
-                        });
-                    }
-                }, 100);
-            }
-        }
-        
-        // Global variables for track animation
-        let trackMap = null;
-        let animationInterval = null;
-        let currentTrackData = null;
-        let animationMarker = null;
-        let trailPolyline = null;
-        let currentFrameIndex = 0;
-        let isAnimating = false;
-        let isPaused = false;
-        
-        // 3D visualization variables
-        let cesiumViewer = null;
-        let cesiumAnimation = null;
-        let is3DView = false;
-        let cesiumEntities = [];
-        let cesiumAnimationMarker = null;
-        let currentStormData = null;
-        
-        // Initialize map for track animation
-        window.initializeTrackMap = function(storm) {
-            currentStormData = storm;
-            const mapContainer = document.getElementById('trackMap');
-            if (!mapContainer || trackMap) return;
-            
-            // Create map
-            trackMap = L.map('trackMap').setView([25, -80], 5);
-            
-            // Add tile layer
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(trackMap);
-            
-            // Load and display storm track
-            loadStormTrackForAnimation(storm);
-        }
-        
-        // Initialize 3D Cesium viewer
-        window.initialize3DView = function() {
-            if (cesiumViewer) return;
-            
-            try {
-                console.log('Initializing Cesium with offline imagery...');
-                
-                // Disable default Ion access token to prevent warnings
-                Cesium.Ion.defaultAccessToken = undefined;
-                
-                // Create viewer with completely offline configuration
-                cesiumViewer = new Cesium.Viewer('cesiumContainer', {
-                    // Use OpenStreetMap tiles which don't require authentication
-                    imageryProvider: new Cesium.TileMapServiceImageryProvider({
-                        url: Cesium.buildModuleUrl('Assets/Textures/NaturalEarthII')
-                    }),
-                    // Simple ellipsoid terrain (no Ion required)
-                    terrainProvider: new Cesium.EllipsoidTerrainProvider(),
-                    // Disable all Ion-dependent widgets
-                    animation: false,
-                    baseLayerPicker: false,
-                    fullscreenButton: false,
-                    vrButton: false,
-                    geocoder: false,
-                    homeButton: false,
-                    infoBox: true,
-                    sceneModePicker: false,
-                    selectionIndicator: true,
-                    timeline: false,
-                    navigationHelpButton: false,
-                    navigationInstructionsInitiallyVisible: false,
-                    // Disable Ion-dependent rendering features
-                    skyBox: false,
-                    skyAtmosphere: false,
-                    requestRenderMode: true,
-                    maximumRenderTimeChange: Infinity
-                });
-                
-                // Add custom imagery layer after viewer is created
-                cesiumViewer.imageryLayers.removeAll();
-                
-                // Try multiple tile providers in order
-                const imageryProviders = [
-                    // Esri World Imagery
-                    {
-                        provider: new Cesium.UrlTemplateImageryProvider({
-                            url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-                            maximumLevel: 19,
-                            credit: new Cesium.Credit('Tiles © Esri')
-                        }),
-                        name: 'Esri World Imagery'
-                    },
-                    // OpenStreetMap
-                    {
-                        provider: new Cesium.UrlTemplateImageryProvider({
-                            url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                            maximumLevel: 19,
-                            credit: new Cesium.Credit('© OpenStreetMap contributors')
-                        }),
-                        name: 'OpenStreetMap'
-                    },
-                    // CartoDB Positron (light basemap)
-                    {
-                        provider: new Cesium.UrlTemplateImageryProvider({
-                            url: 'https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
-                            maximumLevel: 19,
-                            credit: new Cesium.Credit('© CartoDB')
-                        }),
-                        name: 'CartoDB'
-                    }
-                ];
-                
-                // Try each provider
-                let successfulProvider = null;
-                for (const config of imageryProviders) {
-                    try {
-                        cesiumViewer.imageryLayers.addImageryProvider(config.provider);
-                        console.log(`Successfully loaded ${config.name} imagery`);
-                        successfulProvider = config.name;
-                        break;
-                    } catch (e) {
-                        console.warn(`Failed to load ${config.name}, trying next...`);
-                        cesiumViewer.imageryLayers.removeAll();
-                    }
-                }
-                
-                if (!successfulProvider) {
-                    console.warn('All imagery providers failed, using default offline tiles');
-                    // Use built-in offline imagery as last resort
-                    cesiumViewer.imageryLayers.addImageryProvider(
-                        new Cesium.TileMapServiceImageryProvider({
-                            url: Cesium.buildModuleUrl('Assets/Textures/NaturalEarthII')
-                        })
-                    );
-                }
-                
-                // Configure scene settings
-                cesiumViewer.scene.globe.show = true;
-                cesiumViewer.scene.globe.enableLighting = false;
-                cesiumViewer.scene.globe.depthTestAgainstTerrain = false;
-                cesiumViewer.scene.highDynamicRange = false;
-                
-                // Set background to sky blue instead of stars
-                cesiumViewer.scene.backgroundColor = new Cesium.Color(0.48, 0.68, 0.89, 1.0);
-                cesiumViewer.scene.sun.show = false;
-                cesiumViewer.scene.moon.show = false;
-                cesiumViewer.scene.skyBox = undefined;
-                
-                // Hide credits container
-                if (cesiumViewer.cesiumWidget.creditContainer) {
-                    cesiumViewer.cesiumWidget.creditContainer.style.display = 'none';
-                }
-                
-                // Set initial Atlantic hurricane view
-                cesiumViewer.scene.camera.setView({
-                    destination: Cesium.Cartesian3.fromDegrees(-60.0, 25.0, 5000000.0),
-                    orientation: {
-                        heading: 0.0,
-                        pitch: -Cesium.Math.PI_OVER_TWO,
-                        roll: 0.0
-                    }
-                });
-                
-                // Force initial render
-                cesiumViewer.scene.requestRender();
-                
-                console.log('Cesium initialized successfully with', successfulProvider || 'offline imagery');
-                
-                // Load track if available
-                if (currentTrackData && currentTrackData.length > 0) {
-                    display3DTrack(currentTrackData);
-                }
-                
-            } catch (error) {
-                console.error('Failed to initialize 3D view:', error);
-                alert('Unable to initialize 3D view. Please check your internet connection and try again.');
-                
-                // Switch back to 2D view
-                const trackMapDiv = document.getElementById('trackMap');
-                const cesiumDiv = document.getElementById('cesiumContainer');
-                const btn = document.querySelector('[onclick*="toggle3DView"]');
-                
-                cesiumDiv.style.display = 'none';
-                trackMapDiv.style.display = 'block';
-                if (btn) btn.textContent = '🌍 3D View';
-                is3DView = false;
-            }
-        }
-        
-        // Toggle between 2D and 3D views
-        window.toggle3DView = function() {
-            const trackMapDiv = document.getElementById('trackMap');
-            const cesiumDiv = document.getElementById('cesiumContainer');
-            const btn = event.target;
-            
-            if (!is3DView) {
-                // Switch to 3D
-                trackMapDiv.style.display = 'none';
-                cesiumDiv.style.display = 'block';
-                btn.textContent = '🗺️ 2D View';
-                is3DView = true;
-                
-                // Initialize 3D view if not already done
-                if (!cesiumViewer) {
-                    initialize3DView();
-                }
-                
-                // Resize cesium viewer
-                setTimeout(() => {
-                    if (cesiumViewer) {
-                        cesiumViewer.resize();
-                    }
-                }, 100);
-            } else {
-                // Switch to 2D
-                cesiumDiv.style.display = 'none';
-                trackMapDiv.style.display = 'block';
-                btn.textContent = '🌍 3D View';
-                is3DView = false;
-                
-                // Resize leaflet map
-                setTimeout(() => {
-                    if (trackMap) {
-                        trackMap.invalidateSize();
-                    }
-                }, 100);
-            }
-        }
-        
-        // Display storm track in 3D
-        window.display3DTrack = function(features) {
-            if (!cesiumViewer) return;
-            
-            // Clear existing entities
-            cesiumEntities.forEach(entity => {
-                cesiumViewer.entities.remove(entity);
-            });
-            cesiumEntities = [];
-            
-            // Sort by datetime
-            features.sort((a, b) => new Date(a.properties.datetime) - new Date(b.properties.datetime));
-            
-            // Create polyline positions at ground level for visibility
-            const groundPositions = [];
-            const bounds = {
-                west: Infinity,
-                east: -Infinity,
-                north: -Infinity,
-                south: Infinity
-            };
-            
-            features.forEach((feature, index) => {
-                const coords = feature.geometry.coordinates;
-                const lon = coords[0];
-                const lat = coords[1];
-                const wind = feature.properties.max_wind || 0;
-                
-                // Track bounds
-                bounds.west = Math.min(bounds.west, lon);
-                bounds.east = Math.max(bounds.east, lon);
-                bounds.north = Math.max(bounds.north, lat);
-                bounds.south = Math.min(bounds.south, lat);
-                
-                // Add ground position for main track line
-                groundPositions.push(Cesium.Cartesian3.fromDegrees(lon, lat, 1000));
-                
-                // Add point entity for each position with slight elevation
-                const status = feature.properties.status || 'TS';
-                const color = getCesiumColor(status, wind);
-                
-                const pointEntity = cesiumViewer.entities.add({
-                    position: Cesium.Cartesian3.fromDegrees(lon, lat, 5000),
-                    point: {
-                        pixelSize: 10,
-                        color: color,
-                        outlineColor: Cesium.Color.WHITE,
-                        outlineWidth: 3,
-                        heightReference: Cesium.HeightReference.NONE,
-                        disableDepthTestDistance: Number.POSITIVE_INFINITY,
-                        scaleByDistance: new Cesium.NearFarScalar(1.5e2, 1.5, 8.0e6, 0.2)
-                    },
-                    properties: feature.properties,
-                    description: generatePopupContent(feature)
-                });
-                cesiumEntities.push(pointEntity);
-            });
-            
-            // Create the main track polyline at low altitude for visibility
-            if (groundPositions.length > 1) {
-                // Main colored track line segments
-                for (let i = 0; i < features.length - 1; i++) {
-                    const status = features[i].properties.status || 'TS';
-                    const wind = features[i].properties.max_wind || 0;
-                    const segmentColor = getCesiumColor(status, wind);
-                    
-                    const trackSegment = cesiumViewer.entities.add({
-                        polyline: {
-                            positions: [groundPositions[i], groundPositions[i + 1]],
-                            width: 8,
-                            material: new Cesium.PolylineGlowMaterialProperty({
-                                glowPower: 0.25,
-                                color: segmentColor,
-                                taperPower: 0.8
-                            }),
-                            clampToGround: false,
-                            disableDepthTestDistance: Number.POSITIVE_INFINITY
-                        }
-                    });
-                    cesiumEntities.push(trackSegment);
-                }
-                
-                // Add white outline for better visibility
-                const outlineEntity = cesiumViewer.entities.add({
-                    polyline: {
-                        positions: groundPositions,
-                        width: 12,
-                        material: new Cesium.PolylineOutlineMaterialProperty({
-                            color: Cesium.Color.WHITE.withAlpha(0.8),
-                            outlineWidth: 2,
-                            outlineColor: Cesium.Color.BLACK
-                        }),
-                        clampToGround: false,
-                        disableDepthTestDistance: Number.POSITIVE_INFINITY
-                    }
-                });
-                cesiumEntities.push(outlineEntity);
-            }
-            
-            // Set up camera to follow behind the storm's initial path
-            if (groundPositions.length > 1) {
-                // Calculate the general direction of storm movement
-                const startCoords = features[0].geometry.coordinates;
-                const endCoords = features[features.length - 1].geometry.coordinates;
-                
-                // Calculate bearing from start to end
-                const dLon = (endCoords[0] - startCoords[0]) * Math.PI / 180;
-                const lat1 = startCoords[1] * Math.PI / 180;
-                const lat2 = endCoords[1] * Math.PI / 180;
-                const y = Math.sin(dLon) * Math.cos(lat2);
-                const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
-                const overallHeading = Math.atan2(y, x);
-                
-                // Calculate track extent for camera distance
-                const lonExtent = bounds.east - bounds.west;
-                const latExtent = bounds.north - bounds.south;
-                const maxExtent = Math.max(lonExtent, latExtent);
-                
-                // Position camera behind the storm's starting position
-                const cameraDistanceDegrees = maxExtent * 0.5;
-                const cameraLon = startCoords[0] - (Math.sin(overallHeading) * cameraDistanceDegrees);
-                const cameraLat = startCoords[1] - (Math.cos(overallHeading) * cameraDistanceDegrees);
-                
-                // Set camera height based on track extent
-                const cameraHeight = Math.max(800000, maxExtent * 100000);
-                
-                cesiumViewer.scene.camera.setView({
-                    destination: Cesium.Cartesian3.fromDegrees(cameraLon, cameraLat, cameraHeight),
-                    orientation: {
-                        heading: overallHeading,  // Face direction of overall storm movement
-                        pitch: -Cesium.Math.toRadians(30),  // Look down at 30 degree angle
-                        roll: 0.0
-                    }
-                });
-            }
-        }
-        
-        // Get Cesium color based on storm status
-        window.getCesiumColor = function(status, wind) {
-            let hexColor = getStatusColorForMap(status, wind);
-            // Convert hex to Cesium Color
-            return Cesium.Color.fromCssColorString(hexColor);
-        }
-        
-        // Draw storm icon for 3D view
-        window.drawStormIcon = function(status, wind) {
-            const canvas = document.createElement('canvas');
-            canvas.width = 48;
-            canvas.height = 48;
-            const ctx = canvas.getContext('2d');
-            
-            // Get color
-            const color = getStatusColorForMap(status, wind);
-            
-            // Draw circle
-            ctx.beginPath();
-            ctx.arc(24, 24, 20, 0, 2 * Math.PI);
-            ctx.fillStyle = color;
-            ctx.fill();
-            ctx.strokeStyle = 'white';
-            ctx.lineWidth = 3;
-            ctx.stroke();
-            
-            // Draw hurricane symbol for hurricanes
-            if (status === 'HU') {
-                ctx.strokeStyle = 'white';
-                ctx.lineWidth = 2;
-                ctx.beginPath();
-                // Draw spiral
-                for (let i = 0; i < 3; i++) {
-                    ctx.save();
-                    ctx.translate(24, 24);
-                    ctx.rotate((i * 120) * Math.PI / 180);
-                    ctx.beginPath();
-                    ctx.arc(0, -8, 8, 0.5 * Math.PI, 1.5 * Math.PI);
-                    ctx.stroke();
-                    ctx.restore();
-                }
-            }
-            
-            return canvas;
-        }
-        
-        // Generate popup content for 3D view
-        window.generatePopupContent = function(feature) {
-            const dateObj = new Date(feature.properties.datetime);
-            const dateStr = dateObj.toLocaleDateString('en-US', { 
-                month: 'short', 
-                day: 'numeric', 
-                year: 'numeric',
-                hour: 'numeric',
-                minute: '2-digit'
-            });
-            
-            const status = feature.properties.status || 'Unknown';
-            const wind = feature.properties.max_wind || 0;
-            
-            let categoryDisplay = status;
-            const statusMap = {
-                'TD': 'Tropical Depression',
-                'TS': 'Tropical Storm', 
-                'HU': 'Hurricane',
-                'EX': 'Extratropical',
-                'SD': 'Subtropical Depression',
-                'SS': 'Subtropical Storm',
-                'LO': 'Low',
-                'DB': 'Disturbance'
-            };
-            
-            if (status === 'HU' && wind >= 74) {
-                let category = 1;
-                if (wind >= 157) category = 5;
-                else if (wind >= 130) category = 4;
-                else if (wind >= 111) category = 3;
-                else if (wind >= 96) category = 2;
-                categoryDisplay = `Category ${category} Hurricane`;
-            } else if (statusMap[status]) {
-                categoryDisplay = statusMap[status];
-            }
-            
-            return `<div style="font-family: Arial, sans-serif;">
-                <h3 style="margin: 0 0 10px 0;">${dateStr}</h3>
-                <p><strong>${categoryDisplay}</strong></p>
-                <p>Wind Speed: ${wind} mph</p>
-                <p>Pressure: ${feature.properties.min_pressure || 'N/A'} mb</p>
-            </div>`;
-        }
-        
-        // Load storm track data
-        window.loadStormTrackForAnimation = async function(storm) {
-            try {
-                const decade = Math.floor(storm.year / 10) * 10;
-                const pointsFile = `./hurdat2_data/points_${decade}s.geojson`;
-                
-                const response = await fetch(pointsFile);
-                if (response.ok) {
-                    const data = await response.json();
-                    const features = data.features.filter(f => f.properties.storm_id === storm.storm_id);
-                    
-                    if (features.length > 0) {
-                        currentTrackData = features;
-                        displayStaticTrack(features);
-                        // Also prepare 3D display if viewer is initialized
-                        if (cesiumViewer) {
-                            display3DTrack(features);
-                        }
-                    } else {
-                        // Try tracks file as fallback
-                        const tracksFile = `./hurdat2_data/tracks_${decade}s.geojson`;
-                        const tracksResponse = await fetch(tracksFile);
-                        if (tracksResponse.ok) {
-                            const tracksData = await tracksResponse.json();
-                            const trackFeature = tracksData.features.find(f => f.properties.storm_id === storm.storm_id);
-                            if (trackFeature) {
-                                displaySimpleTrack(trackFeature);
-                            }
-                        }
-                    }
-                }
-            } catch (error) {
-                console.error('Error loading track data:', error);
-            }
-        }
-        
-        // Display static track
-        window.displayStaticTrack = function(features) {
-            if (!trackMap) return;
-            
-            // Sort by datetime
-            features.sort((a, b) => new Date(a.properties.datetime) - new Date(b.properties.datetime));
-            
-            // Create points and bounds
-            const points = [];
-            const bounds = L.latLngBounds();
-            
-            features.forEach(feature => {
-                const coords = feature.geometry.coordinates;
-                const lat = coords[1];
-                const lon = coords[0];
-                const point = [lat, lon];
-                points.push(point);
-                bounds.extend(point);
-                
-                // Add circle marker for each point
-                const status = feature.properties.status || 'TS';
-                const color = getStatusColorForMap(status, feature.properties.max_wind);
-                L.circleMarker(point, {
-                    radius: 4,
-                    fillColor: color,
-                    color: 'white',
-                    weight: 1,
-                    opacity: 1,
-                    fillOpacity: 0.8
-                }).addTo(trackMap);
-            });
-            
-            // Draw track line
-            if (points.length > 1) {
-                L.polyline(points, {
-                    color: '#666',
-                    weight: 2,
-                    opacity: 0.6
-                }).addTo(trackMap);
-            }
-            
-            // Fit map to track
-            trackMap.fitBounds(bounds.pad(0.1));
-        }
-        
-        // Display simple track
-        window.displaySimpleTrack = function(trackFeature) {
-            if (!trackMap || !trackFeature.geometry.coordinates) return;
-            
-            const coords = trackFeature.geometry.coordinates;
-            const points = coords.map(coord => [coord[1], coord[0]]);
-            
-            // Draw track line
-            L.polyline(points, {
-                color: '#ff0000',
-                weight: 3,
-                opacity: 0.8
-            }).addTo(trackMap);
-            
-            // Add start and end markers
-            if (points.length > 0) {
-                L.marker(points[0]).addTo(trackMap).bindPopup('Start');
-                L.marker(points[points.length - 1]).addTo(trackMap).bindPopup('End');
-                
-                // Fit map to track
-                const bounds = L.latLngBounds(points);
-                trackMap.fitBounds(bounds.pad(0.1));
-            }
-        }
-        
-        // Toggle fullscreen
-        window.toggleFullscreen = function() {
-            const fullscreenContainer = document.getElementById('fullscreenContainer');
-            const mapContainer = document.getElementById('trackMapContainer');
-            const fullscreenControls = document.getElementById('fullscreenControls');
-            const normalControls = document.getElementById('normalControls');
-            
-            if (!document.fullscreenElement) {
-                fullscreenContainer.requestFullscreen().then(() => {
-                    // Show fullscreen controls, hide normal controls
-                    fullscreenControls.style.display = 'block';
-                    normalControls.style.display = 'none';
-                    
-                    // Make map container fill the screen
-                    mapContainer.style.height = '100vh';
-                    mapContainer.style.margin = '0';
-                    mapContainer.style.border = 'none';
-                    mapContainer.style.borderRadius = '0';
-                    
-                    // Resize map/cesium when entering fullscreen
-                    setTimeout(() => {
-                        if (trackMap) trackMap.invalidateSize();
-                        if (cesiumViewer) cesiumViewer.resize();
-                    }, 100);
-                }).catch(err => {
-                    console.error('Error entering fullscreen:', err);
-                });
-            } else {
-                document.exitFullscreen().then(() => {
-                    // Hide fullscreen controls, show normal controls
-                    fullscreenControls.style.display = 'none';
-                    normalControls.style.display = 'flex';
-                    
-                    // Reset map container to normal size
-                    mapContainer.style.height = '400px';
-                    mapContainer.style.margin = '10px 0';
-                    mapContainer.style.border = '2px solid #ddd';
-                    mapContainer.style.borderRadius = '8px';
-                    
-                    // Resize map/cesium when exiting fullscreen
-                    setTimeout(() => {
-                        if (trackMap) trackMap.invalidateSize();
-                        if (cesiumViewer) cesiumViewer.resize();
-                    }, 100);
-                });
-            }
-        }
-        
-        // Update speed display
-        document.addEventListener('DOMContentLoaded', function() {
-            const speedSlider = document.getElementById('trackAnimationSpeed');
-            const speedDisplay = document.getElementById('speedDisplay');
-            if (speedSlider && speedDisplay) {
-                speedSlider.addEventListener('input', function() {
-                    const speed = (2100 - this.value) / 1000;
-                    speedDisplay.textContent = speed.toFixed(1) + 'x';
-                });
-            }
-        });
-        
-        // Toggle play/pause
-        window.toggleAnimation = function(stormId) {
-            const btn = document.getElementById('playPauseBtn');
-            const btnFS = document.getElementById('playPauseBtnFS');
-            
-            if (!isAnimating) {
-                animateTrack(stormId);
-                updatePlayPauseButtons('⏸️ Pause', '#ffc107');
-            } else if (isPaused) {
-                resumeAnimation();
-                updatePlayPauseButtons('⏸️ Pause', '#ffc107');
-            } else {
-                pauseAnimation();
-                updatePlayPauseButtons('▶️ Play', '#4caf50');
-            }
-        }
-        
-        // Helper to update both play/pause buttons
-        window.updatePlayPauseButtons = function(text, color) {
-            const btn = document.getElementById('playPauseBtn');
-            const btnFS = document.getElementById('playPauseBtnFS');
-            
-            if (btn) {
-                btn.innerHTML = text;
-                btn.style.backgroundColor = color;
-            }
-            if (btnFS) {
-                btnFS.innerHTML = text;
-                btnFS.style.backgroundColor = color;
-            }
-        }
-        
-        // Pause animation
-        window.pauseAnimation = function() {
-            if (animationInterval) {
-                clearInterval(animationInterval);
-                animationInterval = null;
-                isPaused = true;
-            }
-        }
-        
-        // Resume animation
-        window.resumeAnimation = function() {
-            if (isPaused && currentTrackData) {
-                isPaused = false;
-                const speed = document.getElementById('trackAnimationSpeed').value;
-                continueAnimation(speed);
-            }
-        }
-        
-        // Navigate to previous frame
-        window.previousFrame = function() {
-            if (!currentTrackData || currentFrameIndex <= 0) return;
-            
-            // Stop any running animation
-            if (animationInterval) {
-                clearInterval(animationInterval);
-                animationInterval = null;
-            }
-            
-            currentFrameIndex--;
-            displayFrame(currentFrameIndex);
-        }
-        
-        // Navigate to next frame
-        window.nextFrame = function() {
-            if (!currentTrackData || currentFrameIndex >= currentTrackData.length - 1) return;
-            
-            // Stop any running animation
-            if (animationInterval) {
-                clearInterval(animationInterval);
-                animationInterval = null;
-            }
-            
-            currentFrameIndex++;
-            displayFrame(currentFrameIndex);
-        }
-        
-        // Display a specific frame
-        window.displayFrame = function(index) {
-            if (!currentTrackData || index < 0 || index >= currentTrackData.length) return;
-            
-            const feature = currentTrackData[index];
-            const coords = feature.geometry.coordinates;
-            const lat = coords[1];
-            const lon = coords[0];
-            
-            // Handle 3D view animation
-            if (is3DView && cesiumViewer) {
-                const wind = feature.properties.max_wind || 0;
-                const status = feature.properties.status || 'TS';
-                const markerHeight = 10000; // Fixed low altitude for visibility
-                
-                // Update or create 3D animation marker
-                if (!cesiumAnimationMarker) {
-                    cesiumAnimationMarker = cesiumViewer.entities.add({
-                        position: Cesium.Cartesian3.fromDegrees(lon, lat, markerHeight),
-                        point: {
-                            pixelSize: 20,
-                            color: getCesiumColor(status, wind),
-                            outlineColor: Cesium.Color.WHITE,
-                            outlineWidth: 4,
-                            heightReference: Cesium.HeightReference.NONE,
-                            disableDepthTestDistance: Number.POSITIVE_INFINITY,
-                            scaleByDistance: new Cesium.NearFarScalar(1.5e2, 2.0, 8.0e6, 0.5)
-                        },
-                        label: {
-                            text: `${wind} mph`,
-                            font: 'bold 16pt monospace',
-                            style: Cesium.LabelStyle.FILL_AND_OUTLINE,
-                            outlineWidth: 3,
-                            fillColor: Cesium.Color.WHITE,
-                            outlineColor: Cesium.Color.BLACK,
-                            pixelOffset: new Cesium.Cartesian2(0, -35),
-                            disableDepthTestDistance: Number.POSITIVE_INFINITY,
-                            scaleByDistance: new Cesium.NearFarScalar(1.5e2, 1.0, 8.0e6, 0.5)
-                        },
-                        description: generatePopupContent(feature)
-                    });
-                } else {
-                    // Update position
-                    cesiumAnimationMarker.position = new Cesium.ConstantPositionProperty(
-                        Cesium.Cartesian3.fromDegrees(lon, lat, markerHeight)
-                    );
-                    // Update color based on intensity
-                    if (cesiumAnimationMarker.point) {
-                        cesiumAnimationMarker.point.color = new Cesium.ConstantProperty(getCesiumColor(status, wind));
-                    }
-                    // Update label
-                    if (cesiumAnimationMarker.label) {
-                        cesiumAnimationMarker.label.text = new Cesium.ConstantProperty(`${wind} mph`);
-                    }
-                    // Update description
-                    cesiumAnimationMarker.description = new Cesium.ConstantProperty(generatePopupContent(feature));
-                }
-                
-                // Update camera to follow behind storm in direction of movement
-                // Calculate storm movement direction
-                let heading = 0;
-                let cameraLon = lon;
-                let cameraLat = lat;
-                
-                if (index > 0) {
-                    // Get previous position to calculate movement direction
-                    const prevCoords = currentTrackData[index - 1].geometry.coordinates;
-                    const prevLon = prevCoords[0];
-                    const prevLat = prevCoords[1];
-                    
-                    // Calculate bearing from previous to current position
-                    const dLon = (lon - prevLon) * Math.PI / 180;
-                    const lat1 = prevLat * Math.PI / 180;
-                    const lat2 = lat * Math.PI / 180;
-                    const y = Math.sin(dLon) * Math.cos(lat2);
-                    const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
-                    heading = Math.atan2(y, x);
-                    
-                    // Position camera behind the storm based on movement direction
-                    const cameraDistanceDegrees = 2.5; // degrees behind storm
-                    cameraLon = lon - (Math.sin(heading) * cameraDistanceDegrees);
-                    cameraLat = lat - (Math.cos(heading) * cameraDistanceDegrees);
-                }
-                
-                // Look ahead to anticipate storm path
-                let targetLon = lon;
-                let targetLat = lat;
-                if (index < currentTrackData.length - 2) {
-                    // Look at a point ahead of current position
-                    const futureCoords = currentTrackData[Math.min(index + 2, currentTrackData.length - 1)].geometry.coordinates;
-                    targetLon = futureCoords[0];
-                    targetLat = futureCoords[1];
-                }
-                
-                // Set camera position and orientation
-                const cameraHeight = 400000; // 400km altitude
-                const targetHeight = 10000; // Target point altitude
-                
-                cesiumViewer.scene.camera.setView({
-                    destination: Cesium.Cartesian3.fromDegrees(cameraLon, cameraLat, cameraHeight),
-                    orientation: {
-                        heading: heading,  // Face direction of storm movement
-                        pitch: -Cesium.Math.toRadians(25),  // Look down at 25 degree angle
-                        roll: 0.0
-                    }
-                });
-                
-                // Update info box
-                cesiumViewer.selectedEntity = cesiumAnimationMarker;
-                
-            } else if (trackMap) {
-                // Update 2D marker position
-                if (!animationMarker) {
-                    animationMarker = L.marker([lat, lon], {
-                        icon: L.divIcon({
-                            className: 'animation-marker',
-                            html: '<div style="background: red; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.5);"></div>',
-                            iconSize: [16, 16]
-                        })
-                    }).addTo(trackMap);
-                } else {
-                    animationMarker.setLatLng([lat, lon]);
-                }
-                
-                // Update marker color based on intensity
-                const markerStatus = feature.properties.status || 'TS';
-                const markerWind = feature.properties.max_wind || 0;
-                const markerColor = getStatusColorForMap(markerStatus, markerWind);
-                animationMarker.setIcon(L.divIcon({
-                    className: 'animation-marker',
-                    html: `<div style="background: ${markerColor}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.5);"></div>`,
-                    iconSize: [16, 16]
-                }));
-                
-                // Update trail
-                if (!trailPolyline) {
-                    trailPolyline = L.polyline([], {
-                        color: '#666',
-                        weight: 3,
-                        opacity: 0.8
-                    }).addTo(trackMap);
-                }
-                
-                // Build trail up to current point
-                const trailPoints = [];
-                for (let i = 0; i <= index; i++) {
-                    const f = currentTrackData[i];
-                    trailPoints.push([f.geometry.coordinates[1], f.geometry.coordinates[0]]);
-                }
-                trailPolyline.setLatLngs(trailPoints);
-                
-                // Update popup with storm info
-                const dateObj = new Date(feature.properties.datetime);
-                const dateStr = dateObj.toLocaleDateString('en-US', { 
-                    month: 'short', 
-                    day: 'numeric', 
-                    year: 'numeric' 
-                });
-                const timeStr = dateObj.toLocaleTimeString('en-US', { 
-                    hour: 'numeric', 
-                    minute: '2-digit' 
-                });
-                const datetime = `${dateStr} ${timeStr}`;
-                
-                const status = feature.properties.status || 'Unknown';
-                const wind = feature.properties.max_wind || 0;
-                
-                // Format status display with proper names and hurricane categories
-                let categoryDisplay = status;
-                const statusMap = {
-                    'TD': 'Tropical Depression',
-                    'TS': 'Tropical Storm', 
-                    'HU': 'Hurricane',
-                    'EX': 'Extratropical',
-                    'SD': 'Subtropical Depression',
-                    'SS': 'Subtropical Storm',
-                    'LO': 'Low',
-                    'DB': 'Disturbance'
-                };
-                
-                // For hurricanes, add category based on wind speed
-                if (status === 'HU' && wind >= 74) {
-                    let category = 1;
-                    if (wind >= 157) category = 5;
-                    else if (wind >= 130) category = 4;
-                    else if (wind >= 111) category = 3;
-                    else if (wind >= 96) category = 2;
-                    categoryDisplay = `Category ${category} Hurricane`;
-                } else if (statusMap[status]) {
-                    categoryDisplay = statusMap[status];
-                }
-                
-                animationMarker.bindPopup(`
-                    <strong>${datetime}</strong><br>
-                    <strong>${categoryDisplay}</strong><br>
-                    Wind Speed: ${wind} mph
-                `).openPopup();
-            }
-            
-            // Update frame counter for both normal and fullscreen
-            const frameCounter = document.getElementById('frameCounter');
-            const frameCounterFS = document.getElementById('frameCounterFS');
-            const frameText = `${index + 1} / ${currentTrackData.length}`;
-            
-            if (frameCounter) {
-                frameCounter.textContent = frameText;
-            }
-            if (frameCounterFS) {
-                frameCounterFS.textContent = frameText;
-            }
-        }
-        
-        // Continue animation from current frame
-        window.continueAnimation = function(speed) {
-            animationInterval = setInterval(() => {
-                if (currentFrameIndex >= currentTrackData.length - 1) {
-                    stopTrackAnimation();
-                    return;
-                }
-                
-                currentFrameIndex++;
-                displayFrame(currentFrameIndex);
-            }, speed);
-        }
-        
-        // Animate track
-        window.animateTrack = function(stormId) {
-            if (!currentTrackData || currentTrackData.length === 0) {
-                alert('No track data available for animation');
-                return;
-            }
-            
-            // Reset state
-            currentFrameIndex = 0;
-            isAnimating = true;
-            isPaused = false;
-            
-            // Clear any existing animation
-            if (animationInterval) {
-                clearInterval(animationInterval);
-                animationInterval = null;
-            }
-            
-            // Remove existing markers/trails
-            if (animationMarker) {
-                trackMap.removeLayer(animationMarker);
-                animationMarker = null;
-            }
-            if (trailPolyline) {
-                trackMap.removeLayer(trailPolyline);
-                trailPolyline = null;
-            }
-            
-            // Update frame counters
-            const frameCounter = document.getElementById('frameCounter');
-            const frameCounterFS = document.getElementById('frameCounterFS');
-            const frameText = `1 / ${currentTrackData.length}`;
-            
-            if (frameCounter) {
-                frameCounter.textContent = frameText;
-            }
-            if (frameCounterFS) {
-                frameCounterFS.textContent = frameText;
-            }
-            
-            // Display first frame
-            displayFrame(0);
-            
-            // Start animation
-            const speed = document.getElementById('trackAnimationSpeed').value;
-            continueAnimation(speed);
-        }
-        
-        // Stop animation
-        window.stopTrackAnimation = function() {
-            if (animationInterval) {
-                clearInterval(animationInterval);
-                animationInterval = null;
-            }
-            
-            // Clean up 2D elements
-            if (animationMarker && trackMap) {
-                trackMap.removeLayer(animationMarker);
-                animationMarker = null;
-            }
-            if (trailPolyline && trackMap) {
-                trackMap.removeLayer(trailPolyline);
-                trailPolyline = null;
-            }
-            
-            // Clean up 3D elements
-            if (cesiumAnimationMarker && cesiumViewer) {
-                cesiumViewer.entities.remove(cesiumAnimationMarker);
-                cesiumAnimationMarker = null;
-                cesiumViewer.selectedEntity = undefined;
-                
-                // Reset camera view
-                if (cesiumEntities.length > 0) {
-                    cesiumViewer.zoomTo(cesiumViewer.entities);
-                }
-            }
-            
-            // Reset state
-            isAnimating = false;
-            isPaused = false;
-            currentFrameIndex = 0;
-            
-            // Reset buttons
-            updatePlayPauseButtons('▶️ Play', '#4caf50');
-            
-            // Reset frame counters
-            const frameCounter = document.getElementById('frameCounter');
-            const frameCounterFS = document.getElementById('frameCounterFS');
-            if (frameCounter) {
-                frameCounter.textContent = '0 / 0';
-            }
-            if (frameCounterFS) {
-                frameCounterFS.textContent = '0 / 0';
-            }
-        }
-        
-        // Get color based on status and wind speed
-        window.getStatusColorForMap = function(status, wind) {
-            // For hurricanes, determine category by wind speed
-            if (status === 'HU' && wind) {
-                if (wind >= 157) return '#7c3aed'; // Cat 5 - Purple
-                if (wind >= 130) return '#ef4444'; // Cat 4 - Red  
-                if (wind >= 111) return '#f97316'; // Cat 3 - Orange
-                if (wind >= 96) return '#f59e0b';  // Cat 2 - Yellow
-                if (wind >= 74) return '#10b981';  // Cat 1 - Green
-            }
-            
-            // Colors for other status types
-            const statusColors = {
-                'TD': '#94a3b8', // Tropical Depression - Slate
-                'TS': '#3b82f6', // Tropical Storm - Blue
-                'HU': '#10b981', // Hurricane (default) - Green
-                'EX': '#6b7280', // Extratropical - Gray
-                'SD': '#94a3b8', // Subtropical Depression - Slate
-                'SS': '#60a5fa', // Subtropical Storm - Light Blue
-                'LO': '#d1d5db', // Low - Light Gray
-                'DB': '#e5e7eb'  // Disturbance - Very Light Gray
-            };
-            
-            return statusColors[status] || '#6b7280';
-        }
-        
-        // Keep old function for backwards compatibility
-        window.getCategoryColorForMap = function(category) {
-            const colors = {
-                '-1': '#94a3b8', // TD - Slate
-                '0': '#3b82f6',  // TS - Blue
-                '1': '#10b981',  // Cat 1 - Green
-                '2': '#f59e0b',  // Cat 2 - Yellow/Amber
-                '3': '#f97316',  // Cat 3 - Orange
-                '4': '#ef4444',  // Cat 4 - Red
-                '5': '#7c3aed'   // Cat 5 - Purple
-            };
-            return colors[category] || '#6b7280';
-        }
-
-        window.showNarrative = function(stormId) {
-            const storm = allStorms.find(s => s.storm_id === stormId);
-            if (storm?.narrative) {
-                // Create a simple modal using the same approach as trackStorm
-                const modalHTML = `
-                    <div id="narrativeModal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); display: flex; align-items: center; justify-content: center; z-index: 9999;">
-                        <div style="background-color: white; padding: 30px; border-radius: 10px; max-width: 600px; max-height: 80vh; overflow-y: auto; position: relative; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-                            <button onclick="document.getElementById('narrativeModal').remove()" style="position: absolute; top: 10px; right: 10px; background-color: #ED1B2E; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-size: 16px;">✕</button>
-                            <h2 style="margin: 0 0 20px 0; color: #ED1B2E;">${storm.name} (${storm.year})</h2>
-                            <p style="line-height: 1.6; color: #333;">${storm.narrative}</p>
-                        </div>
-                    </div>
-                `;
-                
-                // Insert the modal into the page
-                document.body.insertAdjacentHTML('beforeend', modalHTML);
-                
-                // Add click outside to close
-                const modal = document.getElementById('narrativeModal');
-                if (modal) {
-                    modal.onclick = function(e) {
-                        if (e.target === modal) {
-                            modal.remove();
-                        }
-                    };
-                }
-            }
-        }
-
-        window.clearFilters = function() {
+        // Clear filters
+        function clearFilters() {
             activeFilters = {
                 search: '',
                 impact: [],
@@ -2188,226 +894,94 @@
                 yearStart: 1851,
                 yearEnd: 2024
             };
+            
+            // Clear UI
             document.getElementById('searchInput').value = '';
             document.getElementById('yearStart').value = 1851;
             document.getElementById('yearEnd').value = 2024;
-            document.querySelectorAll('.filter-chip').forEach(chip => {
+            document.querySelectorAll('.filter-chip.active').forEach(chip => {
                 chip.classList.remove('active');
             });
+            
             applyFilters();
         }
 
-        window.changePageSize = function() {
+        // Pagination functions
+        function changePageSize() {
             pageSize = parseInt(document.getElementById('pageSize').value);
             currentPage = 1;
-            renderTable();
-            updateCounts();
+            updateTable();
         }
 
-        window.previousPage = function() {
+        function previousPage() {
             if (currentPage > 1) {
                 currentPage--;
-                renderTable();
-                updateCounts();
+                updateTable();
             }
         }
 
-        window.nextPage = function() {
+        function nextPage() {
             const totalPages = Math.ceil(filteredStorms.length / pageSize);
             if (currentPage < totalPages) {
                 currentPage++;
-                renderTable();
-                updateCounts();
+                updateTable();
             }
         }
 
-        window.viewOnMap = function() {
-            console.log('viewOnMap called');
-            // Send selected storms to map view
-            const storms = selectedStorms.size > 0 ? 
-                filteredStorms.filter(s => selectedStorms.has(s.storm_id)) : 
-                filteredStorms.slice(0, 100); // Limit to 100 for performance
+        // Export selected storms
+        function exportSelected() {
+            const stormsToExport = selectedStorms.size > 0 ? 
+                allStorms.filter(s => selectedStorms.has(s.storm_id)) : 
+                filteredStorms;
             
-            console.log('Sending', storms.length, 'storms to parent');
-            window.parent.postMessage({
-                action: 'viewOnMap',
-                storms: storms
-            }, '*');
-        }
-        
-        // Check if a storm has a TCR report available
-        window.hasTCR = function(storm) {
-            // TCRs are generally available for storms after 1995
-            // and for significant storms (Cat 3+ or major impact)
-            return storm.year >= 1995 && (storm.category >= 3 || storm.rc_impact_level === 'CATASTROPHIC' || storm.rc_impact_level === 'SEVERE');
-        }
-        
-        // Get the TCR link for a storm
-        window.getTCRLink = function(storm) {
-            // Construct NOAA TCR URL
-            // Format: https://www.nhc.noaa.gov/data/tcr/AL##YYYY_Name.pdf
-            const stormNumber = storm.storm_id.substring(2, 4); // Extract storm number from ID
-            const baseUrl = 'https://www.nhc.noaa.gov/data/tcr/';
-            const filename = `AL${stormNumber}${storm.year}_${storm.name}.pdf`;
-            return baseUrl + filename;
-        }
-        
-        // Override parent postMessage to debug
-        const originalPostMessage = window.parent.postMessage;
-        window.parent.postMessage = function(data, origin) {
-            console.log('Database sending message to parent:', data);
-            originalPostMessage.call(window.parent, data, origin);
-        };
-        
-        // Listen for AI Assistant filter messages
-        window.addEventListener('message', function(event) {
-            if (event.data && event.data.action === 'applyFilters') {
-                console.log('Database: Applying AI-suggested filters:', event.data.filters);
-                const filters = event.data.filters;
-                
-                // Apply year filters
-                if (filters.yearStart !== undefined) {
-                    document.getElementById('yearStart').value = filters.yearStart;
-                }
-                if (filters.yearEnd !== undefined) {
-                    document.getElementById('yearEnd').value = filters.yearEnd;
-                }
-                
-                // Apply category filters
-                if (filters.categories) {
-                    // Clear all category checkboxes first
-                    document.querySelectorAll('input[id^="cat"]').forEach(cb => cb.checked = false);
-                    // Check the requested categories
-                    filters.categories.forEach(cat => {
-                        const catId = cat === '-1' ? 'catTD' : `cat${cat}`;
-                        const checkbox = document.getElementById(catId);
-                        if (checkbox) checkbox.checked = true;
-                    });
-                } else if (filters.category !== undefined) {
-                    // Clear all and check only the specified category
-                    document.querySelectorAll('input[id^="cat"]').forEach(cb => cb.checked = false);
-                    const catId = filters.category === -1 ? 'catTD' : `cat${filters.category}`;
-                    const checkbox = document.getElementById(catId);
-                    if (checkbox) checkbox.checked = true;
-                }
-                
-                // Apply search filter
-                if (filters.search) {
-                    document.getElementById('searchInput').value = filters.search;
-                }
-                
-                // Apply landfall state filter if provided
-                if (filters.landfallState) {
-                    const stateSelect = document.getElementById('stateFilter');
-                    if (stateSelect) {
-                        stateSelect.value = filters.landfallState;
-                    }
-                }
-                
-                // Trigger the filter update
-                filterStorms();
-            }
-        });
-        
-        // Storm Comparison Functions
-        window.showComparison = function() {
-            if (selectedStorms.size < 2 || selectedStorms.size > 3) {
-                alert('Please select 2-3 storms to compare');
+            if (stormsToExport.length === 0) {
+                alert('No storms to export');
                 return;
             }
             
-            const modal = document.getElementById('comparisonModal');
-            const content = document.getElementById('comparisonContent');
+            // Create CSV
+            const headers = ['ID', 'Name', 'Year', 'Category', 'Wind (mph)', 'Impact Level', 'RC Score', 'States', 'Deaths', 'Damage (millions)'];
+            const rows = stormsToExport.map(s => [
+                s.storm_id,
+                s.name || 'Unnamed',
+                s.year,
+                s.category,
+                s.wind_mph,
+                s.rc_impact_level || '',
+                s.rc_impact_score || '',
+                s.landfall_states?.join('; ') || '',
+                s.deaths || '',
+                s.damage_millions || ''
+            ]);
             
-            // Get selected storm data
-            const storms = Array.from(selectedStorms).map(id => 
-                allStorms.find(s => s.storm_id === id)
-            ).filter(s => s);
+            const csv = [headers, ...rows].map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
             
-            // Build comparison table
-            let html = `
-                <div class="overflow-x-auto">
-                    <table class="min-w-full">
-                        <thead>
-                            <tr class="border-b-2 border-gray-300">
-                                <th class="px-4 py-2 text-left text-gray-700">Attribute</th>
-                                ${storms.map(s => `<th class="px-4 py-2 text-left">${s.name} (${s.year})</th>`).join('')}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="border-b">
-                                <td class="px-4 py-3 font-semibold">Category</td>
-                                ${storms.map(s => `<td class="px-4 py-3"><span class="px-2 py-1 text-xs font-bold rounded ${getCategoryClass(s.category)}">${s.category === -1 ? 'TD' : s.category === 0 ? 'TS' : 'Cat ' + s.category}</span></td>`).join('')}
-                            </tr>
-                            <tr class="border-b bg-gray-50">
-                                <td class="px-4 py-3 font-semibold">Wind Speed</td>
-                                ${storms.map(s => `<td class="px-4 py-3">${s.wind_mph || 0} mph</td>`).join('')}
-                            </tr>
-                            <tr class="border-b">
-                                <td class="px-4 py-3 font-semibold">RC Impact Score</td>
-                                ${storms.map(s => `<td class="px-4 py-3"><div class="flex items-center"><span class="font-bold ${getScoreColor(s.rc_impact_score)}">${s.rc_impact_score || 0}</span><div class="ml-2 w-16 bg-gray-200 rounded-full h-2"><div class="h-2 rounded-full ${getScoreBarColor(s.rc_impact_score)}" style="width: ${s.rc_impact_score || 0}%"></div></div></div></td>`).join('')}
-                            </tr>
-                            <tr class="border-b bg-gray-50">
-                                <td class="px-4 py-3 font-semibold">Deaths</td>
-                                ${storms.map(s => `<td class="px-4 py-3 ${s.deaths > 100 ? 'text-red-600 font-bold' : ''}">${s.deaths || 0}</td>`).join('')}
-                            </tr>
-                            <tr class="border-b">
-                                <td class="px-4 py-3 font-semibold">Damage</td>
-                                ${storms.map(s => `<td class="px-4 py-3">${s.damage_millions ? '$' + s.damage_millions.toLocaleString() + 'M' : '-'}</td>`).join('')}
-                            </tr>
-                            <tr class="border-b bg-gray-50">
-                                <td class="px-4 py-3 font-semibold">Landfall States</td>
-                                ${storms.map(s => `<td class="px-4 py-3">${s.landfall_states?.join(', ') || '-'}</td>`).join('')}
-                            </tr>
-                            <tr class="border-b">
-                                <td class="px-4 py-3 font-semibold">Date</td>
-                                ${storms.map(s => `<td class="px-4 py-3">${getMonthName(s.month)} ${s.day}, ${s.year}</td>`).join('')}
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div class="mt-6 grid grid-cols-${storms.length} gap-6">
-                    ${storms.map(s => `
-                        <div class="bg-gray-50 rounded-lg p-4">
-                            <h3 class="font-bold text-lg mb-2">${s.name} Narrative</h3>
-                            <p class="text-sm text-gray-700 leading-relaxed">${s.narrative || 'No narrative available'}</p>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-            
-            content.innerHTML = html;
-            modal.classList.remove('hidden');
+            // Download
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `hurricane_data_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
         }
-        
-        window.closeComparison = function() {
-            document.getElementById('comparisonModal').classList.add('hidden');
-        }
-        
-        function getMonthName(month) {
-            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-            return months[month - 1] || '';
+
+        // View storm details (simplified for space)
+        function viewStorm(stormId) {
+            const storm = allStorms.find(s => s.storm_id === stormId);
+            if (!storm) return;
+            
+            // Send message to parent window
+            if (window.parent !== window) {
+                window.parent.postMessage({
+                    action: 'viewStorm',
+                    storm: storm
+                }, '*');
+            }
+            
+            // Could also show a modal here if needed
+            console.log('Viewing storm:', storm);
         }
     </script>
-    
-    <!-- Storm Comparison Modal -->
-    <div id="comparisonModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 overflow-y-auto">
-        <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="bg-white rounded-lg max-w-6xl w-full max-h-[90vh] overflow-y-auto">
-                <div class="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center">
-                    <h2 class="text-2xl font-bold text-gray-900">Storm Comparison</h2>
-                    <button onclick="closeComparison()" class="text-gray-500 hover:text-gray-700">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
-                <div id="comparisonContent" class="p-6">
-                    <!-- Comparison content will be populated here -->
-                </div>
-            </div>
-        </div>
-    </div>
 </body>
 </html>
