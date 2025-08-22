@@ -288,15 +288,24 @@
             selectors.forEach((selectorId, idx) => {
                 const select = document.getElementById(selectorId);
                 
-                // Add search input above select
+                // Replace select with searchable input using datalist
                 const searchInput = document.createElement('input');
                 searchInput.type = 'text';
-                searchInput.placeholder = 'Search storms by name or year...';
-                searchInput.className = 'w-full px-3 py-1 mb-2 border rounded-lg text-sm';
+                searchInput.placeholder = 'Type to search storms...';
+                searchInput.className = 'w-full px-3 py-2 border rounded-lg text-sm';
                 searchInput.id = selectorId + 'Search';
+                searchInput.setAttribute('list', selectorId + 'List');
                 
-                // Insert search before select
+                // Create datalist for autocomplete
+                const dataList = document.createElement('datalist');
+                dataList.id = selectorId + 'List';
+                
+                // Hide original select
+                select.style.display = 'none';
+                
+                // Insert search input and datalist
                 select.parentNode.insertBefore(searchInput, select);
+                select.parentNode.insertBefore(dataList, select);
                 
                 // Clear existing options
                 select.innerHTML = '';
@@ -307,75 +316,31 @@
                 defaultOption.textContent = '-- Select a Hurricane (Cat 1-5 with landfall) --';
                 select.appendChild(defaultOption);
                 
-                // Function to populate options based on search
-                const populateOptions = (searchTerm = '') => {
-                    // Clear current options except default
-                    while (select.options.length > 1) {
-                        select.remove(1);
+                // Populate datalist with all storms
+                landfallHurricanes.forEach(storm => {
+                    const option = document.createElement('option');
+                    option.value = `${storm.name} (${storm.year}) - Cat ${storm.category}`;
+                    option.setAttribute('data-storm-id', storm.storm_id);
+                    dataList.appendChild(option);
+                    
+                    // Also add to hidden select for compatibility
+                    const selectOption = document.createElement('option');
+                    selectOption.value = storm.storm_id;
+                    selectOption.textContent = `${storm.name} (${storm.year}) - Cat ${storm.category}`;
+                    select.appendChild(selectOption);
+                });
+                
+                // Handle input change
+                searchInput.addEventListener('input', function() {
+                    const selectedText = this.value;
+                    // Find matching storm
+                    const matchingStorm = landfallHurricanes.find(storm => 
+                        `${storm.name} (${storm.year}) - Cat ${storm.category}` === selectedText
+                    );
+                    if (matchingStorm) {
+                        select.value = matchingStorm.storm_id;
+                        select.dispatchEvent(new Event('change'));
                     }
-                    
-                    // Filter storms based on search
-                    let filteredStorms = landfallHurricanes;
-                    if (searchTerm) {
-                        const term = searchTerm.toLowerCase();
-                        filteredStorms = landfallHurricanes.filter(storm => 
-                            storm.name.toLowerCase().includes(term) ||
-                            storm.year.toString().includes(term) ||
-                            storm.landfall_states.join(' ').toLowerCase().includes(term)
-                        );
-                    }
-                    
-                    // Update default option with count
-                    select.options[0].textContent = searchTerm 
-                        ? `-- ${filteredStorms.length} hurricanes found --`
-                        : `-- ${landfallHurricanes.length} Cat 1-5 hurricanes with landfall --`;
-                
-                    // Group storms by decade for better organization
-                    const decades = {};
-                    filteredStorms.forEach(storm => {
-                        const decade = Math.floor(storm.year / 10) * 10;
-                        if (!decades[decade]) {
-                            decades[decade] = [];
-                        }
-                        decades[decade].push(storm);
-                    });
-                    
-                    // Add storm options grouped by decade (newest first)
-                    const sortedDecades = Object.keys(decades)
-                        .map(d => parseInt(d))
-                        .sort((a, b) => b - a);
-                    
-                    sortedDecades.forEach(decade => {
-                        const optgroup = document.createElement('optgroup');
-                        optgroup.label = `${decade}s (${decades[decade].length} storms)`;
-                        
-                        decades[decade].forEach(storm => {
-                            const option = document.createElement('option');
-                            option.value = storm.storm_id;
-                            const catText = storm.category >= 0 ? `Cat ${storm.category}` : 'TD';
-                            const states = storm.landfall_states ? storm.landfall_states.join(', ') : 'No landfall';
-                            const windText = storm.wind_mph ? `${storm.wind_mph} mph` : '';
-                            option.textContent = `${storm.name} (${storm.year}) - ${catText} - ${windText} - ${states}`;
-                            
-                            // Color code by intensity
-                            if (storm.category >= 5) option.style.color = '#7c3aed';
-                            else if (storm.category >= 4) option.style.color = '#dc2626';
-                            else if (storm.category >= 3) option.style.color = '#ea580c';
-                            else if (storm.category >= 1) option.style.color = '#0891b2';
-                            
-                            optgroup.appendChild(option);
-                        });
-                        
-                        select.appendChild(optgroup);
-                    });
-                };
-                
-                // Initial population
-                populateOptions();
-                
-                // Add search event listener
-                searchInput.addEventListener('input', (e) => {
-                    populateOptions(e.target.value);
                 });
             });
         }
@@ -682,8 +647,8 @@
                 });
             });
             
-            // Create annotations for storm names
-            const annotations = validStorms.map((storm, index) => ({
+            // Only create annotations if storms are selected
+            const annotations = validStorms.length > 0 ? validStorms.map((storm, index) => ({
                 x: 0.5,
                 y: -0.08 - (index * 0.03),
                 xref: 'paper',
@@ -692,7 +657,7 @@
                 showarrow: false,
                 font: { size: 12 },
                 xanchor: 'center'
-            }));
+            })) : [];
             
             const layout = {
                 polar: {
