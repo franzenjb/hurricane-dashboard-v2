@@ -759,13 +759,32 @@
                 name: 'All Hurricanes',
                 showlegend: false,  // Hide from legend to reduce clutter
                 marker: {
-                    size: 6,  // Bigger dots (was 4)
-                    color: '#6b7280',
-                    opacity: 0.6
+                    size: 9,  // 50% bigger (was 6)
+                    color: '#4b5563',  // Darker gray (was #6b7280)
+                    opacity: 0.7  // Slightly more opaque
                 },
                 hovertemplate: '<b>%{text}</b><br>Wind: %{y} mph<br>Pressure: %{x} mb<extra></extra>',
                 text: backgroundStorms.map(s => `${s.name} (${s.year})`)
             }];
+            
+            // Add text labels for major storms (visible when zoomed)
+            const majorBackgroundStorms = backgroundStorms.filter(s => s.category >= 4 || s.wind_mph >= 150);
+            if (majorBackgroundStorms.length > 0) {
+                traces.push({
+                    x: majorBackgroundStorms.map(s => s.pressure),
+                    y: majorBackgroundStorms.map(s => s.wind_mph),
+                    mode: 'text',
+                    type: 'scatter',
+                    showlegend: false,
+                    text: majorBackgroundStorms.map(s => s.name),
+                    textfont: {
+                        size: 8,
+                        color: '#374151'
+                    },
+                    textposition: 'top center',
+                    hoverinfo: 'skip'
+                });
+            }
             
             // Add selected storms
             validStorms.forEach((storm, index) => {
@@ -877,13 +896,32 @@
                 name: 'All Cat 1-5 Hurricanes',
                 showlegend: false,  // Hide from legend to reduce clutter
                 marker: {
-                    size: 6,  // Bigger dots
-                    color: '#9ca3af',
-                    opacity: 0.5
+                    size: 9,  // 50% bigger (was 6)
+                    color: '#6b7280',  // Darker gray (was #9ca3af)
+                    opacity: 0.6  // More opaque
                 },
                 hovertemplate: '<b>%{text}</b><br>Year: %{x}<br>Wind: %{y} mph<extra></extra>',
                 text: backgroundStorms.map(s => `${s.name}`)
             });
+            
+            // Add labels for Category 5 storms
+            const cat5Storms = backgroundStorms.filter(s => s.category === 5);
+            if (cat5Storms.length > 0) {
+                traces.push({
+                    x: cat5Storms.map(s => s.year),
+                    y: cat5Storms.map(s => s.wind_mph),
+                    mode: 'text',
+                    type: 'scatter',
+                    showlegend: false,
+                    text: cat5Storms.map(s => s.name),
+                    textfont: {
+                        size: 8,
+                        color: '#7c3aed'  // Purple for Cat 5
+                    },
+                    textposition: 'top center',
+                    hoverinfo: 'skip'
+                });
+            }
             
             // Add selected storms with larger markers
             validStorms.forEach((storm, index) => {
