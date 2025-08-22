@@ -249,6 +249,18 @@
         function populateStormSelectors() {
             const selectors = ['storm1Select', 'storm2Select', 'storm3Select'];
             
+            // Filter for Category 1-5 hurricanes with U.S. landfall, sorted newest first
+            const landfallHurricanes = allStorms
+                .filter(s => s.category >= 1 && s.category <= 5 && s.landfall_states && s.landfall_states.length > 0)
+                .sort((a, b) => {
+                    // Sort by year descending (newest first)
+                    if (b.year !== a.year) return b.year - a.year;
+                    // Then by month descending
+                    if (b.month !== a.month) return b.month - a.month;
+                    // Then by day descending
+                    return (b.day || 0) - (a.day || 0);
+                });
+            
             selectors.forEach(selectorId => {
                 const select = document.getElementById(selectorId);
                 
@@ -258,37 +270,36 @@
                 // Add default option
                 const defaultOption = document.createElement('option');
                 defaultOption.value = '';
-                defaultOption.textContent = '-- Select a Storm --';
+                defaultOption.textContent = '-- Select a Hurricane --';
                 select.appendChild(defaultOption);
                 
-                // Add major storms first
-                const optgroup1 = document.createElement('optgroup');
-                optgroup1.label = 'Major Storms (High Impact)';
-                
-                majorStorms.slice(0, 50).forEach(storm => {
-                    const option = document.createElement('option');
-                    option.value = storm.storm_id;
-                    option.textContent = `${storm.name} (${storm.year}) - Cat ${storm.category} - Score: ${storm.rc_impact_score}`;
-                    optgroup1.appendChild(option);
+                // Group storms by decade for better organization
+                const decades = {};
+                landfallHurricanes.forEach(storm => {
+                    const decade = Math.floor(storm.year / 10) * 10;
+                    if (!decades[decade]) {
+                        decades[decade] = [];
+                    }
+                    decades[decade].push(storm);
                 });
                 
-                select.appendChild(optgroup1);
+                // Add storm options grouped by decade (newest decades first)
+                const sortedDecades = Object.keys(decades).sort((a, b) => b - a);
                 
-                // Add recent storms
-                const optgroup2 = document.createElement('optgroup');
-                optgroup2.label = 'Recent Storms (2020-2024)';
-                
-                allStorms
-                    .filter(s => s.year >= 2020)
-                    .sort((a, b) => b.year - a.year || b.rc_impact_score - a.rc_impact_score)
-                    .forEach(storm => {
+                sortedDecades.forEach(decade => {
+                    const optgroup = document.createElement('optgroup');
+                    optgroup.label = `${decade}s`;
+                    
+                    decades[decade].forEach(storm => {
                         const option = document.createElement('option');
                         option.value = storm.storm_id;
-                        option.textContent = `${storm.name} (${storm.year}) - Cat ${storm.category}`;
-                        optgroup2.appendChild(option);
+                        const states = storm.landfall_states.join(', ');
+                        option.textContent = `${storm.name} (${storm.year}) - Cat ${storm.category} - ${states}`;
+                        optgroup.appendChild(option);
                     });
-                
-                select.appendChild(optgroup2);
+                    
+                    select.appendChild(optgroup);
+                });
             });
         }
 
