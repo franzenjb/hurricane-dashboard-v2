@@ -700,18 +700,24 @@
                     orientation: 'h',
                     x: 0.5,
                     xanchor: 'center',
-                    y: -0.05,
+                    y: -0.15,  // Move down to give more space
                     yanchor: 'top',
-                    font: { size: 14 },
+                    font: { size: 12 },  // Slightly smaller for better fit
                     itemsizing: 'constant',
-                    tracegroupgap: 30
+                    itemwidth: 120,  // Set consistent item width
+                    tracegroupgap: 10,  // Less gap between items
+                    xref: 'paper',
+                    yref: 'paper',
+                    bgcolor: 'rgba(255,255,255,0.8)',
+                    bordercolor: '#e5e7eb',
+                    borderwidth: 1
                 },
                 title: {
                     text: 'Multi-Factor Storm Analysis',
                     font: { size: 16 }
                 },
                 height: 650,
-                margin: { t: 70, r: 100, b: 100, l: 100 },  // Adjusted for cleaner layout
+                margin: { t: 70, r: 100, b: 150, l: 100 },  // More bottom margin for legend
                 paper_bgcolor: 'white',
                 font: { family: 'system-ui, sans-serif' }
             };
@@ -827,13 +833,19 @@
                     orientation: 'h',
                     x: 0.5,
                     xanchor: 'center',
-                    y: -0.05,
+                    y: -0.15,  // Move down for more space
                     yanchor: 'top',
-                    font: { size: 14 },  // Larger font
+                    font: { size: 12 },  // Consistent font size
                     itemsizing: 'constant',
-                    tracegroupgap: 30  // More space between items
+                    itemwidth: 120,  // Set consistent item width
+                    tracegroupgap: 10,  // Less gap between items
+                    xref: 'paper',
+                    yref: 'paper',
+                    bgcolor: 'rgba(255,255,255,0.8)',
+                    bordercolor: '#e5e7eb',
+                    borderwidth: 1
                 },
-                margin: { t: 70, r: 70, b: 100, l: 70 },  // Adjusted for cleaner legend
+                margin: { t: 70, r: 70, b: 150, l: 70 },  // More bottom margin for legend
                 hovermode: 'closest',
                 paper_bgcolor: 'white',
                 plot_bgcolor: '#f9fafb'
@@ -954,13 +966,19 @@
                     orientation: 'h',
                     x: 0.5,
                     xanchor: 'center',
-                    y: -0.05,
+                    y: -0.15,  // Move down to give more space
                     yanchor: 'top',
-                    font: { size: 14 },
+                    font: { size: 12 },  // Slightly smaller for better fit
                     itemsizing: 'constant',
-                    tracegroupgap: 30
+                    itemwidth: 120,  // Set consistent item width
+                    tracegroupgap: 10,  // Less gap between items
+                    xref: 'paper',
+                    yref: 'paper',
+                    bgcolor: 'rgba(255,255,255,0.8)',
+                    bordercolor: '#e5e7eb',
+                    borderwidth: 1
                 },
-                margin: { t: 70, r: 70, b: 100, l: 70 },  // Adjusted
+                margin: { t: 70, r: 70, b: 150, l: 70 },  // More bottom margin for legend
                 paper_bgcolor: 'white',
                 plot_bgcolor: '#f9fafb'
             };
@@ -1040,13 +1058,22 @@
                 height: 650,
                 showlegend: true,
                 legend: {
-                    orientation: 'v',  // Vertical legend on side for bar chart
-                    x: 1.02,
-                    xanchor: 'left',
-                    y: 1,
-                    yanchor: 'top'
+                    orientation: 'h',  // Horizontal legend for consistency
+                    x: 0.5,
+                    xanchor: 'center',
+                    y: -0.15,
+                    yanchor: 'top',
+                    font: { size: 12 },
+                    itemsizing: 'constant',
+                    itemwidth: 120,
+                    tracegroupgap: 10,
+                    xref: 'paper',
+                    yref: 'paper',
+                    bgcolor: 'rgba(255,255,255,0.8)',
+                    bordercolor: '#e5e7eb',
+                    borderwidth: 1
                 },
-                margin: { t: 70, r: 150, b: 70, l: 70 },  // Right margin for legend
+                margin: { t: 70, r: 70, b: 150, l: 70 },  // Bottom margin for legend
                 xaxis: { gridcolor: '#e5e7eb' },
                 yaxis: { title: 'Value', gridcolor: '#e5e7eb' },
                 paper_bgcolor: 'white',
