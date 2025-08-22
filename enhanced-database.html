@@ -69,19 +69,34 @@
         
         .filter-chip {
             display: inline-block;
-            padding: 4px 12px;
+            padding: 6px 14px;
             margin: 2px;
-            background: #e5e7eb;
-            border-radius: 20px;
-            font-size: 12px;
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 13px;
             cursor: pointer;
             transition: all 0.2s;
+            font-weight: 500;
+        }
+        
+        .filter-chip:hover {
+            background: #e5e7eb;
+            transform: translateY(-1px);
         }
         
         .filter-chip.active {
             background: var(--rc-red);
             color: white;
+            border-color: var(--rc-red);
         }
+        
+        /* Category-specific colors */
+        .filter-cat5.active { background: #8B008B; border-color: #8B008B; }
+        .filter-cat4.active { background: #D9534F; border-color: #D9534F; }
+        .filter-cat3.active { background: #FF7F00; border-color: #FF7F00; }
+        .filter-cat2.active { background: #F0AD4E; border-color: #F0AD4E; }
+        .filter-cat1.active { background: #5CB85C; border-color: #5CB85C; }
         
         .stats-card {
             background: white;
@@ -207,47 +222,52 @@
     <!-- Main Content -->
     <div class="max-w-7xl mx-auto px-4 py-6">
         <!-- Filters -->
-        <div class="bg-white rounded-lg shadow-md p-4 mb-6">
-            <h2 class="text-lg font-bold mb-4">Advanced Filters</h2>
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-xl font-bold mb-5 text-gray-800">Advanced Filters</h2>
             
-            <!-- Search -->
-            <div class="mb-4">
+            <!-- Search Bar -->
+            <div class="mb-6">
                 <input type="text" id="searchInput" placeholder="Search by name, year, state..." 
-                       class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                       class="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent">
             </div>
             
-            <!-- Filter Chips -->
-            <div class="flex flex-wrap gap-4">
-                <!-- Impact Level -->
-                <div>
-                    <label class="text-sm font-bold text-gray-700">Impact Level:</label>
-                    <div class="mt-1">
-                        <span class="filter-chip" data-filter="impact" data-value="CATASTROPHIC">Catastrophic</span>
-                        <span class="filter-chip" data-filter="impact" data-value="SEVERE">Severe</span>
-                        <span class="filter-chip" data-filter="impact" data-value="MAJOR">Major</span>
-                        <span class="filter-chip" data-filter="impact" data-value="MODERATE">Moderate</span>
-                        <span class="filter-chip" data-filter="impact" data-value="MINOR">Minor</span>
+            <!-- Filter Sections in Grid -->
+            <div class="space-y-5">
+                <!-- Storm Classification Row -->
+                <div class="border-b border-gray-200 pb-5">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Impact Level -->
+                        <div>
+                            <label class="text-sm font-semibold text-gray-700 mb-2 block">IMPACT LEVEL</label>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="filter-chip" data-filter="impact" data-value="CATASTROPHIC">Catastrophic</span>
+                                <span class="filter-chip" data-filter="impact" data-value="SEVERE">Severe</span>
+                                <span class="filter-chip" data-filter="impact" data-value="MAJOR">Major</span>
+                                <span class="filter-chip" data-filter="impact" data-value="MODERATE">Moderate</span>
+                                <span class="filter-chip" data-filter="impact" data-value="MINOR">Minor</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Category -->
+                        <div>
+                            <label class="text-sm font-semibold text-gray-700 mb-2 block">CATEGORY</label>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="filter-chip filter-cat5" data-filter="category" data-value="5">Cat 5</span>
+                                <span class="filter-chip filter-cat4" data-filter="category" data-value="4">Cat 4</span>
+                                <span class="filter-chip filter-cat3" data-filter="category" data-value="3">Cat 3</span>
+                                <span class="filter-chip filter-cat2" data-filter="category" data-value="2">Cat 2</span>
+                                <span class="filter-chip filter-cat1" data-filter="category" data-value="1">Cat 1</span>
+                                <span class="filter-chip" data-filter="category" data-value="0">TS</span>
+                                <span class="filter-chip" data-filter="category" data-value="-1">TD</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
-                <!-- Category -->
-                <div>
-                    <label class="text-sm font-bold text-gray-700">Category:</label>
-                    <div class="mt-1">
-                        <span class="filter-chip" data-filter="category" data-value="5">Cat 5</span>
-                        <span class="filter-chip" data-filter="category" data-value="4">Cat 4</span>
-                        <span class="filter-chip" data-filter="category" data-value="3">Cat 3</span>
-                        <span class="filter-chip" data-filter="category" data-value="2">Cat 2</span>
-                        <span class="filter-chip" data-filter="category" data-value="1">Cat 1</span>
-                        <span class="filter-chip" data-filter="category" data-value="0">TS</span>
-                        <span class="filter-chip" data-filter="category" data-value="-1">TD</span>
-                    </div>
-                </div>
-                
-                <!-- Special Filters -->
-                <div>
-                    <label class="text-sm font-bold text-gray-700">Special:</label>
-                    <div class="mt-1">
+                <!-- Data Filters Row -->
+                <div class="border-b border-gray-200 pb-5">
+                    <label class="text-sm font-semibold text-gray-700 mb-2 block">DATA FILTERS</label>
+                    <div class="flex flex-wrap gap-2">
                         <span class="filter-chip" data-filter="special" data-value="rc_response">RC Response</span>
                         <span class="filter-chip" data-filter="special" data-value="has_tcr">Has TCR</span>
                         <span class="filter-chip" data-filter="special" data-value="has_narrative">Has Narrative</span>
@@ -256,58 +276,63 @@
                         <span class="filter-chip" data-filter="special" data-value="us_landfall">US Landfall Only</span>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Landfall State Filter -->
-            <div class="flex flex-wrap gap-2 mt-4">
-                <label class="text-sm font-bold text-gray-700 w-full">Landfall States:</label>
-                <div class="flex flex-wrap gap-1">
-                    <span class="filter-chip" data-filter="state" data-value="FL">Florida</span>
-                    <span class="filter-chip" data-filter="state" data-value="TX">Texas</span>
-                    <span class="filter-chip" data-filter="state" data-value="LA">Louisiana</span>
-                    <span class="filter-chip" data-filter="state" data-value="NC">North Carolina</span>
-                    <span class="filter-chip" data-filter="state" data-value="SC">South Carolina</span>
-                    <span class="filter-chip" data-filter="state" data-value="GA">Georgia</span>
-                    <span class="filter-chip" data-filter="state" data-value="AL">Alabama</span>
-                    <span class="filter-chip" data-filter="state" data-value="MS">Mississippi</span>
-                    <span class="filter-chip" data-filter="state" data-value="VA">Virginia</span>
-                    <span class="filter-chip" data-filter="state" data-value="NY">New York</span>
-                    <span class="filter-chip" data-filter="state" data-value="NJ">New Jersey</span>
-                    <span class="filter-chip" data-filter="state" data-value="MA">Massachusetts</span>
-                    <span class="filter-chip" data-filter="state" data-value="CT">Connecticut</span>
-                    <span class="filter-chip" data-filter="state" data-value="RI">Rhode Island</span>
-                    <span class="filter-chip" data-filter="state" data-value="ME">Maine</span>
-                    <span class="filter-chip" data-filter="state" data-value="MD">Maryland</span>
-                    <span class="filter-chip" data-filter="state" data-value="DE">Delaware</span>
+                
+                <!-- Landfall States -->
+                <div class="border-b border-gray-200 pb-5">
+                    <label class="text-sm font-semibold text-gray-700 mb-2 block">LANDFALL STATES</label>
+                    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
+                        <span class="filter-chip text-center" data-filter="state" data-value="FL">Florida</span>
+                        <span class="filter-chip text-center" data-filter="state" data-value="TX">Texas</span>
+                        <span class="filter-chip text-center" data-filter="state" data-value="LA">Louisiana</span>
+                        <span class="filter-chip text-center" data-filter="state" data-value="NC">North Carolina</span>
+                        <span class="filter-chip text-center" data-filter="state" data-value="SC">South Carolina</span>
+                        <span class="filter-chip text-center" data-filter="state" data-value="GA">Georgia</span>
+                        <span class="filter-chip text-center" data-filter="state" data-value="AL">Alabama</span>
+                        <span class="filter-chip text-center" data-filter="state" data-value="MS">Mississippi</span>
+                        <span class="filter-chip text-center" data-filter="state" data-value="VA">Virginia</span>
+                        <span class="filter-chip text-center" data-filter="state" data-value="NY">New York</span>
+                        <span class="filter-chip text-center" data-filter="state" data-value="NJ">New Jersey</span>
+                        <span class="filter-chip text-center" data-filter="state" data-value="MA">Massachusetts</span>
+                        <span class="filter-chip text-center" data-filter="state" data-value="CT">Connecticut</span>
+                        <span class="filter-chip text-center" data-filter="state" data-value="RI">Rhode Island</span>
+                        <span class="filter-chip text-center" data-filter="state" data-value="ME">Maine</span>
+                        <span class="filter-chip text-center" data-filter="state" data-value="MD">Maryland</span>
+                        <span class="filter-chip text-center" data-filter="state" data-value="DE">Delaware</span>
+                    </div>
                 </div>
-            </div>
-            
-            <!-- Year Range -->
-            <div class="flex items-center gap-4 mt-4">
-                <label class="text-sm font-bold text-gray-700">Years:</label>
-                <input type="number" id="yearStart" min="1851" max="2024" value="1900" class="w-20 px-2 py-1 border rounded">
-                <span>to</span>
-                <input type="number" id="yearEnd" min="1851" max="2024" value="2024" class="w-20 px-2 py-1 border rounded">
-                <button onclick="applyFilters()" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Apply</button>
-                <button onclick="clearFilters()" class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">Clear</button>
+                
+                <!-- Year Range -->
+                <div class="flex flex-wrap items-center gap-4">
+                    <label class="text-sm font-semibold text-gray-700">YEAR RANGE</label>
+                    <div class="flex items-center gap-2">
+                        <input type="number" id="yearStart" min="1851" max="2024" value="1900" 
+                               class="w-24 px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                        <span class="text-gray-500">to</span>
+                        <input type="number" id="yearEnd" min="1851" max="2024" value="2024" 
+                               class="w-24 px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                        <button onclick="applyFilters()" class="px-5 py-2 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition-colors">
+                            Apply
+                        </button>
+                        <button onclick="clearFilters()" class="px-5 py-2 bg-gray-500 text-white font-medium rounded-lg hover:bg-gray-600 transition-colors">
+                            Clear All
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- Actions Bar -->
         <div class="bg-white rounded-lg shadow-md p-4 mb-4 flex justify-between items-center">
             <div class="flex gap-2">
-                <button onclick="compareSelected()" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50" id="compareBtn" disabled>
-                    Compare Selected
-                </button>
-                <button onclick="exportSelected()" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+                <button onclick="exportSelected()" class="px-5 py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
                     Export CSV
                 </button>
-                <button onclick="viewOnMap()" class="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700">
-                    View on Map
-                </button>
             </div>
-            <div class="text-sm text-gray-600">
-                Showing <span id="visibleCount">0</span> of <span id="totalCount">1991</span> storms
+            <div class="text-sm text-gray-600 font-medium">
+                Showing <span id="visibleCount" class="font-bold text-gray-800">0</span> of <span id="totalCount" class="font-bold text-gray-800">1991</span> storms
             </div>
         </div>
 
