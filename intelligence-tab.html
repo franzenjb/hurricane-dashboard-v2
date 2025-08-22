@@ -862,18 +862,37 @@
                 text: backgroundStorms.map(s => `${s.name}`)
             });
             
-            // Don't add labels for background storms - only for selected storms
+            // Add labels for Category 5 storms
+            const cat5Storms = backgroundStorms.filter(s => s.category === 5);
+            if (cat5Storms.length > 0) {
+                traces.push({
+                    x: cat5Storms.map(s => s.year),
+                    y: cat5Storms.map(s => s.wind_mph),
+                    mode: 'text',
+                    type: 'scatter',
+                    showlegend: false,
+                    text: cat5Storms.map(s => s.name),
+                    textfont: {
+                        size: 8,
+                        color: '#7c3aed'  // Purple for Cat 5
+                    },
+                    textposition: 'top center',
+                    hoverinfo: 'skip',
+                    texttemplate: '%{text}',
+                    // Add offset to move text higher
+                    y: cat5Storms.map(s => s.wind_mph + 5)  // Move labels 5 mph higher
+                });
+            }
             
             // Add selected storms with larger markers
             validStorms.forEach((storm, index) => {
+                // Add the marker
                 traces.push({
                     x: [storm.year],
                     y: [storm.wind_mph],
-                    mode: 'markers+text',
+                    mode: 'markers',
                     type: 'scatter',
                     name: `${storm.name} (${storm.year})`,
-                    text: [storm.name],
-                    textposition: 'top center',
                     marker: {
                         size: 15,
                         color: ['#dc2626', '#f59e0b', '#10b981'][index],
@@ -881,7 +900,26 @@
                     },
                     hovertemplate: `<b>${storm.name} (${storm.year})</b><br>` +
                         `Wind: ${storm.wind_mph} mph<br>` +
-                        `Category: ${storm.category}<extra></extra>`
+                        `Category: ${storm.category}<extra></extra>`,
+                    showlegend: false
+                });
+                
+                // Add the text label separately with offset
+                traces.push({
+                    x: [storm.year],
+                    y: [storm.wind_mph + 7],  // Move label 7 mph higher
+                    mode: 'text',
+                    type: 'scatter',
+                    text: [storm.name],
+                    textposition: 'top center',
+                    textfont: {
+                        size: 10,
+                        color: ['#dc2626', '#f59e0b', '#10b981'][index],
+                        family: 'Arial, sans-serif',
+                        weight: 'bold'
+                    },
+                    hoverinfo: 'skip',
+                    showlegend: false
                 });
             });
             
