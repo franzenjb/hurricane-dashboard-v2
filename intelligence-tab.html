@@ -273,7 +273,29 @@
                 defaultOption.textContent = '-- Select a Hurricane --';
                 select.appendChild(defaultOption);
                 
-                // Group storms by decade for better organization
+                // Add most recent major hurricanes at the top
+                const recentMajor = landfallHurricanes
+                    .filter(s => s.year >= 2020 && s.category >= 3)
+                    .slice(0, 10);
+                
+                if (recentMajor.length > 0) {
+                    const recentGroup = document.createElement('optgroup');
+                    recentGroup.label = '⭐ Recent Major Hurricanes (2020-2024)';
+                    recentGroup.style.fontWeight = 'bold';
+                    
+                    recentMajor.forEach(storm => {
+                        const option = document.createElement('option');
+                        option.value = storm.storm_id;
+                        const states = storm.landfall_states.join(', ');
+                        option.textContent = `${storm.name} (${storm.year}) - Cat ${storm.category} - ${states}`;
+                        option.style.color = storm.category >= 4 ? '#dc2626' : '#ea580c';
+                        recentGroup.appendChild(option);
+                    });
+                    
+                    select.appendChild(recentGroup);
+                }
+                
+                // Group remaining storms by decade for better organization
                 const decades = {};
                 landfallHurricanes.forEach(storm => {
                     const decade = Math.floor(storm.year / 10) * 10;
@@ -284,7 +306,9 @@
                 });
                 
                 // Add storm options grouped by decade (newest decades first)
-                const sortedDecades = Object.keys(decades).sort((a, b) => b - a);
+                const sortedDecades = Object.keys(decades)
+                    .map(d => parseInt(d))  // Convert to numbers for proper sorting
+                    .sort((a, b) => b - a);  // Sort descending (newest first)
                 
                 sortedDecades.forEach(decade => {
                     const optgroup = document.createElement('optgroup');
