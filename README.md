@@ -19,6 +19,20 @@ Transform 173 years of hurricane data into actionable intelligence for disaster 
 ### Option 2: Live Deployment
 Access the live dashboard at: https://franzenjb.github.io/hurricane-dashboard-v2/
 
+### Development Workflow (Recommended)
+```bash
+# Start local server for rapid development
+python3 -m http.server 8000
+
+# Open Chrome DevTools → Network tab → Check "Disable cache"
+# This ensures instant updates when you save files
+
+# When ready to deploy:
+git add .
+git commit -m "description"
+git push
+```
+
 ## 🌟 Core Features
 
 ### 📊 Database Tab (Hurricane Intelligence)
@@ -51,6 +65,14 @@ Access the live dashboard at: https://franzenjb.github.io/hurricane-dashboard-v2
 - **Historical comparisons** and impact analysis
 - **2024 season expertise** including Helene and Milton impacts
 - **Fallback mode** with hardcoded responses if API unavailable
+
+### 📊 Storm Intelligence Tab (NEW)
+- **Comparative Analysis**: Compare up to 3 storms side-by-side
+- **Interactive Spider Chart**: Multi-metric storm comparison visualization
+- **Wind-Pressure Relationship**: Scatter plot showing storm intensification patterns
+- **Historical Intensity Distribution**: Timeline view with Category 5 highlights
+- **Searchable Storm Selectors**: Type-to-search with clear/reset buttons
+- **Zoom-Responsive Labels**: Labels stay properly positioned at any zoom level
 
 ## 🏗️ Technical Architecture
 

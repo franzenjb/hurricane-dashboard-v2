@@ -12,11 +12,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Development Commands
 
-### Local Development
+### Local Development (RECOMMENDED WORKFLOW)
 ```bash
-# Start local server (required - CORS restrictions prevent file:// usage)
-./run-local.sh
+# Start local server for rapid iteration
+python3 -m http.server 8000
 # Opens at: http://localhost:8000
+
+# IMPORTANT: To avoid cache issues with Chrome:
+# 1. Open DevTools (Right-click → Inspect)
+# 2. Go to Network tab
+# 3. Check "Disable cache" checkbox
+# 4. Keep DevTools open while developing
+# This ensures you see changes instantly when you save files
+
+# Alternative: Use ./run-local.sh script
+./run-local.sh
 ```
 
 ### Deployment
@@ -86,6 +96,8 @@ Cross-frame messaging via postMessage()
 - **Timeline changes**: Edit `enhanced-timeline.html` 
 - **Regional changes**: Edit `enhanced-multi-state.html`
 - **Database changes**: Edit `enhanced-database.html`
+- **Intelligence changes**: Edit `intelligence-tab.html`
+- **Response changes**: Edit `response-tab.html`
 - **Never edit backup implementations in index.html**
 
 ### 2. Cross-Frame Communication
@@ -205,11 +217,39 @@ window.sendLiveStormsToTimeline = function() {
 }
 ```
 
+## Recent Improvements (Aug 2025)
+
+### Storm Intelligence Tab
+- Added searchable storm selectors with type-to-search functionality
+- Implemented clear/reset buttons (✕) for storm selection
+- Made chart labels zoom-responsive (2% offset from data points)
+- Removed redundant Impact Metrics Comparison chart
+- Fixed JavaScript syntax errors that broke dropdown population
+- Purple highlighting for Category 5 storms in Historical Intensity chart
+
+### Database Tab
+- Reorganized filters into clear sections with visual separators
+- States now display in responsive grid layout
+- Enhanced styling with borders, padding, and hover effects
+- Color-coded category filters when active
+- Removed non-functional Compare Selected and View on Map buttons
+- Kept only Export CSV with icon
+
+### Development Workflow
+- Emphasized localhost development for rapid iteration
+- Added Chrome DevTools cache disable instructions
+- Fixed nested git repository issues
+
 ## Common Issues & Solutions
 
 ### CORS Errors
 - **Cause**: Opening HTML files directly (file://)
 - **Solution**: Use `./run-local.sh` or access via GitHub Pages
+
+### Browser Cache Issues (NEW)
+- **Cause**: Chrome aggressively caches localhost
+- **Solution**: Open DevTools → Network → Check "Disable cache"
+- **Alternative**: Hard refresh with Cmd+Shift+R (Mac) or Ctrl+Shift+F5 (Windows)
 
 ### Missing Storm Tracks
 - **Cause**: storm_id mismatch between database and GeoJSON files
