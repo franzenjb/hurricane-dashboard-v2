@@ -49997,57 +49997,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     }
   },
   {
-    "storm_id": "AL241992",
-    "name": "ANDREW",
-    "year": 1992,
-    "month": 8,
-    "day": 24,
-    "category": 5,
-    "wind_mph": 175,
-    "wind_knots": 152,
-    "pressure": 922,
-    "ace": 14.5,
-    "lat": 25.5,
-    "lon": -80.3,
-    "landfall_state": null,
-    "deaths": 65,
-    "landfall_states": [
-      "FL",
-      "LA"
-    ],
-    "narrative": "Hurricane Andrew was one of the most destructive hurricanes in United States history. Making landfall in South Florida on August 24, 1992, as a Category 5 hurricane with sustained winds of 175 mph, Andrew devastated Homestead and surrounding areas. The hurricane caused $27 billion in damage (1992 dollars), destroyed over 25,000 homes, and left 250,000 people homeless. Andrew's compact size belied its intensity - the storm maintained Category 5 strength as it crossed Florida and made a second landfall in Louisiana. The hurricane fundamentally changed building codes in Florida and transformed hurricane preparedness nationwide.",
-    "resources": {
-      "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL241992_ANDREW.pdf",
-      "tcr_kmz": "https://www.nhc.noaa.gov/data/tcr/AL241992_ANDREW.kmz",
-      "tcr_shp": "https://www.nhc.noaa.gov/data/tcr/AL241992_ANDREW_5day.zip",
-      "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1992.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/data/tcr/index.php?season=1992&basin=atl",
-      "nhc_graphics": "https://www.nhc.noaa.gov/archive/1992/AL241992/",
-      "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL241992.html"
-    },
-    "rc_impact_score": 100,
-    "rc_impact_level": "CATASTROPHIC",
-    "rc_response": {
-      "responded": true,
-      "operation_type": "Level 3",
-      "estimated_shelters": 80,
-      "estimated_meals": 500000,
-      "estimated_volunteers": 2000,
-      "actual_shelters": null,
-      "actual_meals": null,
-      "actual_volunteers": null,
-      "actual_cost": null
-    },
-    "data_quality": {
-      "has_narrative": true,
-      "has_track_data": true,
-      "has_casualties": true,
-      "has_damage": true,
-      "has_landfall": true,
-      "completeness_score": 100
-    }
-  },
-  {
     "storm_id": "AL251967",
     "name": "HEIDI",
     "year": 1967,

@@ -498,15 +498,17 @@
                     const monthDiff = Math.abs(s.month - storm.month);
                     score += Math.max(0, 20 - monthDiff * 5);
                     
-                    // Landfall state overlap (10 points)
+                    // Landfall state overlap (10 points max)
                     if (s.landfall_states && storm.landfall_states) {
                         const overlap = s.landfall_states.filter(state => 
                             storm.landfall_states.includes(state)
                         ).length;
-                        score += overlap * 10;
+                        // Cap at 10 points total for state overlap
+                        score += Math.min(10, overlap * 5);
                     }
                     
-                    return { storm: s, score: Math.round(score) };
+                    // Ensure score never exceeds 100
+                    return { storm: s, score: Math.min(100, Math.round(score)) };
                 })
                 .filter(s => s.score > 50)
                 .sort((a, b) => b.score - a.score)
@@ -693,15 +695,18 @@
                 },
                 showlegend: true,
                 legend: {
-                    x: 0,
-                    y: 1
+                    orientation: 'h',
+                    x: 0.5,
+                    xanchor: 'center',
+                    y: -0.15,
+                    yanchor: 'top'
                 },
                 title: {
                     text: 'Multi-Factor Storm Analysis',
                     font: { size: 16 }
                 },
                 height: 400,
-                margin: { t: 60, r: 80, b: 40, l: 80 },
+                margin: { t: 60, r: 80, b: 80, l: 80 },  // Increased bottom margin for legend
                 paper_bgcolor: 'white',
                 font: { family: 'system-ui, sans-serif' }
             };
@@ -790,8 +795,16 @@
                     title: 'Maximum Wind Speed (mph)',
                     gridcolor: '#e5e7eb'
                 },
-                height: 450,  // Increased height for full width
+                height: 450,
                 showlegend: true,
+                legend: {
+                    orientation: 'h',
+                    x: 0.5,
+                    xanchor: 'center',
+                    y: -0.12,
+                    yanchor: 'top'
+                },
+                margin: { t: 50, r: 50, b: 80, l: 50 },  // Bottom margin for legend
                 hovermode: 'closest',
                 paper_bgcolor: 'white',
                 plot_bgcolor: '#f9fafb'
@@ -815,38 +828,45 @@
             // Get historical context - similar category storms
             const traces = [];
             
+            // Add background context - all similar category storms
+            const backgroundStorms = allStorms.filter(s => 
+                s.category >= 1 && s.category <= 5 &&
+                s.landfall_states && s.landfall_states.length > 0 &&
+                s.wind_mph
+            );
+            
+            traces.push({
+                x: backgroundStorms.map(s => s.year),
+                y: backgroundStorms.map(s => s.wind_mph),
+                mode: 'markers',
+                type: 'scatter',
+                name: 'All Cat 1-5 Hurricanes',
+                marker: {
+                    size: 4,
+                    color: '#9ca3af',
+                    opacity: 0.4
+                },
+                hoverinfo: 'skip'
+            });
+            
+            // Add selected storms with larger markers
             validStorms.forEach((storm, index) => {
-                const similarStorms = allStorms.filter(s => 
-                    Math.abs(s.category - storm.category) <= 1 &&
-                    s.landfall_states && s.landfall_states.length > 0
-                ).sort((a, b) => a.year - b.year);
-                
-                traces.push({
-                    x: similarStorms.map(s => s.year),
-                    y: similarStorms.map(s => s.wind_mph),
-                    mode: 'lines',
-                    type: 'scatter',
-                    name: `Cat ${storm.category}±1 trend`,
-                    line: {
-                        color: ['#dc2626', '#f59e0b', '#10b981'][index],  // Much darker, solid colors
-                        width: 2  // Thicker line for visibility
-                    },
-                    opacity: 0.5,  // More opaque (was 0.3)
-                    hoverinfo: 'skip'
-                });
-                
-                // Highlight selected storm
                 traces.push({
                     x: [storm.year],
                     y: [storm.wind_mph],
-                    mode: 'markers',
+                    mode: 'markers+text',
                     type: 'scatter',
                     name: `${storm.name} (${storm.year})`,
+                    text: [storm.name],
+                    textposition: 'top center',
                     marker: {
                         size: 15,
                         color: ['#dc2626', '#f59e0b', '#10b981'][index],
                         line: { color: 'white', width: 2 }
-                    }
+                    },
+                    hovertemplate: `<b>${storm.name} (${storm.year})</b><br>` +
+                        `Wind: ${storm.wind_mph} mph<br>` +
+                        `Category: ${storm.category}<extra></extra>`
                 });
             });
             
@@ -854,8 +874,16 @@
                 title: 'Historical Intensity Context',
                 xaxis: { title: 'Year', gridcolor: '#e5e7eb' },
                 yaxis: { title: 'Wind Speed (mph)', gridcolor: '#e5e7eb' },
-                height: 400,  // Increased height for full width
+                height: 400,
                 showlegend: true,
+                legend: {
+                    orientation: 'h',
+                    x: 0.5,
+                    xanchor: 'center',
+                    y: -0.15,
+                    yanchor: 'top'
+                },
+                margin: { t: 50, r: 50, b: 80, l: 50 },  // Bottom margin for legend
                 paper_bgcolor: 'white',
                 plot_bgcolor: '#f9fafb'
             };
@@ -911,7 +939,16 @@
             const layout = {
                 title: 'Storm Impact Metrics',
                 barmode: 'group',
-                height: 400,  // Increased height for full width
+                height: 400,
+                showlegend: true,
+                legend: {
+                    orientation: 'h',
+                    x: 0.5,
+                    xanchor: 'center',
+                    y: -0.15,
+                    yanchor: 'top'
+                },
+                margin: { t: 50, r: 50, b: 100, l: 50 },  // Extra bottom margin for bar chart legend
                 xaxis: { gridcolor: '#e5e7eb' },
                 yaxis: { title: 'Value', gridcolor: '#e5e7eb' },
                 paper_bgcolor: 'white',
