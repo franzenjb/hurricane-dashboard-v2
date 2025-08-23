@@ -518,10 +518,17 @@
             const layout = {
                 barmode: 'group',
                 showlegend: true,
-                legend: { orientation: 'h', y: -0.2 },
-                margin: { t: 20, r: 20, b: 60, l: 40 },
+                legend: { 
+                    orientation: 'h', 
+                    y: -0.25,
+                    x: 0.5,
+                    xanchor: 'center',
+                    font: { size: 11 }
+                },
+                margin: { t: 20, r: 20, b: 80, l: 40 },
                 xaxis: { title: '' },
-                yaxis: { title: '' }
+                yaxis: { title: '' },
+                height: 280
             };
             
             Plotly.newPlot('resourcesChart', traces, layout, { responsive: true, displayModeBar: false });
