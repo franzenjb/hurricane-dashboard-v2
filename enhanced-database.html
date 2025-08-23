@@ -1196,58 +1196,121 @@
             if (!stormModalMap || points.length === 0) return;
             
             // Sort points by time
-            points.sort((a, b) => 
-                new Date(a.properties.datetime) - new Date(b.properties.datetime)
-            );
+            points.sort((a, b) => {
+                if (a.properties.datetime && b.properties.datetime) {
+                    return new Date(a.properties.datetime) - new Date(b.properties.datetime);
+                }
+                return 0;
+            });
             
-            // Draw track segments with colors based on intensity
+            // Collect all coordinates for bounds
+            const allLatLngs = [];
+            const segments = [];
+            
+            // Prepare segments for animation
             for (let i = 0; i < points.length - 1; i++) {
                 const point1 = points[i];
                 const point2 = points[i + 1];
                 
-                const coords1 = point1.geometry.coordinates;
-                const coords2 = point2.geometry.coordinates;
+                const coord1 = point1.geometry.coordinates;
+                const coord2 = point2.geometry.coordinates;
                 
-                // Determine color based on wind speed
-                const windSpeed = point1.properties.max_wind || 0;
-                let color = '#00ff00';  // Tropical Depression
-                if (windSpeed >= 137) color = '#ff00ff';      // Cat 5
-                else if (windSpeed >= 113) color = '#ff0000';  // Cat 4  
-                else if (windSpeed >= 96) color = '#ff8800';   // Cat 3
-                else if (windSpeed >= 83) color = '#ffaa00';   // Cat 2
-                else if (windSpeed >= 64) color = '#ffdd00';   // Cat 1
-                else if (windSpeed >= 34) color = '#00ffff';   // Tropical Storm
+                // Calculate category from wind speed (in knots)
+                const maxWind = point1.properties.max_wind || 0;
+                let category = 0;
+                if (maxWind >= 137) category = 5;      // 157+ mph
+                else if (maxWind >= 113) category = 4; // 130-156 mph
+                else if (maxWind >= 96) category = 3;  // 111-129 mph
+                else if (maxWind >= 83) category = 2;  // 96-110 mph
+                else if (maxWind >= 64) category = 1;  // 74-95 mph
+                else category = 0;                     // <74 mph (TS/TD)
                 
-                // Draw segment
-                L.polyline(
-                    [[coords1[1], coords1[0]], [coords2[1], coords2[0]]],
-                    { color: color, weight: 3, opacity: 0.8 }
-                ).addTo(stormModalMap);
+                const latLng1 = [coord1[1], coord1[0]];
+                const latLng2 = [coord2[1], coord2[0]];
+                
+                allLatLngs.push(latLng1);
+                if (i === points.length - 2) allLatLngs.push(latLng2);
+                
+                // Store segment for animation
+                segments.push({
+                    path: [latLng1, latLng2],
+                    color: getModalCategoryColor(category),
+                    category: category
+                });
             }
             
-            // Add markers for start and end
-            if (points.length > 0) {
-                const firstPoint = points[0];
-                const lastPoint = points[points.length - 1];
-                
-                // Start marker
-                L.circleMarker(
-                    [firstPoint.geometry.coordinates[1], firstPoint.geometry.coordinates[0]],
-                    { radius: 6, fillColor: '#00ff00', color: '#fff', weight: 2, opacity: 1, fillOpacity: 0.8 }
-                ).addTo(stormModalMap).bindPopup('Start');
-                
-                // End marker  
-                L.circleMarker(
-                    [lastPoint.geometry.coordinates[1], lastPoint.geometry.coordinates[0]],
-                    { radius: 6, fillColor: '#ff0000', color: '#fff', weight: 2, opacity: 1, fillOpacity: 0.8 }
-                ).addTo(stormModalMap).bindPopup('End');
-                
-                // Fit map to track bounds
-                const bounds = L.latLngBounds(points.map(p => 
-                    [p.geometry.coordinates[1], p.geometry.coordinates[0]]
-                ));
+            // Animate the drawing of segments
+            let segmentIndex = 0;
+            const animationSpeed = Math.max(20, 500 / segments.length);
+            
+            const animateSegment = () => {
+                if (segmentIndex < segments.length) {
+                    const segment = segments[segmentIndex];
+                    L.polyline(segment.path, {
+                        color: segment.color,
+                        weight: 4,  // Match Timeline width
+                        opacity: 0.9,
+                        smoothFactor: 1
+                    }).addTo(stormModalMap);
+                    
+                    segmentIndex++;
+                    setTimeout(animateSegment, animationSpeed);
+                } else {
+                    // Animation complete - add end markers
+                    if (points.length > 0) {
+                        const firstPoint = points[0];
+                        const lastPoint = points[points.length - 1];
+                        
+                        // Start marker (green)
+                        L.circleMarker(
+                            [firstPoint.geometry.coordinates[1], firstPoint.geometry.coordinates[0]],
+                            { 
+                                radius: 8, 
+                                fillColor: '#5CB85C', 
+                                color: '#fff', 
+                                weight: 2, 
+                                opacity: 1, 
+                                fillOpacity: 0.9 
+                            }
+                        ).addTo(stormModalMap).bindPopup(`<b>Start:</b> ${new Date(firstPoint.properties.datetime).toLocaleDateString()}`);
+                        
+                        // End marker (red)
+                        L.circleMarker(
+                            [lastPoint.geometry.coordinates[1], lastPoint.geometry.coordinates[0]],
+                            { 
+                                radius: 8, 
+                                fillColor: '#D9534F', 
+                                color: '#fff', 
+                                weight: 2, 
+                                opacity: 1, 
+                                fillOpacity: 0.9 
+                            }
+                        ).addTo(stormModalMap).bindPopup(`<b>End:</b> ${new Date(lastPoint.properties.datetime).toLocaleDateString()}`);
+                    }
+                }
+            };
+            
+            // Start animation
+            animateSegment();
+            
+            // Fit map to track bounds
+            if (allLatLngs.length > 0) {
+                const bounds = L.latLngBounds(allLatLngs);
                 stormModalMap.fitBounds(bounds, { padding: [50, 50] });
             }
+        }
+        
+        // Match Timeline's color scheme exactly
+        function getModalCategoryColor(category) {
+            const colors = {
+                0: "#8B9DC3",  // TS/TD - Blue-gray
+                1: "#5CB85C",  // Cat 1 - Green
+                2: "#F0AD4E",  // Cat 2 - Orange
+                3: "#FF7F00",  // Cat 3 - Dark Orange
+                4: "#D9534F",  // Cat 4 - Red
+                5: "#8B008B"   // Cat 5 - Purple
+            };
+            return colors[category] || "#757575";
         }
     </script>
 </body>
