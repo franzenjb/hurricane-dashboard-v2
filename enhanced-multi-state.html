@@ -148,7 +148,8 @@
             flex: 0 0 45%;
             background: white;
             padding: 20px;
-            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
         }
         
         .narrative-header {
@@ -785,7 +786,7 @@
             <div class="narrative-panel" id="narrativePanel">
                 <div class="narrative-header">Historical Narrative</div>
                 <div class="narrative-subtitle">Select a storm with landfall history for detailed narrative information.</div>
-                <div class="narrative-content" id="narrativeContent" style="max-height: calc(100% - 60px); overflow-y: auto; padding-right: 8px;">
+                <div class="narrative-content" id="narrativeContent" style="flex: 1; overflow-y: auto; padding-right: 8px; min-height: 0;">
                 </div>
             </div>
         </div>
