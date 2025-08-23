@@ -137,14 +137,15 @@ window.sendLiveStormsToTimeline = function() {
 ### 3. Function Naming Conventions
 **Timeline/Regional tabs**:
 - `updateStormInfoPanel()` - Updates sidebar
-- `showStormOnMap()` - Displays track
-- `getCategoryColor()` - Returns hex color
-- `drawRainbowTrack()` - Multi-color track
+- `showStormOnMap()` - Displays track with animation
+- `getCategoryColor()` - Returns hex color (#8B9DC3, #5CB85C, etc.)
+- `drawRainbowTrack()` - Animated multi-color track
 
 **Database tab**:
-- `viewStorm()` - Opens animation modal
-- `trackStorm()` - Starts tracking animation
-- `showComparison()` - Storm comparison modal
+- `viewStorm()` - Opens modal with storm details and map
+- `showStormModal()` - Creates and displays storm modal
+- `initStormMap()` - Initializes Leaflet map in modal
+- `drawStormTrackOnModal()` - Animates rainbow track in modal
 - `exportSelected()` - CSV export
 
 ### 4. Cesium 3D Visualization
@@ -219,26 +220,24 @@ window.sendLiveStormsToTimeline = function() {
 
 ## Recent Improvements (Aug 2025)
 
-### Storm Intelligence Tab
-- Added searchable storm selectors with type-to-search functionality
-- Implemented clear/reset buttons (✕) for storm selection
-- Made chart labels zoom-responsive (2% offset from data points)
-- Removed redundant Impact Metrics Comparison chart
-- Fixed JavaScript syntax errors that broke dropdown population
-- Purple highlighting for Category 5 storms in Historical Intensity chart
+### Database Tab Enhancements
+- **Modal Storm Viewer**: View button now opens in-tab modal instead of jumping to Timeline
+- **Animated Rainbow Tracks**: Storm paths animate segment-by-segment with intensity-based colors
+- **TCR Download Buttons**: Direct download buttons for NOAA Tropical Cyclone Reports (1995+)
+- **Removed Damage Column**: Cleaned up table by removing mostly-empty damage data
+- **Filter Sidebar Toggle**: Clear "Filters" button in header replaces ambiguous icon
+- **Fixed TCR Links**: Corrected all NOAA TCR URLs to use proper case format
 
-### Database Tab
-- Reorganized filters into clear sections with visual separators
-- States now display in responsive grid layout
-- Enhanced styling with borders, padding, and hover effects
-- Color-coded category filters when active
-- Removed non-functional Compare Selected and View on Map buttons
-- Kept only Export CSV with icon
-
-### Development Workflow
-- Emphasized localhost development for rapid iteration
-- Added Chrome DevTools cache disable instructions
-- Fixed nested git repository issues
+### Storm Visualization Standards
+- **Color Scheme**: Consistent across all tabs
+  - Cat 0 (TS/TD): #8B9DC3 (Blue-gray)
+  - Cat 1: #5CB85C (Green)
+  - Cat 2: #F0AD4E (Orange)
+  - Cat 3: #FF7F00 (Dark Orange)
+  - Cat 4: #D9534F (Red)
+  - Cat 5: #8B008B (Purple)
+- **Track Width**: 4px with 0.9 opacity
+- **Animation Speed**: Dynamic based on track length
 
 ## Common Issues & Solutions
 
@@ -290,11 +289,12 @@ window.sendLiveStormsToTimeline = function() {
 
 ### Before Committing
 1. **Run locally**: `./run-local.sh` and test all tabs
-2. **Check console**: No errors in browser console
+2. **Check console**: No errors in browser console (F12)
 3. **Test animations**: Both 2D and 3D views work
 4. **Verify filters**: Database filters apply correctly
-5. **Cross-tab communication**: Clicking storms updates other tabs
-6. **Live storms**: Check NOAA updates display on home tab
+5. **Test Database Modal**: View button opens modal with animated track
+6. **TCR Links**: Verify download buttons work for 1995+ storms
+7. **Live storms**: Check NOAA updates display on home tab
 
 ### Storm Track Testing
 1. Click any storm in Timeline/Regional/Database
@@ -330,6 +330,8 @@ window.sendLiveStormsToTimeline = function() {
 - Some AI-generated narratives contain factual errors
 - Landfall state detection can be inaccurate for complex storm paths
 - Pre-1900 death counts are often estimates
+- TCR links are case-sensitive (e.g., "Ian.pdf" not "IAN.pdf")
+- TCRs only available for storms from 1995 onwards
 
 ## NOAA Live Updates
 
