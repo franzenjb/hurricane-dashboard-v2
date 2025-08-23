@@ -243,13 +243,18 @@
             font-size: 16px;
             line-height: 1.6;
             color: #555;
-            flex: 1;
-            overflow-y: auto;
+            flex: 1 1 auto;
+            overflow-y: auto !important;
+            overflow-x: hidden;
             min-height: 0;
-            padding-right: 8px;
-            padding-bottom: 20px;
+            max-height: 100%;
+            padding: 0 8px 20px 0;
             word-wrap: break-word;
             overflow-wrap: break-word;
+        }
+        .narrative-content p {
+            margin: 0;
+            padding: 0;
         }
         
         #map {
