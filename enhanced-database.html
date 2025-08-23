@@ -889,6 +889,19 @@
         }
 
         // Get category display
+        function getCategoryColor(category) {
+            const colors = {
+                '-1': '#00ff00',  // TD - Green
+                '0': '#00ffff',   // TS - Cyan
+                '1': '#ffdd00',   // Cat 1 - Yellow
+                '2': '#ffaa00',   // Cat 2 - Orange
+                '3': '#ff8800',   // Cat 3 - Dark Orange
+                '4': '#ff0000',   // Cat 4 - Red
+                '5': '#ff00ff'    // Cat 5 - Magenta
+            };
+            return colors[category] || '#888888';
+        }
+        
         function getCategoryDisplay(category) {
             if (category === 5) return '<span style="color: #8B008B; font-weight: bold;">5</span>';
             if (category === 4) return '<span style="color: #D9534F; font-weight: bold;">4</span>';
@@ -989,22 +1002,30 @@
 
         // View storm details in modal
         function viewStorm(stormId) {
+            console.log('viewStorm called with:', stormId);
             const storm = allStorms.find(s => s.storm_id === stormId);
-            if (!storm) return;
+            if (!storm) {
+                console.error('Storm not found:', stormId);
+                return;
+            }
             
+            console.log('Found storm:', storm);
             // Show modal with storm details instead of jumping to timeline
             showStormModal(storm);
         }
         
         function showStormModal(storm) {
-            // Remove any existing modal
-            const existingModal = document.getElementById('stormModal');
-            if (existingModal) {
-                existingModal.remove();
-            }
-            
-            // Create modal HTML
-            const modalHTML = `
+            try {
+                console.log('showStormModal called with storm:', storm.name, storm.year);
+                
+                // Remove any existing modal
+                const existingModal = document.getElementById('stormModal');
+                if (existingModal) {
+                    existingModal.remove();
+                }
+                
+                // Create modal HTML
+                const modalHTML = `
                 <div id="stormModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" style="animation: fadeIn 0.2s ease-out">
                     <div class="bg-white rounded-lg shadow-xl w-11/12 max-w-6xl h-5/6 flex flex-col">
                         <!-- Header -->
@@ -1102,6 +1123,10 @@
             setTimeout(() => {
                 initStormMap(storm);
             }, 100);
+            } catch (error) {
+                console.error('Error showing storm modal:', error);
+                alert('Error displaying storm details. Check console for details.');
+            }
         }
         
         function closeStormModal() {
