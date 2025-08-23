@@ -496,21 +496,21 @@
                 {
                     x: years,
                     y: years.map(y => yearData[y].shelters),
-                    name: 'Shelters',
+                    name: 'Shelters Opened',
                     type: 'bar',
                     marker: { color: '#dc2626' }
                 },
                 {
                     x: years,
                     y: years.map(y => yearData[y].meals),
-                    name: 'Meals (M)',
+                    name: 'Meals Served (Millions)',
                     type: 'bar',
                     marker: { color: '#f59e0b' }
                 },
                 {
                     x: years,
                     y: years.map(y => yearData[y].volunteers),
-                    name: 'Volunteers (100s)',
+                    name: 'Volunteers (Hundreds)',
                     type: 'bar',
                     marker: { color: '#10b981' }
                 }
@@ -520,20 +520,17 @@
                 barmode: 'group',
                 showlegend: true,
                 legend: { 
-                    orientation: 'v', 
-                    y: 0.95,
-                    x: 0.02,
-                    xanchor: 'left',
+                    orientation: 'h', 
+                    y: -0.2,
+                    x: 0.5,
+                    xanchor: 'center',
                     yanchor: 'top',
-                    font: { size: 10 },
-                    bgcolor: 'rgba(255,255,255,0.95)',
-                    bordercolor: '#333',
-                    borderwidth: 1
+                    font: { size: 9 }
                 },
-                margin: { t: 20, r: 20, b: 40, l: 40 },
+                margin: { t: 20, r: 20, b: 100, l: 40 },
                 xaxis: { title: '' },
                 yaxis: { title: '' },
-                height: 340
+                height: 320
             };
             
             Plotly.newPlot('resourcesChart', traces, layout, { responsive: true, displayModeBar: false });
