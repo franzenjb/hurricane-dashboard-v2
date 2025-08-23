@@ -39937,7 +39937,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "landfall_states": [
       "FL"
     ],
-    "narrative": "FLORENCE developed into a Category 3 hurricane and made landfall in Florida, Georgia, and South Carolina on September 23, 1953. The storm reached maximum sustained winds of 100 mph with a minimum central pressure of 968 mb, producing major hurricane winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Florence caused $24 billion in damage and 53 deaths, with its prolonged...",
+    "narrative": "FLORENCE developed into a Category 3 hurricane and made landfall in Florida, Georgia, and South Carolina on September 23, 1953. The storm reached maximum sustained winds of 100 mph with a minimum central pressure of 968 mb, producing major hurricane winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Florence caused $24 billion in damage and 53 deaths, with its prolonged.",
     "resources": {
       "tcr_shp": "https://www.nhc.noaa.gov/data/tcr/AL091953_FLORENCE_5day.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1953.txt",
@@ -40821,7 +40821,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "landfall_states": [
       "SC"
     ],
-    "narrative": "HAZEL developed into a Category 4 hurricane and made landfall in North Carolina, Pennsylvania, and South Carolina on October 5, 1954. The storm reached maximum sustained winds of 115 mph with a minimum central pressure of 938 mb, producing extreme hurricane winds across the affected regions. The storm's track brought significant impacts across multiple states, demonstrating the far-reaching effects of major Atlantic hurricanes. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Hazel caused unprecedented destruction with 95 deaths in the Carolinas alone, demonstrating the rare...",
+    "narrative": "HAZEL developed into a Category 4 hurricane and made landfall in North Carolina, Pennsylvania, and South Carolina on October 5, 1954. The storm reached maximum sustained winds of 115 mph with a minimum central pressure of 938 mb, producing extreme hurricane winds across the affected regions. The storm's track brought significant impacts across multiple states, demonstrating the far-reaching effects of major Atlantic hurricanes. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Hazel caused unprecedented destruction with 95 deaths in the Carolinas alone, demonstrating the rare.",
     "resources": {
       "tcr_shp": "https://www.nhc.noaa.gov/data/tcr/AL141954_HAZEL_5day.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1954.txt",
@@ -42828,7 +42828,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "landfall_state": null,
     "deaths": 1,
     "landfall_states": [],
-    "narrative": "HELENE developed into a Category 4 hurricane and made landfall in North Carolina and South Carolina on September 21, 1958. The storm reached maximum sustained winds of 130 mph with a minimum central pressure of 930 mb, producing extreme hurricane winds across the affected regions. The storm's track brought significant impacts across multiple states, demonstrating the far-reaching effects of major Atlantic hurricanes. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Helene caused over $47 billion in damage and 230+ deaths across multiple states, with catastrophic...",
+    "narrative": "HELENE developed into a Category 4 hurricane and made landfall in North Carolina and South Carolina on September 21, 1958. The storm reached maximum sustained winds of 130 mph with a minimum central pressure of 930 mb, producing extreme hurricane winds across the affected regions. The storm's track brought significant impacts across multiple states, demonstrating the far-reaching effects of major Atlantic hurricanes. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Helene caused over $47 billion in damage and 230+ deaths across multiple states, with catastrophic.",
     "resources": {
       "tcr_shp": "https://www.nhc.noaa.gov/data/tcr/AL081958_HELENE_5day.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1958.txt",
@@ -43910,7 +43910,7 @@ const ATLANTIC_STORMS_ENHANCED = [
       "NC",
       "NY"
     ],
-    "narrative": "DONNA developed into a Category 4 hurricane and made landfall in Florida, Massachusetts, Maine, North Carolina, New Hampshire, and New York on August 29, 1960. The storm reached maximum sustained winds of 125 mph with a minimum central pressure of 930 mb, producing extreme hurricane winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Donna caused $2 billion in damage and...",
+    "narrative": "DONNA developed into a Category 4 hurricane and made landfall in Florida, Massachusetts, Maine, North Carolina, New Hampshire, and New York on August 29, 1960. The storm reached maximum sustained winds of 125 mph with a minimum central pressure of 930 mb, producing extreme hurricane winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Donna caused $2 billion in damage and.",
     "resources": {
       "tcr_shp": "https://www.nhc.noaa.gov/data/tcr/AL051960_DONNA_5day.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1960.txt",
@@ -48938,7 +48938,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "landfall_states": [
       "LA"
     ],
-    "narrative": "CAMILLE developed into a Category 5 hurricane and made landfall in Florida, Louisiana, Mississippi, and Virginia on August 14, 1969. The storm reached maximum sustained winds of 150 mph with a minimum central pressure of 900 mb, producing catastrophic Category 5 winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Camille ranks among the most intense hurricanes ever to strike the U.S....",
+    "narrative": "CAMILLE developed into a Category 5 hurricane and made landfall in Florida, Louisiana, Mississippi, and Virginia on August 14, 1969. The storm reached maximum sustained winds of 150 mph with a minimum central pressure of 900 mb, producing catastrophic Category 5 winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Camille ranks among the most intense hurricanes ever to strike the U.S..",
     "resources": {
       "tcr_shp": "https://www.nhc.noaa.gov/data/tcr/AL091969_CAMILLE_5day.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1969.txt",
@@ -51804,7 +51804,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "landfall_state": null,
     "deaths": 128,
     "landfall_states": [],
-    "narrative": "AGNES developed into a Category 1 hurricane and made landfall in Florida, Georgia, North Carolina, New York, and South Carolina on June 14, 1972. The storm reached maximum sustained winds of 75 mph with a minimum central pressure of 977 mb, producing minimal hurricane winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The hurricane brought damaging winds, coastal flooding, and power disruptions, affecting thousands of residents and requiring extensive recovery efforts. Tropical Storm Agnes caused $2.1 billion in damage and 129 deaths, producing...",
+    "narrative": "AGNES developed into a Category 1 hurricane and made landfall in Florida, Georgia, North Carolina, New York, and South Carolina on June 14, 1972. The storm reached maximum sustained winds of 75 mph with a minimum central pressure of 977 mb, producing minimal hurricane winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The hurricane brought damaging winds, coastal flooding, and power disruptions, affecting thousands of residents and requiring extensive recovery efforts. Tropical Storm Agnes caused $2.1 billion in damage and 129 deaths, producing.",
     "resources": {
       "tcr_shp": "https://www.nhc.noaa.gov/data/tcr/AL021972_AGNES_5day.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1972.txt",
@@ -63331,7 +63331,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "landfall_states": [
       "NC"
     ],
-    "narrative": "CHARLEY developed into a Category 1 hurricane and made landfall in Florida, Georgia, North Carolina, South Carolina, and Virginia on August 13, 1986. The storm reached maximum sustained winds of 70 mph with a minimum central pressure of 980 mb, producing minimal hurricane winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The hurricane brought damaging winds, coastal flooding, and power disruptions, affecting thousands of residents and requiring extensive recovery efforts. Hurricane Charley caused $16 billion in damage with its compact but intense eyewall,...",
+    "narrative": "CHARLEY developed into a Category 1 hurricane and made landfall in Florida, Georgia, North Carolina, South Carolina, and Virginia on August 13, 1986. The storm reached maximum sustained winds of 70 mph with a minimum central pressure of 980 mb, producing minimal hurricane winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The hurricane brought damaging winds, coastal flooding, and power disruptions, affecting thousands of residents and requiring extensive recovery efforts. Hurricane Charley caused $16 billion in damage with its compact but intense eyewall,.",
     "resources": {
       "tcr_shp": "https://www.nhc.noaa.gov/data/tcr/AL051986_CHARLEY_5day.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1986.txt",
@@ -64535,7 +64535,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "landfall_states": [
       "LA"
     ],
-    "narrative": "FLORENCE developed into a Category 1 hurricane and made landfall in Louisiana, Mississippi, and Texas on September 7, 1988. The storm reached maximum sustained winds of 70 mph with a minimum central pressure of 982 mb, producing minimal hurricane winds across the affected regions. The storm's track brought significant impacts across multiple states, demonstrating the far-reaching effects of major Atlantic hurricanes. The hurricane brought damaging winds, coastal flooding, and power disruptions, affecting thousands of residents and requiring extensive recovery efforts. Hurricane Florence caused $24 billion in damage and 53 deaths, with its prolonged stall over the Carolinas producing historic rainfall...",
+    "narrative": "FLORENCE developed into a Category 1 hurricane and made landfall in Louisiana, Mississippi, and Texas on September 7, 1988. The storm reached maximum sustained winds of 70 mph with a minimum central pressure of 982 mb, producing minimal hurricane winds across the affected regions. The storm's track brought significant impacts across multiple states, demonstrating the far-reaching effects of major Atlantic hurricanes. The hurricane brought damaging winds, coastal flooding, and power disruptions, affecting thousands of residents and requiring extensive recovery efforts. Hurricane Florence caused $24 billion in damage and 53 deaths, with its prolonged stall over the Carolinas producing historic rainfall.",
     "resources": {
       "tcr_shp": "https://www.nhc.noaa.gov/data/tcr/AL071988_FLORENCE_5day.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1988.txt",
@@ -65601,7 +65601,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "landfall_states": [
       "SC"
     ],
-    "narrative": "HUGO developed into a Category 5 hurricane and made landfall in North Carolina, Pennsylvania, Puerto Rico, South Carolina, Virginia, and the U.S. Virgin Islands on September 10, 1989. The storm reached maximum sustained winds of 140 mph with a minimum central pressure of 918 mb, producing catastrophic Category 5 winds across the affected regions. The storm's track brought significant impacts across multiple states, demonstrating the far-reaching effects of major Atlantic hurricanes. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Hugo caused $10 billion in damage...",
+    "narrative": "HUGO developed into a Category 5 hurricane and made landfall in North Carolina, Pennsylvania, Puerto Rico, South Carolina, Virginia, and the U.S. Virgin Islands on September 10, 1989. The storm reached maximum sustained winds of 140 mph with a minimum central pressure of 918 mb, producing catastrophic Category 5 winds across the affected regions. The storm's track brought significant impacts across multiple states, demonstrating the far-reaching effects of major Atlantic hurricanes. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Hugo caused $10 billion in damage.",
     "resources": {
       "tcr_shp": "https://www.nhc.noaa.gov/data/tcr/AL111989_HUGO_5day.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1989.txt",
@@ -67265,7 +67265,7 @@ const ATLANTIC_STORMS_ENHANCED = [
       "FL",
       "LA"
     ],
-    "narrative": "ANDREW developed into a Category 5 hurricane and made landfall in Alabama, Florida, Louisiana, Mississippi, and North Carolina on August 16, 1992. The storm reached maximum sustained winds of 150 mph with a minimum central pressure of 922 mb, producing catastrophic Category 5 winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Andrew caused $27 billion in damage (1992 dollars), destroying...",
+    "narrative": "ANDREW developed into a Category 5 hurricane and made landfall in Alabama, Florida, Louisiana, Mississippi, and North Carolina on August 16, 1992. The storm reached maximum sustained winds of 150 mph with a minimum central pressure of 922 mb, producing catastrophic Category 5 winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Andrew caused $27 billion in damage (1992 dollars), destroying.",
     "resources": {
       "tcr_shp": "https://www.nhc.noaa.gov/data/tcr/AL041992_ANDREW_5day.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1992.txt",
@@ -75568,7 +75568,7 @@ const ATLANTIC_STORMS_ENHANCED = [
       "FL",
       "SC"
     ],
-    "narrative": "CHARLEY developed into a Category 4 hurricane and made landfall in Florida, Massachusetts, North Carolina, South Carolina, and Virginia on August 9, 2004. The storm reached maximum sustained winds of 130 mph with a minimum central pressure of 941 mb, producing extreme hurricane winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Charley caused $16 billion in damage with its compact...",
+    "narrative": "CHARLEY developed into a Category 4 hurricane and made landfall in Florida, Massachusetts, North Carolina, South Carolina, and Virginia on August 9, 2004. The storm reached maximum sustained winds of 130 mph with a minimum central pressure of 941 mb, producing extreme hurricane winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Charley caused $16 billion in damage with its compact.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL032004_Charley.pdf",
       "tcr_shp": "https://www.nhc.noaa.gov/data/tcr/AL032004_CHARLEY_5day.zip",
@@ -75711,7 +75711,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "landfall_states": [
       "FL"
     ],
-    "narrative": "FRANCES developed into a Category 4 hurricane and made landfall in Florida, Georgia, Maine, North Carolina, New York, Pennsylvania, and Virginia on August 25, 2004. The storm reached maximum sustained winds of 125 mph with a minimum central pressure of 935 mb, producing extreme hurricane winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Frances caused $12 billion in damage as...",
+    "narrative": "FRANCES developed into a Category 4 hurricane and made landfall in Florida, Georgia, Maine, North Carolina, New York, Pennsylvania, and Virginia on August 25, 2004. The storm reached maximum sustained winds of 125 mph with a minimum central pressure of 935 mb, producing extreme hurricane winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Frances caused $12 billion in damage as.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL062004_Frances.pdf",
       "tcr_shp": "https://www.nhc.noaa.gov/data/tcr/AL062004_FRANCES_5day.zip",
@@ -75955,7 +75955,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "landfall_states": [
       "FL"
     ],
-    "narrative": "JEANNE developed into a Category 3 hurricane and made landfall in Florida, Georgia, Maryland, North Carolina, Puerto Rico, South Carolina, and Virginia on September 13, 2004. The storm reached maximum sustained winds of 105 mph with a minimum central pressure of 950 mb, producing major hurricane winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Jeanne caused $8 billion in damage,...",
+    "narrative": "JEANNE developed into a Category 3 hurricane and made landfall in Florida, Georgia, Maryland, North Carolina, Puerto Rico, South Carolina, and Virginia on September 13, 2004. The storm reached maximum sustained winds of 105 mph with a minimum central pressure of 950 mb, producing major hurricane winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Jeanne caused $8 billion in damage,.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL112004_Jeanne.pdf",
       "tcr_shp": "https://www.nhc.noaa.gov/data/tcr/AL112004_JEANNE_5day.zip",
@@ -76765,7 +76765,7 @@ const ATLANTIC_STORMS_ENHANCED = [
       "FL",
       "LA"
     ],
-    "narrative": "KATRINA developed into a Category 5 hurricane and made landfall in Florida, Louisiana, and Mississippi on August 23, 2005. The storm reached maximum sustained winds of 150 mph with a minimum central pressure of 902 mb, producing catastrophic Category 5 winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Katrina became one of the most devastating natural disasters in U.S. history,...",
+    "narrative": "KATRINA developed into a Category 5 hurricane and made landfall in Florida, Louisiana, and Mississippi on August 23, 2005. The storm reached maximum sustained winds of 150 mph with a minimum central pressure of 902 mb, producing catastrophic Category 5 winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Katrina became one of the most devastating natural disasters in U.S. history,.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL122005_Katrina.pdf",
       "tcr_shp": "https://www.nhc.noaa.gov/data/tcr/AL122005_KATRINA_5day.zip",
@@ -77049,7 +77049,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "landfall_states": [
       "TX"
     ],
-    "narrative": "RITA developed into a Category 5 hurricane and made landfall in Florida, Louisiana, and Texas on September 18, 2005. The storm reached maximum sustained winds of 155 mph with a minimum central pressure of 895 mb, producing catastrophic Category 5 winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Rita caused $18 billion in damage and was notable for triggering the...",
+    "narrative": "RITA developed into a Category 5 hurricane and made landfall in Florida, Louisiana, and Texas on September 18, 2005. The storm reached maximum sustained winds of 155 mph with a minimum central pressure of 895 mb, producing catastrophic Category 5 winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Rita caused $18 billion in damage and was notable for triggering the.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL182005_Rita.pdf",
       "tcr_shp": "https://www.nhc.noaa.gov/data/tcr/AL182005_RITA_5day.zip",
@@ -83072,7 +83072,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "landfall_states": [
       "NJ"
     ],
-    "narrative": "SANDY developed into a Category 3 hurricane and made landfall in New Jersey, New York, and Pennsylvania on October 21, 2012. The storm reached maximum sustained winds of 100 mph with a minimum central pressure of 940 mb, producing major hurricane winds across the affected regions. The storm's track brought significant impacts across multiple states, demonstrating the far-reaching effects of major Atlantic hurricanes. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Superstorm Sandy caused $65 billion in damage and 147 deaths, redefining hurricane risk for the...",
+    "narrative": "SANDY developed into a Category 3 hurricane and made landfall in New Jersey, New York, and Pennsylvania on October 21, 2012. The storm reached maximum sustained winds of 100 mph with a minimum central pressure of 940 mb, producing major hurricane winds across the affected regions. The storm's track brought significant impacts across multiple states, demonstrating the far-reaching effects of major Atlantic hurricanes. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Superstorm Sandy caused $65 billion in damage and 147 deaths, redefining hurricane risk for the.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL182012_Sandy.pdf",
       "tcr_shp": "https://www.nhc.noaa.gov/data/tcr/AL182012_SANDY_5day.zip",
@@ -86010,7 +86010,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "landfall_states": [
       "TX"
     ],
-    "narrative": "HARVEY developed into a Category 4 hurricane and made landfall in Alabama, Louisiana, Mississippi, and Texas on August 16, 2017. The storm reached maximum sustained winds of 115 mph with a minimum central pressure of 937 mb, producing extreme hurricane winds across the affected regions. The storm's track brought significant impacts across multiple states, demonstrating the far-reaching effects of major Atlantic hurricanes. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Harvey caused $125 billion in damage and 107 deaths, with its unprecedented rainfall over Southeast...",
+    "narrative": "HARVEY developed into a Category 4 hurricane and made landfall in Alabama, Louisiana, Mississippi, and Texas on August 16, 2017. The storm reached maximum sustained winds of 115 mph with a minimum central pressure of 937 mb, producing extreme hurricane winds across the affected regions. The storm's track brought significant impacts across multiple states, demonstrating the far-reaching effects of major Atlantic hurricanes. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Harvey caused $125 billion in damage and 107 deaths, with its unprecedented rainfall over Southeast.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL092017_Harvey.pdf",
       "tcr_shp": "https://www.nhc.noaa.gov/data/tcr/AL092017_HARVEY_5day.zip",
@@ -86059,7 +86059,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "landfall_states": [
       "FL"
     ],
-    "narrative": "IRMA developed into a Category 5 hurricane and made landfall in Alabama, Florida, and Georgia on August 30, 2017. The storm reached maximum sustained winds of 155 mph with a minimum central pressure of 914 mb, producing catastrophic Category 5 winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Irma caused $77 billion in damage and 134 deaths, with its massive...",
+    "narrative": "IRMA developed into a Category 5 hurricane and made landfall in Alabama, Florida, and Georgia on August 30, 2017. The storm reached maximum sustained winds of 155 mph with a minimum central pressure of 914 mb, producing catastrophic Category 5 winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Irma caused $77 billion in damage and 134 deaths, with its massive.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL112017_Irma.pdf",
       "tcr_shp": "https://www.nhc.noaa.gov/data/tcr/AL112017_IRMA_5day.zip",
@@ -86247,7 +86247,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "landfall_state": null,
     "deaths": 2975,
     "landfall_states": [],
-    "narrative": "MARIA developed into a Category 5 hurricane and made landfall in Puerto Rico and the U.S. Virgin Islands on September 16, 2017. The storm reached maximum sustained winds of 150 mph with a minimum central pressure of 908 mb, producing catastrophic Category 5 winds across the affected regions. The storm's track brought significant impacts across multiple states, demonstrating the far-reaching effects of major Atlantic hurricanes. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Maria caused $90 billion in damage and nearly 3,000 deaths in Puerto...",
+    "narrative": "MARIA developed into a Category 5 hurricane and made landfall in Puerto Rico and the U.S. Virgin Islands on September 16, 2017. The storm reached maximum sustained winds of 150 mph with a minimum central pressure of 908 mb, producing catastrophic Category 5 winds across the affected regions. The storm's track brought significant impacts across multiple states, demonstrating the far-reaching effects of major Atlantic hurricanes. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Maria caused $90 billion in damage and nearly 3,000 deaths in Puerto.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL152017_Maria.pdf",
       "tcr_shp": "https://www.nhc.noaa.gov/data/tcr/AL152017_MARIA_5day.zip",
@@ -86723,7 +86723,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "landfall_states": [
       "NC"
     ],
-    "narrative": "FLORENCE developed into a Category 4 hurricane and made landfall in Massachusetts, North Carolina, New York, South Carolina, and Virginia on August 30, 2018. The storm reached maximum sustained winds of 130 mph with a minimum central pressure of 937 mb, producing extreme hurricane winds across the affected regions. The storm's track brought significant impacts across multiple states, demonstrating the far-reaching effects of major Atlantic hurricanes. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Florence caused $24 billion in damage and 53 deaths, with its...",
+    "narrative": "FLORENCE developed into a Category 4 hurricane and made landfall in Massachusetts, North Carolina, New York, South Carolina, and Virginia on August 30, 2018. The storm reached maximum sustained winds of 130 mph with a minimum central pressure of 937 mb, producing extreme hurricane winds across the affected regions. The storm's track brought significant impacts across multiple states, demonstrating the far-reaching effects of major Atlantic hurricanes. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Florence caused $24 billion in damage and 53 deaths, with its.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL062018_Florence.pdf",
       "tcr_shp": "https://www.nhc.noaa.gov/data/tcr/AL062018_FLORENCE_5day.zip",
@@ -87104,7 +87104,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "landfall_states": [
       "FL"
     ],
-    "narrative": "MICHAEL developed into a Category 5 hurricane and made landfall in Florida, Georgia, North Carolina, South Carolina, and Virginia on October 6, 2018. The storm reached maximum sustained winds of 140 mph with a minimum central pressure of 919 mb, producing catastrophic Category 5 winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Michael caused $25 billion in damage and 74...",
+    "narrative": "MICHAEL developed into a Category 5 hurricane and made landfall in Florida, Georgia, North Carolina, South Carolina, and Virginia on October 6, 2018. The storm reached maximum sustained winds of 140 mph with a minimum central pressure of 919 mb, producing catastrophic Category 5 winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Michael caused $25 billion in damage and 74.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL142018_Michael.pdf",
       "tcr_shp": "https://www.nhc.noaa.gov/data/tcr/AL142018_MICHAEL_5day.zip",
@@ -91011,7 +91011,7 @@ const ATLANTIC_STORMS_ENHANCED = [
       "FL",
       "SC"
     ],
-    "narrative": "IAN developed into a Category 5 hurricane and made landfall in Florida, North Carolina, and South Carolina on September 22, 2022. The storm reached maximum sustained winds of 140 mph with a minimum central pressure of 937 mb, producing catastrophic Category 5 winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Ian caused over $112 billion in damage and 161 deaths,...",
+    "narrative": "IAN developed into a Category 5 hurricane and made landfall in Florida, North Carolina, and South Carolina on September 22, 2022. The storm reached maximum sustained winds of 140 mph with a minimum central pressure of 937 mb, producing catastrophic Category 5 winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Ian caused over $112 billion in damage and 161 deaths,.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL092022_Ian.pdf",
       "tcr_shp": "https://www.nhc.noaa.gov/data/tcr/AL092022_IAN_5day.zip",
@@ -92478,7 +92478,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "landfall_states": [
       "TX"
     ],
-    "narrative": "BERYL developed into a Category 5 hurricane and made landfall in New York and Texas on June 28, 2024. The storm reached maximum sustained winds of 145 mph with a minimum central pressure of 932 mb, producing catastrophic Category 5 winds across the affected regions. The storm's track brought significant impacts across multiple states, demonstrating the far-reaching effects of major Atlantic hurricanes. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Beryl set records as the earliest Category 5 hurricane in the Atlantic, reaching unprecedented strength...",
+    "narrative": "BERYL developed into a Category 5 hurricane and made landfall in New York and Texas on June 28, 2024. The storm reached maximum sustained winds of 145 mph with a minimum central pressure of 932 mb, producing catastrophic Category 5 winds across the affected regions. The storm's track brought significant impacts across multiple states, demonstrating the far-reaching effects of major Atlantic hurricanes. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Beryl set records as the earliest Category 5 hurricane in the Atlantic, reaching unprecedented strength.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL022024_Beryl.pdf",
       "tcr_shp": "https://www.nhc.noaa.gov/data/tcr/AL022024_BERYL_5day.zip",
@@ -92575,7 +92575,7 @@ const ATLANTIC_STORMS_ENHANCED = [
       "FL",
       "SC"
     ],
-    "narrative": "DEBBY developed into a Category 1 hurricane and made landfall in Florida, Georgia, North Carolina, New York, Pennsylvania, South Carolina, and Virginia on August 2, 2024. The storm reached maximum sustained winds of 70 mph with a minimum central pressure of 979 mb, producing minimal hurricane winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The hurricane brought damaging winds, coastal flooding, and power disruptions, affecting thousands of residents and requiring extensive recovery efforts. Hurricane Debby caused significant flooding across Florida and the Southeast...",
+    "narrative": "DEBBY developed into a Category 1 hurricane and made landfall in Florida, Georgia, North Carolina, New York, Pennsylvania, South Carolina, and Virginia on August 2, 2024. The storm reached maximum sustained winds of 70 mph with a minimum central pressure of 979 mb, producing minimal hurricane winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The hurricane brought damaging winds, coastal flooding, and power disruptions, affecting thousands of residents and requiring extensive recovery efforts. Hurricane Debby caused significant flooding across Florida and the Southeast.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL042024_Debby.pdf",
       "tcr_shp": "https://www.nhc.noaa.gov/data/tcr/AL042024_DEBBY_5day.zip",
@@ -92767,7 +92767,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "landfall_states": [
       "FL"
     ],
-    "narrative": "HELENE developed into a Category 4 hurricane and made landfall in Florida, Georgia, North Carolina, and South Carolina on September 23, 2024. The storm reached maximum sustained winds of 120 mph with a minimum central pressure of 939 mb, producing extreme hurricane winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Helene caused over $47 billion in damage and 230+ deaths...",
+    "narrative": "HELENE developed into a Category 4 hurricane and made landfall in Florida, Georgia, North Carolina, and South Carolina on September 23, 2024. The storm reached maximum sustained winds of 120 mph with a minimum central pressure of 939 mb, producing extreme hurricane winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Helene caused over $47 billion in damage and 230+ deaths.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL092024_Helene.pdf",
       "tcr_shp": "https://www.nhc.noaa.gov/data/tcr/AL092024_HELENE_5day.zip",
