@@ -218,9 +218,10 @@
         let responseMap;
         let selectedOperation = null;
         
-        // Filter major storms with RC response AND US landfall
+        // Filter major storms (Cat 3+) with RC response AND US landfall
         const rcOperations = allStorms
             .filter(s => s.year >= 2000 && 
+                        s.category >= 3 &&  // Only Cat 3, 4, and 5 storms
                         s.rc_response?.responded && 
                         s.landfall_states && 
                         s.landfall_states.length > 0)
