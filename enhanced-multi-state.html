@@ -151,6 +151,7 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            height: 100%;
         }
         
         .narrative-header {
@@ -828,6 +829,13 @@
         let currentStartYear = 2010;
         let currentEndYear = 2024;
         
+        // Animation variables
+        let animationMarker = null;
+        let animationInterval = null;
+        let currentFrameIndex = 0;
+        let trackPoints = [];
+        let isPlaying = false;
+        
         function initMap() {
             console.log('Initializing Leaflet map for Multi-State tab...');
             const mapDiv = document.getElementById('map');
@@ -1015,7 +1023,7 @@
             }
         }
 
-        function drawRainbowTrack(pointFeatures, storm) {
+        function drawRainbowTrack(pointFeatures, storm, animate = true) {
             if (pointFeatures.length === 0) return;
             
             // Sort by datetime
@@ -1025,6 +1033,9 @@
                 }
                 return 0;
             });
+            
+            // Store points for animation
+            trackPoints = pointFeatures;
             
             const allLatLngs = [];
             
