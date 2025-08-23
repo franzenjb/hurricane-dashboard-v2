@@ -29,6 +29,21 @@
     </style>
 </head>
 <body class="bg-gray-50">
+    <!-- DISCLAIMER BANNER -->
+    <div class="bg-yellow-100 border-b-2 border-yellow-500">
+        <div class="max-w-7xl mx-auto px-4 py-3">
+            <div class="flex items-center gap-2">
+                <svg class="w-6 h-6 text-yellow-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                </svg>
+                <div>
+                    <p class="text-sm font-semibold text-yellow-800">DEMONSTRATION PROTOTYPE - FICTIONAL DATA</p>
+                    <p class="text-xs text-yellow-700">This Response tab contains simulated data for demonstration purposes only. Actual Red Cross response data is not yet integrated. This feature is under development.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Header -->
     <div class="bg-white shadow-md border-b-4 border-red-600">
         <div class="max-w-7xl mx-auto px-4 py-4">
@@ -217,29 +232,16 @@
             setupEventListeners();
         });
 
+        let currentStormLayer = null;
+        
         function initializeMap() {
-            responseMap = L.map('responseMap').setView([32.0, -90.0], 4);
+            responseMap = L.map('responseMap').setView([28.0, -80.0], 5);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap contributors'
             }).addTo(responseMap);
             
-            // Add operation markers
-            rcOperations.forEach(op => {
-                if (op.lat && op.lon) {
-                    const color = op.rc_impact_score >= 80 ? '#7f1d1d' : 
-                                 op.rc_impact_score >= 60 ? '#dc2626' : '#f59e0b';
-                    
-                    L.circleMarker([op.lat, op.lon], {
-                        radius: 5 + (op.rc_impact_score / 10),
-                        fillColor: color,
-                        color: '#fff',
-                        weight: 2,
-                        opacity: 1,
-                        fillOpacity: 0.8
-                    }).addTo(responseMap)
-                    .bindPopup(`<b>${op.name} (${op.year})</b><br>Level ${op.rc_response.operation_type}<br>Impact Score: ${op.rc_impact_score}`);
-                }
-            });
+            // Focus on US Atlantic coastline - no markers initially
+            // Storm tracks will be added when operations are selected
         }
 
         function populateOperationsList() {
@@ -307,12 +309,146 @@
                 });
             }
             
-            // Center map on operation
-            if (op.lat && op.lon) {
-                responseMap.setView([op.lat, op.lon], 7);
-            }
+            // Load and display storm track
+            loadStormTrack(op);
         }
 
+        async function loadStormTrack(storm) {
+            // Clear previous track
+            if (currentStormLayer) {
+                responseMap.removeLayer(currentStormLayer);
+                currentStormLayer = null;
+            }
+            
+            if (!storm.storm_id) return;
+            
+            // Calculate decade for file path
+            const decade = Math.floor(storm.year / 10) * 10;
+            const pointsFile = `hurdat2_data/points_${decade}s.geojson`;
+            
+            try {
+                const response = await fetch(pointsFile);
+                if (response.ok) {
+                    const data = await response.json();
+                    const stormPoints = data.features.filter(f => 
+                        f.properties.storm_id === storm.storm_id
+                    );
+                    
+                    if (stormPoints.length > 0) {
+                        drawStormTrack(stormPoints, storm);
+                    } else {
+                        // Fallback to simple track
+                        loadSimpleTrack(storm);
+                    }
+                } else {
+                    loadSimpleTrack(storm);
+                }
+            } catch (error) {
+                console.error('Error loading storm track:', error);
+                loadSimpleTrack(storm);
+            }
+        }
+        
+        async function loadSimpleTrack(storm) {
+            const decade = Math.floor(storm.year / 10) * 10;
+            const tracksFile = `hurdat2_data/tracks_${decade}s.geojson`;
+            
+            try {
+                const response = await fetch(tracksFile);
+                if (response.ok) {
+                    const data = await response.json();
+                    const stormTrack = data.features.find(f => 
+                        f.properties.storm_id === storm.storm_id
+                    );
+                    
+                    if (stormTrack) {
+                        const coords = stormTrack.geometry.coordinates.map(c => [c[1], c[0]]);
+                        const color = getCategoryColor(storm.category);
+                        
+                        currentStormLayer = L.polyline(coords, {
+                            color: color,
+                            weight: 4,
+                            opacity: 0.8
+                        }).addTo(responseMap);
+                        
+                        // Fit map to track
+                        const bounds = L.latLngBounds(coords);
+                        responseMap.fitBounds(bounds, { padding: [50, 50] });
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading simple track:', error);
+            }
+        }
+        
+        function drawStormTrack(pointFeatures, storm) {
+            // Sort by datetime
+            pointFeatures.sort((a, b) => {
+                if (a.properties.datetime && b.properties.datetime) {
+                    return new Date(a.properties.datetime) - new Date(b.properties.datetime);
+                }
+                return 0;
+            });
+            
+            const allLatLngs = [];
+            const trackGroup = L.layerGroup();
+            
+            // Draw colored segments (rainbow track)
+            for (let i = 0; i < pointFeatures.length - 1; i++) {
+                const current = pointFeatures[i];
+                const next = pointFeatures[i + 1];
+                
+                const currentCoords = [current.geometry.coordinates[1], current.geometry.coordinates[0]];
+                const nextCoords = [next.geometry.coordinates[1], next.geometry.coordinates[0]];
+                
+                allLatLngs.push(currentCoords);
+                
+                // Calculate category from wind speed
+                const maxWind = Math.max(
+                    current.properties.max_wind || 0,
+                    next.properties.max_wind || 0
+                );
+                
+                let category = 0;
+                if (maxWind >= 137) category = 5;
+                else if (maxWind >= 113) category = 4;
+                else if (maxWind >= 96) category = 3;
+                else if (maxWind >= 83) category = 2;
+                else if (maxWind >= 64) category = 1;
+                
+                const segmentColor = getCategoryColor(category);
+                
+                L.polyline([currentCoords, nextCoords], {
+                    color: segmentColor,
+                    weight: 6,
+                    opacity: 0.9
+                }).addTo(trackGroup);
+            }
+            
+            // Add to map
+            currentStormLayer = trackGroup;
+            trackGroup.addTo(responseMap);
+            
+            // Fit map to track
+            if (allLatLngs.length > 0) {
+                const bounds = L.latLngBounds(allLatLngs);
+                responseMap.fitBounds(bounds, { padding: [50, 50] });
+            }
+        }
+        
+        function getCategoryColor(category) {
+            const colors = {
+                5: '#8B008B',  // Purple for Cat 5
+                4: '#DC143C',  // Red for Cat 4
+                3: '#FF8C00',  // Orange for Cat 3
+                2: '#FFD700',  // Gold for Cat 2
+                1: '#90EE90',  // Light green for Cat 1
+                0: '#87CEEB',  // Sky blue for TS
+                '-1': '#D3D3D3' // Light gray for TD
+            };
+            return colors[category] || '#D3D3D3';
+        }
+        
         function updateStatistics() {
             // Calculate totals
             let totalShelters = 0;
