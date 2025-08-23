@@ -43,34 +43,26 @@
             left: 0;
         }
         
-        /* Floating filter toggle */
+        /* Filter toggle button in header */
         .filter-toggle {
-            position: fixed;
-            left: 16px;
-            top: 72px;
             background: var(--arc-red);
             color: white;
             border-radius: 6px;
             display: flex;
             align-items: center;
             gap: 6px;
-            padding: 8px 14px;
+            padding: 6px 12px;
             cursor: pointer;
-            box-shadow: 0 2px 8px rgba(237, 27, 46, 0.3);
-            z-index: 999;
+            box-shadow: 0 1px 3px rgba(237, 27, 46, 0.2);
             transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
+            margin-right: 8px;
         }
         
         .filter-toggle:hover {
-            transform: translateX(2px);
-            box-shadow: 0 4px 12px rgba(237, 27, 46, 0.4);
+            box-shadow: 0 2px 6px rgba(237, 27, 46, 0.3);
             background: var(--arc-dark-red);
-        }
-        
-        .filter-panel.open + .filter-toggle {
-            left: 336px;
         }
         
         .filter-toggle .arrow {
@@ -78,7 +70,7 @@
             display: inline-block;
         }
         
-        .filter-panel.open + .filter-toggle .arrow {
+        .filter-panel.open ~ .compact-header .filter-toggle .arrow {
             transform: rotate(180deg);
         }
         
@@ -293,10 +285,6 @@
                 left: -280px;
             }
             
-            .filter-panel.open + .filter-toggle {
-                left: 296px;
-            }
-            
             .main-content.shifted {
                 margin-left: 280px;
             }
@@ -355,6 +343,14 @@
     <div class="compact-header">
         <div class="h-full px-4 flex items-center justify-between">
             <div class="flex items-center gap-3">
+                <!-- Filter Toggle Button -->
+                <div class="filter-toggle" onclick="toggleFilters()">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
+                    </svg>
+                    <span>Filters</span>
+                    <span class="arrow">→</span>
+                </div>
                 <div class="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center text-white font-bold text-xs">RC</div>
                 <div>
                     <h1 class="text-base font-bold text-gray-900 leading-tight">Hurricane Intelligence Database</h1>
@@ -459,15 +455,6 @@
                 </button>
             </div>
         </div>
-    </div>
-
-    <!-- Filter Toggle Button -->
-    <div class="filter-toggle" onclick="toggleFilters()">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
-        </svg>
-        <span>Filters</span>
-        <span class="arrow">→</span>
     </div>
 
     <!-- Main Content -->
