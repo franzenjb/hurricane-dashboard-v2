@@ -48,27 +48,38 @@
             position: fixed;
             left: 16px;
             top: 72px;
-            width: 36px;
-            height: 36px;
             background: var(--arc-red);
             color: white;
-            border-radius: 50%;
+            border-radius: 6px;
             display: flex;
             align-items: center;
-            justify-content: center;
+            gap: 6px;
+            padding: 8px 14px;
             cursor: pointer;
             box-shadow: 0 2px 8px rgba(237, 27, 46, 0.3);
             z-index: 999;
             transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            font-size: 14px;
+            font-weight: 600;
         }
         
         .filter-toggle:hover {
-            transform: scale(1.1);
+            transform: translateX(2px);
             box-shadow: 0 4px 12px rgba(237, 27, 46, 0.4);
+            background: var(--arc-dark-red);
         }
         
         .filter-panel.open + .filter-toggle {
             left: 336px;
+        }
+        
+        .filter-toggle .arrow {
+            transition: transform 0.3s ease;
+            display: inline-block;
+        }
+        
+        .filter-panel.open + .filter-toggle .arrow {
+            transform: rotate(180deg);
         }
         
         /* Compact header */
@@ -452,9 +463,11 @@
 
     <!-- Filter Toggle Button -->
     <div class="filter-toggle" onclick="toggleFilters()">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
         </svg>
+        <span>Filters</span>
+        <span class="arrow">→</span>
     </div>
 
     <!-- Main Content -->
