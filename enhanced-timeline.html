@@ -139,7 +139,7 @@
                             </div>
                         </div>
                         <label><input type="checkbox" id="landfallOnly"> Landfall Only</label>
-                        <button onclick="applyFilters()" class="filter-button">Apply Filters</button>
+                        <button onclick="manualApplyFilters()" class="filter-button">Apply Filters</button>
                         <button onclick="clearFilters()" class="clear-button">Clear</button>
                     </div>
                 </div>
@@ -588,6 +588,11 @@
         }
         
         function applyFilters() {
+            // Don't apply filters if we're displaying a single storm from the database
+            if (displayingSingleStorm) {
+                return;
+            }
+            
             const nameFilter = document.getElementById('nameFilter').value.toLowerCase();
             const landfallOnly = document.getElementById('landfallOnly').checked;
             
@@ -729,6 +734,7 @@
         let animationRunning = false;
         let animationFrame = null;
         let animatedMarker = null;
+        let displayingSingleStorm = false;  // Flag to prevent filter interference
         
         function toggleSurgeVisualization() {
             if (!surgeLayer || !currentStorm) return;
@@ -1320,6 +1326,7 @@
                 case 'displayStorm':
                     // Display a single storm from Database tab
                     if (data.storm) {
+                        displayingSingleStorm = true;  // Set flag to prevent filter interference
                         clearMapLayers();
                         updateStormInfoPanel(data.storm);
                         showStormOnMap(data.storm);
