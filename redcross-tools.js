@@ -250,10 +250,10 @@ class RedCrossTools {
         styles.textContent = `
             .rc-button {
                 position: fixed;
-                bottom: 20px;
-                right: 90px;
-                width: 60px;
-                height: 60px;
+                top: 10px;
+                right: 100px;
+                width: 50px;
+                height: 50px;
                 border-radius: 50%;
                 background: #ed1b2e;
                 color: white;
@@ -286,8 +286,8 @@ class RedCrossTools {
             
             .rc-panel {
                 position: fixed;
-                bottom: 90px;
-                right: 90px;
+                top: 70px;
+                right: 20px;
                 width: 500px;
                 max-height: 600px;
                 background: white;
