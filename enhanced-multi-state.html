@@ -2302,7 +2302,7 @@
             // Update narrative panel
             const narrativeContent = document.getElementById('narrativeContent');
             if (storm.narrative) {
-                narrativeContent.innerHTML = `<p style="line-height: 1.6; color: #333;">${storm.narrative}</p>`;
+                narrativeContent.innerHTML = `<p>${storm.narrative}</p>`;
             } else {
                 narrativeContent.innerHTML = `<p style="color: #666; font-style: italic;">No historical narrative available for this storm.</p>`;
             }
