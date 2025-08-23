@@ -805,6 +805,23 @@
                 }
             });
             
+            // Create shapes for label backgrounds
+            const shapes = [];
+            annotations.forEach(ann => {
+                shapes.push({
+                    type: 'rect',
+                    x0: ann.x - 8,
+                    x1: ann.x + 8,
+                    y0: ann.y - 3,
+                    y1: ann.y + 3,
+                    fillcolor: 'rgba(255, 255, 255, 0.95)',
+                    line: {
+                        color: 'rgba(0, 0, 0, 0.2)',
+                        width: 1
+                    }
+                });
+            });
+            
             const layout = {
                 title: 'Wind-Pressure Relationship',
                 xaxis: {
@@ -822,6 +839,7 @@
                 hovermode: 'closest',
                 paper_bgcolor: 'white',
                 plot_bgcolor: '#f9fafb',
+                shapes: shapes,
                 annotations: annotations
             };
             
