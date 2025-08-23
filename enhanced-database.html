@@ -536,9 +536,6 @@
                                 <th class="text-left sortable-header" onclick="sortTable('deaths')">
                                     Deaths<span class="sort-indicator" id="sort-deaths">⇅</span>
                                 </th>
-                                <th class="text-left sortable-header" onclick="sortTable('damage')">
-                                    Damage<span class="sort-indicator" id="sort-damage">⇅</span>
-                                </th>
                                 <th class="text-left">TCR</th>
                                 <th class="text-left">Action</th>
                             </tr>
@@ -841,9 +838,15 @@
                         <td>${storm.rc_impact_score || '-'}</td>
                         <td class="text-xs">${storm.landfall_states?.join(', ') || '-'}</td>
                         <td>${storm.deaths ? storm.deaths.toLocaleString() : '-'}</td>
-                        <td>${storm.damage_millions ? `$${storm.damage_millions.toLocaleString()}M` : '-'}</td>
                         <td>
-                            ${hasTCR ? '<span class="text-green-600 text-xs">✓</span>' : '<span class="text-gray-400 text-xs">-</span>'}
+                            ${hasTCR && storm.resources?.tcr_pdf ? 
+                                `<a href="${storm.resources.tcr_pdf}" target="_blank" class="inline-flex items-center gap-1 px-2 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 transition-colors">
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                    </svg>
+                                    TCR
+                                </a>` : 
+                                '<span class="text-gray-400 text-xs">-</span>'}
                         </td>
                         <td>
                             <button onclick="viewStorm('${storm.storm_id}')" class="btn-view">View</button>
@@ -940,7 +943,7 @@
             }
             
             // Create CSV
-            const headers = ['ID', 'Name', 'Year', 'Category', 'Wind (mph)', 'Impact Level', 'RC Score', 'States', 'Deaths', 'Damage (millions)'];
+            const headers = ['ID', 'Name', 'Year', 'Category', 'Wind (mph)', 'Impact Level', 'RC Score', 'States', 'Deaths'];
             const rows = stormsToExport.map(s => [
                 s.storm_id,
                 s.name || 'Unnamed',
@@ -950,8 +953,7 @@
                 s.rc_impact_level || '',
                 s.rc_impact_score || '',
                 s.landfall_states?.join('; ') || '',
-                s.deaths || '',
-                s.damage_millions || ''
+                s.deaths || ''
             ]);
             
             const csv = [headers, ...rows].map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
