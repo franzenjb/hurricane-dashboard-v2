@@ -218,9 +218,12 @@
         let responseMap;
         let selectedOperation = null;
         
-        // Filter major storms with RC response
+        // Filter major storms with RC response AND US landfall
         const rcOperations = allStorms
-            .filter(s => s.year >= 2000 && s.rc_response?.responded)
+            .filter(s => s.year >= 2000 && 
+                        s.rc_response?.responded && 
+                        s.landfall_states && 
+                        s.landfall_states.length > 0)
             .sort((a, b) => b.year - a.year || b.rc_impact_score - a.rc_impact_score);
 
         // Initialize on load
