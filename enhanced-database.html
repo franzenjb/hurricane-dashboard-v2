@@ -1989,6 +1989,12 @@
             
             console.log('Drawing 3D storm track with', animationState.stormPoints.length, 'points');
             
+            // Sample first few points to verify data
+            if (animationState.stormPoints.length > 0) {
+                console.log('First point:', animationState.stormPoints[0].geometry.coordinates);
+                console.log('Last point:', animationState.stormPoints[animationState.stormPoints.length - 1].geometry.coordinates);
+            }
+            
             // Clear ALL existing entities completely
             cesiumViewer.entities.removeAll();
             animationState.cesiumEntities = [];
@@ -2046,20 +2052,26 @@
                 }
                 
                 console.log('Created', positions.length, 'positions for 3D path');
+                console.log('Sample positions:', positions.slice(0, 3));
+                console.log('Sample colors:', colors.slice(0, 3));
                 
                 if (positions.length > 1) {
-                    // Add the complete polyline with per-vertex colors
-                    const polyline = cesiumViewer.entities.add({
-                        name: animationState.storm?.name || 'Storm Track',
-                        polyline: {
-                            positions: positions,
-                            width: 32,  // Quadrupled from 8 to 32 for maximum visibility
-                            material: new Cesium.PolylineColorArrayMaterialProperty(colors),
-                            clampToGround: false
-                        }
-                    });
-                    
-                    animationState.cesiumEntities.push(polyline);
+                    // Try drawing segments individually for better visibility
+                    for (let i = 0; i < positions.length - 1; i++) {
+                        const segmentPositions = [positions[i], positions[i + 1]];
+                        const segmentColor = colors[i];
+                        
+                        const segment = cesiumViewer.entities.add({
+                            polyline: {
+                                positions: segmentPositions,
+                                width: 20,  // Thick line for visibility
+                                material: segmentColor,
+                                clampToGround: false
+                            }
+                        });
+                        
+                        animationState.cesiumEntities.push(segment);
+                    }
                     
                     // Add start and end markers
                     const firstPoint = animationState.stormPoints[0];
@@ -2101,21 +2113,10 @@
                     
                     animationState.cesiumEntities.push(startMarker, endMarker);
                     
-                    // Calculate bounding sphere for proper zoom
-                    const boundingSphere = Cesium.BoundingSphere.fromPoints(positions);
-                    
-                    // Zoom to show the entire track with proper framing
-                    cesiumViewer.camera.viewBoundingSphere(
-                        boundingSphere,
-                        new Cesium.HeadingPitchRange(
-                            0,  // heading
-                            -Cesium.Math.PI_OVER_FOUR,  // pitch (45 degrees down)
-                            boundingSphere.radius * 3.5  // distance (3.5x radius for good framing)
-                        )
-                    );
-                    
-                    // Ensure camera looks at the storm
-                    cesiumViewer.camera.lookAtTransform(Cesium.Matrix4.IDENTITY);
+                    // Simpler approach - just zoom to all entities
+                    setTimeout(() => {
+                        cesiumViewer.zoomTo(cesiumViewer.entities, new Cesium.HeadingPitchRange(0, -Cesium.Math.PI_OVER_FOUR, 0));
+                    }, 100);
                     
                     console.log('3D storm track rendered successfully');
                 } else {
