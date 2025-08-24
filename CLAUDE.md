@@ -19,20 +19,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **CORRECT FORMAT:**
 ```
 Changes are live at:
-https://franzenjb.github.io/hurricane-dashboard-v2/
-```
 
-**WRONG FORMAT:**
-```
-Test URL: https://franzenjb.github.io/hurricane-da
-shboard-v2/ (will be live in 2-3 minutes)
+https://franzenjb.github.io/hurricane-dashboard-v2/
+
+(deploys in 2-3 minutes)
 ```
 
 ## Development Commands
 
 ### Local Development
 ```bash
-# Start local server (RECOMMENDED)
+# Start local server (REQUIRED - avoids CORS issues)
 python3 -m http.server 8000
 # Opens at: http://localhost:8000
 
@@ -61,6 +58,12 @@ node search-nc-storms.js
 
 # Fetch 2024 TCR reports
 ./fetch-2024-tcr.sh
+
+# Fix narrative ellipsis issues
+node fix-narrative-ellipsis.js
+
+# Fix TCR links case sensitivity
+node fix-tcr-links.js
 ```
 
 ## Architecture Overview
@@ -99,6 +102,12 @@ Cross-frame messaging via postMessage()
 - **Client**: `noaa-live-updates-v2.js` fetches every 15 minutes
 - **Integration**: Parent sends live storms to Timeline via postMessage
 - **Display**: Home tab shows active storms, Timeline shows with red star markers
+
+### AI Assistant System
+- **Backend**: `ai-backend.js` - Express server with Claude API integration
+- **Worker**: `ai-powered-worker.js` - Cloudflare Worker for API proxy
+- **Component**: `ai-assistant-component.js` - UI component for chat interface
+- **Fallback**: Hardcoded responses if API unavailable
 
 ## Critical Development Rules
 
@@ -139,6 +148,8 @@ window.addEventListener('message', (event) => {
 - `initStormMap()` - Initializes Leaflet map in modal
 - `loadStormTrackForModal()` - Loads GeoJSON track data
 - `drawStormTrackOnModal()` - Renders animated rainbow track
+- Animation controls: Play/pause/frame controls for 2D and 3D views
+- 3D mode: Uses Cesium (must disable Ion token)
 
 **Intelligence tab**:
 - `selectStorm()` - Updates comparison charts
@@ -168,9 +179,9 @@ const colors = {
 
 **Animation System**:
 - 2D: Leaflet with segment-by-segment rainbow tracks
-- 3D: Cesium with chase cam (must disable Ion token)
+- 3D: Cesium with proper camera positioning and colored segments
 - Controls: Play/pause, frame navigation, speed adjustment
-- Fullscreen mode must include controls
+- State management: `animationState` object tracks current frame, segments, and view mode
 
 ## Data Structures
 
@@ -214,39 +225,11 @@ const colors = {
         storm_id: "AL092022",
         datetime: "2022-09-28T18:00:00",
         status: "HU",               // TD|TS|HU|EX|SS|SD|LO|DB
-        max_wind: 155,              // knots
+        max_wind: 155,              // knots (multiply by 1.15 for mph)
         min_pressure: 937           // mb
     }
 }
 ```
-
-## Recent UI/UX Improvements (Aug 2025)
-
-### Database Tab
-- Modal popup for viewing storms (no more jumping to Timeline)
-- Animated rainbow tracks in modal
-- TCR download buttons (blue, right of affected states)
-- Removed damage column (insufficient data)
-- "Filters" button in header instead of ambiguous icon
-- Fixed narrative scrolling with flexbox layout
-
-### Timeline & Regional Tabs  
-- Fixed narrative panel scrolling (height: 100%, overflow-y: auto)
-- Narrative doesn't get cut off by floating buttons
-- RC button moved to top-right corner
-- Legend spacing improved (no more overlapping)
-
-### Intelligence Tab
-- White rectangle backgrounds for storm labels using Plotly shapes
-- Searchable storm selectors with clear buttons (✕)
-- Zoom-responsive label positioning (2-3% offset)
-- Purple highlighting for Category 5 storms
-
-### Response Tab
-- Yellow disclaimer banner for fictional data
-- Filters to Category 3+ storms with US landfall only
-- Storm tracks display when operations selected
-- Resources chart legend below with full descriptions
 
 ## Common Issues & Solutions
 
@@ -257,15 +240,18 @@ const colors = {
 ### Missing Storm Tracks
 - **Check**: storm_id matches between database and GeoJSON
 - **Verify**: Decade calculation is correct
+- **Debug**: Check console for 404 errors on GeoJSON files
 
-### Label Readability
-- **Fixed**: Using Plotly shapes for white backgrounds
-- **Annotations**: Include bgcolor and bordercolor properties
+### 3D View Issues
+- **Animation controls**: Ensure z-index is 99999 for visibility
+- **Path not showing**: Check `animationState.stormPoints` is populated
+- **Camera position**: Use `cesiumViewer.zoomTo()` for proper framing
+- **Cesium initialization**: Disable Ion token with `Cesium.Ion.defaultAccessToken = undefined`
 
-### Narrative Display
-- **Scrolling**: Use flexbox with overflow-y: auto
-- **Cut-off text**: Ensure proper height constraints
-- **Ending with "..."**: Run fix-narrative-ellipsis.js
+### Database Modal Animation
+- **Controls disappearing**: Check z-index and position absolute
+- **Animation speed**: Adjust with `animationSpeed` calculation
+- **Frame tracking**: Use `animationState.currentFrame` for position
 
 ### TCR Links
 - **Format**: Case-sensitive (e.g., "Ian.pdf" not "IAN.pdf")
@@ -278,11 +264,11 @@ const colors = {
 1. **Run locally**: Test all tabs with `./run-local.sh`
 2. **Console check**: No errors (F12)
 3. **Database modal**: View button opens with animated track
-4. **Narrative scrolling**: Works in all tabs (Database, Timeline, Regional)
-5. **Storm labels**: Readable with white backgrounds in Intelligence tab
-6. **Response tab**: Only shows Cat 3+ with US landfall
-7. **TCR downloads**: Work for 1995+ storms
-8. **Live updates**: NOAA integration displays current storms
+4. **Animation controls**: Play/pause/forward/back work in 2D and 3D
+5. **3D view**: Storm path displays with correct colors
+6. **Storm labels**: Readable with white backgrounds in Intelligence tab
+7. **Response tab**: Only shows Cat 3+ with US landfall
+8. **TCR downloads**: Work for 1995+ storms
 
 ### After Pushing
 - GitHub Pages deploys in 2-3 minutes
@@ -303,3 +289,4 @@ const colors = {
 - Some narratives contain AI-generated errors
 - Landfall detection may miss complex paths
 - Damage data incomplete for many storms
+- Wind speeds in GeoJSON are in knots (multiply by 1.15 for mph)
