@@ -2023,8 +2023,19 @@
                     else if (maxWind >= 34) category = 0;
                     else category = -1;
                     
-                    const hexColor = getModalCategoryColor(category);
-                    const cesiumColor = Cesium.Color.fromCssColorString(hexColor);
+                    // Use richer, more saturated colors for 3D view
+                    const rich3DColors = {
+                        5: '#9400D3',  // Vivid Purple for Cat 5 (darker, richer)
+                        4: '#FF0000',  // Pure Red for Cat 4 (brighter)
+                        3: '#FF6600',  // Vibrant Orange for Cat 3 (more saturated)
+                        2: '#FFB300',  // Rich Gold for Cat 2 (deeper)
+                        1: '#00FF00',  // Bright Green for Cat 1 (more vivid)
+                        0: '#00BFFF',  // Deep Sky Blue for TS (more saturated)
+                        '-1': '#808080' // Gray for TD (darker)
+                    };
+                    
+                    const hexColor = rich3DColors[category] || rich3DColors['-1'];
+                    const cesiumColor = Cesium.Color.fromCssColorString(hexColor).brighten(0.2, new Cesium.Color());
                     
                     // Add color for each vertex
                     if (i === 0) {
@@ -2041,7 +2052,7 @@
                         name: animationState.storm?.name || 'Storm Track',
                         polyline: {
                             positions: positions,
-                            width: 8,
+                            width: 16,  // Doubled from 8 to 16
                             material: new Cesium.PolylineColorArrayMaterialProperty(colors),
                             clampToGround: false
                         }
@@ -2061,10 +2072,12 @@
                             15000
                         ),
                         point: {
-                            pixelSize: 12,
-                            color: Cesium.Color.GREEN,
-                            outlineColor: Cesium.Color.WHITE,
-                            outlineWidth: 2
+                            pixelSize: 20,  // Larger marker
+                            color: Cesium.Color.LIME,  // Brighter green
+                            outlineColor: Cesium.Color.BLACK,
+                            outlineWidth: 3,
+                            heightReference: Cesium.HeightReference.NONE,
+                            disableDepthTestDistance: Number.POSITIVE_INFINITY  // Always visible
                         }
                     });
                     
@@ -2076,10 +2089,12 @@
                             15000
                         ),
                         point: {
-                            pixelSize: 12,
-                            color: Cesium.Color.RED,
-                            outlineColor: Cesium.Color.WHITE,
-                            outlineWidth: 2
+                            pixelSize: 20,  // Larger marker
+                            color: Cesium.Color.fromCssColorString('#FF0000'),  // Bright red
+                            outlineColor: Cesium.Color.BLACK,
+                            outlineWidth: 3,
+                            heightReference: Cesium.HeightReference.NONE,
+                            disableDepthTestDistance: Number.POSITIVE_INFINITY  // Always visible
                         }
                     });
                     
