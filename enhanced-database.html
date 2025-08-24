@@ -2029,20 +2029,20 @@
                     else if (maxWind >= 34) category = 0;
                     else category = -1;
                     
-                    // Use BOLD, VIBRANT colors for maximum visibility in 3D
-                    const bold3DColors = {
-                        5: '#FF00FF',  // HOT MAGENTA for Cat 5 (maximum contrast)
-                        4: '#FF0000',  // PURE RED for Cat 4 (full saturation)
-                        3: '#FF4500',  // ORANGE-RED for Cat 3 (bold)
-                        2: '#FFA500',  // BRIGHT ORANGE for Cat 2 (vivid)
-                        1: '#00FF00',  // NEON GREEN for Cat 1 (electric)
-                        0: '#0080FF',  // BRIGHT BLUE for TS (vivid)
-                        '-1': '#404040' // DARK GRAY for TD
+                    // Professional, rich colors with good visibility and sophistication
+                    const professional3DColors = {
+                        5: '#7B1FA2',  // Deep Purple for Cat 5 (professional, serious)
+                        4: '#C62828',  // Dark Red for Cat 4 (danger without being garish)
+                        3: '#EF6C00',  // Burnt Orange for Cat 3 (warm, visible)
+                        2: '#F9A825',  // Amber for Cat 2 (rich gold)
+                        1: '#2E7D32',  // Forest Green for Cat 1 (natural, professional)
+                        0: '#1565C0',  // Deep Blue for TS (ocean-like, sophisticated)
+                        '-1': '#616161' // Medium Gray for TD
                     };
                     
-                    const hexColor = bold3DColors[category] || bold3DColors['-1'];
-                    // Don't brighten - use full saturation for bold appearance
-                    const cesiumColor = Cesium.Color.fromCssColorString(hexColor);
+                    const hexColor = professional3DColors[category] || professional3DColors['-1'];
+                    // Add slight brightness for 3D visibility without looking cheap
+                    const cesiumColor = Cesium.Color.fromCssColorString(hexColor).brighten(0.15, new Cesium.Color());
                     
                     // Add color for each vertex
                     if (i === 0) {
@@ -2064,8 +2064,12 @@
                         const segment = cesiumViewer.entities.add({
                             polyline: {
                                 positions: segmentPositions,
-                                width: 20,  // Thick line for visibility
-                                material: segmentColor,
+                                width: 12,  // Professional width - visible but refined
+                                material: new Cesium.PolylineGlowMaterialProperty({
+                                    glowPower: 0.2,
+                                    color: segmentColor,
+                                    taperPower: 0.5
+                                }),
                                 clampToGround: false
                             }
                         });
@@ -2078,34 +2082,34 @@
                     const lastPoint = animationState.stormPoints[animationState.stormPoints.length - 1];
                     
                     const startMarker = cesiumViewer.entities.add({
-                        name: 'Start',
+                        name: 'Storm Start',
                         position: Cesium.Cartesian3.fromDegrees(
                             firstPoint.geometry.coordinates[0],
                             firstPoint.geometry.coordinates[1],
                             15000
                         ),
                         point: {
-                            pixelSize: 20,  // Larger marker
-                            color: Cesium.Color.LIME,  // Brighter green
-                            outlineColor: Cesium.Color.BLACK,
-                            outlineWidth: 3,
+                            pixelSize: 14,  // Refined size
+                            color: Cesium.Color.fromCssColorString('#2E7D32'),  // Professional green
+                            outlineColor: Cesium.Color.WHITE,
+                            outlineWidth: 2,
                             heightReference: Cesium.HeightReference.NONE,
                             disableDepthTestDistance: Number.POSITIVE_INFINITY  // Always visible
                         }
                     });
                     
                     const endMarker = cesiumViewer.entities.add({
-                        name: 'End',
+                        name: 'Storm End',
                         position: Cesium.Cartesian3.fromDegrees(
                             lastPoint.geometry.coordinates[0],
                             lastPoint.geometry.coordinates[1],
                             15000
                         ),
                         point: {
-                            pixelSize: 20,  // Larger marker
-                            color: Cesium.Color.fromCssColorString('#FF0000'),  // Bright red
-                            outlineColor: Cesium.Color.BLACK,
-                            outlineWidth: 3,
+                            pixelSize: 14,  // Refined size
+                            color: Cesium.Color.fromCssColorString('#C62828'),  // Professional red
+                            outlineColor: Cesium.Color.WHITE,
+                            outlineWidth: 2,
                             heightReference: Cesium.HeightReference.NONE,
                             disableDepthTestDistance: Number.POSITIVE_INFINITY  // Always visible
                         }
