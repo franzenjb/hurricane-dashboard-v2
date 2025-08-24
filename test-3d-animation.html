@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test 3D Animation Controls</title>
+    <style>
+        body { margin: 0; padding: 20px; font-family: Arial; }
+        .test-section { margin: 20px 0; padding: 15px; background: #f5f5f5; border-radius: 5px; }
+        button { margin: 5px; padding: 8px 15px; cursor: pointer; }
+        .status { padding: 10px; background: #e0e0e0; margin: 10px 0; }
+        .success { background: #90EE90; }
+        .error { background: #FFB6C1; }
+    </style>
+</head>
+<body>
+    <h1>3D Animation Controls Test</h1>
+    
+    <div class="test-section">
+        <h2>Test Steps:</h2>
+        <ol>
+            <li>Open main dashboard in new tab</li>
+            <li>Go to Database tab</li>
+            <li>Click View on any storm (e.g., KATRINA 2005)</li>
+            <li>Click "3D View" button</li>
+            <li>Test animation controls</li>
+        </ol>
+    </div>
+    
+    <div class="test-section">
+        <h2>Quick Links:</h2>
+        <button onclick="window.open('http://localhost:8000', '_blank')">Open Dashboard</button>
+        <button onclick="testInIframe()">Test in Console</button>
+    </div>
+    
+    <div id="status" class="status">Ready to test</div>
+    
+    <script>
+        function testInIframe() {
+            const statusDiv = document.getElementById('status');
+            
+            // This would be run in the browser console when dashboard is open
+            const testCode = `
+// Run this in console when Database tab is open with storm modal
+const iframe = document.querySelector('iframe[src*="enhanced-database.html"]');
+if (iframe) {
+    const win = iframe.contentWindow;
+    console.log('Animation State:', {
+        is3D: win.animationState?.is3D,
+        isPlaying: win.animationState?.isPlaying,
+        currentFrame: win.animationState?.currentFrame,
+        totalFrames: win.animationState?.totalFrames,
+        stormPoints: win.animationState?.stormPoints?.length
+    });
+    
+    // Test play button
+    const playBtn = win.document.getElementById('playPause');
+    if (playBtn) {
+        console.log('Play button found, onclick:', !!playBtn.onclick);
+        // Simulate click
+        playBtn.click();
+        setTimeout(() => {
+            console.log('After click - isPlaying:', win.animationState?.isPlaying);
+        }, 1000);
+    }
+}
+            `;
+            
+            statusDiv.textContent = 'Test code copied to clipboard. Paste in browser console.';
+            statusDiv.className = 'status success';
+            
+            // Copy to clipboard
+            navigator.clipboard.writeText(testCode);
+        }
+    </script>
+</body>
+</html>

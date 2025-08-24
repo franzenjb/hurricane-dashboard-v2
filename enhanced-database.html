@@ -1388,6 +1388,9 @@
                 }
             }
             
+            // Re-setup animation controls for new storm
+            setupAnimationControls();
+            
             // Load new storm track
             loadStormTrackForModal(storm);
         }
@@ -2043,6 +2046,11 @@
                         }
                     }
                 };
+                
+                // Re-setup animation controls after switching to 3D
+                setTimeout(() => {
+                    setupAnimationControls();
+                }, 100);
                 
                 setTimeout(tryDrawing, 500);
             } else {
