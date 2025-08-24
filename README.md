@@ -17,7 +17,8 @@ Transform 173 years of hurricane data into actionable intelligence for disaster 
 ```
 
 ### Option 2: Live Deployment
-Access the live dashboard at: https://franzenjb.github.io/hurricane-dashboard-v2/
+Access the live dashboard at:
+https://franzenjb.github.io/hurricane-dashboard-v2/
 
 ### Development Workflow (Recommended)
 ```bash
