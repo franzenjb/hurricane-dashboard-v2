@@ -1384,7 +1384,8 @@
             is3D: false,
             cesiumEntities: [],
             stormIcon3D: null,
-            storm: null
+            storm: null,
+            dataLoading: false
         };
         
         function initStormMap(storm) {
@@ -1415,6 +1416,18 @@
         async function loadStormTrackForModal(storm) {
             if (!storm.storm_id) return;
             
+            // Set loading flag
+            animationState.dataLoading = true;
+            console.log('Starting to load storm track for:', storm.storm_id);
+            
+            // Disable 3D button while loading
+            const toggle3DBtn = document.getElementById('toggle3D');
+            if (toggle3DBtn) {
+                toggle3DBtn.disabled = true;
+                toggle3DBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                toggle3DBtn.title = 'Loading storm data...';
+            }
+            
             // Calculate decade for file path
             const decade = Math.floor(storm.year / 10) * 10;
             const pointsFile = `hurdat2_data/points_${decade}s.geojson`;
@@ -1433,6 +1446,16 @@
                 }
             } catch (error) {
                 console.error('Error loading storm track:', error);
+                
+                // Re-enable 3D button but keep disabled since no data
+                animationState.dataLoading = false;
+                const toggle3DBtn = document.getElementById('toggle3D');
+                if (toggle3DBtn) {
+                    toggle3DBtn.disabled = true; // Keep disabled since no data
+                    toggle3DBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                    toggle3DBtn.title = 'No track data available for 3D view';
+                }
+                
                 // Show single point if track unavailable
                 if (storm.lat && storm.lon) {
                     L.circleMarker([storm.lat, storm.lon], {
@@ -1543,6 +1566,16 @@
                 animationState.currentFrame = 0;
                 playAnimation();
             }, 100);
+            
+            // Data is now loaded, enable 3D button
+            animationState.dataLoading = false;
+            const toggle3DBtn = document.getElementById('toggle3D');
+            if (toggle3DBtn) {
+                toggle3DBtn.disabled = false;
+                toggle3DBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                toggle3DBtn.title = '3D View';
+            }
+            console.log('Storm data loaded successfully, 3D button enabled');
         }
         
         // Animation control functions
@@ -1864,6 +1897,13 @@
                 storm: animationState.storm?.name || 'none'
             });
             
+            // Check if we have storm data loaded
+            if (!animationState.stormPoints || animationState.stormPoints.length === 0) {
+                console.error('Cannot switch to 3D view: No storm data loaded');
+                alert('Please wait for the storm data to load before switching to 3D view');
+                return;
+            }
+            
             animationState.is3D = !animationState.is3D;
             const mapDiv = document.getElementById('stormMap');
             const cesiumDiv = document.getElementById('cesiumContainer');
@@ -1885,8 +1925,12 @@
                 // Add a small delay to ensure Cesium is ready
                 setTimeout(() => {
                     console.log('Calling draw3DStormTrack after delay');
+                    console.log('Data check before draw3DStormTrack:', {
+                        points: animationState.stormPoints?.length,
+                        segments: animationState.segments?.length
+                    });
                     draw3DStormTrack();
-                }, 200);
+                }, 300);
             } else {
                 // Switch back to 2D view
                 cesiumDiv.style.display = 'none';
@@ -1986,17 +2030,27 @@
         }
         
         function drawComplete3DPath() {
-            if (!cesiumViewer || !animationState.segments) {
-                console.error('Cannot draw 3D path: viewer or segments missing');
+            if (!cesiumViewer) {
+                console.error('Cannot draw 3D path: Cesium viewer not initialized');
+                return;
+            }
+            
+            if (!animationState.segments || animationState.segments.length === 0) {
+                console.error('Cannot draw 3D path: No segments available');
+                console.log('animationState:', animationState);
                 return;
             }
             
             console.log('Drawing complete 3D path with', animationState.segments.length, 'segments');
+            console.log('Storm points available:', animationState.stormPoints?.length || 0);
             
-            if (animationState.stormPoints && animationState.stormPoints.length > 0) {
-                const firstPoint = animationState.stormPoints[0];
-                console.log('First storm point:', firstPoint.geometry.coordinates, 'Storm:', animationState.storm?.name);
+            if (!animationState.stormPoints || animationState.stormPoints.length === 0) {
+                console.error('No storm points available for 3D rendering');
+                return;
             }
+            
+            const firstPoint = animationState.stormPoints[0];
+            console.log('First storm point:', firstPoint.geometry.coordinates, 'Storm:', animationState.storm?.name);
             
             // Draw all segments with their colors
             animationState.segments.forEach((segment, i) => {
