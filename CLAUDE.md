@@ -12,34 +12,22 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Development Commands
 
-### Local Development (RECOMMENDED WORKFLOW)
+### Local Development
 ```bash
-# Start local server for rapid iteration
+# Start local server (RECOMMENDED)
 python3 -m http.server 8000
 # Opens at: http://localhost:8000
 
-# IMPORTANT: To avoid cache issues with Chrome:
-# 1. Open DevTools (Right-click → Inspect)
-# 2. Go to Network tab
-# 3. Check "Disable cache" checkbox
-# 4. Keep DevTools open while developing
-# This ensures you see changes instantly when you save files
-
-# Alternative: Use ./run-local.sh script
+# Alternative with script
 ./run-local.sh
+
+# IMPORTANT: Chrome cache workaround
+# 1. Open DevTools (F12)
+# 2. Network tab → Check "Disable cache"
+# 3. Keep DevTools open while developing
 ```
 
-### Deployment
-```bash
-# REQUIRED AFTER EVERY CHANGE
-git add .
-git commit -m "description of changes"
-git push
-
-# Live at: https://franzenjb.github.io/hurricane-dashboard-v2/
-```
-
-### Running Tests & Validation
+### Testing & Validation
 ```bash
 # Test AI Assistant endpoint
 ./test-ai-assistant.sh
@@ -52,6 +40,9 @@ node database-qa-tool.js
 
 # Search storm data
 node search-nc-storms.js
+
+# Fetch 2024 TCR reports
+./fetch-2024-tcr.sh
 ```
 
 ## Architecture Overview
@@ -60,7 +51,7 @@ node search-nc-storms.js
 The platform uses an iframe-based architecture with Alpine.js for state management:
 
 ```
-index.html (Main Container)
+index.html (Main Container with Alpine.js)
 ├── enhanced-timeline.html (Timeline Tab - iframe)
 ├── enhanced-multi-state.html (Regional Tab - iframe)  
 ├── enhanced-database.html (Database Tab - iframe)
@@ -83,8 +74,9 @@ Cross-frame messaging via postMessage()
 - **Points files**: `hurdat2_data/points_[decade]s.geojson` - Individual storm points with wind/status data
 - **Tracks files**: `hurdat2_data/tracks_[decade]s.geojson` - Simple polyline tracks
 - **Loading pattern**: Try points first (for rainbow tracks), fallback to tracks
+- **Decade calculation**: `Math.floor(storm.year / 10) * 10`
 
-### NOAA Live Updates System (NEW)
+### NOAA Live Updates
 - **Worker URL**: `https://noaa-hurricane-proxy.jbf-395.workers.dev`
 - **Client**: `noaa-live-updates-v2.js` fetches every 15 minutes
 - **Integration**: Parent sends live storms to Timeline via postMessage
@@ -93,15 +85,14 @@ Cross-frame messaging via postMessage()
 ## Critical Development Rules
 
 ### 1. Tab-Specific File Editing
-- **Timeline changes**: Edit `enhanced-timeline.html` 
-- **Regional changes**: Edit `enhanced-multi-state.html`
-- **Database changes**: Edit `enhanced-database.html`
-- **Intelligence changes**: Edit `intelligence-tab.html`
-- **Response changes**: Edit `response-tab.html`
-- **Never edit backup implementations in index.html**
+- **Timeline**: Edit `enhanced-timeline.html` 
+- **Regional**: Edit `enhanced-multi-state.html`
+- **Database**: Edit `enhanced-database.html`
+- **Intelligence**: Edit `intelligence-tab.html`
+- **Response**: Edit `response-tab.html`
+- **Never edit backup files or inline implementations in index.html**
 
 ### 2. Cross-Frame Communication
-All tabs communicate via postMessage:
 ```javascript
 // Send to parent
 window.parent.postMessage({
@@ -115,52 +106,55 @@ window.addEventListener('message', (event) => {
         // Handle storm viewing
     }
 });
+```
 
-// Send live storms to Timeline (NEW)
-window.sendLiveStormsToTimeline = function() {
-    if (window.noaaUpdates) {
-        window.noaaUpdates.fetchActiveStorms().then(data => {
-            if (data && data.activeStorms && data.activeStorms.length > 0) {
-                const timelineFrame = document.querySelector('iframe[src="enhanced-timeline.html"]');
-                if (timelineFrame && timelineFrame.contentWindow) {
-                    timelineFrame.contentWindow.postMessage({
-                        action: 'updateLiveStorms',
-                        storms: data.activeStorms
-                    }, '*');
-                }
-            }
-        });
-    }
+### 3. Key Functions by Tab
+
+**Timeline/Regional tabs**:
+- `updateStormInfoPanel()` - Updates sidebar with storm details
+- `showStormOnMap()` - Displays track with animation capabilities
+- `drawRainbowTrack()` - Multi-color track based on intensity
+- `getCategoryColor()` - Returns consistent hex colors
+
+**Database tab**:
+- `showStormModal()` - Opens in-tab modal with storm details
+- `initStormMap()` - Initializes Leaflet map in modal
+- `loadStormTrackForModal()` - Loads GeoJSON track data
+- `drawStormTrackOnModal()` - Renders animated rainbow track
+
+**Intelligence tab**:
+- `selectStorm()` - Updates comparison charts
+- `updateScatterChart()` - Wind-pressure relationship
+- `updateTimeSeriesChart()` - Historical intensity trends
+- Uses Plotly annotations with shapes for label backgrounds
+
+**Response tab**:
+- Filters to Category 3+ storms with US landfall only
+- `loadStormTrack()` - Shows storm path when operation selected
+- Resources chart legend positioned below with full names
+
+### 4. Storm Visualization Standards
+
+**Color Scheme** (consistent across all tabs):
+```javascript
+const colors = {
+    5: '#8B008B',  // Purple for Cat 5
+    4: '#DC143C',  // Red for Cat 4  
+    3: '#FF8C00',  // Orange for Cat 3
+    2: '#FFD700',  // Gold for Cat 2
+    1: '#90EE90',  // Light green for Cat 1
+    0: '#87CEEB',  // Sky blue for TS
+    '-1': '#D3D3D3' // Light gray for TD
 };
 ```
 
-### 3. Function Naming Conventions
-**Timeline/Regional tabs**:
-- `updateStormInfoPanel()` - Updates sidebar
-- `showStormOnMap()` - Displays track with animation
-- `getCategoryColor()` - Returns hex color (#8B9DC3, #5CB85C, etc.)
-- `drawRainbowTrack()` - Animated multi-color track
+**Animation System**:
+- 2D: Leaflet with segment-by-segment rainbow tracks
+- 3D: Cesium with chase cam (must disable Ion token)
+- Controls: Play/pause, frame navigation, speed adjustment
+- Fullscreen mode must include controls
 
-**Database tab**:
-- `viewStorm()` - Opens modal with storm details and map
-- `showStormModal()` - Creates and displays storm modal
-- `initStormMap()` - Initializes Leaflet map in modal
-- `drawStormTrackOnModal()` - Animates rainbow track in modal
-- `exportSelected()` - CSV export
-
-### 4. Cesium 3D Visualization
-- Must disable Ion access token: `Cesium.Ion.defaultAccessToken = undefined`
-- Use offline imagery providers (Esri, OSM, CartoDB)
-- Camera follows behind storm in movement direction
-- Track displayed at low altitude with colored segments
-
-### 5. Animation System
-- 2D uses Leaflet with dynamic markers
-- 3D uses Cesium with chase cam view
-- Frame-by-frame control with play/pause
-- Fullscreen mode includes controls
-
-## Data Structure
+## Data Structures
 
 ### Storm Object
 ```javascript
@@ -172,15 +166,20 @@ window.sendLiveStormsToTimeline = function() {
     day: 22,
     category: 5,                    // -1=TD, 0=TS, 1-5=Hurricane
     wind_mph: 160,
-    landfall_states: ["FL", "SC"],
+    pressure: 937,                  // Min pressure in mb
+    landfall_states: ["FL", "SC"],  // US state codes
     deaths: 156,
     damage_millions: 112900,
     rc_impact_score: 95,            // 0-100 Red Cross impact
-    rc_impact_level: "CATASTROPHIC", // MINOR|MODERATE|MAJOR|SEVERE|CATASTROPHIC
-    narrative: "Description...",
+    rc_impact_level: "CATASTROPHIC",
+    narrative: "Description...",    // May end with "..." (needs fixing)
     resources: {
-        tcr_pdf: "https://...",     // Tropical Cyclone Report
+        tcr_pdf: "https://...",     // TCR link (1995+ only, case-sensitive)
         nhc_archive: "https://..."
+    },
+    rc_response: {
+        responded: true,
+        operation_type: "Level 3"   // Level 1-3
     }
 }
 ```
@@ -191,161 +190,98 @@ window.sendLiveStormsToTimeline = function() {
     type: "Feature",
     geometry: {
         type: "Point",
-        coordinates: [-82.5, 27.5]
+        coordinates: [-82.5, 27.5]  // [lon, lat]
     },
     properties: {
         storm_id: "AL092022",
         datetime: "2022-09-28T18:00:00",
         status: "HU",               // TD|TS|HU|EX|SS|SD|LO|DB
-        max_wind: 155,
-        min_pressure: 937
+        max_wind: 155,              // knots
+        min_pressure: 937           // mb
     }
 }
 ```
 
-### NOAA Live Storm Format (NEW)
-```javascript
-{
-    id: "AL052025",
-    name: "ERIN",
-    status: "Hurricane",
-    category: 1,
-    wind_mph: 85,
-    pressure_mb: 985,
-    position: { lat: 35.5, lon: -65.0 },
-    movement: "NE at 18 mph",
-    is_live: true
-}
-```
+## Recent UI/UX Improvements (Aug 2025)
 
-## Recent Improvements (Aug 2025)
+### Database Tab
+- Modal popup for viewing storms (no more jumping to Timeline)
+- Animated rainbow tracks in modal
+- TCR download buttons (blue, right of affected states)
+- Removed damage column (insufficient data)
+- "Filters" button in header instead of ambiguous icon
+- Fixed narrative scrolling with flexbox layout
 
-### Database Tab Enhancements
-- **Modal Storm Viewer**: View button now opens in-tab modal instead of jumping to Timeline
-- **Animated Rainbow Tracks**: Storm paths animate segment-by-segment with intensity-based colors
-- **TCR Download Buttons**: Direct download buttons for NOAA Tropical Cyclone Reports (1995+)
-- **Removed Damage Column**: Cleaned up table by removing mostly-empty damage data
-- **Filter Sidebar Toggle**: Clear "Filters" button in header replaces ambiguous icon
-- **Fixed TCR Links**: Corrected all NOAA TCR URLs to use proper case format
+### Timeline & Regional Tabs  
+- Fixed narrative panel scrolling (height: 100%, overflow-y: auto)
+- Narrative doesn't get cut off by floating buttons
+- RC button moved to top-right corner
+- Legend spacing improved (no more overlapping)
 
-### Storm Visualization Standards
-- **Color Scheme**: Consistent across all tabs
-  - Cat 0 (TS/TD): #8B9DC3 (Blue-gray)
-  - Cat 1: #5CB85C (Green)
-  - Cat 2: #F0AD4E (Orange)
-  - Cat 3: #FF7F00 (Dark Orange)
-  - Cat 4: #D9534F (Red)
-  - Cat 5: #8B008B (Purple)
-- **Track Width**: 4px with 0.9 opacity
-- **Animation Speed**: Dynamic based on track length
+### Intelligence Tab
+- White rectangle backgrounds for storm labels using Plotly shapes
+- Searchable storm selectors with clear buttons (✕)
+- Zoom-responsive label positioning (2-3% offset)
+- Purple highlighting for Category 5 storms
+
+### Response Tab
+- Yellow disclaimer banner for fictional data
+- Filters to Category 3+ storms with US landfall only
+- Storm tracks display when operations selected
+- Resources chart legend below with full descriptions
 
 ## Common Issues & Solutions
 
-### CORS Errors
-- **Cause**: Opening HTML files directly (file://)
-- **Solution**: Use `./run-local.sh` or access via GitHub Pages
-
-### Browser Cache Issues (NEW)
-- **Cause**: Chrome aggressively caches localhost
-- **Solution**: Open DevTools → Network → Check "Disable cache"
-- **Alternative**: Hard refresh with Cmd+Shift+R (Mac) or Ctrl+Shift+F5 (Windows)
+### Browser Cache
+- **Solution**: DevTools → Network → Disable cache
+- **Alternative**: Hard refresh (Cmd+Shift+R / Ctrl+F5)
 
 ### Missing Storm Tracks
-- **Cause**: storm_id mismatch between database and GeoJSON files
-- **Solution**: Check decade calculation and file naming
+- **Check**: storm_id matches between database and GeoJSON
+- **Verify**: Decade calculation is correct
 
-### 3D Globe Shows Stars
-- **Cause**: Cesium Ion authentication failure
-- **Solution**: Ensure Ion token is undefined, use offline providers
+### Label Readability
+- **Fixed**: Using Plotly shapes for white backgrounds
+- **Annotations**: Include bgcolor and bordercolor properties
 
-### Animation Controls Missing in Fullscreen
-- **Cause**: Controls outside fullscreen container
-- **Solution**: Duplicate controls inside fullscreenContainer div
+### Narrative Display
+- **Scrolling**: Use flexbox with overflow-y: auto
+- **Cut-off text**: Ensure proper height constraints
+- **Ending with "..."**: Run fix-narrative-ellipsis.js
 
-### Database Showing Old Storms First
-- **Cause**: Default filters include all categories from 1851
-- **Solution**: Set default filters to Cat 1-5, 1900-present, sorted newest first
-
-### Live Storms Not Showing in Timeline (NEW)
-- **Cause**: Iframe timing and communication issues
-- **Solution**: Call `sendLiveStormsToTimeline()` after tab switch with delay
-
-## AI Assistant Integration
-
-### Current Implementation
-- Frontend: `ai-assistant-component.js` sends queries to worker
-- Worker: Deployed at `https://hurricane-ai-simple.jbf-395.workers.dev/`
-- Fallback: Pattern matching if API unavailable
-
-### Worker Deployment
-```bash
-# Deploy to Cloudflare Workers
-1. Update code in worker dashboard
-2. Add ANTHROPIC_API_KEY environment variable
-3. Test: curl -X POST [worker-url] -d '{"query":"test"}'
-```
+### TCR Links
+- **Format**: Case-sensitive (e.g., "Ian.pdf" not "IAN.pdf")
+- **Availability**: Only for 1995+ storms
+- **URL Pattern**: `https://www.nhc.noaa.gov/data/tcr/AL[##][YYYY]_[Name].pdf`
 
 ## Testing Checklist
 
 ### Before Committing
-1. **Run locally**: `./run-local.sh` and test all tabs
-2. **Check console**: No errors in browser console (F12)
-3. **Test animations**: Both 2D and 3D views work
-4. **Verify filters**: Database filters apply correctly
-5. **Test Database Modal**: View button opens modal with animated track
-6. **TCR Links**: Verify download buttons work for 1995+ storms
-7. **Live storms**: Check NOAA updates display on home tab
+1. **Run locally**: Test all tabs with `./run-local.sh`
+2. **Console check**: No errors (F12)
+3. **Database modal**: View button opens with animated track
+4. **Narrative scrolling**: Works in all tabs (Database, Timeline, Regional)
+5. **Storm labels**: Readable with white backgrounds in Intelligence tab
+6. **Response tab**: Only shows Cat 3+ with US landfall
+7. **TCR downloads**: Work for 1995+ storms
+8. **Live updates**: NOAA integration displays current storms
 
-### Storm Track Testing
-1. Click any storm in Timeline/Regional/Database
-2. Verify rainbow track appears (console: "Found X track points")
-3. Test animation controls (play/pause/frame nav)
-4. Toggle 3D view and verify globe shows Earth
-5. Check fullscreen mode includes controls
-
-## Performance Considerations
-
-### Large Dataset Handling
-- 1,992 storms loaded in browser memory
-- GeoJSON files loaded on-demand by decade
-- Use pagination in database (default 50 per page)
-- Limit map displays to avoid browser freezing
-
-### Optimization Tips
-- Filter storms before rendering
-- Use requestAnimationFrame for smooth animations
-- Dispose of Cesium entities when switching views
-- Clear Leaflet layers before adding new ones
+### After Pushing
+- GitHub Pages deploys in 2-3 minutes
+- Live at: https://franzenjb.github.io/hurricane-dashboard-v2/
+- Clear browser cache if changes don't appear
 
 ## Critical Data Integrity
 
-### HURDAT2 Data Accuracy
-- Database must show PEAK INTENSITY values from HURDAT2
-- Death counts are manually maintained and must be preserved during updates
-- Storm IDs must match exactly between database and GeoJSON files
-- Galveston Hurricane (AL011900) = 8,000 deaths, Category 4
-- Hurricane Andrew (AL241992) must be present in database
+### HURDAT2 Standards
+- Peak intensity values must be preserved
+- Death counts are manually maintained
+- Storm IDs must match exactly: `AL[##][YYYY]`
+- Galveston (1900): 8,000 deaths, Category 4
+- Andrew (1992): Must be present in database
 
-### Known Data Issues
-- Some AI-generated narratives contain factual errors
-- Landfall state detection can be inaccurate for complex storm paths
-- Pre-1900 death counts are often estimates
-- TCR links are case-sensitive (e.g., "Ian.pdf" not "IAN.pdf")
-- TCRs only available for storms from 1995 onwards
-
-## NOAA Live Updates
-
-### Current Implementation
-- Uses `noaa-live-updates-v2.js` to fetch current Atlantic outlook
-- Cloudflare Worker proxy: `https://noaa-hurricane-proxy.jbf-395.workers.dev`
-- Updates every 15 minutes automatically
-- Parent-iframe communication for Timeline integration
-
-### NOAA Endpoints
-- Active storms: `https://www.nhc.noaa.gov/CurrentStorms.json`
-- RSS feed: `https://www.nhc.noaa.gov/rss_update.xml`
-
-### Timeline Integration
-- Live storms (2025+) appear with red star markers
-- Special "LIVE TRACKING" narratives
-- Must manually trigger update when switching tabs
+### Known Data Limitations
+- Pre-1900 death counts are estimates
+- Some narratives contain AI-generated errors
+- Landfall detection may miss complex paths
+- Damage data incomplete for many storms
