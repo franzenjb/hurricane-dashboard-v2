@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug 3D Controls</title>
+    <script>
+        // This will help debug the actual dashboard
+        function checkDashboard() {
+            // Open dashboard
+            const win = window.open('http://localhost:8000', 'dashboard');
+            
+            setTimeout(() => {
+                console.log('Dashboard window:', win);
+                // Will need to manually navigate to Database tab and open a storm
+            }, 2000);
+        }
+    </script>
+</head>
+<body>
+    <h1>3D Debug Helper</h1>
+    <button onclick="checkDashboard()">Open Dashboard</button>
+    
+    <h2>Manual Debug Steps:</h2>
+    <ol>
+        <li>Click "Open Dashboard"</li>
+        <li>Go to Database tab</li>
+        <li>Click View on any storm</li>
+        <li>Click 3D View</li>
+        <li>Open browser console (F12)</li>
+        <li>Run this code:</li>
+    </ol>
+    
+    <pre style="background: #f0f0f0; padding: 10px;">
+// Check iframe and animation state
+const iframe = document.querySelector('iframe[src*="enhanced-database.html"]');
+const win = iframe?.contentWindow;
+
+console.log('=== 3D DEBUG ===');
+console.log('Iframe found:', !!iframe);
+console.log('Animation state:', win?.animationState);
+console.log('Is 3D:', win?.animationState?.is3D);
+console.log('Cesium viewer:', !!win?.cesiumViewer);
+
+// Check buttons
+const playBtn = win?.document.getElementById('playPause');
+const nextBtn = win?.document.getElementById('nextFrame');
+const prevBtn = win?.document.getElementById('prevFrame');
+
+console.log('Play button:', !!playBtn, 'onclick:', !!playBtn?.onclick);
+console.log('Next button:', !!nextBtn, 'onclick:', !!nextBtn?.onclick);
+console.log('Prev button:', !!prevBtn, 'onclick:', !!prevBtn?.onclick);
+
+// Try clicking play
+if (playBtn && playBtn.onclick) {
+    console.log('Clicking play button...');
+    playBtn.onclick();
+    setTimeout(() => {
+        console.log('After click - isPlaying:', win?.animationState?.isPlaying);
+    }, 500);
+} else {
+    console.log('ERROR: Play button or onclick handler missing!');
+}
+    </pre>
+</body>
+</html>

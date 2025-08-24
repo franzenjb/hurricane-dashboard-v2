@@ -1143,7 +1143,7 @@
                                 <div id="cesiumContainer" class="w-full h-full" style="display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0;"></div>
                                 
                                 <!-- Animation Controls -->
-                                <div id="animationControls" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white bg-opacity-95 rounded-lg shadow-lg p-3" style="display: none; z-index: 9999;">
+                                <div id="animationControls" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white bg-opacity-95 rounded-lg shadow-lg p-3" style="display: none; z-index: 999999;">
                                     <div class="flex items-center gap-3">
                                         <button id="prevFrame" class="p-2 bg-gray-100 rounded hover:bg-gray-200 transition-colors" title="Previous Frame">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1654,6 +1654,8 @@
         
         // Animation control functions
         function setupAnimationControls() {
+            console.log('Setting up animation controls. Is 3D:', animationState.is3D);
+            
             // Ensure controls stay visible
             const controlsDiv = document.getElementById('animationControls');
             if (controlsDiv) {
@@ -1669,47 +1671,75 @@
             const speedValue = document.getElementById('speedValue');
             const toggle3DBtn = document.getElementById('toggle3D');
             
+            console.log('Buttons found:', {
+                playPause: !!playPauseBtn,
+                prev: !!prevBtn,
+                next: !!nextBtn,
+                speedSlider: !!speedSlider,
+                toggle3D: !!toggle3DBtn
+            });
+            
             // Play/Pause button
-            playPauseBtn.onclick = () => {
-                if (animationState.isPlaying) {
-                    pauseAnimation();
-                } else {
-                    playAnimation();
-                }
-            };
+            if (playPauseBtn) {
+                playPauseBtn.onclick = () => {
+                    console.log('Play/pause clicked. Current state:', animationState.isPlaying, 'Is 3D:', animationState.is3D);
+                    if (animationState.isPlaying) {
+                        pauseAnimation();
+                    } else {
+                        playAnimation();
+                    }
+                };
+            } else {
+                console.error('PlayPause button not found!');
+            }
             
             // Previous frame
-            prevBtn.onclick = () => {
-                pauseAnimation();
-                if (animationState.currentFrame > 0) {
-                    animationState.currentFrame--;
-                    drawUpToFrame(animationState.currentFrame);
-                }
-            };
+            if (prevBtn) {
+                prevBtn.onclick = () => {
+                    console.log('Previous clicked. Frame:', animationState.currentFrame, '/', animationState.totalFrames);
+                    pauseAnimation();
+                    if (animationState.currentFrame > 0) {
+                        animationState.currentFrame--;
+                        drawUpToFrame(animationState.currentFrame);
+                    }
+                };
+            } else {
+                console.error('Previous button not found!');
+            }
             
             // Next frame
-            nextBtn.onclick = () => {
-                pauseAnimation();
-                if (animationState.currentFrame < animationState.totalFrames) {
-                    drawFrame(animationState.currentFrame);
-                    animationState.currentFrame++;
-                }
-            };
+            if (nextBtn) {
+                nextBtn.onclick = () => {
+                    console.log('Next clicked. Frame:', animationState.currentFrame, '/', animationState.totalFrames);
+                    pauseAnimation();
+                    if (animationState.currentFrame < animationState.totalFrames) {
+                        drawFrame(animationState.currentFrame);
+                        animationState.currentFrame++;
+                    }
+                };
+            } else {
+                console.error('Next button not found!');
+            }
             
             // Speed control
-            speedSlider.oninput = (e) => {
-                animationState.speed = parseInt(e.target.value);
-                speedValue.textContent = `${animationState.speed}x`;
-                if (animationState.isPlaying) {
-                    pauseAnimation();
-                    playAnimation();
-                }
-            };
+            if (speedSlider && speedValue) {
+                speedSlider.oninput = (e) => {
+                    animationState.speed = parseInt(e.target.value);
+                    speedValue.textContent = `${animationState.speed}x`;
+                    if (animationState.isPlaying) {
+                        pauseAnimation();
+                        playAnimation();
+                    }
+                };
+            }
             
             // 3D toggle
-            toggle3DBtn.onclick = () => {
-                toggle3DView();
-            };
+            if (toggle3DBtn) {
+                toggle3DBtn.onclick = () => {
+                    console.log('3D toggle clicked');
+                    toggle3DView();
+                };
+            }
             
             // Fullscreen toggle
             const fullscreenBtn = document.getElementById('toggleFullscreen');
@@ -2050,6 +2080,16 @@
                 // Re-setup animation controls after switching to 3D
                 setTimeout(() => {
                     setupAnimationControls();
+                    
+                    // Ensure controls are visible and clickable in 3D
+                    const animControls = document.getElementById('animationControls');
+                    if (animControls) {
+                        animControls.style.display = 'block';
+                        animControls.style.zIndex = '999999';
+                        animControls.style.pointerEvents = 'auto';
+                        animControls.style.position = 'absolute';
+                        console.log('Animation controls made visible for 3D');
+                    }
                 }, 100);
                 
                 setTimeout(tryDrawing, 500);
@@ -2139,6 +2179,18 @@
             
             // Setup enhanced 3D controls
             setup3DControls();
+            
+            // Ensure animation controls stay on top of Cesium
+            const animControls = document.getElementById('animationControls');
+            if (animControls) {
+                // Move controls to parent container to ensure they're above Cesium
+                const mapContainer = document.getElementById('mapContainer');
+                if (mapContainer && !mapContainer.contains(animControls)) {
+                    mapContainer.appendChild(animControls);
+                }
+                animControls.style.zIndex = '999999';
+                animControls.style.pointerEvents = 'auto';
+            }
             
             console.log('Cesium initialized successfully');
             return true;
