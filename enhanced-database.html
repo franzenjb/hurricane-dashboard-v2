@@ -2023,19 +2023,20 @@
                     else if (maxWind >= 34) category = 0;
                     else category = -1;
                     
-                    // Use richer, more saturated colors for 3D view
-                    const rich3DColors = {
-                        5: '#9400D3',  // Vivid Purple for Cat 5 (darker, richer)
-                        4: '#FF0000',  // Pure Red for Cat 4 (brighter)
-                        3: '#FF6600',  // Vibrant Orange for Cat 3 (more saturated)
-                        2: '#FFB300',  // Rich Gold for Cat 2 (deeper)
-                        1: '#00FF00',  // Bright Green for Cat 1 (more vivid)
-                        0: '#00BFFF',  // Deep Sky Blue for TS (more saturated)
-                        '-1': '#808080' // Gray for TD (darker)
+                    // Use BOLD, VIBRANT colors for maximum visibility in 3D
+                    const bold3DColors = {
+                        5: '#FF00FF',  // HOT MAGENTA for Cat 5 (maximum contrast)
+                        4: '#FF0000',  // PURE RED for Cat 4 (full saturation)
+                        3: '#FF4500',  // ORANGE-RED for Cat 3 (bold)
+                        2: '#FFA500',  // BRIGHT ORANGE for Cat 2 (vivid)
+                        1: '#00FF00',  // NEON GREEN for Cat 1 (electric)
+                        0: '#0080FF',  // BRIGHT BLUE for TS (vivid)
+                        '-1': '#404040' // DARK GRAY for TD
                     };
                     
-                    const hexColor = rich3DColors[category] || rich3DColors['-1'];
-                    const cesiumColor = Cesium.Color.fromCssColorString(hexColor).brighten(0.2, new Cesium.Color());
+                    const hexColor = bold3DColors[category] || bold3DColors['-1'];
+                    // Don't brighten - use full saturation for bold appearance
+                    const cesiumColor = Cesium.Color.fromCssColorString(hexColor);
                     
                     // Add color for each vertex
                     if (i === 0) {
@@ -2052,7 +2053,7 @@
                         name: animationState.storm?.name || 'Storm Track',
                         polyline: {
                             positions: positions,
-                            width: 16,  // Doubled from 8 to 16
+                            width: 32,  // Quadrupled from 8 to 32 for maximum visibility
                             material: new Cesium.PolylineColorArrayMaterialProperty(colors),
                             clampToGround: false
                         }
@@ -2100,8 +2101,21 @@
                     
                     animationState.cesiumEntities.push(startMarker, endMarker);
                     
-                    // Zoom to show the entire track
-                    cesiumViewer.zoomTo(cesiumViewer.entities);
+                    // Calculate bounding sphere for proper zoom
+                    const boundingSphere = Cesium.BoundingSphere.fromPoints(positions);
+                    
+                    // Zoom to show the entire track with proper framing
+                    cesiumViewer.camera.viewBoundingSphere(
+                        boundingSphere,
+                        new Cesium.HeadingPitchRange(
+                            0,  // heading
+                            -Cesium.Math.PI_OVER_FOUR,  // pitch (45 degrees down)
+                            boundingSphere.radius * 3.5  // distance (3.5x radius for good framing)
+                        )
+                    );
+                    
+                    // Ensure camera looks at the storm
+                    cesiumViewer.camera.lookAtTransform(Cesium.Matrix4.IDENTITY);
                     
                     console.log('3D storm track rendered successfully');
                 } else {
