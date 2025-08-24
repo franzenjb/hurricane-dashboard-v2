@@ -1609,12 +1609,7 @@
                 pauseAnimation();
                 if (animationState.currentFrame > 0) {
                     animationState.currentFrame--;
-                    if (animationState.is3D) {
-                        draw3DUpToFrame(animationState.currentFrame);
-                    } else {
-                        drawUpToFrame(animationState.currentFrame);
-                    }
-                    updateFrameInfo();
+                    drawUpToFrame(animationState.currentFrame);
                 }
             };
             
@@ -1622,14 +1617,8 @@
             nextBtn.onclick = () => {
                 pauseAnimation();
                 if (animationState.currentFrame < animationState.totalFrames) {
-                    if (animationState.is3D) {
-                        animationState.currentFrame++;
-                        draw3DUpToFrame(animationState.currentFrame);
-                    } else {
-                        drawFrame(animationState.currentFrame);
-                        animationState.currentFrame++;
-                    }
-                    updateFrameInfo();
+                    drawFrame(animationState.currentFrame);
+                    animationState.currentFrame++;
                 }
             };
             
@@ -1666,15 +1655,8 @@
                 if (!animationState.isPlaying) return;
                 
                 if (animationState.currentFrame < animationState.totalFrames) {
-                    if (animationState.is3D) {
-                        // In 3D mode, redraw everything up to current frame
-                        animationState.currentFrame++;
-                        draw3DUpToFrame(animationState.currentFrame);
-                    } else {
-                        // In 2D mode, add next segment
-                        drawFrame(animationState.currentFrame);
-                        animationState.currentFrame++;
-                    }
+                    drawFrame(animationState.currentFrame);
+                    animationState.currentFrame++;
                     updateFrameInfo();
                     animationState.animationTimer = setTimeout(animate, animationSpeed);
                 } else {
@@ -1706,9 +1688,8 @@
             if (index >= animationState.segments.length) return;
             
             if (animationState.is3D) {
-                // 3D mode - redraw everything up to current frame for consistency
-                animationState.currentFrame = index + 1;
-                draw3DUpToFrame(index);
+                // 3D mode - just add the single frame, don't redraw everything
+                draw3DSingleFrame(index);
             } else {
                 // 2D mode - draw frame in Leaflet
                 const segment = animationState.segments[index];
@@ -1737,15 +1718,18 @@
             const [lon1, lat1] = point1.geometry.coordinates;
             const [lon2, lat2] = point2.geometry.coordinates;
             
-            // Add single segment with solid color
+            // Add single segment
             const entity = cesiumViewer.entities.add({
                 polyline: {
                     positions: [
                         Cesium.Cartesian3.fromDegrees(lon1, lat1, 10000),
                         Cesium.Cartesian3.fromDegrees(lon2, lat2, 10000)
                     ],
-                    width: 12,
-                    material: new Cesium.ColorMaterialProperty(Cesium.Color.fromCssColorString(segment.color).withAlpha(1.0))
+                    width: 8,
+                    material: new Cesium.PolylineGlowMaterialProperty({
+                        glowPower: 0.3,
+                        color: Cesium.Color.fromCssColorString(segment.color)
+                    })
                 }
             });
             
@@ -2045,20 +2029,20 @@
                     else if (maxWind >= 34) category = 0;
                     else category = -1;
                     
-                    // Professional colors with strong visibility - balanced approach
-                    const professional3DColors = {
-                        5: '#8B0A50',  // Deep Magenta for Cat 5 (serious, visible)
-                        4: '#DC143C',  // Crimson for Cat 4 (classic danger color)
-                        3: '#FF8C00',  // Dark Orange for Cat 3 (warm, professional)
-                        2: '#FFD700',  // Gold for Cat 2 (bright but refined)
-                        1: '#32CD32',  // Lime Green for Cat 1 (natural, visible)
-                        0: '#4169E1',  // Royal Blue for TS (ocean-like, professional)
-                        '-1': '#808080' // Gray for TD
+                    // Bold, rich colors - professional but highly visible
+                    const bold3DColors = {
+                        5: '#9C27B0',  // Rich Purple for Cat 5 (bold but professional)
+                        4: '#E53935',  // Bright Red for Cat 4 (vivid danger signal)
+                        3: '#FF6F00',  // Strong Orange for Cat 3 (bold, warm)
+                        2: '#FFB300',  // Golden Yellow for Cat 2 (bright, rich)
+                        1: '#43A047',  // Vibrant Green for Cat 1 (lively but natural)
+                        0: '#1E88E5',  // Bright Blue for TS (vivid ocean blue)
+                        '-1': '#757575' // Solid Gray for TD
                     };
                     
-                    const hexColor = professional3DColors[category] || professional3DColors['-1'];
-                    // Use solid color with full opacity for professional appearance
-                    const cesiumColor = Cesium.Color.fromCssColorString(hexColor).withAlpha(1.0);
+                    const hexColor = bold3DColors[category] || bold3DColors['-1'];
+                    // Use full saturation for bold appearance
+                    const cesiumColor = Cesium.Color.fromCssColorString(hexColor);
                     
                     // Add color for each vertex
                     if (i === 0) {
@@ -2080,10 +2064,13 @@
                         const segment = cesiumViewer.entities.add({
                             polyline: {
                                 positions: segmentPositions,
-                                width: 12,  // Professional width - visible but refined
-                                material: new Cesium.ColorMaterialProperty(segmentColor),  // Solid color for clean professional look
-                                clampToGround: false,
-                                show: true
+                                width: 18,  // Bold width for strong visibility
+                                material: new Cesium.PolylineGlowMaterialProperty({
+                                    glowPower: 0.4,  // Stronger glow for better visibility
+                                    color: segmentColor,
+                                    taperPower: 0.2  // Less taper for bolder appearance
+                                }),
+                                clampToGround: false
                             }
                         });
                         
@@ -2172,15 +2159,18 @@
             
             const color = getModalCategoryColor(category);
             
-            // Add segment to 3D view with solid color
+            // Add segment to 3D view
             const entity = cesiumViewer.entities.add({
                 polyline: {
                     positions: [
                         Cesium.Cartesian3.fromDegrees(lon1, lat1, 10000),
                         Cesium.Cartesian3.fromDegrees(lon2, lat2, 10000)
                     ],
-                    width: 12,
-                    material: new Cesium.ColorMaterialProperty(Cesium.Color.fromCssColorString(color).withAlpha(1.0))
+                    width: 8,
+                    material: new Cesium.PolylineGlowMaterialProperty({
+                        glowPower: 0.3,
+                        color: Cesium.Color.fromCssColorString(color)
+                    })
                 }
             });
             
@@ -2216,18 +2206,18 @@
                 else if (maxWind >= 34) category = 0;
                 else category = -1;
                 
-                const professional3DColors = {
-                    5: '#8B0A50',  // Deep Magenta for Cat 5
-                    4: '#DC143C',  // Crimson for Cat 4
-                    3: '#FF8C00',  // Dark Orange for Cat 3
-                    2: '#FFD700',  // Gold for Cat 2
-                    1: '#32CD32',  // Lime Green for Cat 1
-                    0: '#4169E1',  // Royal Blue for TS
-                    '-1': '#808080' // Gray for TD
+                const bold3DColors = {
+                    5: '#9C27B0',
+                    4: '#E53935',
+                    3: '#FF6F00',
+                    2: '#FFB300',
+                    1: '#43A047',
+                    0: '#1E88E5',
+                    '-1': '#757575'
                 };
                 
-                const hexColor = professional3DColors[category] || professional3DColors['-1'];
-                const cesiumColor = Cesium.Color.fromCssColorString(hexColor).withAlpha(1.0);
+                const hexColor = bold3DColors[category] || bold3DColors['-1'];
+                const cesiumColor = Cesium.Color.fromCssColorString(hexColor);
                 
                 const entity = cesiumViewer.entities.add({
                     polyline: {
@@ -2235,10 +2225,13 @@
                             Cesium.Cartesian3.fromDegrees(lon1, lat1, 10000),
                             Cesium.Cartesian3.fromDegrees(lon2, lat2, 10000)
                         ],
-                        width: 12,  // Professional width
-                        material: new Cesium.ColorMaterialProperty(cesiumColor),  // Solid color
-                        clampToGround: false,
-                        show: true
+                        width: 18,
+                        material: new Cesium.PolylineGlowMaterialProperty({
+                            glowPower: 0.4,
+                            color: cesiumColor,
+                            taperPower: 0.2
+                        }),
+                        clampToGround: false
                     }
                 });
                 
