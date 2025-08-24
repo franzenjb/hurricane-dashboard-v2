@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.95/Build/Cesium/Cesium.js"></script>
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.95/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <style>
+        body { margin: 0; padding: 20px; font-family: Arial; }
+        #cesiumContainer { width: 100%; height: 500px; border: 2px solid #333; }
+        .status { margin: 10px 0; padding: 10px; background: #f0f0f0; }
+    </style>
+</head>
+<body>
+    <h1>3D Test - Atmosphere Fix</h1>
+    <div class="status" id="status">Initializing...</div>
+    <div id="cesiumContainer"></div>
+    <script>
+        const statusDiv = document.getElementById('status');
+        
+        try {
+            // Disable Ion token
+            Cesium.Ion.defaultAccessToken = undefined;
+            
+            statusDiv.textContent = 'Creating viewer with ALL atmosphere disabled...';
+            
+            // Create viewer with atmosphere completely disabled
+            var viewer = new Cesium.Viewer('cesiumContainer', {
+                baseLayerPicker: false,
+                geocoder: false,
+                homeButton: false,
+                sceneModePicker: false,
+                navigationHelpButton: false,
+                animation: false,
+                timeline: false,
+                fullscreenButton: false,
+                vrButton: false,
+                scene3DOnly: true,
+                requestRenderMode: true,
+                maximumRenderTimeChange: Infinity,
+                imageryProvider: new Cesium.OpenStreetMapImageryProvider({
+                    url: 'https://a.tile.openstreetmap.org/'
+                })
+            });
+            
+            statusDiv.textContent = 'Disabling atmosphere features...';
+            
+            // Disable ALL atmosphere and lighting
+            viewer.scene.globe.enableLighting = false;
+            viewer.scene.fog.enabled = false;
+            viewer.scene.globe.depthTestAgainstTerrain = false;
+            
+            // Explicitly disable atmosphere if it exists
+            if (viewer.scene.skyAtmosphere) {
+                viewer.scene.skyAtmosphere.show = false;
+                statusDiv.textContent += ' skyAtmosphere disabled.';
+            }
+            if (viewer.scene.globe.showGroundAtmosphere !== undefined) {
+                viewer.scene.globe.showGroundAtmosphere = false;
+                statusDiv.textContent += ' groundAtmosphere disabled.';
+            }
+            
+            statusDiv.textContent = 'Adding test polyline...';
+            
+            // Add a test polyline (hurricane path simulation)
+            const pathEntity = viewer.entities.add({
+                polyline: {
+                    positions: Cesium.Cartesian3.fromDegreesArray([
+                        -75, 35,
+                        -73, 33,
+                        -70, 30,
+                        -67, 27,
+                        -65, 25
+                    ]),
+                    width: 10,
+                    material: new Cesium.PolylineGlowMaterialProperty({
+                        glowPower: 0.3,
+                        color: Cesium.Color.fromCssColorString('#DC143C')
+                    }),
+                    clampToGround: false
+                }
+            });
+            
+            // Add markers
+            viewer.entities.add({
+                position: Cesium.Cartesian3.fromDegrees(-75, 35, 10000),
+                point: {
+                    pixelSize: 12,
+                    color: Cesium.Color.GREEN,
+                    outlineColor: Cesium.Color.WHITE,
+                    outlineWidth: 2
+                }
+            });
+            
+            viewer.entities.add({
+                position: Cesium.Cartesian3.fromDegrees(-65, 25, 10000),
+                point: {
+                    pixelSize: 12,
+                    color: Cesium.Color.RED,
+                    outlineColor: Cesium.Color.WHITE,
+                    outlineWidth: 2
+                }
+            });
+            
+            statusDiv.textContent = 'Zooming to entities...';
+            
+            viewer.zoomTo(viewer.entities);
+            
+            statusDiv.style.background = '#90EE90';
+            statusDiv.textContent = '✅ SUCCESS! 3D view working without atmosphere crashes.';
+            
+        } catch (error) {
+            statusDiv.style.background = '#FFB6C1';
+            statusDiv.textContent = '❌ ERROR: ' + error.message;
+            console.error('Full error:', error);
+        }
+    </script>
+</body>
+</html>

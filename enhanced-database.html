@@ -1457,7 +1457,7 @@
             wallEntities: [],
             labelEntities: [],
             glowEnabled: true,
-            atmosphereEnabled: true,
+            atmosphereEnabled: false,
             speed3D: 1.0,
             orbitAngle: 0,
             cameraDistance: 1000000
@@ -2106,19 +2106,27 @@
                 animation: false,
                 timeline: false,
                 fullscreenButton: false,
+                vrButton: false,
+                scene3DOnly: true,
+                requestRenderMode: true,
+                maximumRenderTimeChange: Infinity,
                 imageryProvider: new Cesium.OpenStreetMapImageryProvider({
                     url: 'https://a.tile.openstreetmap.org/'
                 })
-                // Removed skyBox and skyAtmosphere to prevent crashes
             });
             
-            // Simple settings for stability (atmosphere causes crashes)
+            // Disable ALL atmosphere and advanced features to prevent crashes
             cesiumViewer.scene.globe.enableLighting = false;
             cesiumViewer.scene.fog.enabled = false;
+            cesiumViewer.scene.globe.depthTestAgainstTerrain = false;
             
-            // Better performance
-            cesiumViewer.scene.requestRenderMode = true;
-            cesiumViewer.scene.maximumRenderTimeChange = Infinity;
+            // Explicitly disable atmosphere features if they exist
+            if (cesiumViewer.scene.skyAtmosphere) {
+                cesiumViewer.scene.skyAtmosphere.show = false;
+            }
+            if (cesiumViewer.scene.globe.showGroundAtmosphere !== undefined) {
+                cesiumViewer.scene.globe.showGroundAtmosphere = false;
+            }
             
             // Set initial view
             cesiumViewer.scene.camera.setView({
@@ -2230,11 +2238,13 @@
                 if (animationState.is3D) draw3DStormTrack();
             };
             labelsCheck.onchange = () => toggleTimeLabels(labelsCheck.checked);
-            atmosphereCheck.onchange = () => {
-                animationState.atmosphereEnabled = atmosphereCheck.checked;
-                // Atmosphere features disabled due to Cesium compatibility issues
-                console.log('Atmosphere toggle (currently disabled for stability)');
-            };
+            // Atmosphere checkbox disabled to prevent crashes
+            if (atmosphereCheck) {
+                atmosphereCheck.disabled = true;
+                atmosphereCheck.checked = false;
+                atmosphereCheck.parentElement.style.opacity = '0.5';
+                atmosphereCheck.parentElement.title = 'Atmosphere disabled for stability';
+            }
             
             // Speed control
             speed3DSlider.oninput = (e) => {
