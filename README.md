@@ -142,12 +142,18 @@ The AI Assistant currently uses simple pattern matching and returns generic resp
 **Time Required: 10 minutes**
 
 1. **Get Anthropic API Key** (5 min)
-   - Visit https://console.anthropic.com/
+   - Visit:
+   
+   https://console.anthropic.com/
+   
    - Create account and generate API key
    - Copy key (starts with `sk-ant-`)
 
 2. **Update Cloudflare Worker** (3 min)
-   - Go to https://workers.cloudflare.com/
+   - Go to:
+   
+   https://workers.cloudflare.com/
+   
    - Open your `hurricane-ai-simple` worker
    - Replace code with `ai-powered-worker.js`
    - Save and Deploy

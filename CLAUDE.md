@@ -11,18 +11,24 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **The user monitors progress through GitHub. Not pushing changes means the user cannot see your work. This is NOT optional.**
 
 ## 🔗 CRITICAL: URL FORMATTING RULES 🔗
-**ALWAYS provide URLs in a clickable format:**
-- Put URLs on their own line with no other text
-- Never break URLs across lines
-- Never add explanatory text after URLs on the same line
+**FAILURE TO FOLLOW THESE RULES IS UNACCEPTABLE:**
+- URLs MUST be on their own line with NO other text
+- NEVER break URLs across lines
+- NEVER add text after URLs on the same line
+- ALWAYS test that URLs are clickable before sending
 
 **CORRECT FORMAT:**
 ```
-Changes are live at:
+Test URL:
 
 https://franzenjb.github.io/hurricane-dashboard-v2/
 
 (deploys in 2-3 minutes)
+```
+
+**WRONG FORMAT (NEVER DO THIS):**
+```
+Test URL: https://franzenjb.github.io/hurricane-dashboard-v2/ (will be live in 2-3 minutes)
 ```
 
 ## Development Commands
