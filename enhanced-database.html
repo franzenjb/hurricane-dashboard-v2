@@ -1975,23 +1975,18 @@
         
         function toggle3DView() {
             console.log('Toggle 3D view called. Current state:', animationState.is3D);
-            console.log('Storm data available:', {
-                points: animationState.stormPoints?.length || 0,
-                segments: animationState.segments?.length || 0,
-                storm: animationState.storm?.name || 'none'
-            });
             
-            // Check if we have storm data loaded
-            if (!animationState.stormPoints || animationState.stormPoints.length === 0) {
-                console.error('Cannot switch to 3D view: No storm data loaded');
-                alert('Please wait for the storm data to load before switching to 3D view');
-                return;
-            }
-            
-            animationState.is3D = !animationState.is3D;
-            const mapDiv = document.getElementById('stormMap');
-            const cesiumDiv = document.getElementById('cesiumContainer');
-            const toggle3DBtn = document.getElementById('toggle3D');
+            try {
+                // Comprehensive safety checks
+                if (!animationState.stormPoints || animationState.stormPoints.length < 2) {
+                    alert('Please wait for storm data to load completely');
+                    return;
+                }
+                
+                animationState.is3D = !animationState.is3D;
+                const mapDiv = document.getElementById('stormMap');
+                const cesiumDiv = document.getElementById('cesiumContainer');
+                const toggle3DBtn = document.getElementById('toggle3D');
             
             if (animationState.is3D) {
                 // Switch to 3D view
@@ -2009,24 +2004,51 @@
                 
                 if (!cesiumViewer) {
                     console.log('Initializing Cesium 3D viewer');
-                    initCesium3D();
+                    if (!initCesium3D()) {
+                        console.error('Failed to initialize Cesium');
+                        // Revert to 2D
+                        animationState.is3D = false;
+                        mapDiv.style.display = 'block';
+                        cesiumDiv.style.display = 'none';
+                        toggle3DBtn.textContent = '3D View';
+                        return;
+                    }
                 }
                 
-                // Add a small delay to ensure Cesium is ready
-                setTimeout(() => {
-                    console.log('Calling draw3DStormTrack after delay');
-                    console.log('Data check before draw3DStormTrack:', {
-                        points: animationState.stormPoints?.length,
-                        segments: animationState.segments?.length,
-                        currentFrame: animationState.currentFrame
-                    });
-                    // If animation was in progress, show it at current frame
-                    if (animationState.currentFrame > 0) {
-                        draw3DUpToFrame(animationState.currentFrame);
-                    } else {
-                        draw3DStormTrack();
+                // Multiple retries to ensure Cesium is ready
+                let retryCount = 0;
+                const maxRetries = 5;
+                
+                const tryDrawing = () => {
+                    retryCount++;
+                    
+                    if (!cesiumViewer || !cesiumViewer.scene || !cesiumViewer.entities) {
+                        if (retryCount < maxRetries) {
+                            console.log(`Cesium not ready, retry ${retryCount}/${maxRetries}`);
+                            setTimeout(tryDrawing, 500);
+                        } else {
+                            console.error('Cesium failed to initialize after retries');
+                            alert('3D view is not responding. Please try again.');
+                        }
+                        return;
                     }
-                }, 300);
+                    
+                    console.log('Cesium ready, attempting to draw');
+                    try {
+                        if (animationState.currentFrame > 0) {
+                            draw3DUpToFrame(animationState.currentFrame);
+                        } else {
+                            draw3DStormTrack();
+                        }
+                    } catch (e) {
+                        console.error('Error drawing 3D track:', e);
+                        if (retryCount < maxRetries) {
+                            setTimeout(tryDrawing, 500);
+                        }
+                    }
+                };
+                
+                setTimeout(tryDrawing, 500);
             } else {
                 // Switch back to 2D view
                 cesiumDiv.style.display = 'none';
@@ -2041,13 +2063,41 @@
                     controls3D.style.display = 'none';
                 }
             }
+            
+            } catch (error) {
+                console.error('Critical error in toggle3DView:', error);
+                alert('Error switching to 3D view. Please try again.');
+                // Reset to safe state
+                animationState.is3D = false;
+                const mapDiv = document.getElementById('stormMap');
+                const cesiumDiv = document.getElementById('cesiumContainer');
+                if (mapDiv) mapDiv.style.display = 'block';
+                if (cesiumDiv) cesiumDiv.style.display = 'none';
+            }
         }
         
         function initCesium3D() {
-            // Disable Ion token requirement
-            Cesium.Ion.defaultAccessToken = undefined;
-            
-            cesiumViewer = new Cesium.Viewer('cesiumContainer', {
+            try {
+                // Clean up any existing viewer
+                if (cesiumViewer) {
+                    try {
+                        cesiumViewer.destroy();
+                    } catch (e) {
+                        console.warn('Could not destroy old viewer:', e);
+                    }
+                    cesiumViewer = null;
+                }
+                
+                // Check if Cesium is loaded
+                if (typeof Cesium === 'undefined') {
+                    console.error('Cesium library not loaded');
+                    return false;
+                }
+                
+                // Disable Ion token requirement
+                Cesium.Ion.defaultAccessToken = undefined;
+                
+                cesiumViewer = new Cesium.Viewer('cesiumContainer', {
                 baseLayerPicker: false,
                 geocoder: false,
                 homeButton: false,
@@ -2058,17 +2108,13 @@
                 fullscreenButton: false,
                 imageryProvider: new Cesium.OpenStreetMapImageryProvider({
                     url: 'https://a.tile.openstreetmap.org/'
-                }),
-                skyBox: false,
-                skyAtmosphere: true,
-                scene3DOnly: false
+                })
+                // Removed skyBox and skyAtmosphere to prevent crashes
             });
             
-            // Enhanced lighting and atmosphere
-            cesiumViewer.scene.globe.enableLighting = true;
-            cesiumViewer.scene.fog.enabled = true;
-            cesiumViewer.scene.fog.density = 0.0001;
-            cesiumViewer.scene.globe.showGroundAtmosphere = true;
+            // Simple settings for stability (atmosphere causes crashes)
+            cesiumViewer.scene.globe.enableLighting = false;
+            cesiumViewer.scene.fog.enabled = false;
             
             // Better performance
             cesiumViewer.scene.requestRenderMode = true;
@@ -2081,6 +2127,15 @@
             
             // Setup enhanced 3D controls
             setup3DControls();
+            
+            console.log('Cesium initialized successfully');
+            return true;
+            
+            } catch (error) {
+                console.error('Failed to initialize Cesium:', error);
+                cesiumViewer = null;
+                return false;
+            }
         }
         
         function toggleFullscreen() {
@@ -2177,10 +2232,8 @@
             labelsCheck.onchange = () => toggleTimeLabels(labelsCheck.checked);
             atmosphereCheck.onchange = () => {
                 animationState.atmosphereEnabled = atmosphereCheck.checked;
-                if (cesiumViewer) {
-                    cesiumViewer.scene.skyAtmosphere.show = atmosphereCheck.checked;
-                    cesiumViewer.scene.globe.showGroundAtmosphere = atmosphereCheck.checked;
-                }
+                // Atmosphere features disabled due to Cesium compatibility issues
+                console.log('Atmosphere toggle (currently disabled for stability)');
             };
             
             // Speed control
