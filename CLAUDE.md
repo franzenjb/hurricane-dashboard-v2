@@ -281,6 +281,156 @@ const colors = {
 - Live at: https://franzenjb.github.io/hurricane-dashboard-v2/
 - Clear browser cache if changes don't appear
 
+## Developer Workflow & Git Best Practices
+
+### Essential Git Workflow for This Project
+
+#### Working with Branches (RECOMMENDED for major changes)
+```bash
+# Create branch for risky changes
+git checkout -b fix/3d-animation
+# Make changes and test
+git add enhanced-database.html
+git commit -m "fix: 3D animation controls not responding"
+# Test thoroughly before merging
+git checkout main
+git merge fix/3d-animation
+git push
+```
+
+#### Quick Fixes (only for minor, safe changes)
+```bash
+git add .
+git commit -m "fix: typo in storm narrative"
+git push
+```
+
+#### Emergency Rollback
+```bash
+# If you break something critical
+git revert HEAD --no-edit  # Revert last commit
+git push                    # Push immediately
+# Or revert multiple commits
+git revert HEAD~2..HEAD --no-edit
+```
+
+### Development Tools & Debugging
+
+#### Advanced Git Commands for This Codebase
+```bash
+# Find which commit broke something
+git bisect start
+git bisect bad                    # Current version is broken
+git bisect good 2f6f376          # This commit was working
+# Git will help you find the breaking commit
+
+# See who last modified a line (useful for understanding code)
+git blame enhanced-timeline.html -L 1500,1550
+
+# Search entire codebase
+git grep "draw3DStormTrack"      # Find function usage
+git grep -n "bold3DColors"       # With line numbers
+
+# View file at specific commit
+git show HEAD~3:enhanced-database.html
+
+# Stash work-in-progress
+git stash save "WIP: fixing 3D colors"
+git stash list
+git stash pop
+```
+
+#### GitHub CLI Productivity
+```bash
+# Create PR from command line
+gh pr create --title "Fix 3D animation controls" \
+  --body "Fixes animation play/pause in 3D mode"
+
+# Check PR status
+gh pr status
+gh pr checks  # See CI status
+
+# Review PRs locally
+gh pr checkout 123
+gh pr diff
+
+# Work with issues
+gh issue list --label "bug"
+gh issue create --title "Database not loading" --label "critical"
+```
+
+### Code Quality Standards
+
+#### Pre-Push Checklist
+1. **Test all tabs**: Timeline, Regional, Database, Intelligence, Response
+2. **Check console**: No errors in browser console (F12)
+3. **Verify animations**: Both 2D and 3D modes work
+4. **Test storm switching**: Can change storms without closing modal
+5. **Check data integrity**: 1,991 Atlantic storms still load
+6. **Verify deployment**: Changes appear on GitHub Pages after push
+
+#### Common Pitfalls to Avoid
+- **Never commit API keys** or tokens
+- **Test 3D changes carefully** - they often break other features
+- **Always check cesiumViewer exists** before using it
+- **Preserve animation state** when switching 2D/3D
+- **Don't modify storm database** without extensive testing
+- **Keep GeoJSON files organized** by decade
+
+### Performance & Optimization
+
+#### Git Repository Optimization
+```bash
+# Check repository size
+git count-objects -vH
+
+# Clean up unnecessary files
+git clean -xfd  # Remove all untracked files (careful!)
+git gc --aggressive --prune=now  # Garbage collection
+
+# Find large files in history
+git rev-list --objects --all | \
+  git cat-file --batch-check='%(objecttype) %(objectname) %(objectsize) %(rest)' | \
+  sed -n 's/^blob //p' | \
+  sort --numeric-sort --key=2 | \
+  tail -10
+```
+
+#### Development Environment Setup
+```bash
+# Set up helpful Git aliases
+git config --global alias.lg "log --oneline --graph --decorate"
+git config --global alias.st "status -s"
+git config --global alias.co "checkout"
+git config --global alias.br "branch"
+git config --global alias.unstage "reset HEAD --"
+
+# Configure VS Code for this project
+code --install-extension dbaeumer.vscode-eslint
+code --install-extension esbenp.prettier-vscode
+code --install-extension github.vscode-pull-request-github
+```
+
+### Troubleshooting Common Issues
+
+#### When Database Won't Load
+1. Check browser console for errors
+2. Verify atlantic-storms-enhanced.js is loaded
+3. Check CORS settings (must use http server, not file://)
+4. Clear browser cache completely
+
+#### When 3D View Breaks
+1. Check if cesiumViewer is initialized
+2. Verify storm data is loaded before switching to 3D
+3. Check animation state management
+4. Look for undefined coordinates in storm points
+
+#### When GitHub Pages Doesn't Update
+1. Wait full 2-3 minutes for deployment
+2. Hard refresh browser (Cmd+Shift+R / Ctrl+F5)
+3. Check GitHub Actions tab for deployment status
+4. Verify you pushed to main branch
+
 ## Critical Data Integrity
 
 ### HURDAT2 Standards

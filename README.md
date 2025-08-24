@@ -102,36 +102,105 @@ git push
 - **JavaScript**: ES6+ support required
 - **Network**: Internet connection for map tiles and AI features
 
-## Git Best Practices
+## 📋 Development Best Practices
 
-### Understanding Git Push Behavior
-When working with Git, it's important to understand how pushes work:
-- **Interrupted pushes are safe**: If a push is interrupted before completion, your local commits remain intact
-- **Only committed changes get pushed**: Uncommitted changes stay local until you commit them
-- **Local commits are preserved**: Git handles interrupted operations gracefully
+### Git Workflow & Commit Standards
 
-### Recommended Git Workflow
+#### Essential Git Commands
 ```bash
-# 1. Check current status
+# Check current status
 git status                    # See what's staged/unstaged
+git diff                      # Review changes before committing
 git log origin/main..HEAD     # See commits that will be pushed
 
-# 2. Stage and commit changes
+# Stage and commit with semantic messages
 git add .                     # Stage all changes (or specify files)
-git commit -m "Clear description of what changed"
+git commit -m "feat: add 3D storm visualization"  # Use semantic commits
 
-# 3. Push to remote repository
+# Push to remote repository
 git push origin main
 
-# If push is interrupted, simply run git push again
+# Work with branches for complex features
+git checkout -b feature-name  # Create feature branch
+git merge main                # Keep branch updated
+git push -u origin feature-name  # Push branch
 ```
 
-### Important Git Rules
-- **Always commit locally first**: Changes must be committed before they can be pushed
-- **Check status before committing**: Use `git status` to understand what will be included
-- **Write clear commit messages**: Describe what changed and why
-- **Push immediately after committing**: This ensures changes are backed up and visible on GitHub
-- **Interrupted pushes can be retried**: Just run `git push` again if interrupted
+#### Semantic Commit Messages
+Use conventional commits for clear history:
+- `feat:` New feature
+- `fix:` Bug fix
+- `docs:` Documentation changes
+- `style:` Code style/formatting
+- `refactor:` Code restructuring
+- `test:` Test additions/changes
+- `chore:` Maintenance tasks
+
+#### Branch Strategy
+- **Main branch**: Always deployable
+- **Feature branches**: For new features (`feature/storm-3d-view`)
+- **Fix branches**: For bug fixes (`fix/animation-controls`)
+- **Test before merging**: Ensure all tests pass
+
+### Code Quality & Testing
+
+#### Pre-commit Checklist
+- [ ] Run local server and test all tabs
+- [ ] Check browser console for errors (F12)
+- [ ] Test on multiple browsers if possible
+- [ ] Verify mobile responsiveness
+- [ ] Ensure no sensitive data in commits
+
+#### Debugging Tools
+```bash
+# Test locally before pushing
+python3 -m http.server 8000  # Local server
+./test-ai-assistant.sh        # Test AI endpoint
+node database-qa-tool.js      # Database quality check
+
+# Use Git tools for debugging
+git bisect start              # Find breaking commit
+git blame enhanced-timeline.html  # Track code changes
+git log --oneline --graph     # Visualize branch history
+```
+
+### GitHub Features & Integrations
+
+#### Repository Management
+- **Issues**: Track bugs and features with labels
+- **Pull Requests**: Code review before merging
+- **GitHub Actions**: Automated deployment to GitHub Pages
+- **Branch Protection**: Prevent direct pushes to main
+- **GitHub CLI**: `gh pr create`, `gh issue list`
+
+#### Useful GitHub Commands
+```bash
+# GitHub CLI examples
+gh pr create --title "Add 3D visualization"
+gh pr list --state open
+gh issue create --title "Animation bug in 3D mode"
+gh repo view --web  # Open repo in browser
+```
+
+### Performance Optimization
+
+#### Repository Health
+- **Use .gitignore**: Keep repo clean (node_modules, .DS_Store)
+- **Optimize images**: Compress before committing
+- **Monitor size**: Keep GeoJSON files organized by decade
+- **Cache strategy**: Use browser cache for static assets
+
+#### Best Practices Summary
+1. **Commit often**: Small, focused commits
+2. **Write clear messages**: Future you will thank you
+3. **Test locally first**: Always verify before pushing
+4. **Use branches**: Isolate complex changes
+5. **Document changes**: Update README/CLAUDE.md as needed
+6. **Review before merge**: Use PR reviews for major changes
+7. **Keep main stable**: Only merge tested code
+8. **Tag releases**: Use semantic versioning (v1.2.3)
+9. **Monitor GitHub Actions**: Ensure deployments succeed
+10. **Clean up branches**: Delete merged feature branches
 
 ## 🚀 AI Assistant Deployment
 
