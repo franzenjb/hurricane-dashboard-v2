@@ -1709,7 +1709,6 @@
             if (playPauseBtn) {
                 playPauseBtn.onclick = () => {
                     console.log('Play/pause clicked. Current state:', animationState.isPlaying, 'Is 3D:', animationState.is3D);
-                    alert('Play button clicked! Playing: ' + animationState.isPlaying);  // DEBUG
                     if (animationState.isPlaying) {
                         pauseAnimation();
                     } else {
@@ -2069,8 +2068,13 @@
                 toggle3DBtn.classList.add('bg-green-500', 'hover:bg-green-600');
                 
                 // Show engine selector
-                engineSelect.style.display = 'inline-block';
-                current3DEngine = engineSelect.value;
+                if (engineSelect) {
+                    engineSelect.style.display = 'inline-block';
+                    current3DEngine = engineSelect.value;
+                    console.log('Engine selector shown, current engine:', current3DEngine);
+                } else {
+                    console.error('Engine selector not found!');
+                }
                 
                 // Show enhanced 3D controls for Cesium
                 const controls3D = document.getElementById('enhanced3DControls');
@@ -2162,10 +2166,13 @@
                     const animControls = document.getElementById('animationControls');
                     if (animControls) {
                         animControls.style.display = 'block';
-                        animControls.style.zIndex = '999999';
+                        animControls.style.zIndex = '9999999';
                         animControls.style.pointerEvents = 'auto';
-                        animControls.style.position = 'absolute';
-                        console.log('Animation controls made visible for 3D');
+                        animControls.style.position = 'fixed';
+                        animControls.style.bottom = '20px';
+                        animControls.style.left = '50%';
+                        animControls.style.transform = 'translateX(-50%)';
+                        console.log('Animation controls made visible for 3D with fixed position');
                     }
                 }, 100);
                 
@@ -2405,13 +2412,19 @@
             // Ensure animation controls stay on top of Cesium
             const animControls = document.getElementById('animationControls');
             if (animControls) {
-                // Move controls to parent container to ensure they're above Cesium
-                const mapContainer = document.getElementById('mapContainer');
-                if (mapContainer && !mapContainer.contains(animControls)) {
-                    mapContainer.appendChild(animControls);
-                }
-                animControls.style.zIndex = '999999';
+                // Make absolutely sure controls are on top
+                animControls.style.zIndex = '9999999';
                 animControls.style.pointerEvents = 'auto';
+                animControls.style.position = 'fixed';  // Use fixed positioning
+                animControls.style.bottom = '20px';
+                animControls.style.left = '50%';
+                animControls.style.transform = 'translateX(-50%)';
+                
+                // Also disable pointer events on Cesium's credit container which can block clicks
+                const creditContainer = document.querySelector('.cesium-widget-credits');
+                if (creditContainer) {
+                    creditContainer.style.display = 'none';
+                }
             }
             
             console.log('Cesium initialized successfully');
@@ -2850,14 +2863,8 @@
                         const segment = cesiumViewer.entities.add({
                             polyline: {
                                 positions: segmentPositions,
-                                width: animationState.glowEnabled ? 16 : 12,
-                                material: animationState.glowEnabled ? 
-                                    new Cesium.PolylineGlowMaterialProperty({
-                                        glowPower: 0.35,
-                                        color: segmentColor,
-                                        taperPower: 0.2
-                                    }) :
-                                    new Cesium.ColorMaterialProperty(segmentColor),
+                                width: 12,
+                                material: segmentColor,
                                 clampToGround: false,
                                 shadows: Cesium.ShadowMode.DISABLED
                             }
@@ -2906,10 +2913,28 @@
                     
                     animationState.cesiumEntities.push(startMarker, endMarker);
                     
-                    // Simpler approach - just zoom to all entities
+                    // Calculate bounds and zoom to storm
                     setTimeout(() => {
-                        cesiumViewer.zoomTo(cesiumViewer.entities, new Cesium.HeadingPitchRange(0, -Cesium.Math.PI_OVER_FOUR, 0));
-                    }, 100);
+                        try {
+                            if (positions.length > 0) {
+                                // Create a bounding sphere from all positions
+                                const boundingSphere = Cesium.BoundingSphere.fromPoints(positions);
+                                
+                                // Zoom to the bounding sphere with a good view angle
+                                cesiumViewer.camera.viewBoundingSphere(
+                                    boundingSphere,
+                                    new Cesium.HeadingPitchRange(0, -Cesium.Math.PI_OVER_FOUR, boundingSphere.radius * 3)
+                                );
+                                
+                                // Ensure the view is looking at the right place
+                                cesiumViewer.camera.lookAtTransform(Cesium.Matrix4.IDENTITY);
+                            }
+                        } catch (e) {
+                            console.warn('Could not zoom to storm track:', e);
+                            // Fallback to entity zoom
+                            cesiumViewer.zoomTo(cesiumViewer.entities);
+                        }
+                    }, 500);
                     
                     console.log('3D storm track rendered successfully');
                 } else {
@@ -2956,10 +2981,7 @@
                         Cesium.Cartesian3.fromDegrees(lon2, lat2, 10000)
                     ],
                     width: 8,
-                    material: new Cesium.PolylineGlowMaterialProperty({
-                        glowPower: 0.3,
-                        color: Cesium.Color.fromCssColorString(color)
-                    })
+                    material: Cesium.Color.fromCssColorString(color)
                 }
             });
             
@@ -3015,14 +3037,8 @@
                             Cesium.Cartesian3.fromDegrees(lon1, lat1, 10000),
                             Cesium.Cartesian3.fromDegrees(lon2, lat2, 10000)
                         ],
-                        width: animationState.glowEnabled ? 16 : 12,
-                        material: animationState.glowEnabled ?
-                            new Cesium.PolylineGlowMaterialProperty({
-                                glowPower: 0.35,
-                                color: cesiumColor,
-                                taperPower: 0.2
-                            }) :
-                            new Cesium.ColorMaterialProperty(cesiumColor),
+                        width: 12,
+                        material: cesiumColor,
                         clampToGround: false,
                         shadows: Cesium.ShadowMode.DISABLED
                     }
