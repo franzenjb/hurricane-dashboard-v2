@@ -1113,12 +1113,12 @@
                             </div>
                             
                             <!-- Right side - Map -->
-                            <div class="flex-1 relative">
+                            <div class="flex-1 relative" style="position: relative;">
                                 <div id="stormMap" class="w-full h-full"></div>
                                 <div id="cesiumContainer" class="w-full h-full" style="display: none;"></div>
                                 
                                 <!-- Animation Controls -->
-                                <div id="animationControls" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white bg-opacity-95 rounded-lg shadow-lg p-3" style="display: none;">
+                                <div id="animationControls" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white bg-opacity-95 rounded-lg shadow-lg p-3" style="display: none; z-index: 1000;">
                                     <div class="flex items-center gap-3">
                                         <button id="prevFrame" class="p-2 bg-gray-100 rounded hover:bg-gray-200 transition-colors" title="Previous Frame">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1330,8 +1330,11 @@
             animationState.drawnSegments = [];
             
             // Show animation controls
-            document.getElementById('animationControls').style.display = 'block';
-            setupAnimationControls();
+            const controlsDiv = document.getElementById('animationControls');
+            if (controlsDiv) {
+                controlsDiv.style.display = 'block';
+                setupAnimationControls();
+            }
             
             // Fit map to track bounds with more padding
             if (allLatLngs.length > 0) {
@@ -1342,12 +1345,22 @@
                 });
             }
             
-            // Start automatic playback
-            playAnimation();
+            // Start automatic playback after a small delay to ensure controls are visible
+            setTimeout(() => {
+                playAnimation();
+            }, 100);
         }
         
         // Animation control functions
         function setupAnimationControls() {
+            // Ensure controls stay visible
+            const controlsDiv = document.getElementById('animationControls');
+            if (controlsDiv) {
+                controlsDiv.style.display = 'block';
+                controlsDiv.style.visibility = 'visible';
+                controlsDiv.style.opacity = '1';
+            }
+            
             const playPauseBtn = document.getElementById('playPause');
             const prevBtn = document.getElementById('prevFrame');
             const nextBtn = document.getElementById('nextFrame');
@@ -1409,7 +1422,7 @@
                 </svg>
             `;
             
-            const animationSpeed = Math.max(20, 2000 / (animationState.segments.length * animationState.speed));
+            const animationSpeed = Math.max(50, 3000 / (animationState.segments.length * animationState.speed));
             
             const animate = () => {
                 if (!animationState.isPlaying) return;
