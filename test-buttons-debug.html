@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Animation Buttons</title>
+    <style>
+        body { padding: 20px; font-family: Arial; }
+        .test { margin: 20px 0; padding: 15px; background: #f5f5f5; }
+        pre { background: white; padding: 10px; overflow: auto; }
+    </style>
+</head>
+<body>
+    <h1>Animation Button Debug</h1>
+    
+    <div class="test">
+        <h2>Test in Console:</h2>
+        <p>1. Open dashboard: <a href="http://localhost:8000" target="_blank">http://localhost:8000</a></p>
+        <p>2. Go to Database tab</p>
+        <p>3. Click View on any storm</p>
+        <p>4. Open browser console (F12)</p>
+        <p>5. Run this code:</p>
+    </div>
+    
+    <pre id="code">
+// Get iframe context
+const iframe = document.querySelector('iframe[src*="enhanced-database.html"]');
+if (!iframe) {
+    console.error('Database iframe not found!');
+} else {
+    const win = iframe.contentWindow;
+    const doc = win.document;
+    
+    console.log('=== BUTTON DEBUG ===');
+    
+    // Check if buttons exist
+    const playBtn = doc.getElementById('playPause');
+    const nextBtn = doc.getElementById('nextFrame');
+    const prevBtn = doc.getElementById('prevFrame');
+    
+    console.log('Buttons found:');
+    console.log('- playPause:', !!playBtn);
+    console.log('- nextFrame:', !!nextBtn);
+    console.log('- prevFrame:', !!prevBtn);
+    
+    // Check if onclick handlers exist
+    if (playBtn) {
+        console.log('playBtn.onclick:', !!playBtn.onclick);
+        console.log('playBtn onclick function:', playBtn.onclick);
+        
+        // Try to manually trigger
+        console.log('Manually clicking play button...');
+        if (playBtn.onclick) {
+            playBtn.onclick();
+        } else {
+            console.error('No onclick handler on play button!');
+        }
+    }
+    
+    // Check animation state
+    console.log('\nAnimation state:');
+    console.log(win.animationState);
+    
+    // Check if setupAnimationControls exists
+    console.log('\nsetupAnimationControls function exists:', typeof win.setupAnimationControls);
+    
+    // Try to manually call it
+    if (typeof win.setupAnimationControls === 'function') {
+        console.log('Calling setupAnimationControls()...');
+        win.setupAnimationControls();
+        
+        // Check again
+        const playBtnAfter = doc.getElementById('playPause');
+        if (playBtnAfter) {
+            console.log('After setup - playBtn.onclick:', !!playBtnAfter.onclick);
+        }
+    }
+}
+    </pre>
+    
+    <button onclick="copyCode()">Copy Debug Code</button>
+    
+    <script>
+        function copyCode() {
+            const code = document.getElementById('code').textContent;
+            navigator.clipboard.writeText(code);
+            alert('Code copied to clipboard!');
+        }
+    </script>
+</body>
+</html>

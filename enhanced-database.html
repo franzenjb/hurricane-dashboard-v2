@@ -1251,9 +1251,11 @@
             // Add modal to page
             document.body.insertAdjacentHTML('beforeend', modalHTML);
             
-            // Initialize map
+            // Initialize map AND setup controls
             setTimeout(() => {
                 initStormMap(storm);
+                // Setup animation controls immediately after modal creation
+                setupAnimationControls();
             }, 100);
             } catch (error) {
                 console.error('Error showing storm modal:', error);
@@ -1617,12 +1619,16 @@
             if (controlsDiv) {
                 console.log('Showing animation controls');
                 controlsDiv.style.display = 'block';
-                controlsDiv.style.zIndex = '9999';
+                controlsDiv.style.zIndex = '999999';
                 controlsDiv.style.position = 'absolute';
                 controlsDiv.style.bottom = '16px';
                 controlsDiv.style.left = '50%';
                 controlsDiv.style.transform = 'translateX(-50%)';
-                setupAnimationControls();
+                
+                // Delay setup to ensure DOM is ready
+                setTimeout(() => {
+                    setupAnimationControls();
+                }, 50);
                 
                 // Double-check after a moment that controls are still visible
                 setTimeout(() => {
@@ -1660,8 +1666,8 @@
             console.log('Storm data loaded successfully, 3D button enabled');
         }
         
-        // Animation control functions
-        function setupAnimationControls() {
+        // Animation control functions - make it globally accessible for debugging
+        window.setupAnimationControls = function setupAnimationControls() {
             console.log('Setting up animation controls. Is 3D:', animationState.is3D);
             
             // Ensure controls stay visible
@@ -1670,6 +1676,11 @@
                 controlsDiv.style.display = 'block';
                 controlsDiv.style.visibility = 'visible';
                 controlsDiv.style.opacity = '1';
+                controlsDiv.style.pointerEvents = 'auto';
+                controlsDiv.style.zIndex = '999999';
+            } else {
+                console.error('Animation controls div not found!');
+                return;
             }
             
             const playPauseBtn = document.getElementById('playPause');
@@ -1687,10 +1698,18 @@
                 toggle3D: !!toggle3DBtn
             });
             
+            // If buttons not found, try again after a short delay
+            if (!playPauseBtn || !prevBtn || !nextBtn) {
+                console.warn('Some buttons not found, retrying in 100ms...');
+                setTimeout(() => setupAnimationControls(), 100);
+                return;
+            }
+            
             // Play/Pause button
             if (playPauseBtn) {
                 playPauseBtn.onclick = () => {
                     console.log('Play/pause clicked. Current state:', animationState.isPlaying, 'Is 3D:', animationState.is3D);
+                    alert('Play button clicked! Playing: ' + animationState.isPlaying);  // DEBUG
                     if (animationState.isPlaying) {
                         pauseAnimation();
                     } else {
