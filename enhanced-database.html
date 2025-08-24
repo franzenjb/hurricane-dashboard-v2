@@ -1623,8 +1623,8 @@
                 pauseAnimation();
                 if (animationState.currentFrame < animationState.totalFrames) {
                     if (animationState.is3D) {
-                        draw3DUpToFrame(animationState.currentFrame);
                         animationState.currentFrame++;
+                        draw3DUpToFrame(animationState.currentFrame);
                     } else {
                         drawFrame(animationState.currentFrame);
                         animationState.currentFrame++;
@@ -1667,9 +1667,9 @@
                 
                 if (animationState.currentFrame < animationState.totalFrames) {
                     if (animationState.is3D) {
-                        // In 3D mode, draw up to current frame
-                        draw3DUpToFrame(animationState.currentFrame);
+                        // In 3D mode, redraw everything up to current frame
                         animationState.currentFrame++;
+                        draw3DUpToFrame(animationState.currentFrame);
                     } else {
                         // In 2D mode, add next segment
                         drawFrame(animationState.currentFrame);
@@ -1706,7 +1706,8 @@
             if (index >= animationState.segments.length) return;
             
             if (animationState.is3D) {
-                // 3D mode - don't modify currentFrame here, just draw
+                // 3D mode - redraw everything up to current frame for consistency
+                animationState.currentFrame = index + 1;
                 draw3DUpToFrame(index);
             } else {
                 // 2D mode - draw frame in Leaflet
@@ -1942,15 +1943,9 @@
                     console.log('Calling draw3DStormTrack after delay');
                     console.log('Data check before draw3DStormTrack:', {
                         points: animationState.stormPoints?.length,
-                        segments: animationState.segments?.length,
-                        currentFrame: animationState.currentFrame
+                        segments: animationState.segments?.length
                     });
-                    // If animation was in progress, show it at current frame
-                    if (animationState.currentFrame > 0) {
-                        draw3DUpToFrame(animationState.currentFrame);
-                    } else {
-                        draw3DStormTrack();
-                    }
+                    draw3DStormTrack();
                 }, 300);
             } else {
                 // Switch back to 2D view
@@ -2050,15 +2045,15 @@
                     else if (maxWind >= 34) category = 0;
                     else category = -1;
                     
-                    // Rich, saturated colors with depth - professional and visible
+                    // Professional colors with strong visibility - balanced approach
                     const professional3DColors = {
-                        5: '#6A0DAD',  // Royal Purple for Cat 5 (deep, authoritative)
-                        4: '#B22222',  // Firebrick Red for Cat 4 (strong warning)
-                        3: '#FF6B35',  // Burnt Orange for Cat 3 (warm intensity)
-                        2: '#FFA500',  // Orange for Cat 2 (bright visibility)
-                        1: '#228B22',  // Forest Green for Cat 1 (natural strength)
-                        0: '#1E90FF',  // Dodger Blue for TS (ocean depth)
-                        '-1': '#696969' // Dim Gray for TD
+                        5: '#8B0A50',  // Deep Magenta for Cat 5 (serious, visible)
+                        4: '#DC143C',  // Crimson for Cat 4 (classic danger color)
+                        3: '#FF8C00',  // Dark Orange for Cat 3 (warm, professional)
+                        2: '#FFD700',  // Gold for Cat 2 (bright but refined)
+                        1: '#32CD32',  // Lime Green for Cat 1 (natural, visible)
+                        0: '#4169E1',  // Royal Blue for TS (ocean-like, professional)
+                        '-1': '#808080' // Gray for TD
                     };
                     
                     const hexColor = professional3DColors[category] || professional3DColors['-1'];
@@ -2085,12 +2080,8 @@
                         const segment = cesiumViewer.entities.add({
                             polyline: {
                                 positions: segmentPositions,
-                                width: 15,  // Substantial width for visibility
-                                material: new Cesium.PolylineOutlineMaterialProperty({
-                                    color: segmentColor,
-                                    outlineWidth: 3,
-                                    outlineColor: Cesium.Color.BLACK.withAlpha(0.5)
-                                })
+                                width: 12,  // Professional width - visible but refined
+                                material: new Cesium.ColorMaterialProperty(segmentColor),  // Solid color for clean professional look
                                 clampToGround: false,
                                 show: true
                             }
@@ -2226,13 +2217,13 @@
                 else category = -1;
                 
                 const professional3DColors = {
-                    5: '#6A0DAD',  // Royal Purple for Cat 5
-                    4: '#B22222',  // Firebrick Red for Cat 4
-                    3: '#FF6B35',  // Burnt Orange for Cat 3
-                    2: '#FFA500',  // Orange for Cat 2
-                    1: '#228B22',  // Forest Green for Cat 1
-                    0: '#1E90FF',  // Dodger Blue for TS
-                    '-1': '#696969' // Dim Gray for TD
+                    5: '#8B0A50',  // Deep Magenta for Cat 5
+                    4: '#DC143C',  // Crimson for Cat 4
+                    3: '#FF8C00',  // Dark Orange for Cat 3
+                    2: '#FFD700',  // Gold for Cat 2
+                    1: '#32CD32',  // Lime Green for Cat 1
+                    0: '#4169E1',  // Royal Blue for TS
+                    '-1': '#808080' // Gray for TD
                 };
                 
                 const hexColor = professional3DColors[category] || professional3DColors['-1'];
@@ -2244,12 +2235,8 @@
                             Cesium.Cartesian3.fromDegrees(lon1, lat1, 10000),
                             Cesium.Cartesian3.fromDegrees(lon2, lat2, 10000)
                         ],
-                        width: 15,  // Substantial width
-                        material: new Cesium.PolylineOutlineMaterialProperty({
-                            color: cesiumColor,
-                            outlineWidth: 3,
-                            outlineColor: Cesium.Color.BLACK.withAlpha(0.5)
-                        })
+                        width: 12,  // Professional width
+                        material: new Cesium.ColorMaterialProperty(cesiumColor),  // Solid color
                         clampToGround: false,
                         show: true
                     }
