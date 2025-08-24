@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Globe.gl Test - Hurricane Tracking</title>
+    <script src="//unpkg.com/globe.gl"></script>
+    <style>
+        body { margin: 0; }
+        #globeViz { width: 100vw; height: 100vh; }
+        .controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+        button {
+            margin: 0 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="globeViz"></div>
+    <div class="controls">
+        <button onclick="playAnimation()">Play</button>
+        <button onclick="pauseAnimation()">Pause</button>
+        <button onclick="nextFrame()">Next</button>
+        <button onclick="prevFrame()">Previous</button>
+        <button onclick="addTestHurricane()">Add Test Hurricane</button>
+    </div>
+
+    <script>
+        // Initialize Globe
+        const world = Globe()
+            (document.getElementById('globeViz'))
+            .globeImageUrl('//unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
+            .bumpImageUrl('//unpkg.com/three-globe/example/img/earth-topology.png')
+            .backgroundImageUrl('//unpkg.com/three-globe/example/img/night-sky.png');
+
+        // Test hurricane path (like Katrina)
+        const hurricanePath = [
+            { lat: 23.1, lng: -75.1, altitude: 0.1, intensity: 1 },
+            { lat: 24.5, lng: -76.5, altitude: 0.1, intensity: 2 },
+            { lat: 25.9, lng: -78.4, altitude: 0.1, intensity: 3 },
+            { lat: 26.3, lng: -80.3, altitude: 0.1, intensity: 4 },
+            { lat: 25.9, lng: -82.0, altitude: 0.1, intensity: 5 },
+            { lat: 25.4, lng: -83.7, altitude: 0.1, intensity: 5 },
+            { lat: 24.9, lng: -85.3, altitude: 0.1, intensity: 4 },
+            { lat: 24.6, lng: -87.0, altitude: 0.1, intensity: 4 },
+            { lat: 25.2, lng: -88.6, altitude: 0.1, intensity: 5 },
+            { lat: 26.3, lng: -89.6, altitude: 0.1, intensity: 5 },
+            { lat: 28.0, lng: -89.6, altitude: 0.1, intensity: 4 },
+            { lat: 29.3, lng: -89.6, altitude: 0.1, intensity: 3 },
+            { lat: 30.5, lng: -89.1, altitude: 0.1, intensity: 2 },
+            { lat: 32.6, lng: -88.1, altitude: 0.1, intensity: 1 }
+        ];
+
+        let currentFrame = 0;
+        let isPlaying = false;
+        let animationInterval = null;
+
+        function getIntensityColor(intensity) {
+            const colors = {
+                1: '#90EE90',  // Light green
+                2: '#FFD700',  // Gold
+                3: '#FF8C00',  // Orange
+                4: '#DC143C',  // Red
+                5: '#8B008B'   // Purple
+            };
+            return colors[intensity] || '#87CEEB';
+        }
+
+        function addTestHurricane() {
+            // Add path arcs
+            const arcs = [];
+            for (let i = 0; i < hurricanePath.length - 1; i++) {
+                arcs.push({
+                    startLat: hurricanePath[i].lat,
+                    startLng: hurricanePath[i].lng,
+                    endLat: hurricanePath[i + 1].lat,
+                    endLng: hurricanePath[i + 1].lng,
+                    color: getIntensityColor(hurricanePath[i].intensity),
+                    stroke: 3,
+                    altitude: 0.01
+                });
+            }
+            
+            world
+                .arcsData(arcs)
+                .arcColor('color')
+                .arcStroke('stroke')
+                .arcAltitudeAutoScale(0.3);
+
+            // Add points at each location
+            world
+                .pointsData(hurricanePath)
+                .pointLat('lat')
+                .pointLng('lng')
+                .pointAltitude('altitude')
+                .pointRadius(0.5)
+                .pointColor(d => getIntensityColor(d.intensity));
+
+            // Focus on hurricane area
+            world.pointOfView({
+                lat: 27,
+                lng: -85,
+                altitude: 2
+            }, 1000);
+        }
+
+        function playAnimation() {
+            if (isPlaying) return;
+            isPlaying = true;
+            
+            animationInterval = setInterval(() => {
+                if (currentFrame < hurricanePath.length - 1) {
+                    nextFrame();
+                } else {
+                    pauseAnimation();
+                }
+            }, 500);
+        }
+
+        function pauseAnimation() {
+            isPlaying = false;
+            if (animationInterval) {
+                clearInterval(animationInterval);
+                animationInterval = null;
+            }
+        }
+
+        function nextFrame() {
+            if (currentFrame < hurricanePath.length - 1) {
+                currentFrame++;
+                updateVisualization();
+            }
+        }
+
+        function prevFrame() {
+            if (currentFrame > 0) {
+                currentFrame--;
+                updateVisualization();
+            }
+        }
+
+        function updateVisualization() {
+            // Show path up to current frame
+            const visiblePath = hurricanePath.slice(0, currentFrame + 1);
+            const arcs = [];
+            
+            for (let i = 0; i < visiblePath.length - 1; i++) {
+                arcs.push({
+                    startLat: visiblePath[i].lat,
+                    startLng: visiblePath[i].lng,
+                    endLat: visiblePath[i + 1].lat,
+                    endLng: visiblePath[i + 1].lng,
+                    color: getIntensityColor(visiblePath[i].intensity),
+                    stroke: 3
+                });
+            }
+            
+            world.arcsData(arcs);
+            
+            // Update current position marker
+            world.pointsData([visiblePath[visiblePath.length - 1]]);
+        }
+
+        // Auto-rotate globe
+        world.controls().autoRotate = true;
+        world.controls().autoRotateSpeed = 0.5;
+    </script>
+</body>
+</html>

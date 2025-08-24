@@ -9,6 +9,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <link href="https://cesium.com/downloads/cesiumjs/releases/1.95/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
     <script src="https://cesium.com/downloads/cesiumjs/releases/1.95/Build/Cesium/Cesium.js"></script>
+    <script src="//unpkg.com/globe.gl"></script>
     <script src="atlantic-storms-enhanced.js"></script>
     <style>
         :root {
@@ -1141,6 +1142,7 @@
                             <div id="mapContainer" class="flex-1 relative" style="position: relative; overflow: visible;">
                                 <div id="stormMap" class="w-full h-full" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0;"></div>
                                 <div id="cesiumContainer" class="w-full h-full" style="display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0;"></div>
+                                <div id="globeContainer" class="w-full h-full" style="display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0;"></div>
                                 
                                 <!-- Animation Controls -->
                                 <div id="animationControls" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white bg-opacity-95 rounded-lg shadow-lg p-3" style="display: none; z-index: 999999;">
@@ -1169,6 +1171,10 @@
                                         <button id="toggle3D" class="ml-3 px-3 py-1 bg-purple-500 text-white text-sm rounded hover:bg-purple-600 transition-colors">
                                             3D View
                                         </button>
+                                        <select id="engine3D" class="ml-2 px-2 py-1 text-sm border rounded" style="display: none;">
+                                            <option value="cesium">Cesium</option>
+                                            <option value="globe">Globe.gl</option>
+                                        </select>
                                         <button id="toggleFullscreen" class="ml-1 px-3 py-1 bg-gray-600 text-white text-sm rounded hover:bg-gray-700 transition-colors" title="Fullscreen">
                                             ⛶
                                         </button>
@@ -1437,6 +1443,8 @@
         
         let stormModalMap = null;
         let cesiumViewer = null;
+        let globeViewer = null;
+        let current3DEngine = 'cesium'; // 'cesium' or 'globe'
         let animationState = {
             isPlaying: false,
             currentFrame: 0,
@@ -1741,6 +1749,21 @@
                 };
             }
             
+            // Engine selector
+            const engineSelect = document.getElementById('engine3D');
+            if (engineSelect) {
+                engineSelect.onchange = () => {
+                    if (animationState.is3D) {
+                        console.log('Switching 3D engine to:', engineSelect.value);
+                        current3DEngine = engineSelect.value;
+                        
+                        // Toggle off and back on to switch engines
+                        animationState.is3D = false;
+                        toggle3DView();
+                    }
+                };
+            }
+            
             // Fullscreen toggle
             const fullscreenBtn = document.getElementById('toggleFullscreen');
             if (fullscreenBtn) {
@@ -2015,34 +2038,69 @@
                 animationState.is3D = !animationState.is3D;
                 const mapDiv = document.getElementById('stormMap');
                 const cesiumDiv = document.getElementById('cesiumContainer');
+                const globeDiv = document.getElementById('globeContainer');
                 const toggle3DBtn = document.getElementById('toggle3D');
+                const engineSelect = document.getElementById('engine3D');
             
             if (animationState.is3D) {
                 // Switch to 3D view
                 mapDiv.style.display = 'none';
-                cesiumDiv.style.display = 'block';
                 toggle3DBtn.textContent = '2D View';
                 toggle3DBtn.classList.remove('bg-purple-500', 'hover:bg-purple-600');
                 toggle3DBtn.classList.add('bg-green-500', 'hover:bg-green-600');
                 
-                // Show enhanced 3D controls
+                // Show engine selector
+                engineSelect.style.display = 'inline-block';
+                current3DEngine = engineSelect.value;
+                
+                // Show enhanced 3D controls for Cesium
                 const controls3D = document.getElementById('enhanced3DControls');
                 if (controls3D) {
-                    controls3D.style.display = 'block';
+                    controls3D.style.display = current3DEngine === 'cesium' ? 'block' : 'none';
                 }
                 
-                if (!cesiumViewer) {
-                    console.log('Initializing Cesium 3D viewer');
-                    if (!initCesium3D()) {
-                        console.error('Failed to initialize Cesium');
-                        // Revert to 2D
-                        animationState.is3D = false;
-                        mapDiv.style.display = 'block';
-                        cesiumDiv.style.display = 'none';
-                        toggle3DBtn.textContent = '3D View';
-                        return;
+                if (current3DEngine === 'globe') {
+                    // Use Globe.gl
+                    cesiumDiv.style.display = 'none';
+                    globeDiv.style.display = 'block';
+                    
+                    if (!globeViewer) {
+                        console.log('Initializing Globe.gl viewer');
+                        if (!initGlobe3D()) {
+                            console.error('Failed to initialize Globe.gl');
+                            // Revert to 2D
+                            animationState.is3D = false;
+                            mapDiv.style.display = 'block';
+                            globeDiv.style.display = 'none';
+                            toggle3DBtn.textContent = '3D View';
+                            engineSelect.style.display = 'none';
+                            return;
+                        }
                     }
-                }
+                    
+                    // Draw storm track in Globe.gl
+                    setTimeout(() => {
+                        drawGlobeStormTrack();
+                    }, 500);
+                    
+                } else {
+                    // Use Cesium (default)
+                    globeDiv.style.display = 'none';
+                    cesiumDiv.style.display = 'block';
+                    
+                    if (!cesiumViewer) {
+                        console.log('Initializing Cesium 3D viewer');
+                        if (!initCesium3D()) {
+                            console.error('Failed to initialize Cesium');
+                            // Revert to 2D
+                            animationState.is3D = false;
+                            mapDiv.style.display = 'block';
+                            cesiumDiv.style.display = 'none';
+                            toggle3DBtn.textContent = '3D View';
+                            engineSelect.style.display = 'none';
+                            return;
+                        }
+                    }
                 
                 // Multiple retries to ensure Cesium is ready
                 let retryCount = 0;
@@ -2093,13 +2151,16 @@
                 }, 100);
                 
                 setTimeout(tryDrawing, 500);
+                }
             } else {
                 // Switch back to 2D view
                 cesiumDiv.style.display = 'none';
+                globeDiv.style.display = 'none';
                 mapDiv.style.display = 'block';
                 toggle3DBtn.textContent = '3D View';
                 toggle3DBtn.classList.remove('bg-green-500', 'hover:bg-green-600');
                 toggle3DBtn.classList.add('bg-purple-500', 'hover:bg-purple-600');
+                engineSelect.style.display = 'none';
                 
                 // Hide enhanced 3D controls
                 const controls3D = document.getElementById('enhanced3DControls');
@@ -2118,6 +2179,148 @@
                 if (mapDiv) mapDiv.style.display = 'block';
                 if (cesiumDiv) cesiumDiv.style.display = 'none';
             }
+        }
+        
+        function initGlobe3D() {
+            try {
+                console.log('Initializing Globe.gl viewer');
+                
+                // Clean up any existing viewer
+                if (globeViewer) {
+                    // Globe.gl doesn't have a destroy method, just clear the container
+                    const container = document.getElementById('globeContainer');
+                    if (container) container.innerHTML = '';
+                    globeViewer = null;
+                }
+                
+                // Initialize Globe.gl
+                globeViewer = Globe()
+                    (document.getElementById('globeContainer'))
+                    .globeImageUrl('//unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
+                    .bumpImageUrl('//unpkg.com/three-globe/example/img/earth-topology.png')
+                    .backgroundImageUrl('//unpkg.com/three-globe/example/img/night-sky.png')
+                    .showAtmosphere(true)
+                    .atmosphereColor('lightskyblue')
+                    .atmosphereAltitude(0.15);
+                
+                // Set initial view to Atlantic
+                globeViewer.pointOfView({
+                    lat: 25,
+                    lng: -70,
+                    altitude: 2.5
+                }, 1000);
+                
+                // Enable controls
+                globeViewer.controls().enableDamping = true;
+                globeViewer.controls().dampingFactor = 0.05;
+                globeViewer.controls().rotateSpeed = 0.5;
+                
+                console.log('Globe.gl initialized successfully');
+                return true;
+                
+            } catch (error) {
+                console.error('Failed to initialize Globe.gl:', error);
+                globeViewer = null;
+                return false;
+            }
+        }
+        
+        function drawGlobeStormTrack() {
+            if (!globeViewer || !animationState.stormPoints || animationState.stormPoints.length < 2) {
+                console.error('Globe.gl not ready or no storm data');
+                return;
+            }
+            
+            console.log('Drawing storm track in Globe.gl');
+            
+            // Convert storm points to arcs
+            const arcs = [];
+            const points = [];
+            
+            for (let i = 0; i < animationState.stormPoints.length - 1; i++) {
+                const point1 = animationState.stormPoints[i];
+                const point2 = animationState.stormPoints[i + 1];
+                
+                const [lon1, lat1] = point1.geometry.coordinates;
+                const [lon2, lat2] = point2.geometry.coordinates;
+                
+                // Determine color based on intensity
+                const maxWind = point1.properties?.max_wind || 0;
+                let category = -1;
+                if (maxWind >= 137) category = 5;
+                else if (maxWind >= 113) category = 4;
+                else if (maxWind >= 96) category = 3;
+                else if (maxWind >= 83) category = 2;
+                else if (maxWind >= 64) category = 1;
+                else if (maxWind >= 34) category = 0;
+                
+                const colors = {
+                    5: '#8B008B',  // Purple
+                    4: '#DC143C',  // Red
+                    3: '#FF8C00',  // Orange
+                    2: '#FFD700',  // Gold
+                    1: '#32CD32',  // Green
+                    0: '#4682B4',  // Blue
+                    '-1': '#808080' // Gray
+                };
+                
+                arcs.push({
+                    startLat: lat1,
+                    startLng: lon1,
+                    endLat: lat2,
+                    endLng: lon2,
+                    color: colors[category] || colors['-1'],
+                    stroke: 3
+                });
+                
+                // Add point for current position
+                if (i === 0) {
+                    points.push({
+                        lat: lat1,
+                        lng: lon1,
+                        color: '#00FF00',
+                        size: 0.5
+                    });
+                }
+            }
+            
+            // Add end point
+            const lastPoint = animationState.stormPoints[animationState.stormPoints.length - 1];
+            const [lastLon, lastLat] = lastPoint.geometry.coordinates;
+            points.push({
+                lat: lastLat,
+                lng: lastLon,
+                color: '#FF0000',
+                size: 0.5
+            });
+            
+            // Apply data to globe
+            globeViewer
+                .arcsData(arcs)
+                .arcColor('color')
+                .arcStroke('stroke')
+                .arcDashLength(0.5)
+                .arcDashGap(0.1)
+                .arcDashAnimateTime(2000);
+            
+            globeViewer
+                .pointsData(points)
+                .pointLat('lat')
+                .pointLng('lng')
+                .pointColor('color')
+                .pointRadius('size')
+                .pointAltitude(0.01);
+            
+            // Focus on storm area
+            const midIdx = Math.floor(animationState.stormPoints.length / 2);
+            const midPoint = animationState.stormPoints[midIdx];
+            const [midLon, midLat] = midPoint.geometry.coordinates;
+            
+            globeViewer.pointOfView({
+                lat: midLat,
+                lng: midLon,
+                altitude: 1.5
+            }, 1500);
         }
         
         function initCesium3D() {
