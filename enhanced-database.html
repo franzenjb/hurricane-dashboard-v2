@@ -1498,26 +1498,12 @@
         function drawFrame(index) {
             if (index >= animationState.segments.length) return;
             
-            const segment = animationState.segments[index];
-            const polyline = L.polyline(segment.path, {
-                color: segment.color,
-                weight: 8,
-                opacity: 0.9,
-                smoothFactor: 1
-            }).addTo(stormModalMap);
-            
-            animationState.drawnSegments.push(polyline);
-            updateFrameInfo();
-        }
-        
-        function drawUpToFrame(index) {
-            // Clear all drawn segments
-            animationState.drawnSegments.forEach(segment => segment.remove());
-            animationState.drawnSegments = [];
-            
-            // Redraw up to the specified frame
-            for (let i = 0; i <= index && i < animationState.segments.length; i++) {
-                const segment = animationState.segments[i];
+            if (animationState.is3D) {
+                // 3D mode - draw frame in Cesium
+                draw3DUpToFrame(index);
+            } else {
+                // 2D mode - draw frame in Leaflet
+                const segment = animationState.segments[index];
                 const polyline = L.polyline(segment.path, {
                     color: segment.color,
                     weight: 8,
@@ -1526,6 +1512,32 @@
                 }).addTo(stormModalMap);
                 
                 animationState.drawnSegments.push(polyline);
+            }
+            updateFrameInfo();
+        }
+        
+        function drawUpToFrame(index) {
+            if (animationState.is3D) {
+                // 3D mode - use Cesium drawing
+                draw3DUpToFrame(index);
+            } else {
+                // 2D mode - use Leaflet drawing
+                // Clear all drawn segments
+                animationState.drawnSegments.forEach(segment => segment.remove());
+                animationState.drawnSegments = [];
+                
+                // Redraw up to the specified frame
+                for (let i = 0; i <= index && i < animationState.segments.length; i++) {
+                    const segment = animationState.segments[i];
+                    const polyline = L.polyline(segment.path, {
+                        color: segment.color,
+                        weight: 8,
+                        opacity: 0.9,
+                        smoothFactor: 1
+                    }).addTo(stormModalMap);
+                    
+                    animationState.drawnSegments.push(polyline);
+                }
             }
             updateFrameInfo();
         }
@@ -1553,31 +1565,78 @@
             const firstPoint = animationState.stormPoints[0];
             const lastPoint = animationState.stormPoints[animationState.stormPoints.length - 1];
             
-            // Start marker (green)
-            L.circleMarker(
-                [firstPoint.geometry.coordinates[1], firstPoint.geometry.coordinates[0]],
-                { 
-                    radius: 8, 
-                    fillColor: '#5CB85C', 
-                    color: '#fff', 
-                    weight: 2, 
-                    opacity: 1, 
-                    fillOpacity: 0.9 
-                }
-            ).addTo(stormModalMap).bindPopup(`<b>Start:</b> ${new Date(firstPoint.properties.datetime).toLocaleDateString()}`);
-            
-            // End marker (red)
-            L.circleMarker(
-                [lastPoint.geometry.coordinates[1], lastPoint.geometry.coordinates[0]],
-                { 
-                    radius: 8, 
-                    fillColor: '#D9534F', 
-                    color: '#fff', 
-                    weight: 2, 
-                    opacity: 1, 
-                    fillOpacity: 0.9 
-                }
-            ).addTo(stormModalMap).bindPopup(`<b>End:</b> ${new Date(lastPoint.properties.datetime).toLocaleDateString()}`);
+            if (animationState.is3D && cesiumViewer) {
+                // 3D mode - add Cesium markers
+                const [startLon, startLat] = firstPoint.geometry.coordinates;
+                const [endLon, endLat] = lastPoint.geometry.coordinates;
+                
+                // Start marker (green)
+                const startEntity = cesiumViewer.entities.add({
+                    position: Cesium.Cartesian3.fromDegrees(startLon, startLat, 10000),
+                    point: {
+                        pixelSize: 12,
+                        color: Cesium.Color.fromCssColorString('#5CB85C'),
+                        outlineColor: Cesium.Color.WHITE,
+                        outlineWidth: 2
+                    },
+                    label: {
+                        text: 'START',
+                        font: '12px sans-serif',
+                        fillColor: Cesium.Color.WHITE,
+                        backgroundColor: Cesium.Color.fromCssColorString('#5CB85C'),
+                        showBackground: true,
+                        pixelOffset: new Cesium.Cartesian2(0, -20)
+                    }
+                });
+                
+                // End marker (red)
+                const endEntity = cesiumViewer.entities.add({
+                    position: Cesium.Cartesian3.fromDegrees(endLon, endLat, 10000),
+                    point: {
+                        pixelSize: 12,
+                        color: Cesium.Color.fromCssColorString('#D9534F'),
+                        outlineColor: Cesium.Color.WHITE,
+                        outlineWidth: 2
+                    },
+                    label: {
+                        text: 'END',
+                        font: '12px sans-serif',
+                        fillColor: Cesium.Color.WHITE,
+                        backgroundColor: Cesium.Color.fromCssColorString('#D9534F'),
+                        showBackground: true,
+                        pixelOffset: new Cesium.Cartesian2(0, -20)
+                    }
+                });
+                
+                animationState.cesiumEntities.push(startEntity, endEntity);
+            } else if (stormModalMap) {
+                // 2D mode - add Leaflet markers
+                // Start marker (green)
+                L.circleMarker(
+                    [firstPoint.geometry.coordinates[1], firstPoint.geometry.coordinates[0]],
+                    { 
+                        radius: 8, 
+                        fillColor: '#5CB85C', 
+                        color: '#fff', 
+                        weight: 2, 
+                        opacity: 1, 
+                        fillOpacity: 0.9 
+                    }
+                ).addTo(stormModalMap).bindPopup(`<b>Start:</b> ${new Date(firstPoint.properties.datetime).toLocaleDateString()}`);
+                
+                // End marker (red)
+                L.circleMarker(
+                    [lastPoint.geometry.coordinates[1], lastPoint.geometry.coordinates[0]],
+                    { 
+                        radius: 8, 
+                        fillColor: '#D9534F', 
+                        color: '#fff', 
+                        weight: 2, 
+                        opacity: 1, 
+                        fillOpacity: 0.9 
+                    }
+                ).addTo(stormModalMap).bindPopup(`<b>End:</b> ${new Date(lastPoint.properties.datetime).toLocaleDateString()}`);
+            }
         }
         
         function toggle3DView() {
@@ -1641,29 +1700,98 @@
             });
             animationState.cesiumEntities = [];
             
-            // Create path for the storm
-            const positions = [];
-            animationState.stormPoints.forEach(point => {
-                const [lon, lat] = point.geometry.coordinates;
-                positions.push(Cesium.Cartesian3.fromDegrees(lon, lat, 10000));
-            });
+            // Reset animation state for 3D
+            animationState.currentFrame = 0;
             
-            // Add polyline
+            // Draw up to current frame or start fresh
+            draw3DUpToFrame(0);
+            
+            // Set camera to view the storm area
+            if (animationState.stormPoints.length > 0) {
+                const midPoint = Math.floor(animationState.stormPoints.length / 2);
+                const [lon, lat] = animationState.stormPoints[midPoint].geometry.coordinates;
+                cesiumViewer.scene.camera.setView({
+                    destination: Cesium.Cartesian3.fromDegrees(lon, lat, 1500000)
+                });
+            }
+        }
+        
+        function draw3DFrame(index) {
+            if (!cesiumViewer || index >= animationState.segments.length) return;
+            
+            const segment = animationState.segments[index];
+            const point1 = segment.point;
+            const point2 = animationState.stormPoints[index + 1];
+            
+            if (!point2) return;
+            
+            const [lon1, lat1] = point1.geometry.coordinates;
+            const [lon2, lat2] = point2.geometry.coordinates;
+            
+            // Calculate color based on intensity
+            const maxWind = point1.properties.max_wind || 0;
+            let category = 0;
+            if (maxWind >= 137) category = 5;
+            else if (maxWind >= 113) category = 4;
+            else if (maxWind >= 96) category = 3;
+            else if (maxWind >= 83) category = 2;
+            else if (maxWind >= 64) category = 1;
+            
+            const color = getModalCategoryColor(category);
+            
+            // Add segment to 3D view
             const entity = cesiumViewer.entities.add({
                 polyline: {
-                    positions: positions,
-                    width: 5,
+                    positions: [
+                        Cesium.Cartesian3.fromDegrees(lon1, lat1, 10000),
+                        Cesium.Cartesian3.fromDegrees(lon2, lat2, 10000)
+                    ],
+                    width: 8,
                     material: new Cesium.PolylineGlowMaterialProperty({
-                        glowPower: 0.2,
-                        color: Cesium.Color.fromCssColorString('#FF0000')
+                        glowPower: 0.3,
+                        color: Cesium.Color.fromCssColorString(color)
                     })
                 }
             });
             
             animationState.cesiumEntities.push(entity);
+        }
+        
+        function draw3DUpToFrame(frameIndex) {
+            if (!cesiumViewer) return;
             
-            // Zoom to entity
-            cesiumViewer.zoomTo(entity);
+            // Clear existing entities
+            animationState.cesiumEntities.forEach(entity => {
+                cesiumViewer.entities.remove(entity);
+            });
+            animationState.cesiumEntities = [];
+            
+            // Draw all segments up to frameIndex
+            for (let i = 0; i <= frameIndex && i < animationState.segments.length; i++) {
+                draw3DFrame(i);
+            }
+            
+            // Add storm icon at current position
+            if (frameIndex < animationState.stormPoints.length) {
+                const currentPoint = animationState.stormPoints[frameIndex];
+                const [lon, lat] = currentPoint.geometry.coordinates;
+                
+                const stormIcon = cesiumViewer.entities.add({
+                    position: Cesium.Cartesian3.fromDegrees(lon, lat, 15000),
+                    billboard: {
+                        image: 'data:image/svg+xml;base64,' + btoa(`
+                            <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+                                <text x="20" y="30" font-size="30" text-anchor="middle">🌀</text>
+                            </svg>
+                        `),
+                        scale: 1.5,
+                        verticalOrigin: Cesium.VerticalOrigin.CENTER,
+                        horizontalOrigin: Cesium.HorizontalOrigin.CENTER
+                    }
+                });
+                
+                animationState.cesiumEntities.push(stormIcon);
+            }
         }
         
         // Match Timeline's color scheme exactly
