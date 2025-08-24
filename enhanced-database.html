@@ -1718,6 +1718,13 @@
         }
         
         function toggle3DView() {
+            console.log('Toggle 3D view called. Current state:', animationState.is3D);
+            console.log('Storm data available:', {
+                points: animationState.stormPoints?.length || 0,
+                segments: animationState.segments?.length || 0,
+                storm: animationState.storm?.name || 'none'
+            });
+            
             animationState.is3D = !animationState.is3D;
             const mapDiv = document.getElementById('stormMap');
             const cesiumDiv = document.getElementById('cesiumContainer');
@@ -1732,9 +1739,15 @@
                 toggle3DBtn.classList.add('bg-green-500', 'hover:bg-green-600');
                 
                 if (!cesiumViewer) {
+                    console.log('Initializing Cesium 3D viewer');
                     initCesium3D();
                 }
-                draw3DStormTrack();
+                
+                // Add a small delay to ensure Cesium is ready
+                setTimeout(() => {
+                    console.log('Calling draw3DStormTrack after delay');
+                    draw3DStormTrack();
+                }, 200);
             } else {
                 // Switch back to 2D view
                 cesiumDiv.style.display = 'none';
@@ -1770,8 +1783,18 @@
         }
         
         function draw3DStormTrack() {
+            console.log('draw3DStormTrack called');
+            console.log('cesiumViewer exists:', !!cesiumViewer);
+            console.log('stormPoints length:', animationState.stormPoints ? animationState.stormPoints.length : 0);
+            console.log('segments length:', animationState.segments ? animationState.segments.length : 0);
+            console.log('currentFrame:', animationState.currentFrame);
+            
             if (!cesiumViewer || !animationState.stormPoints || animationState.stormPoints.length === 0) {
-                console.log('3D track error: No viewer or storm points');
+                console.error('3D track error: No viewer or storm points. Details:', {
+                    viewer: !!cesiumViewer,
+                    points: animationState.stormPoints?.length || 0,
+                    segments: animationState.segments?.length || 0
+                });
                 return;
             }
             
@@ -1824,9 +1847,17 @@
         }
         
         function drawComplete3DPath() {
-            if (!cesiumViewer || !animationState.segments) return;
+            if (!cesiumViewer || !animationState.segments) {
+                console.error('Cannot draw 3D path: viewer or segments missing');
+                return;
+            }
             
             console.log('Drawing complete 3D path with', animationState.segments.length, 'segments');
+            
+            if (animationState.stormPoints && animationState.stormPoints.length > 0) {
+                const firstPoint = animationState.stormPoints[0];
+                console.log('First storm point:', firstPoint.geometry.coordinates, 'Storm:', animationState.storm?.name);
+            }
             
             // Draw all segments with their colors
             animationState.segments.forEach((segment, i) => {
