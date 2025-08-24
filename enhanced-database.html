@@ -1138,7 +1138,7 @@
                             </div>
                             
                             <!-- Right side - Map -->
-                            <div class="flex-1 relative" style="position: relative; overflow: visible;">
+                            <div id="mapContainer" class="flex-1 relative" style="position: relative; overflow: visible;">
                                 <div id="stormMap" class="w-full h-full" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0;"></div>
                                 <div id="cesiumContainer" class="w-full h-full" style="display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0;"></div>
                                 
@@ -1168,6 +1168,9 @@
                                         </div>
                                         <button id="toggle3D" class="ml-3 px-3 py-1 bg-purple-500 text-white text-sm rounded hover:bg-purple-600 transition-colors">
                                             3D View
+                                        </button>
+                                        <button id="toggleFullscreen" class="ml-1 px-3 py-1 bg-gray-600 text-white text-sm rounded hover:bg-gray-700 transition-colors" title="Fullscreen">
+                                            ⛶
                                         </button>
                                     </div>
                                     <div class="mt-2 text-center">
@@ -1708,6 +1711,14 @@
             toggle3DBtn.onclick = () => {
                 toggle3DView();
             };
+            
+            // Fullscreen toggle
+            const fullscreenBtn = document.getElementById('toggleFullscreen');
+            if (fullscreenBtn) {
+                fullscreenBtn.onclick = () => {
+                    toggleFullscreen();
+                };
+            }
         }
         
         function playAnimation() {
@@ -2072,6 +2083,68 @@
             setup3DControls();
         }
         
+        function toggleFullscreen() {
+            const mapContainer = document.getElementById('mapContainer');
+            const animControls = document.getElementById('animationControls');
+            const controls3D = document.getElementById('enhanced3DControls');
+            const fullscreenBtn = document.getElementById('toggleFullscreen');
+            
+            if (!document.fullscreenElement) {
+                // Enter fullscreen
+                if (mapContainer.requestFullscreen) {
+                    mapContainer.requestFullscreen();
+                } else if (mapContainer.webkitRequestFullscreen) {
+                    mapContainer.webkitRequestFullscreen();
+                } else if (mapContainer.mozRequestFullScreen) {
+                    mapContainer.mozRequestFullScreen();
+                } else if (mapContainer.msRequestFullscreen) {
+                    mapContainer.msRequestFullscreen();
+                }
+                
+                // Adjust styles for fullscreen
+                mapContainer.classList.add('fixed', 'inset-0', 'z-50', 'bg-black');
+                if (animControls) {
+                    animControls.style.zIndex = '999999';
+                }
+                if (controls3D) {
+                    controls3D.style.zIndex = '999999';
+                }
+                
+                // Change button to exit fullscreen symbol
+                fullscreenBtn.innerHTML = '⬜';
+                fullscreenBtn.title = 'Exit Fullscreen';
+            } else {
+                // Exit fullscreen
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+                
+                // Reset styles
+                mapContainer.classList.remove('fixed', 'inset-0', 'z-50', 'bg-black');
+                
+                // Reset button
+                fullscreenBtn.innerHTML = '⛶';
+                fullscreenBtn.title = 'Fullscreen';
+            }
+            
+            // Trigger resize for map/cesium
+            setTimeout(() => {
+                if (stormModalMap) {
+                    stormModalMap.invalidateSize();
+                }
+                if (cesiumViewer) {
+                    cesiumViewer.resize();
+                    cesiumViewer.scene.requestRender();
+                }
+            }, 300);
+        }
+        
         function setup3DControls() {
             const followBtn = document.getElementById('followCam');
             const orbitBtn = document.getElementById('orbitCam');
@@ -2227,18 +2300,25 @@
         }
         
         function toggleIntensityWall(show) {
-            // Remove existing walls
-            animationState.wallEntities.forEach(entity => {
-                cesiumViewer.entities.remove(entity);
-            });
+            // Remove existing walls safely
+            if (animationState.wallEntities && cesiumViewer) {
+                animationState.wallEntities.forEach(entity => {
+                    try {
+                        cesiumViewer.entities.remove(entity);
+                    } catch (e) {
+                        console.warn('Error removing wall entity:', e);
+                    }
+                });
+            }
             animationState.wallEntities = [];
             
             if (!show || !cesiumViewer || animationState.stormPoints.length < 2) return;
             
-            // Create 3D wall showing intensity
-            for (let i = 0; i < animationState.stormPoints.length - 1; i++) {
+            // Create 3D wall showing intensity (limit for performance)
+            const step = Math.max(1, Math.floor(animationState.stormPoints.length / 30));
+            for (let i = 0; i < animationState.stormPoints.length - step; i += step) {
                 const point1 = animationState.stormPoints[i];
-                const point2 = animationState.stormPoints[i + 1];
+                const point2 = animationState.stormPoints[Math.min(i + step, animationState.stormPoints.length - 1)];
                 
                 const [lon1, lat1] = point1.geometry.coordinates;
                 const [lon2, lat2] = point2.geometry.coordinates;
@@ -2284,16 +2364,22 @@
         }
         
         function toggleTimeLabels(show) {
-            // Remove existing labels
-            animationState.labelEntities.forEach(entity => {
-                cesiumViewer.entities.remove(entity);
-            });
+            // Remove existing labels safely
+            if (animationState.labelEntities && cesiumViewer) {
+                animationState.labelEntities.forEach(entity => {
+                    try {
+                        cesiumViewer.entities.remove(entity);
+                    } catch (e) {
+                        console.warn('Error removing label entity:', e);
+                    }
+                });
+            }
             animationState.labelEntities = [];
             
             if (!show || !cesiumViewer || animationState.stormPoints.length === 0) return;
             
-            // Add time labels at key points
-            const interval = Math.max(1, Math.floor(animationState.stormPoints.length / 10));
+            // Add time labels at key points (max 8 labels for performance)
+            const interval = Math.max(1, Math.floor(animationState.stormPoints.length / 8));
             
             for (let i = 0; i < animationState.stormPoints.length; i += interval) {
                 const point = animationState.stormPoints[i];
@@ -2411,9 +2497,13 @@
                 console.log('Sample colors:', colors.slice(0, 3));
                 
                 if (positions.length > 1) {
-                    // Try drawing segments individually for better visibility
-                    for (let i = 0; i < positions.length - 1; i++) {
-                        const segmentPositions = [positions[i], positions[i + 1]];
+                    // Draw segments (limit for performance)
+                    const maxSegments = 150;
+                    const step = positions.length > maxSegments ? Math.ceil((positions.length - 1) / maxSegments) : 1;
+                    
+                    for (let i = 0; i < positions.length - 1; i += step) {
+                        const endIdx = Math.min(i + step, positions.length - 1);
+                        const segmentPositions = [positions[i], positions[endIdx]];
                         const segmentColor = colors[i];
                         
                         const segment = cesiumViewer.entities.add({
@@ -2627,13 +2717,19 @@
             // Apply camera mode
             applyCameraMode(frameIndex);
             
-            // Apply visual effects if enabled
-            if (document.getElementById('showWall')?.checked) {
-                toggleIntensityWall(true);
-            }
-            if (document.getElementById('showLabels')?.checked) {
-                toggleTimeLabels(true);
-            }
+            // Apply visual effects if enabled (with delay to prevent crash)
+            setTimeout(() => {
+                try {
+                    if (document.getElementById('showWall')?.checked) {
+                        toggleIntensityWall(true);
+                    }
+                    if (document.getElementById('showLabels')?.checked) {
+                        toggleTimeLabels(true);
+                    }
+                } catch (e) {
+                    console.warn('Error applying visual effects:', e);
+                }
+            }, 200);
         }
         
         // Match Timeline's color scheme exactly
