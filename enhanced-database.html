@@ -336,16 +336,27 @@
             background: #e5e5e5;
         }
         
-        /* Ensure animation controls stay on top of Leaflet map */
+        /* Ensure animation controls stay on top of both Leaflet and Cesium */
         #animationControls {
-            z-index: 9999 !important;
+            z-index: 99999 !important;
             position: absolute !important;
             pointer-events: auto !important;
+            display: flex !important;
+            flex-direction: column !important;
+        }
+        
+        #animationControls[style*="display: none"] {
+            display: none !important;
         }
         
         /* Override Leaflet's default z-index for controls */
         .leaflet-control-container {
             z-index: 800 !important;
+        }
+        
+        /* Ensure Cesium container doesn't block controls */
+        #cesiumContainer {
+            z-index: 1 !important;
         }
         
         /* Category icon styles */
@@ -1211,7 +1222,9 @@
                     animationTimer: null,
                     stormPoints: [],
                     is3D: false,
-                    cesiumEntities: []
+                    cesiumEntities: [],
+                    stormIcon3D: null,
+                    storm: null
                 };
                 
                 modal.remove();
@@ -1230,7 +1243,9 @@
             animationTimer: null,
             stormPoints: [],
             is3D: false,
-            cesiumEntities: []
+            cesiumEntities: [],
+            stormIcon3D: null,
+            storm: null
         };
         
         function initStormMap(storm) {
@@ -1499,8 +1514,8 @@
             if (index >= animationState.segments.length) return;
             
             if (animationState.is3D) {
-                // 3D mode - draw frame in Cesium
-                draw3DUpToFrame(index);
+                // 3D mode - just add the single frame, don't redraw everything
+                draw3DSingleFrame(index);
             } else {
                 // 2D mode - draw frame in Leaflet
                 const segment = animationState.segments[index];
@@ -1514,6 +1529,67 @@
                 animationState.drawnSegments.push(polyline);
             }
             updateFrameInfo();
+        }
+        
+        function draw3DSingleFrame(index) {
+            if (!cesiumViewer || index >= animationState.segments.length) return;
+            
+            const segment = animationState.segments[index];
+            const point1 = segment.point;
+            const nextIndex = index + 1;
+            
+            if (nextIndex >= animationState.stormPoints.length) return;
+            
+            const point2 = animationState.stormPoints[nextIndex];
+            const [lon1, lat1] = point1.geometry.coordinates;
+            const [lon2, lat2] = point2.geometry.coordinates;
+            
+            // Add single segment
+            const entity = cesiumViewer.entities.add({
+                polyline: {
+                    positions: [
+                        Cesium.Cartesian3.fromDegrees(lon1, lat1, 10000),
+                        Cesium.Cartesian3.fromDegrees(lon2, lat2, 10000)
+                    ],
+                    width: 8,
+                    material: new Cesium.PolylineGlowMaterialProperty({
+                        glowPower: 0.3,
+                        color: Cesium.Color.fromCssColorString(segment.color)
+                    })
+                }
+            });
+            
+            animationState.cesiumEntities.push(entity);
+            
+            // Update storm icon position
+            updateStormIcon3D(nextIndex);
+        }
+        
+        function updateStormIcon3D(index) {
+            if (!cesiumViewer || index >= animationState.stormPoints.length) return;
+            
+            // Remove previous storm icon if exists
+            if (animationState.stormIcon3D) {
+                cesiumViewer.entities.remove(animationState.stormIcon3D);
+            }
+            
+            const point = animationState.stormPoints[index];
+            const [lon, lat] = point.geometry.coordinates;
+            
+            // Add storm icon at current position
+            animationState.stormIcon3D = cesiumViewer.entities.add({
+                position: Cesium.Cartesian3.fromDegrees(lon, lat, 15000),
+                billboard: {
+                    image: 'data:image/svg+xml;base64,' + btoa(`
+                        <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+                            <text x="20" y="30" font-size="30" text-anchor="middle">🌀</text>
+                        </svg>
+                    `),
+                    scale: 1.5,
+                    verticalOrigin: Cesium.VerticalOrigin.CENTER,
+                    horizontalOrigin: Cesium.HorizontalOrigin.CENTER
+                }
+            });
         }
         
         function drawUpToFrame(index) {
@@ -1700,11 +1776,9 @@
             });
             animationState.cesiumEntities = [];
             
-            // Reset animation state for 3D
-            animationState.currentFrame = 0;
-            
-            // Draw up to current frame or start fresh
-            draw3DUpToFrame(0);
+            // DON'T reset currentFrame - maintain animation state when switching views
+            // Draw up to the current frame to maintain continuity
+            draw3DUpToFrame(animationState.currentFrame);
             
             // Set camera to view the storm area
             if (animationState.stormPoints.length > 0) {
@@ -1760,38 +1834,49 @@
         function draw3DUpToFrame(frameIndex) {
             if (!cesiumViewer) return;
             
-            // Clear existing entities
+            // Clear existing entities (except storm icon which we'll update separately)
             animationState.cesiumEntities.forEach(entity => {
                 cesiumViewer.entities.remove(entity);
             });
             animationState.cesiumEntities = [];
             
-            // Draw all segments up to frameIndex
-            for (let i = 0; i <= frameIndex && i < animationState.segments.length; i++) {
-                draw3DFrame(i);
+            // Clear storm icon
+            if (animationState.stormIcon3D) {
+                cesiumViewer.entities.remove(animationState.stormIcon3D);
+                animationState.stormIcon3D = null;
             }
             
-            // Add storm icon at current position
-            if (frameIndex < animationState.stormPoints.length) {
-                const currentPoint = animationState.stormPoints[frameIndex];
-                const [lon, lat] = currentPoint.geometry.coordinates;
+            // Draw all segments up to frameIndex
+            for (let i = 0; i <= frameIndex && i < animationState.segments.length; i++) {
+                const segment = animationState.segments[i];
+                const point1 = segment.point;
+                const nextIndex = i + 1;
                 
-                const stormIcon = cesiumViewer.entities.add({
-                    position: Cesium.Cartesian3.fromDegrees(lon, lat, 15000),
-                    billboard: {
-                        image: 'data:image/svg+xml;base64,' + btoa(`
-                            <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-                                <text x="20" y="30" font-size="30" text-anchor="middle">🌀</text>
-                            </svg>
-                        `),
-                        scale: 1.5,
-                        verticalOrigin: Cesium.VerticalOrigin.CENTER,
-                        horizontalOrigin: Cesium.HorizontalOrigin.CENTER
+                if (nextIndex >= animationState.stormPoints.length) continue;
+                
+                const point2 = animationState.stormPoints[nextIndex];
+                const [lon1, lat1] = point1.geometry.coordinates;
+                const [lon2, lat2] = point2.geometry.coordinates;
+                
+                const entity = cesiumViewer.entities.add({
+                    polyline: {
+                        positions: [
+                            Cesium.Cartesian3.fromDegrees(lon1, lat1, 10000),
+                            Cesium.Cartesian3.fromDegrees(lon2, lat2, 10000)
+                        ],
+                        width: 8,
+                        material: new Cesium.PolylineGlowMaterialProperty({
+                            glowPower: 0.3,
+                            color: Cesium.Color.fromCssColorString(segment.color)
+                        })
                     }
                 });
                 
-                animationState.cesiumEntities.push(stormIcon);
+                animationState.cesiumEntities.push(entity);
             }
+            
+            // Update storm icon position
+            updateStormIcon3D(frameIndex);
         }
         
         // Match Timeline's color scheme exactly
