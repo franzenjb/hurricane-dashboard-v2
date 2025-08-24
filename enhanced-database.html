@@ -1688,8 +1688,8 @@
             if (index >= animationState.segments.length) return;
             
             if (animationState.is3D) {
-                // 3D mode - just add the single frame, don't redraw everything
-                draw3DSingleFrame(index);
+                // 3D mode - redraw everything up to and including this frame
+                draw3DUpToFrame(index);
             } else {
                 // 2D mode - draw frame in Leaflet
                 const segment = animationState.segments[index];
@@ -2029,18 +2029,18 @@
                     else if (maxWind >= 34) category = 0;
                     else category = -1;
                     
-                    // Bold, rich colors - professional but highly visible
-                    const bold3DColors = {
-                        5: '#9C27B0',  // Rich Purple for Cat 5 (bold but professional)
-                        4: '#E53935',  // Bright Red for Cat 4 (vivid danger signal)
-                        3: '#FF6F00',  // Strong Orange for Cat 3 (bold, warm)
-                        2: '#FFB300',  // Golden Yellow for Cat 2 (bright, rich)
-                        1: '#43A047',  // Vibrant Green for Cat 1 (lively but natural)
-                        0: '#1E88E5',  // Bright Blue for TS (vivid ocean blue)
-                        '-1': '#757575' // Solid Gray for TD
+                    // Professional meteorological colors with good 3D visibility
+                    const professional3DColors = {
+                        5: '#8B008B',  // Dark Magenta for Cat 5 (matches 2D)
+                        4: '#DC143C',  // Crimson for Cat 4
+                        3: '#FF8C00',  // Dark Orange for Cat 3 (matches 2D) 
+                        2: '#FFD700',  // Gold for Cat 2
+                        1: '#32CD32',  // Lime Green for Cat 1
+                        0: '#4682B4',  // Steel Blue for TS
+                        '-1': '#808080' // Gray for TD
                     };
                     
-                    const hexColor = bold3DColors[category] || bold3DColors['-1'];
+                    const hexColor = professional3DColors[category] || professional3DColors['-1'];
                     // Use full saturation for bold appearance
                     const cesiumColor = Cesium.Color.fromCssColorString(hexColor);
                     
@@ -2064,11 +2064,11 @@
                         const segment = cesiumViewer.entities.add({
                             polyline: {
                                 positions: segmentPositions,
-                                width: 18,  // Bold width for strong visibility
+                                width: 14,  // Professional width for visibility
                                 material: new Cesium.PolylineGlowMaterialProperty({
-                                    glowPower: 0.4,  // Stronger glow for better visibility
+                                    glowPower: 0.25,  // Moderate glow for professional look
                                     color: segmentColor,
-                                    taperPower: 0.2  // Less taper for bolder appearance
+                                    taperPower: 0.3  // Balanced taper
                                 }),
                                 clampToGround: false
                             }
@@ -2206,17 +2206,18 @@
                 else if (maxWind >= 34) category = 0;
                 else category = -1;
                 
-                const bold3DColors = {
-                    5: '#9C27B0',
-                    4: '#E53935',
-                    3: '#FF6F00',
-                    2: '#FFB300',
-                    1: '#43A047',
-                    0: '#1E88E5',
-                    '-1': '#757575'
+                // Professional meteorological colors with good 3D visibility
+                const professional3DColors = {
+                    5: '#8B008B',  // Dark Magenta for Cat 5 (matches 2D)
+                    4: '#DC143C',  // Crimson for Cat 4
+                    3: '#FF8C00',  // Dark Orange for Cat 3 (matches 2D) 
+                    2: '#FFD700',  // Gold for Cat 2
+                    1: '#32CD32',  // Lime Green for Cat 1
+                    0: '#4682B4',  // Steel Blue for TS
+                    '-1': '#808080' // Gray for TD
                 };
                 
-                const hexColor = bold3DColors[category] || bold3DColors['-1'];
+                const hexColor = professional3DColors[category] || professional3DColors['-1'];
                 const cesiumColor = Cesium.Color.fromCssColorString(hexColor);
                 
                 const entity = cesiumViewer.entities.add({
@@ -2225,11 +2226,11 @@
                             Cesium.Cartesian3.fromDegrees(lon1, lat1, 10000),
                             Cesium.Cartesian3.fromDegrees(lon2, lat2, 10000)
                         ],
-                        width: 18,
+                        width: 14,
                         material: new Cesium.PolylineGlowMaterialProperty({
-                            glowPower: 0.4,
+                            glowPower: 0.25,
                             color: cesiumColor,
-                            taperPower: 0.2
+                            taperPower: 0.3
                         }),
                         clampToGround: false
                     }
