@@ -7,10 +7,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <link href="https://cesium.com/downloads/cesiumjs/releases/1.95/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
-    <script src="https://cesium.com/downloads/cesiumjs/releases/1.95/Build/Cesium/Cesium.js"></script>
-    <script src="//unpkg.com/globe.gl"></script>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css' rel='stylesheet' />
     <script src="atlantic-storms-enhanced.js"></script>
+    <script src="mapbox-3d-functions.js"></script>
     <style>
         :root {
             --arc-red: #ED1B2E;
@@ -1141,8 +1141,7 @@
                             <!-- Right side - Map -->
                             <div id="mapContainer" class="flex-1 relative" style="position: relative; overflow: visible;">
                                 <div id="stormMap" class="w-full h-full" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0;"></div>
-                                <div id="cesiumContainer" class="w-full h-full" style="display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0;"></div>
-                                <div id="globeContainer" class="w-full h-full" style="display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0;"></div>
+                                <div id="mapbox3D" class="w-full h-full" style="display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0;"></div>
                                 
                                 <!-- Animation Controls -->
                                 <div id="animationControls" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white bg-opacity-95 rounded-lg shadow-lg p-3" style="display: none; z-index: 999999;">
@@ -1171,10 +1170,6 @@
                                         <button id="toggle3D" class="ml-3 px-3 py-1 bg-purple-500 text-white text-sm rounded hover:bg-purple-600 transition-colors">
                                             3D View
                                         </button>
-                                        <select id="engine3D" class="ml-2 px-2 py-1 text-sm border rounded" style="display: none;">
-                                            <option value="cesium">Cesium</option>
-                                            <option value="globe">Globe.gl</option>
-                                        </select>
                                         <button id="toggleFullscreen" class="ml-1 px-3 py-1 bg-gray-600 text-white text-sm rounded hover:bg-gray-700 transition-colors" title="Fullscreen">
                                             ⛶
                                         </button>
@@ -1444,9 +1439,7 @@
         }
         
         let stormModalMap = null;
-        let cesiumViewer = null;
-        let globeViewer = null;
-        let current3DEngine = 'cesium'; // 'cesium' or 'globe'
+        let mapbox3DViewer = null;
         let animationState = {
             isPlaying: false,
             currentFrame: 0,
@@ -1763,24 +1756,10 @@
             if (toggle3DBtn) {
                 toggle3DBtn.onclick = () => {
                     console.log('3D toggle clicked');
-                    toggle3DView();
+                    simpleToggle3D();  // Use the simpler Mapbox version
                 };
             }
             
-            // Engine selector
-            const engineSelect = document.getElementById('engine3D');
-            if (engineSelect) {
-                engineSelect.onchange = () => {
-                    if (animationState.is3D) {
-                        console.log('Switching 3D engine to:', engineSelect.value);
-                        current3DEngine = engineSelect.value;
-                        
-                        // Toggle off and back on to switch engines
-                        animationState.is3D = false;
-                        toggle3DView();
-                    }
-                };
-            }
             
             // Fullscreen toggle
             const fullscreenBtn = document.getElementById('toggleFullscreen');
@@ -1842,8 +1821,8 @@
             if (index >= animationState.segments.length) return;
             
             if (animationState.is3D) {
-                // 3D mode - redraw everything up to and including this frame
-                draw3DUpToFrame(index);
+                // 3D mode - use Mapbox
+                updateMapbox3DFrame(index);
             } else {
                 // 2D mode - draw frame in Leaflet
                 const segment = animationState.segments[index];
@@ -1922,8 +1901,8 @@
         
         function drawUpToFrame(index) {
             if (animationState.is3D) {
-                // 3D mode - use Cesium drawing
-                draw3DUpToFrame(index);
+                // 3D mode - use Mapbox
+                updateMapbox3DFrame(index);
             } else {
                 // 2D mode - use Leaflet drawing
                 // Clear all drawn segments

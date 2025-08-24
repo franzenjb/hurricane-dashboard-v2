@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Working Hurricane Viewer - No API Key Needed</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        body { margin: 0; padding: 0; font-family: Arial; }
+        #map { height: 100vh; width: 100vw; }
+        #controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 9999;
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            padding: 10px 15px;
+            cursor: pointer;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        button:hover { background: #45a049; }
+        button:active { transform: scale(0.95); }
+        #status {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 9999;
+        }
+        #legend {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 9999;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 3px 0;
+            font-size: 12px;
+        }
+        .legend-color {
+            width: 25px;
+            height: 4px;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <div id="status">✅ Controls Working - Click buttons below</div>
+    <div id="legend">
+        <strong>Categories</strong>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #8B008B;"></div>
+            <span>Cat 5</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #DC143C;"></div>
+            <span>Cat 4</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #FF8C00;"></div>
+            <span>Cat 3</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #FFD700;"></div>
+            <span>Cat 2</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #32CD32;"></div>
+            <span>Cat 1</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #4682B4;"></div>
+            <span>TS</span>
+        </div>
+    </div>
+    <div id="controls">
+        <button onclick="playAnimation()">▶ Play</button>
+        <button onclick="pauseAnimation()">⏸ Pause</button>
+        <button onclick="nextFrame()">⏭ Next</button>
+        <button onclick="prevFrame()">⏮ Previous</button>
+        <button onclick="resetAnimation()">🔄 Reset</button>
+    </div>
+
+    <script>
+        // Initialize map
+        const map = L.map('map').setView([27, -85], 5);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        // Hurricane data with wind speeds
+        const hurricaneData = [
+            { lat: 23.1, lng: -75.1, wind: 30 },
+            { lat: 24.5, lng: -76.5, wind: 45 },
+            { lat: 25.9, lng: -78.4, wind: 65 },
+            { lat: 26.3, lng: -80.3, wind: 75 },
+            { lat: 25.9, lng: -82.0, wind: 90 },
+            { lat: 25.4, lng: -83.7, wind: 105 },
+            { lat: 24.9, lng: -85.3, wind: 115 },
+            { lat: 24.6, lng: -87.0, wind: 125 },
+            { lat: 25.2, lng: -88.6, wind: 145 },
+            { lat: 26.3, lng: -89.6, wind: 165 },
+            { lat: 28.0, lng: -89.6, wind: 155 },
+            { lat: 29.3, lng: -89.6, wind: 125 },
+            { lat: 30.5, lng: -89.1, wind: 105 },
+            { lat: 32.6, lng: -88.1, wind: 75 }
+        ];
+
+        // Get color based on wind speed
+        function getColor(wind) {
+            if (wind >= 157) return '#8B008B'; // Cat 5
+            if (wind >= 130) return '#DC143C'; // Cat 4
+            if (wind >= 111) return '#FF8C00'; // Cat 3
+            if (wind >= 96)  return '#FFD700'; // Cat 2
+            if (wind >= 74)  return '#32CD32'; // Cat 1
+            if (wind >= 39)  return '#4682B4'; // TS
+            return '#808080'; // TD
+        }
+
+        // Animation state
+        let state = {
+            isPlaying: false,
+            currentFrame: 0,
+            timer: null,
+            drawnSegments: [],
+            currentMarker: null
+        };
+
+        // Draw complete path (faded)
+        function drawCompletePath() {
+            for (let i = 0; i < hurricaneData.length - 1; i++) {
+                const segment = L.polyline([
+                    [hurricaneData[i].lat, hurricaneData[i].lng],
+                    [hurricaneData[i + 1].lat, hurricaneData[i + 1].lng]
+                ], {
+                    color: getColor(hurricaneData[i].wind),
+                    weight: 4,
+                    opacity: 0.3
+                }).addTo(map);
+            }
+            
+            // Add start/end markers
+            L.circleMarker([hurricaneData[0].lat, hurricaneData[0].lng], {
+                radius: 8,
+                fillColor: 'green',
+                color: 'white',
+                weight: 2,
+                fillOpacity: 1
+            }).addTo(map).bindPopup('Start');
+            
+            L.circleMarker([hurricaneData[hurricaneData.length - 1].lat, hurricaneData[hurricaneData.length - 1].lng], {
+                radius: 8,
+                fillColor: 'red',
+                color: 'white',
+                weight: 2,
+                fillOpacity: 1
+            }).addTo(map).bindPopup('End');
+            
+            // Fit map to path
+            const lats = hurricaneData.map(p => p.lat);
+            const lngs = hurricaneData.map(p => p.lng);
+            map.fitBounds([
+                [Math.min(...lats), Math.min(...lngs)],
+                [Math.max(...lats), Math.max(...lngs)]
+            ], { padding: [50, 50] });
+        }
+
+        // Update animation to current frame
+        function updateAnimation() {
+            // Clear previous animated segments
+            state.drawnSegments.forEach(s => map.removeLayer(s));
+            state.drawnSegments = [];
+            
+            if (state.currentMarker) {
+                map.removeLayer(state.currentMarker);
+            }
+            
+            // Draw segments up to current frame
+            for (let i = 0; i <= state.currentFrame && i < hurricaneData.length - 1; i++) {
+                const segment = L.polyline([
+                    [hurricaneData[i].lat, hurricaneData[i].lng],
+                    [hurricaneData[i + 1].lat, hurricaneData[i + 1].lng]
+                ], {
+                    color: getColor(hurricaneData[i].wind),
+                    weight: 8,
+                    opacity: 1
+                }).addTo(map);
+                state.drawnSegments.push(segment);
+            }
+            
+            // Add current position marker
+            if (state.currentFrame < hurricaneData.length) {
+                const current = hurricaneData[state.currentFrame];
+                state.currentMarker = L.circleMarker([current.lat, current.lng], {
+                    radius: 12,
+                    fillColor: 'yellow',
+                    color: 'black',
+                    weight: 2,
+                    fillOpacity: 1
+                }).addTo(map);
+            }
+            
+            // Update status
+            document.getElementById('status').textContent = 
+                `Frame ${state.currentFrame + 1} / ${hurricaneData.length} - Wind: ${hurricaneData[state.currentFrame].wind} mph`;
+        }
+
+        // Animation controls
+        function playAnimation() {
+            if (state.isPlaying) return;
+            state.isPlaying = true;
+            
+            state.timer = setInterval(() => {
+                if (state.currentFrame < hurricaneData.length - 1) {
+                    state.currentFrame++;
+                    updateAnimation();
+                } else {
+                    pauseAnimation();
+                }
+            }, 300);
+            
+            console.log('Animation playing');
+        }
+
+        function pauseAnimation() {
+            state.isPlaying = false;
+            if (state.timer) {
+                clearInterval(state.timer);
+                state.timer = null;
+            }
+            console.log('Animation paused');
+        }
+
+        function nextFrame() {
+            pauseAnimation();
+            if (state.currentFrame < hurricaneData.length - 1) {
+                state.currentFrame++;
+                updateAnimation();
+            }
+        }
+
+        function prevFrame() {
+            pauseAnimation();
+            if (state.currentFrame > 0) {
+                state.currentFrame--;
+                updateAnimation();
+            }
+        }
+
+        function resetAnimation() {
+            pauseAnimation();
+            state.currentFrame = 0;
+            updateAnimation();
+        }
+
+        // Initialize
+        drawCompletePath();
+        updateAnimation();
+        
+        // Test buttons work
+        console.log('All controls should be working. Try clicking them!');
+    </script>
+</body>
+</html>

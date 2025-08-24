@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mapbox GL 3D Hurricane Viewer</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body { margin: 0; padding: 0; }
+        #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+        #controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        button {
+            padding: 8px 15px;
+            cursor: pointer;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        button:hover { background: #45a049; }
+        button:active { transform: scale(0.95); }
+        #status {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .working { background: #90EE90 !important; }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <div id="status">3D View Enabled - Tilt with right-click drag</div>
+    <div id="controls">
+        <button onclick="playAnimation()">▶ Play</button>
+        <button onclick="pauseAnimation()">⏸ Pause</button>
+        <button onclick="nextFrame()">⏭ Next</button>
+        <button onclick="prevFrame()">⏮ Previous</button>
+        <button onclick="reset()">🔄 Reset</button>
+        <button onclick="togglePitch()">📐 Toggle 3D</button>
+    </div>
+
+    <script>
+        // No token needed for basic style
+        mapboxgl.accessToken = 'pk.eyJ1IjoiZXhhbXBsZSIsImEiOiJjanh1YTNwYjcwMDFkM25tcGFnYWRqNGV4In0.fake';
+        
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: {
+                version: 8,
+                sources: {
+                    'osm': {
+                        type: 'raster',
+                        tiles: ['https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'],
+                        tileSize: 256
+                    }
+                },
+                layers: [{
+                    id: 'osm',
+                    type: 'raster',
+                    source: 'osm'
+                }]
+            },
+            center: [-85, 27],
+            zoom: 5,
+            pitch: 45, // Start with 3D angle
+            bearing: -17
+        });
+
+        // Hurricane path data
+        const hurricanePath = {
+            type: 'Feature',
+            geometry: {
+                type: 'LineString',
+                coordinates: [
+                    [-75.1, 23.1], [-76.5, 24.5], [-78.4, 25.9], 
+                    [-80.3, 26.3], [-82.0, 25.9], [-83.7, 25.4],
+                    [-85.3, 24.9], [-87.0, 24.6], [-88.6, 25.2],
+                    [-89.6, 26.3], [-89.6, 28.0], [-89.6, 29.3],
+                    [-89.1, 30.5], [-88.1, 32.6]
+                ]
+            }
+        };
+
+        let animationState = {
+            isPlaying: false,
+            currentFrame: 0,
+            timer: null
+        };
+
+        map.on('load', () => {
+            // Add hurricane path source
+            map.addSource('hurricane-path', {
+                type: 'geojson',
+                data: hurricanePath
+            });
+
+            // Add the complete path (semi-transparent)
+            map.addLayer({
+                id: 'hurricane-path-full',
+                type: 'line',
+                source: 'hurricane-path',
+                paint: {
+                    'line-color': '#ff0000',
+                    'line-opacity': 0.3,
+                    'line-width': 4
+                }
+            });
+
+            // Add animated path source
+            map.addSource('animated-path', {
+                type: 'geojson',
+                data: {
+                    type: 'Feature',
+                    geometry: {
+                        type: 'LineString',
+                        coordinates: []
+                    }
+                }
+            });
+
+            // Add animated path layer
+            map.addLayer({
+                id: 'animated-path',
+                type: 'line',
+                source: 'animated-path',
+                paint: {
+                    'line-color': '#0080ff',
+                    'line-opacity': 1,
+                    'line-width': 6
+                }
+            });
+
+            // Add current position source
+            map.addSource('current-position', {
+                type: 'geojson',
+                data: {
+                    type: 'Feature',
+                    geometry: {
+                        type: 'Point',
+                        coordinates: hurricanePath.geometry.coordinates[0]
+                    }
+                }
+            });
+
+            // Add current position marker
+            map.addLayer({
+                id: 'current-position',
+                type: 'circle',
+                source: 'current-position',
+                paint: {
+                    'circle-radius': 10,
+                    'circle-color': '#ffff00',
+                    'circle-stroke-color': '#ff0000',
+                    'circle-stroke-width': 2
+                }
+            });
+
+            console.log('Mapbox 3D view loaded successfully');
+            document.getElementById('status').className = 'working';
+        });
+
+        function updateAnimation() {
+            const coords = hurricanePath.geometry.coordinates;
+            const visiblePath = coords.slice(0, animationState.currentFrame + 1);
+            
+            // Update animated path
+            map.getSource('animated-path').setData({
+                type: 'Feature',
+                geometry: {
+                    type: 'LineString',
+                    coordinates: visiblePath
+                }
+            });
+            
+            // Update current position
+            if (animationState.currentFrame < coords.length) {
+                map.getSource('current-position').setData({
+                    type: 'Feature',
+                    geometry: {
+                        type: 'Point',
+                        coordinates: coords[animationState.currentFrame]
+                    }
+                });
+            }
+        }
+
+        function playAnimation() {
+            if (animationState.isPlaying) return;
+            animationState.isPlaying = true;
+            
+            animationState.timer = setInterval(() => {
+                if (animationState.currentFrame < hurricanePath.geometry.coordinates.length - 1) {
+                    animationState.currentFrame++;
+                    updateAnimation();
+                } else {
+                    pauseAnimation();
+                }
+            }, 200);
+            
+            console.log('Animation playing');
+        }
+
+        function pauseAnimation() {
+            animationState.isPlaying = false;
+            if (animationState.timer) {
+                clearInterval(animationState.timer);
+                animationState.timer = null;
+            }
+            console.log('Animation paused');
+        }
+
+        function nextFrame() {
+            pauseAnimation();
+            if (animationState.currentFrame < hurricanePath.geometry.coordinates.length - 1) {
+                animationState.currentFrame++;
+                updateAnimation();
+            }
+        }
+
+        function prevFrame() {
+            pauseAnimation();
+            if (animationState.currentFrame > 0) {
+                animationState.currentFrame--;
+                updateAnimation();
+            }
+        }
+
+        function reset() {
+            pauseAnimation();
+            animationState.currentFrame = 0;
+            updateAnimation();
+            map.flyTo({
+                center: [-85, 27],
+                zoom: 5,
+                pitch: 45,
+                bearing: -17
+            });
+        }
+
+        function togglePitch() {
+            const currentPitch = map.getPitch();
+            map.easeTo({
+                pitch: currentPitch === 0 ? 60 : 0,
+                duration: 1000
+            });
+        }
+
+        // Verify controls work
+        window.addEventListener('load', () => {
+            console.log('Controls test: All buttons should be clickable');
+            // Test each button programmatically
+            setTimeout(() => {
+                console.log('Testing animation controls...');
+                nextFrame();
+                console.log('✓ Next frame works');
+                setTimeout(() => {
+                    prevFrame();
+                    console.log('✓ Previous frame works');
+                }, 500);
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

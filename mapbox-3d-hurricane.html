@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mapbox 3D Hurricane - Color Coded by Category</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body { margin: 0; padding: 0; font-family: Arial; }
+        #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+        #controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        button {
+            padding: 8px 15px;
+            cursor: pointer;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        button:hover { background: #45a049; }
+        button:active { transform: scale(0.95); }
+        #status {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        #legend {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+        }
+        .legend-color {
+            width: 30px;
+            height: 4px;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <div id="status">3D Hurricane Track - Right-click drag to tilt</div>
+    <div id="legend">
+        <div style="font-weight: bold; margin-bottom: 5px;">Hurricane Categories</div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #8B008B;"></div>
+            <span>Cat 5 (≥157 mph)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #DC143C;"></div>
+            <span>Cat 4 (130-156 mph)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #FF8C00;"></div>
+            <span>Cat 3 (111-129 mph)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #FFD700;"></div>
+            <span>Cat 2 (96-110 mph)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #32CD32;"></div>
+            <span>Cat 1 (74-95 mph)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #4682B4;"></div>
+            <span>TS (39-73 mph)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #808080;"></div>
+            <span>TD (<39 mph)</span>
+        </div>
+    </div>
+    <div id="controls">
+        <button onclick="playAnimation()">▶ Play</button>
+        <button onclick="pauseAnimation()">⏸ Pause</button>
+        <button onclick="nextFrame()">⏭ Next</button>
+        <button onclick="prevFrame()">⏮ Previous</button>
+        <button onclick="reset()">🔄 Reset</button>
+        <button onclick="togglePitch()">📐 Toggle 3D</button>
+    </div>
+
+    <script>
+        // Your Mapbox access token
+        mapboxgl.accessToken = 'pk.eyJ1IjoiZnJhbnplbmplZmYiLCJhIjoiY21kN2Y0amZpMGs2NDJscHZycDRndDZ0eiJ9.4jmoLB2KQDRVN_wYKUg1Yw';
+        
+        // Hurricane path with wind speeds (simulated Katrina data)
+        const hurricanePoints = [
+            { coords: [-75.1, 23.1], windMph: 30 },  // TD
+            { coords: [-76.5, 24.5], windMph: 45 },  // TS
+            { coords: [-78.4, 25.9], windMph: 65 },  // TS
+            { coords: [-80.3, 26.3], windMph: 75 },  // Cat 1
+            { coords: [-82.0, 25.9], windMph: 90 },  // Cat 1
+            { coords: [-83.7, 25.4], windMph: 105 }, // Cat 2
+            { coords: [-85.3, 24.9], windMph: 115 }, // Cat 3
+            { coords: [-87.0, 24.6], windMph: 125 }, // Cat 3
+            { coords: [-88.6, 25.2], windMph: 145 }, // Cat 4
+            { coords: [-89.6, 26.3], windMph: 165 }, // Cat 5
+            { coords: [-89.6, 28.0], windMph: 155 }, // Cat 4
+            { coords: [-89.6, 29.3], windMph: 125 }, // Cat 3
+            { coords: [-89.1, 30.5], windMph: 105 }, // Cat 2
+            { coords: [-88.1, 32.6], windMph: 75 }   // Cat 1
+        ];
+
+        // Category color mapping
+        function getCategoryColor(windMph) {
+            if (windMph >= 157) return '#8B008B'; // Cat 5 - Purple
+            if (windMph >= 130) return '#DC143C'; // Cat 4 - Crimson
+            if (windMph >= 111) return '#FF8C00'; // Cat 3 - Dark Orange
+            if (windMph >= 96)  return '#FFD700'; // Cat 2 - Gold
+            if (windMph >= 74)  return '#32CD32'; // Cat 1 - Lime Green
+            if (windMph >= 39)  return '#4682B4'; // TS - Steel Blue
+            return '#808080'; // TD - Gray
+        }
+
+        // Create segments with colors
+        function createColoredSegments() {
+            const segments = [];
+            for (let i = 0; i < hurricanePoints.length - 1; i++) {
+                segments.push({
+                    type: 'Feature',
+                    properties: {
+                        color: getCategoryColor(hurricanePoints[i].windMph),
+                        windMph: hurricanePoints[i].windMph,
+                        index: i
+                    },
+                    geometry: {
+                        type: 'LineString',
+                        coordinates: [
+                            hurricanePoints[i].coords,
+                            hurricanePoints[i + 1].coords
+                        ]
+                    }
+                });
+            }
+            return segments;
+        }
+
+        // Calculate bounds for all points
+        function getBounds() {
+            const lngs = hurricanePoints.map(p => p.coords[0]);
+            const lats = hurricanePoints.map(p => p.coords[1]);
+            return [
+                [Math.min(...lngs), Math.min(...lats)],
+                [Math.max(...lngs), Math.max(...lats)]
+            ];
+        }
+
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/satellite-streets-v12', // Satellite view for better 3D effect
+            center: [-85, 27],
+            zoom: 5,
+            pitch: 45,
+            bearing: -17
+        });
+
+        let animationState = {
+            isPlaying: false,
+            currentFrame: 0,
+            timer: null
+        };
+
+        map.on('load', () => {
+            const segments = createColoredSegments();
+            
+            // Add source for all segments
+            map.addSource('hurricane-segments', {
+                type: 'geojson',
+                data: {
+                    type: 'FeatureCollection',
+                    features: segments
+                }
+            });
+
+            // Add layer for complete path (semi-transparent)
+            map.addLayer({
+                id: 'hurricane-complete',
+                type: 'line',
+                source: 'hurricane-segments',
+                paint: {
+                    'line-color': ['get', 'color'],
+                    'line-width': 6,
+                    'line-opacity': 0.3
+                }
+            });
+
+            // Add source for animated segments
+            map.addSource('animated-segments', {
+                type: 'geojson',
+                data: {
+                    type: 'FeatureCollection',
+                    features: []
+                }
+            });
+
+            // Add layer for animated path
+            map.addLayer({
+                id: 'animated-path',
+                type: 'line',
+                source: 'animated-segments',
+                paint: {
+                    'line-color': ['get', 'color'],
+                    'line-width': 8,
+                    'line-opacity': 1
+                }
+            });
+
+            // Add current position
+            map.addSource('current-position', {
+                type: 'geojson',
+                data: {
+                    type: 'Feature',
+                    geometry: {
+                        type: 'Point',
+                        coordinates: hurricanePoints[0].coords
+                    }
+                }
+            });
+
+            map.addLayer({
+                id: 'current-position',
+                type: 'circle',
+                source: 'current-position',
+                paint: {
+                    'circle-radius': 12,
+                    'circle-color': '#FFFF00',
+                    'circle-stroke-color': '#000000',
+                    'circle-stroke-width': 2
+                }
+            });
+
+            // Fit map to hurricane path bounds
+            map.fitBounds(getBounds(), {
+                padding: 100,
+                pitch: 45,
+                bearing: -17
+            });
+
+            console.log('Mapbox 3D with color-coded categories loaded');
+        });
+
+        function updateAnimation() {
+            const segments = createColoredSegments();
+            const visibleSegments = segments.slice(0, animationState.currentFrame + 1);
+            
+            // Update animated segments
+            map.getSource('animated-segments').setData({
+                type: 'FeatureCollection',
+                features: visibleSegments
+            });
+            
+            // Update current position
+            if (animationState.currentFrame < hurricanePoints.length) {
+                map.getSource('current-position').setData({
+                    type: 'Feature',
+                    geometry: {
+                        type: 'Point',
+                        coordinates: hurricanePoints[animationState.currentFrame].coords
+                    }
+                });
+            }
+        }
+
+        function playAnimation() {
+            if (animationState.isPlaying) return;
+            animationState.isPlaying = true;
+            
+            animationState.timer = setInterval(() => {
+                if (animationState.currentFrame < hurricanePoints.length - 1) {
+                    animationState.currentFrame++;
+                    updateAnimation();
+                } else {
+                    pauseAnimation();
+                }
+            }, 300);
+        }
+
+        function pauseAnimation() {
+            animationState.isPlaying = false;
+            if (animationState.timer) {
+                clearInterval(animationState.timer);
+                animationState.timer = null;
+            }
+        }
+
+        function nextFrame() {
+            pauseAnimation();
+            if (animationState.currentFrame < hurricanePoints.length - 1) {
+                animationState.currentFrame++;
+                updateAnimation();
+            }
+        }
+
+        function prevFrame() {
+            pauseAnimation();
+            if (animationState.currentFrame > 0) {
+                animationState.currentFrame--;
+                updateAnimation();
+            }
+        }
+
+        function reset() {
+            pauseAnimation();
+            animationState.currentFrame = 0;
+            updateAnimation();
+            
+            // Re-fit to bounds
+            map.fitBounds(getBounds(), {
+                padding: 100,
+                pitch: 45,
+                bearing: -17,
+                duration: 1000
+            });
+        }
+
+        function togglePitch() {
+            const currentPitch = map.getPitch();
+            map.easeTo({
+                pitch: currentPitch === 0 ? 60 : 0,
+                duration: 1000
+            });
+        }
+
+        // Initialize with first frame
+        map.on('load', () => {
+            updateAnimation();
+        });
+    </script>
+</body>
+</html>
