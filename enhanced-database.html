@@ -1174,6 +1174,69 @@
                                         <span id="frameInfo" class="text-xs text-gray-600">Frame 0 / 0</span>
                                     </div>
                                 </div>
+                                
+                                <!-- World-Class 3D Controls -->
+                                <div id="enhanced3DControls" class="absolute top-4 right-4 bg-black bg-opacity-90 text-white rounded-lg shadow-2xl p-4" style="display: none; z-index: 9999; width: 240px;">
+                                    <h4 class="text-sm font-bold mb-3 text-center text-purple-400 border-b border-purple-600 pb-2">🎬 Cinematic Storm Viewer</h4>
+                                    
+                                    <!-- Camera Modes -->
+                                    <div class="mb-4">
+                                        <label class="text-xs text-gray-300 block mb-2 font-semibold">CAMERA MODE</label>
+                                        <div class="grid grid-cols-2 gap-1">
+                                            <button id="followCam" class="text-xs px-2 py-2 bg-blue-600 rounded hover:bg-blue-500 transition-all font-medium">📍 Follow</button>
+                                            <button id="orbitCam" class="text-xs px-2 py-2 bg-gray-700 rounded hover:bg-gray-600 transition-all font-medium">🔄 Orbit</button>
+                                            <button id="flybyCam" class="text-xs px-2 py-2 bg-gray-700 rounded hover:bg-gray-600 transition-all font-medium">✈️ Flyby</button>
+                                            <button id="satelliteCam" class="text-xs px-2 py-2 bg-gray-700 rounded hover:bg-gray-600 transition-all font-medium">🛰️ Satellite</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Visual Effects -->
+                                    <div class="mb-4">
+                                        <label class="text-xs text-gray-300 block mb-2 font-semibold">VISUAL EFFECTS</label>
+                                        <div class="space-y-2">
+                                            <label class="flex items-center text-xs cursor-pointer hover:text-purple-300 transition-colors">
+                                                <input type="checkbox" id="showWall" class="mr-2" checked>
+                                                <span>3D Intensity Wall</span>
+                                            </label>
+                                            <label class="flex items-center text-xs cursor-pointer hover:text-purple-300 transition-colors">
+                                                <input type="checkbox" id="showGlow" class="mr-2" checked>
+                                                <span>Dynamic Path Glow</span>
+                                            </label>
+                                            <label class="flex items-center text-xs cursor-pointer hover:text-purple-300 transition-colors">
+                                                <input type="checkbox" id="showLabels" class="mr-2" checked>
+                                                <span>Time Labels</span>
+                                            </label>
+                                            <label class="flex items-center text-xs cursor-pointer hover:text-purple-300 transition-colors">
+                                                <input type="checkbox" id="showAtmosphere" class="mr-2" checked>
+                                                <span>Atmospheric Effects</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Speed Control -->
+                                    <div class="mb-4">
+                                        <label class="text-xs text-gray-300 block mb-2 font-semibold">PLAYBACK SPEED</label>
+                                        <input id="speed3D" type="range" min="0.25" max="3" step="0.25" value="1" class="w-full">
+                                        <div class="flex justify-between text-xs text-gray-400 mt-1">
+                                            <span>0.25x</span>
+                                            <span id="speed3DValue" class="text-purple-400 font-bold">1.0x</span>
+                                            <span>3.0x</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Quick Actions -->
+                                    <div class="space-y-2">
+                                        <button id="replay3D" class="w-full text-xs px-2 py-2.5 bg-gradient-to-r from-purple-600 to-blue-600 rounded hover:from-purple-500 hover:to-blue-500 transition-all font-bold shadow-lg">
+                                            🔄 REPLAY STORM
+                                        </button>
+                                        <button id="reset3DView" class="w-full text-xs px-2 py-2 bg-gray-700 rounded hover:bg-gray-600 transition-all font-medium">
+                                            🎯 Reset Camera
+                                        </button>
+                                        <button id="screenshot3D" class="w-full text-xs px-2 py-2 bg-gray-700 rounded hover:bg-gray-600 transition-all font-medium">
+                                            📸 Screenshot
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1385,7 +1448,16 @@
             cesiumEntities: [],
             stormIcon3D: null,
             storm: null,
-            dataLoading: false
+            dataLoading: false,
+            // World-class 3D features
+            cameraMode: 'follow',
+            wallEntities: [],
+            labelEntities: [],
+            glowEnabled: true,
+            atmosphereEnabled: true,
+            speed3D: 1.0,
+            orbitAngle: 0,
+            cameraDistance: 1000000
         };
         
         function initStormMap(storm) {
@@ -1649,7 +1721,8 @@
                 </svg>
             `;
             
-            const animationSpeed = Math.max(50, 3000 / (animationState.segments.length * animationState.speed));
+            const baseSpeed = animationState.is3D ? animationState.speed3D : 1.0;
+            const animationSpeed = Math.max(50, 3000 / (animationState.segments.length * animationState.speed * baseSpeed));
             
             const animate = () => {
                 if (!animationState.isPlaying) return;
@@ -1917,6 +1990,12 @@
                 toggle3DBtn.classList.remove('bg-purple-500', 'hover:bg-purple-600');
                 toggle3DBtn.classList.add('bg-green-500', 'hover:bg-green-600');
                 
+                // Show enhanced 3D controls
+                const controls3D = document.getElementById('enhanced3DControls');
+                if (controls3D) {
+                    controls3D.style.display = 'block';
+                }
+                
                 if (!cesiumViewer) {
                     console.log('Initializing Cesium 3D viewer');
                     initCesium3D();
@@ -1927,9 +2006,15 @@
                     console.log('Calling draw3DStormTrack after delay');
                     console.log('Data check before draw3DStormTrack:', {
                         points: animationState.stormPoints?.length,
-                        segments: animationState.segments?.length
+                        segments: animationState.segments?.length,
+                        currentFrame: animationState.currentFrame
                     });
-                    draw3DStormTrack();
+                    // If animation was in progress, show it at current frame
+                    if (animationState.currentFrame > 0) {
+                        draw3DUpToFrame(animationState.currentFrame);
+                    } else {
+                        draw3DStormTrack();
+                    }
                 }, 300);
             } else {
                 // Switch back to 2D view
@@ -1938,6 +2023,12 @@
                 toggle3DBtn.textContent = '3D View';
                 toggle3DBtn.classList.remove('bg-green-500', 'hover:bg-green-600');
                 toggle3DBtn.classList.add('bg-purple-500', 'hover:bg-purple-600');
+                
+                // Hide enhanced 3D controls
+                const controls3D = document.getElementById('enhanced3DControls');
+                if (controls3D) {
+                    controls3D.style.display = 'none';
+                }
             }
         }
         
@@ -1949,20 +2040,284 @@
                 baseLayerPicker: false,
                 geocoder: false,
                 homeButton: false,
-                sceneModePicker: true,
+                sceneModePicker: false,
                 navigationHelpButton: false,
                 animation: false,
                 timeline: false,
                 fullscreenButton: false,
                 imageryProvider: new Cesium.OpenStreetMapImageryProvider({
                     url: 'https://a.tile.openstreetmap.org/'
-                })
+                }),
+                skyBox: false,
+                skyAtmosphere: true,
+                scene3DOnly: false
             });
+            
+            // Enhanced lighting and atmosphere
+            cesiumViewer.scene.globe.enableLighting = true;
+            cesiumViewer.scene.fog.enabled = true;
+            cesiumViewer.scene.fog.density = 0.0001;
+            cesiumViewer.scene.globe.showGroundAtmosphere = true;
+            
+            // Better performance
+            cesiumViewer.scene.requestRenderMode = true;
+            cesiumViewer.scene.maximumRenderTimeChange = Infinity;
             
             // Set initial view
             cesiumViewer.scene.camera.setView({
                 destination: Cesium.Cartesian3.fromDegrees(-70, 25, 2000000)
             });
+            
+            // Setup enhanced 3D controls
+            setup3DControls();
+        }
+        
+        function setup3DControls() {
+            const followBtn = document.getElementById('followCam');
+            const orbitBtn = document.getElementById('orbitCam');
+            const flybyBtn = document.getElementById('flybyCam');
+            const satelliteBtn = document.getElementById('satelliteCam');
+            const wallCheck = document.getElementById('showWall');
+            const glowCheck = document.getElementById('showGlow');
+            const labelsCheck = document.getElementById('showLabels');
+            const atmosphereCheck = document.getElementById('showAtmosphere');
+            const speed3DSlider = document.getElementById('speed3D');
+            const speed3DValue = document.getElementById('speed3DValue');
+            const replayBtn = document.getElementById('replay3D');
+            const resetBtn = document.getElementById('reset3DView');
+            const screenshotBtn = document.getElementById('screenshot3D');
+            
+            if (!followBtn) return; // Controls not yet created
+            
+            // Camera mode buttons
+            followBtn.onclick = () => setCameraMode('follow', followBtn, [orbitBtn, flybyBtn, satelliteBtn]);
+            orbitBtn.onclick = () => setCameraMode('orbit', orbitBtn, [followBtn, flybyBtn, satelliteBtn]);
+            flybyBtn.onclick = () => setCameraMode('flyby', flybyBtn, [followBtn, orbitBtn, satelliteBtn]);
+            satelliteBtn.onclick = () => setCameraMode('satellite', satelliteBtn, [followBtn, orbitBtn, flybyBtn]);
+            
+            // Visual effects
+            wallCheck.onchange = () => toggleIntensityWall(wallCheck.checked);
+            glowCheck.onchange = () => { 
+                animationState.glowEnabled = glowCheck.checked;
+                if (animationState.is3D) draw3DStormTrack();
+            };
+            labelsCheck.onchange = () => toggleTimeLabels(labelsCheck.checked);
+            atmosphereCheck.onchange = () => {
+                animationState.atmosphereEnabled = atmosphereCheck.checked;
+                if (cesiumViewer) {
+                    cesiumViewer.scene.skyAtmosphere.show = atmosphereCheck.checked;
+                    cesiumViewer.scene.globe.showGroundAtmosphere = atmosphereCheck.checked;
+                }
+            };
+            
+            // Speed control
+            speed3DSlider.oninput = (e) => {
+                animationState.speed3D = parseFloat(e.target.value);
+                speed3DValue.textContent = animationState.speed3D.toFixed(2) + 'x';
+                if (animationState.isPlaying && animationState.is3D) {
+                    pauseAnimation();
+                    playAnimation();
+                }
+            };
+            
+            // Actions
+            replayBtn.onclick = () => {
+                animationState.currentFrame = 0;
+                if (animationState.is3D) {
+                    draw3DUpToFrame(0);
+                    setTimeout(() => playAnimation(), 500);
+                }
+            };
+            
+            resetBtn.onclick = () => {
+                if (cesiumViewer && animationState.stormPoints.length > 0) {
+                    cesiumViewer.zoomTo(cesiumViewer.entities);
+                }
+            };
+            
+            screenshotBtn.onclick = () => {
+                if (cesiumViewer) {
+                    cesiumViewer.render();
+                    cesiumViewer.canvas.toBlob(function(blob) {
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `storm-${animationState.storm?.storm_id || 'unknown'}-3d.png`;
+                        a.click();
+                    });
+                }
+            };
+        }
+        
+        function setCameraMode(mode, activeBtn, otherBtns) {
+            animationState.cameraMode = mode;
+            activeBtn.classList.remove('bg-gray-700');
+            activeBtn.classList.add('bg-blue-600');
+            otherBtns.forEach(btn => {
+                btn.classList.remove('bg-blue-600');
+                btn.classList.add('bg-gray-700');
+            });
+            
+            if (animationState.currentFrame > 0 && animationState.stormPoints.length > 0) {
+                applyCameraMode(animationState.currentFrame);
+            }
+        }
+        
+        function applyCameraMode(frameIndex) {
+            if (!cesiumViewer || frameIndex >= animationState.stormPoints.length) return;
+            
+            const point = animationState.stormPoints[frameIndex];
+            const [lon, lat] = point.geometry.coordinates;
+            const target = Cesium.Cartesian3.fromDegrees(lon, lat, 5000);
+            
+            switch (animationState.cameraMode) {
+                case 'follow':
+                    // Camera follows behind the storm
+                    cesiumViewer.scene.camera.lookAt(
+                        target,
+                        new Cesium.HeadingPitchRange(
+                            Cesium.Math.toRadians(-45),
+                            Cesium.Math.toRadians(-30),
+                            500000
+                        )
+                    );
+                    break;
+                    
+                case 'orbit':
+                    // Camera orbits around the storm
+                    animationState.orbitAngle = (animationState.orbitAngle + 2) % 360;
+                    cesiumViewer.scene.camera.lookAt(
+                        target,
+                        new Cesium.HeadingPitchRange(
+                            Cesium.Math.toRadians(animationState.orbitAngle),
+                            Cesium.Math.toRadians(-25),
+                            800000
+                        )
+                    );
+                    break;
+                    
+                case 'flyby':
+                    // Dramatic flyby view
+                    const progress = frameIndex / animationState.totalFrames;
+                    const heading = Cesium.Math.toRadians(progress * 180 - 90);
+                    cesiumViewer.scene.camera.lookAt(
+                        target,
+                        new Cesium.HeadingPitchRange(
+                            heading,
+                            Cesium.Math.toRadians(-15),
+                            300000 + progress * 700000
+                        )
+                    );
+                    break;
+                    
+                case 'satellite':
+                    // Top-down satellite view
+                    cesiumViewer.scene.camera.lookAt(
+                        target,
+                        new Cesium.HeadingPitchRange(
+                            0,
+                            Cesium.Math.toRadians(-90),
+                            1500000
+                        )
+                    );
+                    break;
+            }
+            
+            cesiumViewer.scene.camera.lookAtTransform(Cesium.Matrix4.IDENTITY);
+        }
+        
+        function toggleIntensityWall(show) {
+            // Remove existing walls
+            animationState.wallEntities.forEach(entity => {
+                cesiumViewer.entities.remove(entity);
+            });
+            animationState.wallEntities = [];
+            
+            if (!show || !cesiumViewer || animationState.stormPoints.length < 2) return;
+            
+            // Create 3D wall showing intensity
+            for (let i = 0; i < animationState.stormPoints.length - 1; i++) {
+                const point1 = animationState.stormPoints[i];
+                const point2 = animationState.stormPoints[i + 1];
+                
+                const [lon1, lat1] = point1.geometry.coordinates;
+                const [lon2, lat2] = point2.geometry.coordinates;
+                
+                const maxWind = point1.properties?.max_wind || 0;
+                const height = maxWind * 1000; // Height based on wind speed
+                
+                let category = 0;
+                if (maxWind >= 137) category = 5;
+                else if (maxWind >= 113) category = 4;
+                else if (maxWind >= 96) category = 3;
+                else if (maxWind >= 83) category = 2;
+                else if (maxWind >= 64) category = 1;
+                else if (maxWind >= 34) category = 0;
+                else category = -1;
+                
+                const colors = {
+                    5: Cesium.Color.DARKMAGENTA.withAlpha(0.6),
+                    4: Cesium.Color.CRIMSON.withAlpha(0.6),
+                    3: Cesium.Color.DARKORANGE.withAlpha(0.6),
+                    2: Cesium.Color.GOLD.withAlpha(0.6),
+                    1: Cesium.Color.LIMEGREEN.withAlpha(0.6),
+                    0: Cesium.Color.STEELBLUE.withAlpha(0.6),
+                    '-1': Cesium.Color.GRAY.withAlpha(0.3)
+                };
+                
+                const wallEntity = cesiumViewer.entities.add({
+                    wall: {
+                        positions: [
+                            Cesium.Cartesian3.fromDegrees(lon1, lat1),
+                            Cesium.Cartesian3.fromDegrees(lon2, lat2)
+                        ],
+                        maximumHeights: [height, height],
+                        minimumHeights: [0, 0],
+                        material: colors[category] || colors['-1'],
+                        outline: true,
+                        outlineColor: Cesium.Color.BLACK.withAlpha(0.3)
+                    }
+                });
+                
+                animationState.wallEntities.push(wallEntity);
+            }
+        }
+        
+        function toggleTimeLabels(show) {
+            // Remove existing labels
+            animationState.labelEntities.forEach(entity => {
+                cesiumViewer.entities.remove(entity);
+            });
+            animationState.labelEntities = [];
+            
+            if (!show || !cesiumViewer || animationState.stormPoints.length === 0) return;
+            
+            // Add time labels at key points
+            const interval = Math.max(1, Math.floor(animationState.stormPoints.length / 10));
+            
+            for (let i = 0; i < animationState.stormPoints.length; i += interval) {
+                const point = animationState.stormPoints[i];
+                const [lon, lat] = point.geometry.coordinates;
+                const date = new Date(point.properties.datetime);
+                const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                
+                const labelEntity = cesiumViewer.entities.add({
+                    position: Cesium.Cartesian3.fromDegrees(lon, lat, 20000),
+                    label: {
+                        text: dateStr,
+                        font: '14px sans-serif',
+                        fillColor: Cesium.Color.WHITE,
+                        outlineColor: Cesium.Color.BLACK,
+                        outlineWidth: 2,
+                        style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+                        verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+                        pixelOffset: new Cesium.Cartesian2(0, -10),
+                        disableDepthTestDistance: Number.POSITIVE_INFINITY
+                    }
+                });
+                
+                animationState.labelEntities.push(labelEntity);
+            }
         }
         
         function draw3DStormTrack() {
@@ -2064,13 +2419,16 @@
                         const segment = cesiumViewer.entities.add({
                             polyline: {
                                 positions: segmentPositions,
-                                width: 14,  // Professional width for visibility
-                                material: new Cesium.PolylineGlowMaterialProperty({
-                                    glowPower: 0.25,  // Moderate glow for professional look
-                                    color: segmentColor,
-                                    taperPower: 0.3  // Balanced taper
-                                }),
-                                clampToGround: false
+                                width: animationState.glowEnabled ? 16 : 12,
+                                material: animationState.glowEnabled ? 
+                                    new Cesium.PolylineGlowMaterialProperty({
+                                        glowPower: 0.35,
+                                        color: segmentColor,
+                                        taperPower: 0.2
+                                    }) :
+                                    new Cesium.ColorMaterialProperty(segmentColor),
+                                clampToGround: false,
+                                shadows: Cesium.ShadowMode.DISABLED
                             }
                         });
                         
@@ -2226,13 +2584,16 @@
                             Cesium.Cartesian3.fromDegrees(lon1, lat1, 10000),
                             Cesium.Cartesian3.fromDegrees(lon2, lat2, 10000)
                         ],
-                        width: 14,
-                        material: new Cesium.PolylineGlowMaterialProperty({
-                            glowPower: 0.25,
-                            color: cesiumColor,
-                            taperPower: 0.3
-                        }),
-                        clampToGround: false
+                        width: animationState.glowEnabled ? 16 : 12,
+                        material: animationState.glowEnabled ?
+                            new Cesium.PolylineGlowMaterialProperty({
+                                glowPower: 0.35,
+                                color: cesiumColor,
+                                taperPower: 0.2
+                            }) :
+                            new Cesium.ColorMaterialProperty(cesiumColor),
+                        clampToGround: false,
+                        shadows: Cesium.ShadowMode.DISABLED
                     }
                 });
                 
@@ -2261,6 +2622,17 @@
                     }
                 });
                 animationState.cesiumEntities.push(startMarker);
+            }
+            
+            // Apply camera mode
+            applyCameraMode(frameIndex);
+            
+            // Apply visual effects if enabled
+            if (document.getElementById('showWall')?.checked) {
+                toggleIntensityWall(true);
+            }
+            if (document.getElementById('showLabels')?.checked) {
+                toggleTimeLabels(true);
             }
         }
         
