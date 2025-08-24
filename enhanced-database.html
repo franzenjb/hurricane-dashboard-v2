@@ -336,6 +336,18 @@
             background: #e5e5e5;
         }
         
+        /* Ensure animation controls stay on top of Leaflet map */
+        #animationControls {
+            z-index: 9999 !important;
+            position: absolute !important;
+            pointer-events: auto !important;
+        }
+        
+        /* Override Leaflet's default z-index for controls */
+        .leaflet-control-container {
+            z-index: 800 !important;
+        }
+        
         /* Category icon styles */
         .category-icon {
             width: 48px;
@@ -1113,12 +1125,12 @@
                             </div>
                             
                             <!-- Right side - Map -->
-                            <div class="flex-1 relative" style="position: relative;">
-                                <div id="stormMap" class="w-full h-full"></div>
-                                <div id="cesiumContainer" class="w-full h-full" style="display: none;"></div>
+                            <div class="flex-1 relative" style="position: relative; overflow: visible;">
+                                <div id="stormMap" class="w-full h-full" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0;"></div>
+                                <div id="cesiumContainer" class="w-full h-full" style="display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0;"></div>
                                 
                                 <!-- Animation Controls -->
-                                <div id="animationControls" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white bg-opacity-95 rounded-lg shadow-lg p-3" style="display: none; z-index: 1000;">
+                                <div id="animationControls" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white bg-opacity-95 rounded-lg shadow-lg p-3" style="display: none; z-index: 9999;">
                                     <div class="flex items-center gap-3">
                                         <button id="prevFrame" class="p-2 bg-gray-100 rounded hover:bg-gray-200 transition-colors" title="Previous Frame">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1223,12 +1235,24 @@
         
         function initStormMap(storm) {
             // Initialize Leaflet map
-            stormModalMap = L.map('stormMap').setView([25.0, -70.0], 4);
+            stormModalMap = L.map('stormMap', {
+                zoomControl: true,
+                attributionControl: true
+            }).setView([25.0, -70.0], 4);
             
             // Add tile layer
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap contributors'
             }).addTo(stormModalMap);
+            
+            // Ensure animation controls stay on top after map initialization
+            setTimeout(() => {
+                const controlsDiv = document.getElementById('animationControls');
+                if (controlsDiv) {
+                    controlsDiv.style.zIndex = '9999';
+                    controlsDiv.style.position = 'absolute';
+                }
+            }, 50);
             
             // Load and display storm track
             loadStormTrackForModal(storm);
@@ -1332,8 +1356,22 @@
             // Show animation controls
             const controlsDiv = document.getElementById('animationControls');
             if (controlsDiv) {
+                console.log('Showing animation controls');
                 controlsDiv.style.display = 'block';
+                controlsDiv.style.zIndex = '9999';
+                controlsDiv.style.position = 'absolute';
+                controlsDiv.style.bottom = '16px';
+                controlsDiv.style.left = '50%';
+                controlsDiv.style.transform = 'translateX(-50%)';
                 setupAnimationControls();
+                
+                // Double-check after a moment that controls are still visible
+                setTimeout(() => {
+                    if (controlsDiv.style.display === 'none') {
+                        console.warn('Controls were hidden! Re-showing...');
+                        controlsDiv.style.display = 'block';
+                    }
+                }, 500);
             }
             
             // Fit map to track bounds with more padding
