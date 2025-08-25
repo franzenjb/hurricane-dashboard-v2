@@ -294,7 +294,8 @@
             flex-shrink: 0; /* Prevent shrinking */
             position: sticky;
             top: 0;
-            z-index: 10;
+            z-index: 1000;  /* Increased to stay above timeline */
+            overflow: visible; /* Allow dropdown to overflow */
         }
         
         .state-selector {
@@ -344,7 +345,7 @@
             border-radius: 0 0 6px 6px;
             max-height: 300px;
             overflow-y: auto;
-            z-index: 1000;
+            z-index: 10000;  /* Increased z-index */
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         
@@ -747,7 +748,7 @@
         </div>
         
         <!-- Scrollable Content Wrapper -->
-        <div style="flex: 1; overflow-y: auto; overflow-x: hidden;">
+        <div style="flex: 1; overflow-y: auto; overflow-x: hidden; position: relative; z-index: 1;">
             <div id="timeline" style="min-height: 600px; width: 100%;"></div>
             
             <!-- State Comparison Section -->
