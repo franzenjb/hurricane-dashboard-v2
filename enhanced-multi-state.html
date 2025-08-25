@@ -1327,6 +1327,8 @@
             
             // Update the stats banner
             updateStatsDisplay(allStorms);
+            // Update the timeline with filtered storms
+            updateTimeline();
             // DO NOT automatically plot all storms on map
             // Only show storms when user clicks on them in the timeline
             // plotStormsOnMap(allStorms); // REMOVED - this was causing the bug
@@ -1581,63 +1583,7 @@
             return inEastCoast || inGulfCoast || inCaribbean;
         }
         
-        // Storm filtering functions (same as timeline tab)
-        function applyFilters() {
-            const nameFilter = document.getElementById('nameFilter').value.toLowerCase();
-            const landfallOnly = document.getElementById('landfallOnly').checked;
-            
-            // Get selected categories from checkboxes
-            const selectedCategories = [];
-            const categoryCheckboxes = document.querySelectorAll('#categoryFilter input[type="checkbox"]:checked');
-            categoryCheckboxes.forEach(checkbox => {
-                selectedCategories.push(parseInt(checkbox.value));
-            });
-            
-            // Apply filters to storms for the selected states
-            const allStorms = ATLANTIC_STORMS_ENHANCED.filter(storm => {
-                const isSelectedState = selectedStates.some(state => 
-                    storm.landfall_states && storm.landfall_states.includes(state)
-                );
-                const inYearRange = storm.year >= currentStartYear && storm.year <= currentEndYear;
-                
-                if (!isSelectedState || !inYearRange) return false;
-                
-                // If name search is active, ONLY filter by name - ignore all other filters
-                if (nameFilter) {
-                    return storm.name.toLowerCase().includes(nameFilter);
-                }
-                
-                // Otherwise apply normal filters
-                if (selectedCategories.length > 0 && !selectedCategories.includes(storm.category)) return false;
-                // Only show hurricane season months (Jun-Dec: months 6-12)
-                if (storm.month < 6 || storm.month > 12) return false;
-                // Filter for landfall storms if checkbox is checked
-                if (landfallOnly && !isLikelyUSLandfall(storm)) return false;
-                return true;
-            });
-            
-            // If name search is active and found storms, adjust year range to show results
-            if (nameFilter && allStorms.length > 0) {
-                const stormYears = allStorms.map(s => s.year);
-                const minStormYear = Math.min(...stormYears);
-                const maxStormYear = Math.max(...stormYears);
-                
-                // Only adjust if storms are outside current range
-                if (minStormYear < currentStartYear || maxStormYear > currentEndYear) {
-                    currentStartYear = Math.min(minStormYear, currentStartYear);
-                    currentEndYear = Math.max(maxStormYear, currentEndYear);
-                    
-                    // Update the year input fields
-                    document.getElementById('start-year').value = currentStartYear;
-                    document.getElementById('end-year').value = currentEndYear;
-                    
-                    console.log(`Name search found storms from ${minStormYear}-${maxStormYear}, adjusted range to ${currentStartYear}-${currentEndYear}`);
-                }
-            }
-            
-            updateTimeline();
-            // Don't plot all storms - only the selected storm should be shown
-        }
+        // (Removed duplicate applyFilters function - using the one defined above)
         
         function plotStormsOnMap(storms) {
             console.log('plotStormsOnMap called with', storms.length, 'storms');
