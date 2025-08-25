@@ -669,124 +669,16 @@
     </div>
     
     <!-- Filter Toggle Button -->
-    <button onclick="toggleFilterPanel()" style="position: fixed; left: 20px; top: 50%; transform: translateY(-50%); background: #007cba; color: white; border: none; border-radius: 0 4px 4px 0; padding: 15px 10px; cursor: pointer; z-index: 9998; box-shadow: 2px 2px 8px rgba(0,0,0,0.2); writing-mode: vertical-rl; text-orientation: mixed; font-weight: bold;">
-        FILTERS
+    <button onclick="toggleFilterPanel()" style="position: fixed; left: 0; top: 100px; background: #007cba; color: white; border: none; border-radius: 0 8px 8px 0; padding: 12px 20px; cursor: pointer; z-index: 9998; box-shadow: 2px 2px 8px rgba(0,0,0,0.3); font-weight: bold; font-size: 14px; transition: all 0.3s;" 
+            onmouseover="this.style.left='5px'; this.style.boxShadow='3px 3px 12px rgba(0,0,0,0.4)'" 
+            onmouseout="this.style.left='0'; this.style.boxShadow='2px 2px 8px rgba(0,0,0,0.3)'">
+        🔍 FILTERS
     </button>
     
     <div class="container">
         <div class="main-content">
-            <!-- Simplified Controls Header -->
-            <div class="controls-header" style="padding: 15px; background: #f8f9fa; border-bottom: 1px solid #ddd; display: none;">
-            <div class="state-selector" style="display: none;">
-                <label>Select States:</label>
-                <div class="multi-select">
-                    <div class="select-button" onclick="toggleDropdown()">
-                        <span id="selected-display">Florida</span>
-                        <span>▼</span>
-                    </div>
-                    <div id="state-dropdown" class="dropdown-content">
-                        <div class="region-header">GULF COAST</div>
-                        <div class="state-option" style="background: #f8f9fa; font-weight: bold;">
-                            <input type="checkbox" id="SELECT_GULF" value="SELECT_GULF" onchange="selectGroup('gulf')">
-                            <label for="SELECT_GULF">Select All Gulf Coast</label>
-                        </div>
-                        <div class="state-option">
-                            <input type="checkbox" id="FL" value="FL" checked onchange="updateSelection()">
-                            <label for="FL">Florida</label>
-                        </div>
-                        <div class="state-option">
-                            <input type="checkbox" id="TX" value="TX" onchange="updateSelection()">
-                            <label for="TX">Texas</label>
-                        </div>
-                        <div class="state-option">
-                            <input type="checkbox" id="LA" value="LA" onchange="updateSelection()">
-                            <label for="LA">Louisiana</label>
-                        </div>
-                        <div class="state-option">
-                            <input type="checkbox" id="MS" value="MS" onchange="updateSelection()">
-                            <label for="MS">Mississippi</label>
-                        </div>
-                        <div class="state-option">
-                            <input type="checkbox" id="AL" value="AL" onchange="updateSelection()">
-                            <label for="AL">Alabama</label>
-                        </div>
-                        
-                        <div class="region-header">ATLANTIC COAST</div>
-                        <div class="state-option" style="background: #f8f9fa; font-weight: bold;">
-                            <input type="checkbox" id="SELECT_ATLANTIC" value="SELECT_ATLANTIC" onchange="selectGroup('atlantic')">
-                            <label for="SELECT_ATLANTIC">Select All Atlantic Coast</label>
-                        </div>
-                        <div class="state-option">
-                            <input type="checkbox" id="GA" value="GA" onchange="updateSelection()">
-                            <label for="GA">Georgia</label>
-                        </div>
-                        <div class="state-option">
-                            <input type="checkbox" id="SC" value="SC" onchange="updateSelection()">
-                            <label for="SC">South Carolina</label>
-                        </div>
-                        <div class="state-option">
-                            <input type="checkbox" id="NC" value="NC" onchange="updateSelection()">
-                            <label for="NC">North Carolina</label>
-                        </div>
-                        <div class="state-option">
-                            <input type="checkbox" id="VA" value="VA" onchange="updateSelection()">
-                            <label for="VA">Virginia</label>
-                        </div>
-                        <div class="state-option">
-                            <input type="checkbox" id="MD" value="MD" onchange="updateSelection()">
-                            <label for="MD">Maryland</label>
-                        </div>
-                        <div class="state-option">
-                            <input type="checkbox" id="DE" value="DE" onchange="updateSelection()">
-                            <label for="DE">Delaware</label>
-                        </div>
-                        <div class="state-option">
-                            <input type="checkbox" id="NJ" value="NJ" onchange="updateSelection()">
-                            <label for="NJ">New Jersey</label>
-                        </div>
-                        <div class="state-option">
-                            <input type="checkbox" id="NY" value="NY" onchange="updateSelection()">
-                            <label for="NY">New York</label>
-                        </div>
-                        <div class="state-option">
-                            <input type="checkbox" id="CT" value="CT" onchange="updateSelection()">
-                            <label for="CT">Connecticut</label>
-                        </div>
-                        <div class="state-option">
-                            <input type="checkbox" id="RI" value="RI" onchange="updateSelection()">
-                            <label for="RI">Rhode Island</label>
-                        </div>
-                        <div class="state-option">
-                            <input type="checkbox" id="MA" value="MA" onchange="updateSelection()">
-                            <label for="MA">Massachusetts</label>
-                        </div>
-                        <div class="state-option">
-                            <input type="checkbox" id="NH" value="NH" onchange="updateSelection()">
-                            <label for="NH">New Hampshire</label>
-                        </div>
-                        <div class="state-option">
-                            <input type="checkbox" id="ME" value="ME" onchange="updateSelection()">
-                            <label for="ME">Maine</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="selected-states" id="states-summary">
-                    1 state selected
-                </div>
-            </div>
-            
-            <div class="time-controls">
-                <label>Years:</label>
-                <div class="year-range">
-                    <input type="number" id="start-year" value="2010" min="1851" max="2024">
-                    <span>to</span>
-                    <input type="number" id="end-year" value="2024" min="1851" max="2024">
-                </div>
-                <button class="update-button" onclick="updateTimeline()">Update</button>
-            </div>
-            
             <!-- Stats Bar -->
-            <div class="stats-bar" style="padding: 10px 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+            <div class="stats-bar" style="padding: 10px 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; margin-bottom: 10px;">
                 <div id="stats-text" style="font-size: 14px;">
                     <strong>1</strong> state selected | <strong id="yearRangeDisplay">2010-2024</strong> | Click filters button to modify
                 </div>
@@ -2218,7 +2110,7 @@
                     trace.x.push(xPos);
                     trace.y.push(yearIdx);
                     trace.text.push(yearSpan > 50 ? '' : storm.name);
-                    trace.marker.size.push(Math.max(8, 10 + storm.wind_mph / 12));
+                    trace.marker.size.push(Math.max(10, 12 + storm.wind_mph / 15));
                     trace.marker.color.push(getCategoryColor(storm.category));
                     trace.customdata.push([
                         storm.name,
@@ -2556,9 +2448,9 @@
                         mode: 'markers',
                         type: 'scatter',
                         marker: {
-                            size: 16,
+                            size: 20,
                             color: stateColors[state] || '#999',
-                            opacity: 0.7,
+                            opacity: 0.8,
                             line: {
                                 color: 'white',
                                 width: 2
