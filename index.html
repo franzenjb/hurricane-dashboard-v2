@@ -8,8 +8,10 @@
     <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="atlantic-storms-enhanced.js"></script>
     <script src="storm-sidebar-component.js"></script>
+    <script src="help-system.js"></script>
     <style>
         [x-cloak] { display: none !important; }
         .full-height { height: calc(100vh - 4rem); }
@@ -1079,6 +1081,49 @@
                 
                 // Send live storms after a delay to ensure iframe is loaded
                 setTimeout(window.sendLiveStormsToTimeline, 2000);
+            }
+        });
+    </script>
+    
+    <!-- Floating Help Button -->
+    <div class="help-button help-pulse" id="helpButton">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+    </div>
+    
+    <!-- Help button click handler -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const helpButton = document.getElementById('helpButton');
+            if (helpButton) {
+                helpButton.addEventListener('click', function() {
+                    // Get active tab from Alpine component
+                    let activeTab = 'home';
+                    try {
+                        const alpineEl = document.querySelector('[x-data]');
+                        if (alpineEl && alpineEl.__x) {
+                            activeTab = alpineEl.__x.$data.activeTab || 'home';
+                        }
+                    } catch (e) {
+                        console.warn('Could not get active tab:', e);
+                    }
+                    
+                    // Map tab names to help content keys
+                    const tabMapping = {
+                        'home': 'home',
+                        'timeline': 'timeline',
+                        'tracker': 'regional',
+                        'database': 'database',
+                        'intelligence': 'intelligence',
+                        'response': 'response'
+                    };
+                    
+                    const helpKey = tabMapping[activeTab] || 'home';
+                    if (window.showHelp) {
+                        window.showHelp(helpKey);
+                    }
+                });
             }
         });
     </script>
