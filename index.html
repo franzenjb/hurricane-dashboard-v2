@@ -1094,20 +1094,30 @@
     
     <!-- Help button click handler -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        // Wait for Alpine to be ready
+        document.addEventListener('alpine:initialized', function() {
             const helpButton = document.getElementById('helpButton');
             if (helpButton) {
                 helpButton.addEventListener('click', function() {
                     // Get active tab from Alpine component
                     let activeTab = 'home';
                     try {
-                        const alpineEl = document.querySelector('[x-data]');
-                        if (alpineEl && alpineEl.__x) {
-                            activeTab = alpineEl.__x.$data.activeTab || 'home';
+                        // Try multiple methods to get the active tab
+                        const alpineEl = document.querySelector('[x-data="hurricaneApp()"]');
+                        if (alpineEl && alpineEl._x_dataStack) {
+                            activeTab = alpineEl._x_dataStack[0].activeTab || 'home';
+                        } else if (window.Alpine) {
+                            // Try using Alpine.js global
+                            const data = Alpine.$data(alpineEl);
+                            if (data && data.activeTab) {
+                                activeTab = data.activeTab;
+                            }
                         }
                     } catch (e) {
-                        console.warn('Could not get active tab:', e);
+                        console.warn('Could not get active tab, defaulting to home:', e);
                     }
+                    
+                    console.log('Current active tab:', activeTab); // Debug log
                     
                     // Map tab names to help content keys
                     const tabMapping = {
@@ -1120,11 +1130,50 @@
                     };
                     
                     const helpKey = tabMapping[activeTab] || 'home';
+                    console.log('Showing help for:', helpKey); // Debug log
+                    
                     if (window.showHelp) {
                         window.showHelp(helpKey);
                     }
                 });
             }
+        });
+        
+        // Fallback for DOMContentLoaded if Alpine isn't ready
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                const helpButton = document.getElementById('helpButton');
+                if (helpButton && !helpButton.hasAttribute('data-listener-added')) {
+                    helpButton.setAttribute('data-listener-added', 'true');
+                    helpButton.addEventListener('click', function() {
+                        // Get active tab from Alpine component
+                        let activeTab = 'home';
+                        try {
+                            const alpineEl = document.querySelector('[x-data="hurricaneApp()"]');
+                            if (alpineEl && alpineEl._x_dataStack) {
+                                activeTab = alpineEl._x_dataStack[0].activeTab || 'home';
+                            }
+                        } catch (e) {
+                            console.warn('Fallback: Could not get active tab:', e);
+                        }
+                        
+                        // Map tab names to help content keys
+                        const tabMapping = {
+                            'home': 'home',
+                            'timeline': 'timeline',
+                            'tracker': 'regional',
+                            'database': 'database',
+                            'intelligence': 'intelligence',
+                            'response': 'response'
+                        };
+                        
+                        const helpKey = tabMapping[activeTab] || 'home';
+                        if (window.showHelp) {
+                            window.showHelp(helpKey);
+                        }
+                    });
+                }
+            }, 1000);
         });
     </script>
 </body>

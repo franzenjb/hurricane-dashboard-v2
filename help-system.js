@@ -171,20 +171,32 @@ const helpContent = {
                     "1,991 Atlantic storms since 1851",
                     "Quick stats and recent storms",
                     "Live updates during hurricane season",
-                    "AI Assistant for questions"
+                    "Navigation cards to access all features"
                 ],
-                tip: "💡 TIP: Ask the AI Assistant natural language questions"
+                tip: "💡 TIP: Click on any card to jump to that section"
             },
             {
-                title: "🤖 Using the AI Assistant",
-                content: "Example questions to ask:",
+                title: "📊 Quick Stats",
+                content: "Key metrics displayed on the home page:",
                 bullets: [
-                    "\"What were the strongest hurricanes to hit Florida?\"",
-                    "\"Show me all Category 5 storms since 2000\"",
-                    "\"When do hurricanes typically hit the Gulf Coast?\"",
-                    "\"Compare 2024 season to historical averages\""
+                    "Total storms in database",
+                    "Category 5 hurricane count",
+                    "Major hurricanes (Cat 3+)",
+                    "Recent significant storms"
                 ],
-                tip: "💡 TIP: The AI can suggest filters based on your question"
+                tip: "💡 TIP: Stats update in real-time during hurricane season"
+            },
+            {
+                title: "🗂️ Navigation Cards",
+                content: "Quick access to all dashboard features:",
+                bullets: [
+                    "Timeline - Interactive historical view",
+                    "Regional - Multi-state comparisons",
+                    "Database - Full storm records",
+                    "Intelligence - Storm analysis tools",
+                    "Response - Red Cross operations data"
+                ],
+                tip: "💡 TIP: Each tab has specialized tools for different analysis needs"
             }
         ]
     }
@@ -232,7 +244,7 @@ function showHelp(tabName) {
                 </div>
                 <div class="bg-gray-100 px-6 py-4 flex justify-between items-center">
                     <div class="text-sm text-gray-600">
-                        Need more help? Email: support@redcross.org
+                        Need more help? Email: jeff.franzen2@redcross.org
                     </div>
                     <button onclick="closeHelp()" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">
                         Got it!
