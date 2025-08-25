@@ -1284,7 +1284,9 @@
             // Update stats display
             const statsText = document.getElementById('stats-text');
             const yearRange = document.getElementById('yearRangeDisplay');
-            statsText.innerHTML = `<strong>${selectedStates.length}</strong> state${selectedStates.length !== 1 ? 's' : ''} selected | <strong>${yearRange.textContent}</strong> | Click filters button to modify`;
+            if (statsText) {
+                statsText.innerHTML = `<strong>${selectedStates.length}</strong> state${selectedStates.length !== 1 ? 's' : ''} selected | <strong>${yearRange ? yearRange.textContent : currentStartYear + '-' + currentEndYear}</strong> | Click filters button to modify`;
+            }
         }
         
         function applyFiltersFromPanel() {
@@ -1295,9 +1297,15 @@
             console.log('Selected states:', selectedStates);
             
             // Get year range
-            currentStartYear = parseInt(document.getElementById('filter_start_year').value);
-            currentEndYear = parseInt(document.getElementById('filter_end_year').value);
-            document.getElementById('yearRangeDisplay').textContent = `${currentStartYear}-${currentEndYear}`;
+            const startYear = document.getElementById('filter_start_year');
+            const endYear = document.getElementById('filter_end_year');
+            if (startYear) currentStartYear = parseInt(startYear.value);
+            if (endYear) currentEndYear = parseInt(endYear.value);
+            
+            const yearRangeDisplay = document.getElementById('yearRangeDisplay');
+            if (yearRangeDisplay) {
+                yearRangeDisplay.textContent = `${currentStartYear}-${currentEndYear}`;
+            }
             console.log('Year range:', currentStartYear, '-', currentEndYear);
             
             // Apply the filters
