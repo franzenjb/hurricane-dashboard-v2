@@ -1048,12 +1048,54 @@
             
             const csv = [headers, ...rows].map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
             
+            // Create descriptive filename based on filters
+            let filenameParts = ['hurricanes'];
+            
+            // Add year range if not default
+            if (activeFilters.yearStart !== 1851 || activeFilters.yearEnd !== 2024) {
+                filenameParts.push(`${activeFilters.yearStart}-${activeFilters.yearEnd}`);
+            }
+            
+            // Add categories if filtered
+            if (activeFilters.category.length > 0 && activeFilters.category.length < 7) {
+                const catMap = {'-1': 'TD', '0': 'TS', '1': 'Cat1', '2': 'Cat2', '3': 'Cat3', '4': 'Cat4', '5': 'Cat5'};
+                const cats = activeFilters.category.map(c => catMap[c] || c).join('-');
+                filenameParts.push(cats);
+            }
+            
+            // Add states if filtered
+            if (activeFilters.state.length > 0) {
+                filenameParts.push(activeFilters.state.join('-'));
+            }
+            
+            // Add impact level if filtered
+            if (activeFilters.impact.length > 0 && activeFilters.impact.length < 5) {
+                filenameParts.push(activeFilters.impact.map(i => i.toLowerCase()).join('-'));
+            }
+            
+            // Add special filters
+            if (activeFilters.special.includes('us_landfall')) {
+                filenameParts.push('landfall');
+            }
+            if (activeFilters.special.includes('rc_response')) {
+                filenameParts.push('RC-response');
+            }
+            
+            // Add search term if present
+            if (activeFilters.search) {
+                filenameParts.push(activeFilters.search.replace(/[^a-zA-Z0-9]/g, ''));
+            }
+            
+            // Add count and date
+            filenameParts.push(`${stormsToExport.length}storms`);
+            filenameParts.push(new Date().toISOString().split('T')[0]);
+            
             // Download
             const blob = new Blob([csv], { type: 'text/csv' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `hurricane_data_${new Date().toISOString().split('T')[0]}.csv`;
+            a.download = `${filenameParts.join('_')}.csv`;
             a.click();
             window.URL.revokeObjectURL(url);
         }
