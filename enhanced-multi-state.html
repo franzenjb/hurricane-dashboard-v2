@@ -1251,9 +1251,17 @@
         function quickApplyFilters() {
             console.log('Quick apply filters with states:', selectedStates);
             if (selectedStates.length > 0) {
-                applyFilters();
+                console.log('Calling applyFilters...');
+                const filteredStorms = applyFilters();
+                console.log('Filtered storms returned:', filteredStorms ? filteredStorms.length : 0);
+                
+                console.log('Calling createMultiStateTimeline...');
                 createMultiStateTimeline();
+                
+                console.log('Calling updateStateComparison...');
                 updateStateComparison();
+                
+                console.log('All updates complete');
             } else {
                 alert('Please select at least one state');
             }
