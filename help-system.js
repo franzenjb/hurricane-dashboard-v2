@@ -157,9 +157,9 @@ const helpContent = {
                 content: "Use the Export button in the header to download:",
                 bullets: [
                     "CSV file with all filtered storms",
-                    "All visible table columns exported",
-                    "Ready for Excel or data analysis",
-                    "Includes storm ID, name, year, category, wind speed, impact data"
+                    "26 comprehensive data fields per storm",
+                    "Includes dates, wind/pressure, ACE, coordinates, impacts",
+                    "Full narratives and Red Cross response data"
                 ],
                 tip: "💡 TIP: Apply filters first to export specific data subsets"
             },

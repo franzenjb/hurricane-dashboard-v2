@@ -1005,18 +1005,45 @@
                 return;
             }
             
-            // Create CSV
-            const headers = ['ID', 'Name', 'Year', 'Category', 'Wind (mph)', 'Impact Level', 'RC Score', 'States', 'Deaths'];
+            // Create CSV with all available fields (excluding geometry)
+            const headers = [
+                'Storm ID', 'Name', 'Year', 'Month', 'Day', 'Category', 
+                'Wind (mph)', 'Wind (knots)', 'Pressure (mb)', 'ACE', 
+                'Peak Lat', 'Peak Lon', 'Deaths', 'Landfall States',
+                'RC Impact Score', 'RC Impact Level', 
+                'RC Responded', 'RC Operation Type', 
+                'Estimated Shelters', 'Estimated Meals', 'Estimated Volunteers',
+                'TCR PDF', 'NHC Archive', 'Has Narrative', 'Has Track Data',
+                'Narrative'
+            ];
+            
             const rows = stormsToExport.map(s => [
                 s.storm_id,
                 s.name || 'Unnamed',
                 s.year,
+                s.month || '',
+                s.day || '',
                 s.category,
-                s.wind_mph,
-                s.rc_impact_level || '',
-                s.rc_impact_score || '',
+                s.wind_mph || '',
+                s.wind_knots || '',
+                s.pressure || '',
+                s.ace || '',
+                s.lat || '',
+                s.lon || '',
+                s.deaths || 0,
                 s.landfall_states?.join('; ') || '',
-                s.deaths || ''
+                s.rc_impact_score || '',
+                s.rc_impact_level || '',
+                s.rc_response?.responded ? 'Yes' : 'No',
+                s.rc_response?.operation_type || '',
+                s.rc_response?.estimated_shelters || '',
+                s.rc_response?.estimated_meals || '',
+                s.rc_response?.estimated_volunteers || '',
+                s.resources?.tcr_pdf || '',
+                s.resources?.nhc_archive || '',
+                s.data_quality?.has_narrative ? 'Yes' : 'No',
+                s.data_quality?.has_track_data ? 'Yes' : 'No',
+                (s.narrative || '').replace(/"/g, '""')  // Escape quotes in narrative
             ]);
             
             const csv = [headers, ...rows].map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
