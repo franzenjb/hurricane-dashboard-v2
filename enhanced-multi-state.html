@@ -1336,6 +1336,17 @@
         }
         
         function applyFilters() {
+            console.log('=== applyFilters START ===');
+            console.log('Current selectedStates:', selectedStates);
+            console.log('Current year range:', currentStartYear, '-', currentEndYear);
+            
+            // Check if data is loaded
+            if (typeof ATLANTIC_STORMS_ENHANCED === 'undefined') {
+                console.error('ATLANTIC_STORMS_ENHANCED is not loaded!');
+                return;
+            }
+            console.log('Total storms in database:', ATLANTIC_STORMS_ENHANCED.length);
+            
             // Get filter values from the panel
             const nameFilter = document.getElementById('filter_name') ? document.getElementById('filter_name').value.toLowerCase() : '';
             const landfallOnly = document.getElementById('filter_landfall') ? document.getElementById('filter_landfall').checked : false;
@@ -1346,6 +1357,14 @@
             categoryCheckboxes.forEach(checkbox => {
                 selectedCategories.push(parseInt(checkbox.value));
             });
+            
+            // If no categories selected, default to Cat 3+
+            if (selectedCategories.length === 0) {
+                selectedCategories.push(3, 4, 5);
+                console.log('No categories selected, defaulting to Cat 3+');
+            }
+            
+            console.log('Filter settings - Name:', nameFilter, 'Landfall:', landfallOnly, 'Categories:', selectedCategories);
             
             // Apply filters to storms for the selected states
             const allStorms = ATLANTIC_STORMS_ENHANCED.filter(storm => {
@@ -1389,13 +1408,21 @@
                 }
             }
             
+            console.log('Filtered storms count:', allStorms.length);
+            if (allStorms.length > 0) {
+                console.log('Sample storms:', allStorms.slice(0, 3).map(s => s.name + ' ' + s.year));
+            }
+            
+            // Store globally for use by other functions
+            window.currentFilteredStorms = allStorms;
+            
             // Update the stats banner
             updateStatsDisplay(allStorms);
             // Update the timeline with filtered storms
             updateTimeline();
-            // DO NOT automatically plot all storms on map
-            // Only show storms when user clicks on them in the timeline
-            // plotStormsOnMap(allStorms); // REMOVED - this was causing the bug
+            
+            console.log('=== applyFilters END ===');
+            return allStorms;
         }
         
         function updateStatsDisplay(storms) {
@@ -2363,6 +2390,9 @@
         
         // Update state comparison table and charts
         function updateStateComparison() {
+            console.log('=== updateStateComparison START ===');
+            console.log('Selected states for comparison:', selectedStates);
+            
             const stateStats = {};
             
             // Initialize stats for each selected state
@@ -2453,10 +2483,12 @@
             });
             
             // Update all comparison charts with state data
+            console.log('Calling chart update functions with stateStats:', stateStats);
             updateCategoryChart(stateStats);
             updateDecadeChart(stateStats);
             updateScatterPlot(stateStats);
             generateInsights(stateStats);
+            console.log('=== updateStateComparison END ===');
         }
         
         function updateScatterPlot(stateStats) {

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Regional Tab Test</title>
+    <script src="atlantic-storms-enhanced.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <h1>Regional Tab Filter Test</h1>
+    <button onclick="testFilters()">Test Filters</button>
+    <div id="output"></div>
+    
+    <script>
+        function testFilters() {
+            const output = document.getElementById('output');
+            let html = '<h2>Test Results:</h2>';
+            
+            // Test 1: Check if ATLANTIC_STORMS_ENHANCED is loaded
+            if (typeof ATLANTIC_STORMS_ENHANCED !== 'undefined') {
+                html += '<p>✅ Storm data loaded: ' + ATLANTIC_STORMS_ENHANCED.length + ' storms</p>';
+            } else {
+                html += '<p>❌ Storm data NOT loaded</p>';
+            }
+            
+            // Test 2: Filter for Florida storms
+            const floridaStorms = ATLANTIC_STORMS_ENHANCED.filter(storm => 
+                storm.landfall_states && storm.landfall_states.includes('FL') &&
+                storm.year >= 2010 && storm.year <= 2024
+            );
+            html += '<p>✅ Florida storms (2010-2024): ' + floridaStorms.length + '</p>';
+            
+            // Test 3: Category 3+ storms
+            const cat3Plus = floridaStorms.filter(storm => storm.category >= 3);
+            html += '<p>✅ Category 3+ in Florida: ' + cat3Plus.length + '</p>';
+            
+            // Test 4: List storm names
+            const stormNames = cat3Plus.map(s => s.name + ' (' + s.year + ')').join(', ');
+            html += '<p>✅ Storm names: ' + stormNames + '</p>';
+            
+            output.innerHTML = html;
+        }
+    </script>
+</body>
+</html>
