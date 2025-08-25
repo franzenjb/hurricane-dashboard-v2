@@ -187,16 +187,31 @@ const helpContent = {
                 tip: "💡 TIP: Stats update in real-time during hurricane season"
             },
             {
-                title: "🗂️ Navigation Cards",
-                content: "Quick access to all dashboard features:",
+                title: "🗂️ Dashboard Tabs (Left to Right)",
+                content: "Navigate through all six tabs for complete hurricane intelligence:",
                 bullets: [
-                    "Timeline - Interactive historical view",
-                    "Regional - Multi-state comparisons",
-                    "Database - Full storm records",
-                    "Intelligence - Storm analysis tools",
-                    "Response - Red Cross operations data"
+                    "1. Home - Dashboard overview and quick stats",
+                    "2. Timeline - Interactive historical storm viewer",
+                    "3. Regional - Multi-state comparison tools",
+                    "4. Database - Complete searchable storm records",
+                    "5. Intelligence - Advanced storm analysis and comparisons",
+                    "6. Response - Red Cross disaster operations data"
                 ],
-                tip: "💡 TIP: Each tab has specialized tools for different analysis needs"
+                tip: "💡 TIP: Each tab has specialized tools - explore them all!"
+            },
+            {
+                title: "💻 Technical Stack",
+                content: "Built with modern web technologies:",
+                bullets: [
+                    "Mapbox GL JS - 3D hurricane visualization",
+                    "Leaflet.js - 2D interactive mapping",
+                    "Alpine.js - Reactive UI state management",
+                    "Plotly.js - Interactive charts and timelines",
+                    "Tailwind CSS - Utility-first styling",
+                    "GeoJSON - Storm track data format",
+                    "HURDAT2 - NOAA hurricane database"
+                ],
+                tip: "💡 TIP: Open source and hosted on GitHub Pages"
             }
         ]
     }
