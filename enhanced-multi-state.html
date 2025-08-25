@@ -945,8 +945,15 @@
         }
         
         function updateTimeline() {
-            currentStartYear = parseInt(document.getElementById('start-year').value);
-            currentEndYear = parseInt(document.getElementById('end-year').value);
+            // Skip if elements don't exist
+            const startYearElem = document.getElementById('start-year');
+            const endYearElem = document.getElementById('end-year');
+            
+            if (startYearElem && endYearElem) {
+                currentStartYear = parseInt(startYearElem.value);
+                currentEndYear = parseInt(endYearElem.value);
+            }
+            
             applyFilters();
         }
 
@@ -2044,9 +2051,15 @@
                 `${selectedStates.length} state${selectedStates.length !== 1 ? 's' : ''} selected`;
         }
         
-        function updateTimeline() {
-            currentStartYear = parseInt(document.getElementById('start-year').value);
-            currentEndYear = parseInt(document.getElementById('end-year').value);
+        function updateTimelineOld() {
+            // Renamed to avoid conflict - this appears to be unused
+            const startYearElem = document.getElementById('start-year');
+            const endYearElem = document.getElementById('end-year');
+            
+            if (startYearElem && endYearElem) {
+                currentStartYear = parseInt(startYearElem.value);
+                currentEndYear = parseInt(endYearElem.value);
+            }
             
             if (selectedStates.length === 0) {
                 alert('Please select at least one state to display data.');
@@ -2054,7 +2067,8 @@
             }
             
             createMultiStateTimeline();
-            document.getElementById('state-dropdown').classList.remove('show');
+            const dropdown = document.getElementById('state-dropdown');
+            if (dropdown) dropdown.classList.remove('show');
         }
         
         function createMultiStateTimeline() {
@@ -2326,9 +2340,12 @@
                 
                 if (!isSelectedState || !inYearRange) return false;
                 
-                // Apply active filters
-                const nameFilter = document.getElementById('nameFilter').value.toLowerCase();
-                const landfallOnly = document.getElementById('landfallOnly').checked;
+                // Apply active filters - check if elements exist first
+                const nameFilterElem = document.getElementById('nameFilter') || document.getElementById('filter_name');
+                const landfallOnlyElem = document.getElementById('landfallOnly') || document.getElementById('filter_landfall');
+                
+                const nameFilter = nameFilterElem ? nameFilterElem.value.toLowerCase() : '';
+                const landfallOnly = landfallOnlyElem ? landfallOnlyElem.checked : false;
                 
                 // Get selected categories from checkboxes
                 const selectedCategories = [];
@@ -2366,7 +2383,8 @@
         // Close dropdown when clicking outside
         document.addEventListener('click', function(event) {
             if (!event.target.closest('.multi-select')) {
-                document.getElementById('state-dropdown').classList.remove('show');
+                const dropdown = document.getElementById('state-dropdown');
+                if (dropdown) dropdown.classList.remove('show');
             }
         });
         
@@ -2376,9 +2394,15 @@
         }
         
         // Add the missing updateTimeline function
-        function updateTimeline() {
-            currentStartYear = parseInt(document.getElementById('start-year').value);
-            currentEndYear = parseInt(document.getElementById('end-year').value);
+        function updateTimelineThird() {
+            // Renamed to avoid conflict - appears to be duplicate
+            const startYearElem = document.getElementById('start-year');
+            const endYearElem = document.getElementById('end-year');
+            
+            if (startYearElem && endYearElem) {
+                currentStartYear = parseInt(startYearElem.value);
+                currentEndYear = parseInt(endYearElem.value);
+            }
             
             if (selectedStates.length > 0) {
                 Plotly.purge('timeline');
