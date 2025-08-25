@@ -787,18 +787,22 @@
                     <div id="scatterPlot" style="height: 400px; width: 100%;"></div>
                 </div>
                 
-                <!-- Additional Charts Section -->
-                <div style="display: flex; gap: 30px; margin-top: 40px; flex-wrap: wrap;">
+                <!-- Additional Charts Section - Stacked Vertically -->
+                <div style="margin-top: 40px;">
                     <!-- Category Distribution Chart -->
-                    <div style="flex: 1; min-width: 400px;">
-                        <h4 style="margin: 0 0 15px 0; color: #34495e; font-size: 16px;">📊 Category Distribution by State</h4>
-                        <div id="categoryChart" style="height: 300px;"></div>
+                    <div style="margin-bottom: 40px;">
+                        <h4 style="margin: 0 0 15px 0; color: #34495e; font-size: 16px; border-bottom: 1px solid #e0e0e0; padding-bottom: 8px;">
+                            📊 Category Distribution by State
+                        </h4>
+                        <div id="categoryChart" style="height: 350px; width: 100%;"></div>
                     </div>
                     
                     <!-- Decade Trend Chart -->
-                    <div style="flex: 1; min-width: 400px;">
-                        <h4 style="margin: 0 0 15px 0; color: #34495e; font-size: 16px;">📈 Storms per Decade Trend</h4>
-                        <div id="decadeChart" style="height: 300px;"></div>
+                    <div>
+                        <h4 style="margin: 0 0 15px 0; color: #34495e; font-size: 16px; border-bottom: 1px solid #e0e0e0; padding-bottom: 8px;">
+                            📈 Storms per Decade Trend
+                        </h4>
+                        <div id="decadeChart" style="height: 350px; width: 100%;"></div>
                     </div>
                 </div>
                 
@@ -2434,12 +2438,12 @@
                         mode: 'markers',
                         type: 'scatter',
                         marker: {
-                            size: 8,
+                            size: 16,
                             color: stateColors[state] || '#999',
                             opacity: 0.7,
                             line: {
                                 color: 'white',
-                                width: 1
+                                width: 2
                             }
                         },
                         hovertemplate: '<b>%{text}</b><br>' +
