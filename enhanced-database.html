@@ -1146,36 +1146,36 @@
                                 <!-- Animation Controls -->
                                 <div id="animationControls" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white bg-opacity-95 rounded-lg shadow-lg p-3" style="display: none; z-index: 999999;">
                                     <div class="flex items-center gap-3">
-                                        <button id="prevFrame" class="p-2 bg-gray-100 rounded hover:bg-gray-200 transition-colors" title="Previous Frame">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <button id="prevFrame" class="p-3 bg-gray-100 rounded hover:bg-gray-200 transition-colors" title="Previous Frame">
+                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                                             </svg>
                                         </button>
-                                        <button id="playPause" class="p-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors" title="Play/Pause">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <button id="playPause" class="p-3 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors" title="Play/Pause">
+                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                             </svg>
                                         </button>
-                                        <button id="nextFrame" class="p-2 bg-gray-100 rounded hover:bg-gray-200 transition-colors" title="Next Frame">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <button id="nextFrame" class="p-3 bg-gray-100 rounded hover:bg-gray-200 transition-colors" title="Next Frame">
+                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                                             </svg>
                                         </button>
-                                        <div class="flex items-center gap-2 ml-2">
-                                            <label class="text-xs text-gray-600">Speed:</label>
-                                            <input id="speedSlider" type="range" min="1" max="10" value="5" class="w-20">
-                                            <span id="speedValue" class="text-xs text-gray-700 font-medium">5x</span>
+                                        <div class="flex items-center gap-2 ml-3">
+                                            <label class="text-sm text-gray-700 font-medium">Speed:</label>
+                                            <input id="speedSlider" type="range" min="1" max="10" value="5" class="w-24">
+                                            <span id="speedValue" class="text-sm text-gray-800 font-bold">5x</span>
                                         </div>
-                                        <button id="toggle3D" class="ml-3 px-3 py-1 bg-purple-500 text-white text-sm rounded hover:bg-purple-600 transition-colors">
+                                        <button id="toggle3D" class="ml-3 px-4 py-2 bg-purple-500 text-white text-base font-medium rounded hover:bg-purple-600 transition-colors">
                                             3D View
                                         </button>
-                                        <button id="toggleFullscreen" class="ml-1 px-3 py-1 bg-gray-600 text-white text-sm rounded hover:bg-gray-700 transition-colors" title="Fullscreen">
+                                        <button id="toggleFullscreen" class="ml-2 px-4 py-2 bg-gray-600 text-white text-base font-medium rounded hover:bg-gray-700 transition-colors" title="Fullscreen">
                                             ⛶
                                         </button>
                                     </div>
                                     <div class="mt-2 text-center">
-                                        <span id="frameInfo" class="text-xs text-gray-600">Frame 0 / 0</span>
+                                        <span id="frameInfo" class="text-sm text-gray-700 font-medium">Frame 0 / 0</span>
                                     </div>
                                 </div>
                                 
