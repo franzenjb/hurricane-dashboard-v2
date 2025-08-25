@@ -687,6 +687,15 @@
         <span>Filters</span>
     </button>
     
+    <!-- Quick Filter Buttons (Fallback) -->
+    <div style="position: fixed; left: 0; top: 150px; background: white; border: 1px solid #ddd; border-radius: 0 8px 8px 0; padding: 10px; z-index: 9997; box-shadow: 2px 2px 8px rgba(0,0,0,0.1);">
+        <div style="font-size: 12px; font-weight: 600; margin-bottom: 8px; color: #666;">Quick Filters:</div>
+        <button onclick="quickSelectStates(['FL', 'TX', 'LA'])" style="display: block; width: 100%; padding: 5px 10px; margin-bottom: 5px; background: #f0f0f0; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; font-size: 12px;">Gulf States</button>
+        <button onclick="quickSelectStates(['NC', 'SC', 'GA'])" style="display: block; width: 100%; padding: 5px 10px; margin-bottom: 5px; background: #f0f0f0; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; font-size: 12px;">SE Atlantic</button>
+        <button onclick="quickSelectStates(['FL'])" style="display: block; width: 100%; padding: 5px 10px; margin-bottom: 5px; background: #f0f0f0; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; font-size: 12px;">Florida Only</button>
+        <button onclick="quickApplyFilters()" style="display: block; width: 100%; padding: 5px 10px; background: #dc2626; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600;">Apply</button>
+    </div>
+    
     <div class="container">
         <div class="main-content">
             <!-- Stats Bar -->
@@ -1225,11 +1234,33 @@
             return false;
         }
         
+        // Quick Filter Functions (Fallback)
+        function quickSelectStates(states) {
+            selectedStates = states;
+            console.log('Quick selected states:', selectedStates);
+            document.getElementById('stats-text').innerHTML = `<strong>${selectedStates.length}</strong> state${selectedStates.length !== 1 ? 's' : ''} selected | <strong>${currentStartYear}-${currentEndYear}</strong> | ${selectedStates.join(', ')}`;
+        }
+        
+        function quickApplyFilters() {
+            console.log('Quick apply filters with states:', selectedStates);
+            if (selectedStates.length > 0) {
+                applyFilters();
+                createMultiStateTimeline();
+                updateStateComparison();
+            } else {
+                alert('Please select at least one state');
+            }
+        }
+        
         // Filter Panel Functions
         function toggleFilterPanel() {
             const panel = document.getElementById('filterPanel');
-            const currentLeft = parseInt(panel.style.left);
-            panel.style.left = currentLeft < 0 ? '0' : '-320px';
+            if (panel) {
+                const currentLeft = parseInt(panel.style.left);
+                panel.style.left = currentLeft < 0 ? '0' : '-320px';
+            } else {
+                console.error('Filter panel not found - using quick filters instead');
+            }
         }
         
         function updateSelectionFromPanel() {
@@ -2859,10 +2890,20 @@
         
         // Initialize map on page load
         document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM loaded, initializing Regional tab...');
             initMap();
+            
+            // Ensure selectedStates has at least Florida
+            if (!selectedStates || selectedStates.length === 0) {
+                selectedStates = ['FL'];
+                console.log('Set default state to Florida');
+            }
+            
             // Apply initial filters to show storm markers
             setTimeout(() => {
+                console.log('Initializing with states:', selectedStates);
                 applyFilters();
+                createMultiStateTimeline();
                 updateStateComparison(); // Initialize comparison on load
             }, 500);
         });
