@@ -1250,21 +1250,29 @@
         }
         
         function applyFiltersFromPanel() {
+            console.log('Applying filters from panel...');
+            
             // Get state selections
             updateSelectionFromPanel();
+            console.log('Selected states:', selectedStates);
             
             // Get year range
             currentStartYear = parseInt(document.getElementById('filter_start_year').value);
             currentEndYear = parseInt(document.getElementById('filter_end_year').value);
             document.getElementById('yearRangeDisplay').textContent = `${currentStartYear}-${currentEndYear}`;
+            console.log('Year range:', currentStartYear, '-', currentEndYear);
             
             // Apply the filters
             applyFilters();
             
-            // Update timeline
+            // Update timeline and charts
             if (selectedStates.length > 0) {
+                console.log('Updating timeline and comparison charts...');
                 createMultiStateTimeline();
                 updateStateComparison();
+            } else {
+                console.error('No states selected!');
+                alert('Please select at least one state.');
             }
             
             // Close the panel
@@ -2496,6 +2504,7 @@
         }
         
         function updateCategoryChart(stateStats) {
+            console.log('updateCategoryChart called with:', stateStats);
             const traces = [];
             const categories = ['TS', 'Cat 1', 'Cat 2', 'Cat 3', 'Cat 4', 'Cat 5'];
             
@@ -2530,6 +2539,7 @@
         }
         
         function updateDecadeChart(stateStats) {
+            console.log('updateDecadeChart called with:', stateStats);
             const traces = [];
             const decades = [];
             
