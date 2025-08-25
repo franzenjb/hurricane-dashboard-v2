@@ -599,11 +599,85 @@
         PROTOTYPE: Multi-State Hurricane Tracker | Select states to compare regional hurricane activity
     </div>
     
+    <!-- Filter Panel (Slide-out) -->
+    <div id="filterPanel" style="position: fixed; left: -320px; top: 0; width: 300px; height: 100%; background: white; box-shadow: 2px 0 10px rgba(0,0,0,0.2); z-index: 9999; transition: left 0.3s ease; overflow-y: auto; padding: 20px;">
+        <button onclick="toggleFilterPanel()" style="position: absolute; right: 10px; top: 10px; background: none; border: none; font-size: 24px; cursor: pointer; color: #666;">×</button>
+        
+        <h3 style="margin: 30px 0 20px 0; color: #2c3e50; font-size: 18px; border-bottom: 2px solid #3498db; padding-bottom: 8px;">🔍 Filters</h3>
+        
+        <!-- State Selection -->
+        <div style="margin-bottom: 20px;">
+            <label style="font-weight: bold; display: block; margin-bottom: 10px; color: #333;">Select States:</label>
+            <div style="max-height: 200px; overflow-y: auto; border: 1px solid #ddd; border-radius: 4px; padding: 8px;">
+                <div style="font-weight: bold; color: #666; margin-bottom: 5px;">GULF COAST</div>
+                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_FL" value="FL" checked onchange="updateSelectionFromPanel()"> Florida</label>
+                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_TX" value="TX" onchange="updateSelectionFromPanel()"> Texas</label>
+                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_LA" value="LA" onchange="updateSelectionFromPanel()"> Louisiana</label>
+                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_MS" value="MS" onchange="updateSelectionFromPanel()"> Mississippi</label>
+                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_AL" value="AL" onchange="updateSelectionFromPanel()"> Alabama</label>
+                
+                <div style="font-weight: bold; color: #666; margin: 10px 0 5px 0;">ATLANTIC COAST</div>
+                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_GA" value="GA" onchange="updateSelectionFromPanel()"> Georgia</label>
+                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_SC" value="SC" onchange="updateSelectionFromPanel()"> South Carolina</label>
+                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_NC" value="NC" onchange="updateSelectionFromPanel()"> North Carolina</label>
+                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_VA" value="VA" onchange="updateSelectionFromPanel()"> Virginia</label>
+                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_MD" value="MD" onchange="updateSelectionFromPanel()"> Maryland</label>
+                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_DE" value="DE" onchange="updateSelectionFromPanel()"> Delaware</label>
+                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_NJ" value="NJ" onchange="updateSelectionFromPanel()"> New Jersey</label>
+                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_NY" value="NY" onchange="updateSelectionFromPanel()"> New York</label>
+                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_CT" value="CT" onchange="updateSelectionFromPanel()"> Connecticut</label>
+                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_RI" value="RI" onchange="updateSelectionFromPanel()"> Rhode Island</label>
+                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_MA" value="MA" onchange="updateSelectionFromPanel()"> Massachusetts</label>
+                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_NH" value="NH" onchange="updateSelectionFromPanel()"> New Hampshire</label>
+                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_ME" value="ME" onchange="updateSelectionFromPanel()"> Maine</label>
+                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_VT" value="VT" onchange="updateSelectionFromPanel()"> Vermont</label>
+            </div>
+        </div>
+        
+        <!-- Year Range -->
+        <div style="margin-bottom: 20px;">
+            <label style="font-weight: bold; display: block; margin-bottom: 10px; color: #333;">Year Range:</label>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <input type="number" id="filter_start_year" value="2010" min="1851" max="2024" style="width: 80px; padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
+                <span>to</span>
+                <input type="number" id="filter_end_year" value="2024" min="1851" max="2024" style="width: 80px; padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+        </div>
+        
+        <!-- Storm Categories -->
+        <div style="margin-bottom: 20px;">
+            <label style="font-weight: bold; display: block; margin-bottom: 10px; color: #333;">Categories:</label>
+            <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_cat_0" value="0"> Tropical Storm</label>
+            <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_cat_1" value="1"> Category 1</label>
+            <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_cat_2" value="2"> Category 2</label>
+            <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_cat_3" value="3" checked> Category 3</label>
+            <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_cat_4" value="4" checked> Category 4</label>
+            <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_cat_5" value="5" checked> Category 5</label>
+        </div>
+        
+        <!-- Other Options -->
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 10px;"><input type="checkbox" id="filter_landfall"> Landfall Only</label>
+            <input type="text" id="filter_name" placeholder="Search by storm name" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+        </div>
+        
+        <!-- Apply Button -->
+        <div style="margin-top: 20px;">
+            <button onclick="applyFiltersFromPanel()" style="width: 100%; padding: 10px; background: #007cba; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: bold;">Apply Filters</button>
+            <button onclick="clearFiltersFromPanel()" style="width: 100%; padding: 10px; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; margin-top: 10px;">Clear All</button>
+        </div>
+    </div>
+    
+    <!-- Filter Toggle Button -->
+    <button onclick="toggleFilterPanel()" style="position: fixed; left: 20px; top: 50%; transform: translateY(-50%); background: #007cba; color: white; border: none; border-radius: 0 4px 4px 0; padding: 15px 10px; cursor: pointer; z-index: 9998; box-shadow: 2px 2px 8px rgba(0,0,0,0.2); writing-mode: vertical-rl; text-orientation: mixed; font-weight: bold;">
+        FILTERS
+    </button>
+    
     <div class="container">
         <div class="main-content">
-            <!-- Controls Header -->
-            <div class="controls-header">
-            <div class="state-selector">
+            <!-- Simplified Controls Header -->
+            <div class="controls-header" style="padding: 15px; background: #f8f9fa; border-bottom: 1px solid #ddd; display: none;">
+            <div class="state-selector" style="display: none;">
                 <label>Select States:</label>
                 <div class="multi-select">
                     <div class="select-button" onclick="toggleDropdown()">
@@ -711,38 +785,10 @@
                 <button class="update-button" onclick="updateTimeline()">Update</button>
             </div>
             
-            <!-- Storm Filtering Controls (same as timeline tab) -->
-            <div class="filter-controls-section" style="margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #ddd;">
-                <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
-                    <input type="text" id="nameFilter" placeholder="Search by name" style="padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; color: #333;">
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <label style="font-weight: bold; font-size: 14px; color: #333;">Categories:</label>
-                        <div style="display: flex; gap: 12px;" id="categoryFilter">
-                            <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; color: #333;">
-                                <input type="checkbox" value="0"> TS
-                            </label>
-                            <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; color: #333;">
-                                <input type="checkbox" value="1"> Cat 1
-                            </label>
-                            <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; color: #333;">
-                                <input type="checkbox" value="2"> Cat 2
-                            </label>
-                            <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; color: #333;">
-                                <input type="checkbox" value="3" checked> Cat 3
-                            </label>
-                            <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; color: #333;">
-                                <input type="checkbox" value="4" checked> Cat 4
-                            </label>
-                            <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; color: #333;">
-                                <input type="checkbox" value="5" checked> Cat 5
-                            </label>
-                        </div>
-                    </div>
-                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; color: #333;">
-                        <input type="checkbox" id="landfallOnly"> Landfall Only
-                    </label>
-                    <button onclick="applyFilters()" style="padding: 8px 16px; background: #007cba; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;">Apply Filters</button>
-                    <button onclick="clearFilters()" style="padding: 8px 16px; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;">Clear</button>
+            <!-- Stats Bar -->
+            <div class="stats-bar" style="padding: 10px 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                <div id="stats-text" style="font-size: 14px;">
+                    <strong>1</strong> state selected | <strong id="yearRangeDisplay">2010-2024</strong> | Click filters button to modify
                 </div>
             </div>
         </div>
@@ -1276,13 +1322,85 @@
             return false;
         }
         
+        // Filter Panel Functions
+        function toggleFilterPanel() {
+            const panel = document.getElementById('filterPanel');
+            const currentLeft = parseInt(panel.style.left);
+            panel.style.left = currentLeft < 0 ? '0' : '-320px';
+        }
+        
+        function updateSelectionFromPanel() {
+            selectedStates = [];
+            // Get all state checkboxes (they start with filter_ and are 2-letter state codes)
+            const checkboxes = document.querySelectorAll('#filterPanel input[type="checkbox"][id^="filter_"]');
+            checkboxes.forEach(cb => {
+                // Skip category checkboxes and other non-state checkboxes
+                if (!cb.id.includes('cat_') && !cb.id.includes('landfall') && cb.value.length === 2 && cb.checked) {
+                    selectedStates.push(cb.value);
+                }
+            });
+            
+            // Update stats display
+            const statsText = document.getElementById('stats-text');
+            const yearRange = document.getElementById('yearRangeDisplay');
+            statsText.innerHTML = `<strong>${selectedStates.length}</strong> state${selectedStates.length !== 1 ? 's' : ''} selected | <strong>${yearRange.textContent}</strong> | Click filters button to modify`;
+        }
+        
+        function applyFiltersFromPanel() {
+            // Get state selections
+            updateSelectionFromPanel();
+            
+            // Get year range
+            currentStartYear = parseInt(document.getElementById('filter_start_year').value);
+            currentEndYear = parseInt(document.getElementById('filter_end_year').value);
+            document.getElementById('yearRangeDisplay').textContent = `${currentStartYear}-${currentEndYear}`;
+            
+            // Apply the filters
+            applyFilters();
+            
+            // Update timeline
+            if (selectedStates.length > 0) {
+                createMultiStateTimeline();
+                updateStateComparison();
+            }
+            
+            // Close the panel
+            toggleFilterPanel();
+        }
+        
+        function clearFiltersFromPanel() {
+            // Reset all checkboxes
+            document.querySelectorAll('#filterPanel input[type="checkbox"]').forEach(cb => {
+                cb.checked = false;
+            });
+            
+            // Set Florida as default
+            document.getElementById('filter_FL').checked = true;
+            
+            // Reset categories to Cat 3+
+            document.getElementById('filter_cat_3').checked = true;
+            document.getElementById('filter_cat_4').checked = true;
+            document.getElementById('filter_cat_5').checked = true;
+            
+            // Reset year range
+            document.getElementById('filter_start_year').value = 2010;
+            document.getElementById('filter_end_year').value = 2024;
+            
+            // Clear name search
+            document.getElementById('filter_name').value = '';
+            
+            // Apply the cleared filters
+            applyFiltersFromPanel();
+        }
+        
         function applyFilters() {
-            const nameFilter = document.getElementById('nameFilter').value.toLowerCase();
-            const landfallOnly = document.getElementById('landfallOnly').checked;
+            // Get filter values from the panel
+            const nameFilter = document.getElementById('filter_name') ? document.getElementById('filter_name').value.toLowerCase() : '';
+            const landfallOnly = document.getElementById('filter_landfall') ? document.getElementById('filter_landfall').checked : false;
             
             // Get selected categories from checkboxes
             const selectedCategories = [];
-            const categoryCheckboxes = document.querySelectorAll('#categoryFilter input[type="checkbox"]:checked');
+            const categoryCheckboxes = document.querySelectorAll('#filterPanel input[type="checkbox"][id^="filter_cat_"]:checked');
             categoryCheckboxes.forEach(checkbox => {
                 selectedCategories.push(parseInt(checkbox.value));
             });
