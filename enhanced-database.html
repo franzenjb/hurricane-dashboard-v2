@@ -1867,6 +1867,16 @@
             }
         }
         
+        function clearPrevious3DAnimation() {
+            // Clear previous 3D drawn segments if using Mapbox
+            if (mapbox3DViewer && mapbox3DViewer.getSource('animated-track')) {
+                mapbox3DViewer.getSource('animated-track').setData({
+                    type: 'FeatureCollection',
+                    features: []
+                });
+            }
+        }
+        
         function playAnimation() {
             if (animationState.isPlaying) return;
             
@@ -1890,9 +1900,17 @@
                     updateFrameInfo();
                     animationState.animationTimer = setTimeout(animate, animationSpeed);
                 } else {
-                    // Animation complete - add end markers
-                    addEndMarkers();
-                    pauseAnimation();
+                    // Animation complete - loop back to beginning
+                    animationState.currentFrame = 0;
+                    // Clear previous animation
+                    if (animationState.is3D) {
+                        clearPrevious3DAnimation();
+                    } else {
+                        animationState.drawnSegments.forEach(seg => stormModalMap.removeLayer(seg));
+                        animationState.drawnSegments = [];
+                    }
+                    // Continue playing from start
+                    animationState.animationTimer = setTimeout(animate, animationSpeed);
                 }
             };
             
@@ -2029,11 +2047,20 @@
             
             if (current < animationState.stormPoints.length) {
                 const point = animationState.stormPoints[current];
-                const date = point.properties.datetime ? 
-                    new Date(point.properties.datetime).toLocaleDateString() : 'N/A';
+                let dateTimeStr = 'N/A';
+                
+                if (point.properties.datetime) {
+                    const dt = new Date(point.properties.datetime);
+                    const date = dt.toLocaleDateString();
+                    const hours = dt.getHours();
+                    const ampm = hours >= 12 ? 'PM' : 'AM';
+                    const displayHours = hours % 12 || 12;
+                    dateTimeStr = `${date} ${displayHours}${ampm}`;
+                }
+                
                 const wind = point.properties.max_wind ? 
                     Math.round(point.properties.max_wind * 1.15) + ' mph' : 'N/A';
-                frameInfo.innerHTML = `Frame ${current} / ${total} • ${date} • ${wind}`;
+                frameInfo.innerHTML = `Frame ${current} / ${total} • ${dateTimeStr} • ${wind}`;
             } else {
                 frameInfo.textContent = `Frame ${current} / ${total}`;
             }
