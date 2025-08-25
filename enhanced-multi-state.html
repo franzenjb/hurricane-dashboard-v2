@@ -2100,7 +2100,7 @@
                     trace.x.push(xPos);
                     trace.y.push(yearIdx);
                     trace.text.push(yearSpan > 50 ? '' : storm.name);
-                    trace.marker.size.push(Math.max(10, 12.5 + storm.wind_mph / 8));
+                    trace.marker.size.push(Math.max(8, 10 + storm.wind_mph / 12));
                     trace.marker.color.push(getCategoryColor(storm.category));
                     trace.customdata.push([
                         storm.name,
