@@ -28,15 +28,16 @@ const helpContent = {
                 tip: "💡 TIP: Stats update in real-time during hurricane season"
             },
             {
-                title: "🗂️ Dashboard Tabs (Left to Right)",
-                content: "Navigate through all six tabs for complete hurricane intelligence:",
+                title: "🗂️ Navigation Tabs (In Order)",
+                content: "Navigate through all seven tabs for complete hurricane intelligence:",
                 bullets: [
-                    "1. Home - Dashboard overview and quick stats (you are here)",
-                    "2. Timeline - Interactive historical storm viewer",
-                    "3. Regional - Multi-state comparison tools",
-                    "4. Database - Complete searchable storm records",
-                    "5. Intelligence - Advanced storm analysis and comparisons",
-                    "6. Response - Red Cross disaster operations data"
+                    "🏠 Home - Dashboard overview and quick stats (you are here)",
+                    "📅 Timeline - Interactive historical storm viewer",
+                    "🗺️ Regional - Multi-state comparison tools",
+                    "🗄️ Database - Complete searchable storm records",
+                    "🧠 Intelligence - Advanced storm analysis and comparisons",
+                    "🏥 Response - Red Cross disaster operations data",
+                    "ℹ️ About - Data sources and project information"
                 ],
                 tip: "💡 TIP: Each tab has specialized tools - explore them all!"
             },
@@ -60,17 +61,18 @@ const helpContent = {
         title: "Timeline Tab Help",
         sections: [
             {
-                title: "🗂️ All Dashboard Tabs",
-                content: "Navigate through all six tabs:",
+                title: "🗂️ Navigation Tabs (In Order)",
+                content: "Navigate through all seven tabs for complete hurricane intelligence:",
                 bullets: [
-                    "1. Home - Dashboard overview",
-                    "2. Timeline - Interactive historical viewer (you are here)",
-                    "3. Regional - Multi-state comparisons",
-                    "4. Database - Searchable storm records",
-                    "5. Intelligence - Storm analysis tools",
-                    "6. Response - Red Cross operations"
+                    "🏠 Home - Dashboard overview and quick stats",
+                    "📅 Timeline - Interactive historical storm viewer (you are here)",
+                    "🗺️ Regional - Multi-state comparison tools",
+                    "🗄️ Database - Complete searchable storm records",
+                    "🧠 Intelligence - Advanced storm analysis and comparisons",
+                    "🏥 Response - Red Cross disaster operations data",
+                    "ℹ️ About - Data sources and project information"
                 ],
-                tip: "💡 TIP: Each tab has unique analysis tools"
+                tip: "💡 TIP: Each tab has specialized tools - explore them all!"
             },
             {
                 title: "📅 Timeline Navigation",
@@ -110,17 +112,18 @@ const helpContent = {
         title: "Regional Tab Help",
         sections: [
             {
-                title: "🗂️ All Dashboard Tabs",
-                content: "Navigate through all six tabs:",
+                title: "🗂️ Navigation Tabs (In Order)",
+                content: "Navigate through all seven tabs for complete hurricane intelligence:",
                 bullets: [
-                    "1. Home - Dashboard overview",
-                    "2. Timeline - Interactive historical viewer",
-                    "3. Regional - Multi-state comparisons (you are here)",
-                    "4. Database - Searchable storm records",
-                    "5. Intelligence - Storm analysis tools",
-                    "6. Response - Red Cross operations"
+                    "🏠 Home - Dashboard overview and quick stats",
+                    "📅 Timeline - Interactive historical storm viewer",
+                    "🗺️ Regional - Multi-state comparison tools (you are here)",
+                    "🗄️ Database - Complete searchable storm records",
+                    "🧠 Intelligence - Advanced storm analysis and comparisons",
+                    "🏥 Response - Red Cross disaster operations data",
+                    "ℹ️ About - Data sources and project information"
                 ],
-                tip: "💡 TIP: Each tab has unique analysis tools"
+                tip: "💡 TIP: Each tab has specialized tools - explore them all!"
             },
             {
                 title: "🌊 State Selection",
@@ -150,17 +153,18 @@ const helpContent = {
         title: "Database Tab Help",
         sections: [
             {
-                title: "🗂️ All Dashboard Tabs",
-                content: "Navigate through all six tabs:",
+                title: "🗂️ Navigation Tabs (In Order)",
+                content: "Navigate through all seven tabs for complete hurricane intelligence:",
                 bullets: [
-                    "1. Home - Dashboard overview",
-                    "2. Timeline - Interactive historical viewer",
-                    "3. Regional - Multi-state comparisons",
-                    "4. Database - Searchable storm records (you are here)",
-                    "5. Intelligence - Storm analysis tools",
-                    "6. Response - Red Cross operations"
+                    "🏠 Home - Dashboard overview and quick stats",
+                    "📅 Timeline - Interactive historical storm viewer",
+                    "🗺️ Regional - Multi-state comparison tools",
+                    "🗄️ Database - Complete searchable storm records (you are here)",
+                    "🧠 Intelligence - Advanced storm analysis and comparisons",
+                    "🏥 Response - Red Cross disaster operations data",
+                    "ℹ️ About - Data sources and project information"
                 ],
-                tip: "💡 TIP: Each tab has unique analysis tools"
+                tip: "💡 TIP: Each tab has specialized tools - explore them all!"
             },
             {
                 title: "🔍 Using Filters",
@@ -205,17 +209,18 @@ const helpContent = {
         title: "Intelligence Tab Help",
         sections: [
             {
-                title: "🗂️ All Dashboard Tabs",
-                content: "Navigate through all six tabs:",
+                title: "🗂️ Navigation Tabs (In Order)",
+                content: "Navigate through all seven tabs for complete hurricane intelligence:",
                 bullets: [
-                    "1. Home - Dashboard overview",
-                    "2. Timeline - Interactive historical viewer",
-                    "3. Regional - Multi-state comparisons",
-                    "4. Database - Searchable storm records",
-                    "5. Intelligence - Storm analysis tools (you are here)",
-                    "6. Response - Red Cross operations"
+                    "🏠 Home - Dashboard overview and quick stats",
+                    "📅 Timeline - Interactive historical storm viewer",
+                    "🗺️ Regional - Multi-state comparison tools",
+                    "🗄️ Database - Complete searchable storm records",
+                    "🧠 Intelligence - Advanced storm analysis and comparisons (you are here)",
+                    "🏥 Response - Red Cross disaster operations data",
+                    "ℹ️ About - Data sources and project information"
                 ],
-                tip: "💡 TIP: Each tab has unique analysis tools"
+                tip: "💡 TIP: Each tab has specialized tools - explore them all!"
             },
             {
                 title: "🔬 Storm Comparison",
@@ -244,17 +249,18 @@ const helpContent = {
         title: "Response Tab Help",
         sections: [
             {
-                title: "🗂️ All Dashboard Tabs",
-                content: "Navigate through all six tabs:",
+                title: "🗂️ Navigation Tabs (In Order)",
+                content: "Navigate through all seven tabs for complete hurricane intelligence:",
                 bullets: [
-                    "1. Home - Dashboard overview",
-                    "2. Timeline - Interactive historical viewer",
-                    "3. Regional - Multi-state comparisons",
-                    "4. Database - Searchable storm records",
-                    "5. Intelligence - Storm analysis tools",
-                    "6. Response - Red Cross operations (you are here)"
+                    "🏠 Home - Dashboard overview and quick stats",
+                    "📅 Timeline - Interactive historical storm viewer",
+                    "🗺️ Regional - Multi-state comparison tools",
+                    "🗄️ Database - Complete searchable storm records",
+                    "🧠 Intelligence - Advanced storm analysis and comparisons",
+                    "🏥 Response - Red Cross disaster operations data (you are here)",
+                    "ℹ️ About - Data sources and project information"
                 ],
-                tip: "💡 TIP: Each tab has unique analysis tools"
+                tip: "💡 TIP: Each tab has specialized tools - explore them all!"
             },
             {
                 title: "🚨 Red Cross Operations",
@@ -277,6 +283,47 @@ const helpContent = {
                     "Volunteers deployed"
                 ],
                 tip: "💡 TIP: Larger storms typically trigger Level 5 responses"
+            }
+        ]
+    },
+    about: {
+        title: "About Tab Help",
+        sections: [
+            {
+                title: "🗂️ Navigation Tabs (In Order)",
+                content: "Navigate through all seven tabs for complete hurricane intelligence:",
+                bullets: [
+                    "🏠 Home - Dashboard overview and quick stats",
+                    "📅 Timeline - Interactive historical storm viewer",
+                    "🗺️ Regional - Multi-state comparison tools",
+                    "🗄️ Database - Complete searchable storm records",
+                    "🧠 Intelligence - Advanced storm analysis and comparisons",
+                    "🏥 Response - Red Cross disaster operations data",
+                    "ℹ️ About - Data sources and project information (you are here)"
+                ],
+                tip: "💡 TIP: Each tab has specialized tools - explore them all!"
+            },
+            {
+                title: "📚 Data Sources",
+                content: "Learn about our comprehensive hurricane data:",
+                bullets: [
+                    "HURDAT2 - NOAA's official hurricane database",
+                    "National Hurricane Center archives",
+                    "Historical weather station records",
+                    "Ship logs and maritime reports"
+                ],
+                tip: "💡 TIP: All data is verified against multiple sources"
+            },
+            {
+                title: "📞 Contact Information",
+                content: "Get in touch with the project team:",
+                bullets: [
+                    "Developer: Jeff Franzen",
+                    "Organization: American Red Cross",
+                    "Email: jeff.franzen2@redcross.org",
+                    "GitHub: franzenjb/hurricane-dashboard-v2"
+                ],
+                tip: "💡 TIP: Report issues or suggestions on GitHub"
             }
         ]
     }
