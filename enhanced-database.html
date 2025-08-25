@@ -1086,8 +1086,8 @@
                 
                 // Create modal HTML for first time
                 const modalHTML = `
-                <div id="stormModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" style="animation: fadeIn 0.2s ease-out">
-                    <div class="bg-white rounded-lg shadow-xl w-full max-w-6xl flex flex-col" style="height: 85vh; max-height: 85vh;">
+                <div id="stormModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" style="animation: fadeIn 0.2s ease-out" onclick="if(event.target.id==='stormModal')closeStormModal()">
+                    <div class="bg-white rounded-lg shadow-xl w-full max-w-6xl flex flex-col" style="height: 85vh; max-height: 85vh;" onclick="event.stopPropagation()">
                         <!-- Header -->
                         <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between flex-shrink-0">
                             <div class="flex items-center gap-4">
@@ -1099,7 +1099,7 @@
                                     <p class="text-sm text-gray-600">${storm.storm_id} • ${getCategoryDisplay(storm.category)}</p>
                                 </div>
                             </div>
-                            <button onclick="closeStormModal()" class="text-gray-400 hover:text-gray-600">
+                            <button onclick="closeStormModal()" class="text-gray-400 hover:text-gray-600 p-2 rounded-lg hover:bg-gray-100 transition-colors z-50 relative" title="Close (Esc)">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                 </svg>
@@ -1433,44 +1433,65 @@
         }
         
         function closeStormModal() {
+            console.log('Closing storm modal...');
             const modal = document.getElementById('stormModal');
             if (modal) {
-                // Clean up animation
-                if (animationState.animationTimer) {
-                    clearInterval(animationState.animationTimer);
+                try {
+                    // Clean up animation
+                    if (animationState && animationState.animationTimer) {
+                        clearInterval(animationState.animationTimer);
+                    }
+                    
+                    // Clean up 2D map
+                    if (stormModalMap) {
+                        stormModalMap.remove();
+                        stormModalMap = null;
+                    }
+                    
+                    // Clean up 3D Mapbox viewer
+                    if (mapbox3DViewer) {
+                        mapbox3DViewer.remove();
+                        mapbox3DViewer = null;
+                    }
+                    
+                    // Clean up Cesium viewer (if it exists)
+                    if (typeof cesiumViewer !== 'undefined' && cesiumViewer) {
+                        cesiumViewer.destroy();
+                        cesiumViewer = null;
+                    }
+                    
+                    // Reset animation state
+                    animationState = {
+                        isPlaying: false,
+                        currentFrame: 0,
+                        totalFrames: 0,
+                        segments: [],
+                        drawnSegments: [],
+                        speed: 5,
+                        animationTimer: null,
+                        stormPoints: [],
+                        is3D: false,
+                        cesiumEntities: [],
+                        stormIcon3D: null,
+                        storm: null
+                    };
+                    
+                    modal.remove();
+                    console.log('Modal closed successfully');
+                } catch (error) {
+                    console.error('Error closing modal:', error);
+                    // Force remove the modal even if cleanup fails
+                    modal.remove();
                 }
-                
-                // Clean up 2D map
-                if (stormModalMap) {
-                    stormModalMap.remove();
-                    stormModalMap = null;
-                }
-                
-                // Clean up 3D viewer
-                if (cesiumViewer) {
-                    cesiumViewer.destroy();
-                    cesiumViewer = null;
-                }
-                
-                // Reset animation state
-                animationState = {
-                    isPlaying: false,
-                    currentFrame: 0,
-                    totalFrames: 0,
-                    segments: [],
-                    drawnSegments: [],
-                    speed: 5,
-                    animationTimer: null,
-                    stormPoints: [],
-                    is3D: false,
-                    cesiumEntities: [],
-                    stormIcon3D: null,
-                    storm: null
-                };
-                
-                modal.remove();
             }
         }
+        
+        // Also handle Escape key to close modal
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeStormModal();
+            }
+        });
         
         let stormModalMap = null;
         let mapbox3DViewer = null;
