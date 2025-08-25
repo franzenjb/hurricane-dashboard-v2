@@ -10,50 +10,33 @@ const helpContent = {
                 content: "Your starting point for hurricane intelligence:",
                 bullets: [
                     "1,991 Atlantic storms since 1851",
-                    "Quick stats and recent storms",
+                    "Quick stats showing total storms, Cat 5 count, and major hurricanes",
                     "Live updates during hurricane season",
-                    "Navigation cards to access all features"
+                    "Navigation cards to access all dashboard features"
                 ],
-                tip: "💡 TIP: Click on any card to jump to that section"
+                tip: "💡 TIP: Click on any card to jump directly to that section"
             },
             {
                 title: "📊 Quick Stats",
-                content: "Key metrics displayed on the home page:",
+                content: "Key metrics displayed at the top:",
                 bullets: [
                     "Total storms in database",
                     "Category 5 hurricane count",
-                    "Major hurricanes (Cat 3+)",
-                    "Recent significant storms"
+                    "Major hurricanes (Category 3+)",
+                    "Recent significant storms with details"
                 ],
-                tip: "💡 TIP: Stats update in real-time during hurricane season"
+                tip: "💡 TIP: Stats update automatically during hurricane season"
             },
             {
-                title: "🗂️ Navigation Tabs (In Order)",
-                content: "Navigate through all seven tabs for complete hurricane intelligence:",
+                title: "🔄 Live Updates",
+                content: "Real-time hurricane tracking:",
                 bullets: [
-                    "🏠 Home - Dashboard overview and quick stats (you are here)",
-                    "📅 Timeline - Interactive historical storm viewer",
-                    "🗺️ Regional - Multi-state comparison tools",
-                    "🗄️ Database - Complete searchable storm records",
-                    "🧠 Intelligence - Advanced storm analysis and comparisons",
-                    "🏥 Response - Red Cross disaster operations data",
-                    "ℹ️ About - Data sources and project information"
+                    "Current Atlantic basin activity",
+                    "Active storm positions and intensities",
+                    "Automatic refresh every 15 minutes",
+                    "NOAA data integration"
                 ],
-                tip: "💡 TIP: Each tab has specialized tools - explore them all!"
-            },
-            {
-                title: "💻 Technical Stack",
-                content: "Built with modern web technologies:",
-                bullets: [
-                    "Mapbox GL JS - 3D hurricane visualization",
-                    "Leaflet.js - 2D interactive mapping",
-                    "Alpine.js - Reactive UI state management",
-                    "Plotly.js - Interactive charts and timelines",
-                    "Tailwind CSS - Utility-first styling",
-                    "GeoJSON - Storm track data format",
-                    "HURDAT2 - NOAA hurricane database"
-                ],
-                tip: "💡 TIP: Open source and hosted on GitHub Pages"
+                tip: "💡 TIP: Active storms appear with red markers during hurricane season"
             }
         ]
     },
@@ -61,50 +44,48 @@ const helpContent = {
         title: "Timeline Tab Help",
         sections: [
             {
-                title: "🗂️ Navigation Tabs (In Order)",
-                content: "Navigate through all seven tabs for complete hurricane intelligence:",
-                bullets: [
-                    "🏠 Home - Dashboard overview and quick stats",
-                    "📅 Timeline - Interactive historical storm viewer (you are here)",
-                    "🗺️ Regional - Multi-state comparison tools",
-                    "🗄️ Database - Complete searchable storm records",
-                    "🧠 Intelligence - Advanced storm analysis and comparisons",
-                    "🏥 Response - Red Cross disaster operations data",
-                    "ℹ️ About - Data sources and project information"
-                ],
-                tip: "💡 TIP: Each tab has specialized tools - explore them all!"
-            },
-            {
                 title: "📅 Timeline Navigation",
                 content: "Explore hurricanes through time:",
                 bullets: [
-                    "Drag the year slider to jump to any period",
-                    "Click on any storm bubble to see details",
-                    "Hover for quick storm info",
-                    "Use mouse wheel to zoom timeline"
+                    "Drag the year slider to jump to any period (1851-2024)",
+                    "Click on any storm bubble to see full details",
+                    "Hover over bubbles for quick storm information",
+                    "Use mouse wheel to zoom the timeline"
                 ],
-                tip: "💡 TIP: Larger bubbles = stronger storms"
+                tip: "💡 TIP: Bubble size indicates storm strength - larger = stronger"
             },
             {
                 title: "🗺️ Interactive Map",
-                content: "The map shows complete storm tracks:",
+                content: "Storm tracks visualization:",
                 bullets: [
-                    "Rainbow colors indicate intensity changes",
-                    "Click tracks for storm details",
-                    "Zoom with mouse wheel or buttons",
-                    "Pan by dragging the map"
+                    "Rainbow colors show intensity changes along path",
+                    "Click any track for complete storm details",
+                    "Zoom with mouse wheel or +/- buttons",
+                    "Pan by clicking and dragging the map"
                 ],
-                tip: "💡 TIP: Red/purple tracks = major hurricanes"
+                tip: "💡 TIP: Red/purple tracks indicate major hurricanes (Cat 3+)"
             },
             {
-                title: "🎯 Filters",
-                content: "Use the filter panel to focus on specific storms:",
+                title: "🎯 Filter Panel",
+                content: "Focus on specific storms:",
                 bullets: [
-                    "Category checkboxes",
-                    "Landfall Only toggle",
-                    "Name search box"
+                    "Category checkboxes (TD through Cat 5)",
+                    "Landfall Only toggle for US impacts",
+                    "Name search box for specific storms",
+                    "Year range selector"
                 ],
-                tip: "💡 TIP: Turn on 'Landfall Only' to see storms that hit the US"
+                tip: "💡 TIP: Turn on 'Landfall Only' to see only storms that hit the US"
+            },
+            {
+                title: "🎬 Animation Controls",
+                content: "Play storm animations:",
+                bullets: [
+                    "Play/Pause button for automatic playback",
+                    "Next/Previous buttons for frame control",
+                    "Speed adjustment slider",
+                    "3D View toggle for perspective mode"
+                ],
+                tip: "💡 TIP: Click '3D View' for an impressive perspective visualization"
             }
         ]
     },
@@ -112,40 +93,37 @@ const helpContent = {
         title: "Regional Tab Help",
         sections: [
             {
-                title: "🗂️ Navigation Tabs (In Order)",
-                content: "Navigate through all seven tabs for complete hurricane intelligence:",
-                bullets: [
-                    "🏠 Home - Dashboard overview and quick stats",
-                    "📅 Timeline - Interactive historical storm viewer",
-                    "🗺️ Regional - Multi-state comparison tools (you are here)",
-                    "🗄️ Database - Complete searchable storm records",
-                    "🧠 Intelligence - Advanced storm analysis and comparisons",
-                    "🏥 Response - Red Cross disaster operations data",
-                    "ℹ️ About - Data sources and project information"
-                ],
-                tip: "💡 TIP: Each tab has specialized tools - explore them all!"
-            },
-            {
                 title: "🌊 State Selection",
                 content: "Compare hurricane impacts across states:",
                 bullets: [
-                    "Select up to 3 states from dropdown",
-                    "View timeline scatter plot",
-                    "See all historical tracks on map",
-                    "Color-coded by state"
+                    "Select up to 3 states from the dropdown menu",
+                    "View comparative timeline scatter plot",
+                    "See all historical tracks on the map",
+                    "Tracks are color-coded by selected state"
                 ],
-                tip: "💡 TIP: Select Florida, Texas, and Louisiana to compare the most impacted states"
+                tip: "💡 TIP: Select FL, TX, and LA to compare the most impacted states"
             },
             {
                 title: "📈 Timeline Analysis",
-                content: "The scatter plot shows:",
+                content: "Understanding the scatter plot:",
                 bullets: [
-                    "Each dot = one hurricane landfall",
-                    "Y-axis = Storm intensity",
-                    "X-axis = Year",
-                    "Hover for storm details"
+                    "Each dot represents one hurricane landfall",
+                    "Y-axis shows storm intensity (category)",
+                    "X-axis shows year of occurrence",
+                    "Hover over dots for storm details"
                 ],
-                tip: "💡 TIP: Look for patterns in frequency over decades"
+                tip: "💡 TIP: Look for clustering patterns to identify active periods"
+            },
+            {
+                title: "📊 Statistical Summary",
+                content: "State comparison metrics:",
+                bullets: [
+                    "Total landfalls per state",
+                    "Major hurricane counts",
+                    "Average intensity by state",
+                    "Temporal distribution patterns"
+                ],
+                tip: "💡 TIP: Use the year range slider to focus on specific decades"
             }
         ]
     },
@@ -153,27 +131,13 @@ const helpContent = {
         title: "Database Tab Help",
         sections: [
             {
-                title: "🗂️ Navigation Tabs (In Order)",
-                content: "Navigate through all seven tabs for complete hurricane intelligence:",
-                bullets: [
-                    "🏠 Home - Dashboard overview and quick stats",
-                    "📅 Timeline - Interactive historical storm viewer",
-                    "🗺️ Regional - Multi-state comparison tools",
-                    "🗄️ Database - Complete searchable storm records (you are here)",
-                    "🧠 Intelligence - Advanced storm analysis and comparisons",
-                    "🏥 Response - Red Cross disaster operations data",
-                    "ℹ️ About - Data sources and project information"
-                ],
-                tip: "💡 TIP: Each tab has specialized tools - explore them all!"
-            },
-            {
                 title: "🔍 Using Filters",
-                content: "Click the purple Filters button to reveal filtering options. You can filter by:",
+                content: "Click the purple Filters button to reveal filtering options:",
                 bullets: [
                     "Hurricane Category (TD through Cat 5)",
                     "Year Range (1851-2024)",
                     "Landfall States (US coastal states)",
-                    "Storm Name (search box)"
+                    "Storm Name search box"
                 ],
                 tip: "💡 TIP: Use multiple filters together for precise results"
             },
@@ -181,12 +145,12 @@ const helpContent = {
                 title: "📊 Viewing Storm Details",
                 content: "Click the 'View' button on any storm row to see:",
                 bullets: [
-                    "Animated storm track on map",
+                    "Animated storm track on interactive map",
                     "Full storm narrative and impacts",
                     "Play/pause animation controls",
                     "3D view option with Mapbox"
                 ],
-                tip: "💡 TIP: Click '3D View' for an impressive perspective view"
+                tip: "💡 TIP: Click '3D View' for perspective visualization"
             },
             {
                 title: "📥 Exporting Data",
@@ -194,13 +158,20 @@ const helpContent = {
                 bullets: [
                     "CSV file with all filtered storms",
                     "27 data fields per storm",
-                    "Ready for Excel or data analysis"
+                    "Ready for Excel or data analysis",
+                    "Includes all visible columns"
                 ],
-                tip: "💡 TIP: Apply filters first to export specific subsets"
+                tip: "💡 TIP: Apply filters first to export specific data subsets"
             },
             {
-                title: "🔢 Sorting",
-                content: "Click any column header to sort. Click again to reverse order.",
+                title: "🔢 Table Features",
+                content: "Working with the data table:",
+                bullets: [
+                    "Click column headers to sort",
+                    "Click again to reverse sort order",
+                    "TCR links for storms after 1995",
+                    "Pagination controls at bottom"
+                ],
                 tip: "💡 TIP: Sort by Wind Speed to find the strongest storms"
             }
         ]
@@ -209,39 +180,49 @@ const helpContent = {
         title: "Intelligence Tab Help",
         sections: [
             {
-                title: "🗂️ Navigation Tabs (In Order)",
-                content: "Navigate through all seven tabs for complete hurricane intelligence:",
-                bullets: [
-                    "🏠 Home - Dashboard overview and quick stats",
-                    "📅 Timeline - Interactive historical storm viewer",
-                    "🗺️ Regional - Multi-state comparison tools",
-                    "🗄️ Database - Complete searchable storm records",
-                    "🧠 Intelligence - Advanced storm analysis and comparisons (you are here)",
-                    "🏥 Response - Red Cross disaster operations data",
-                    "ℹ️ About - Data sources and project information"
-                ],
-                tip: "💡 TIP: Each tab has specialized tools - explore them all!"
-            },
-            {
                 title: "🔬 Storm Comparison",
                 content: "Compare up to 3 storms side-by-side:",
                 bullets: [
-                    "Type storm names in search boxes",
-                    "Spider chart shows multiple metrics",
-                    "Wind-Pressure scatter plot",
-                    "Historical intensity timeline"
+                    "Type storm names in the search boxes",
+                    "Auto-complete suggests matching storms",
+                    "Clear button (✕) to remove selection",
+                    "Comparison updates automatically"
                 ],
-                tip: "💡 TIP: Compare Katrina, Andrew, and Michael for major storm analysis"
+                tip: "💡 TIP: Try comparing Katrina, Andrew, and Michael"
             },
             {
-                title: "📊 Charts Explained",
-                content: "Understanding the visualizations:",
+                title: "🕸️ Spider Chart",
+                content: "Multi-metric comparison visualization:",
                 bullets: [
-                    "Spider Chart: Multi-metric comparison",
-                    "Scatter Plot: Relationship between wind and pressure",
-                    "Timeline: Category 5 storms highlighted in purple"
+                    "Wind Speed (mph)",
+                    "Minimum Pressure (mb)",
+                    "Storm Duration (days)",
+                    "Affected States (count)",
+                    "Deaths (if available)"
                 ],
-                tip: "💡 TIP: Lower pressure = stronger storm"
+                tip: "💡 TIP: Larger area indicates more intense storm"
+            },
+            {
+                title: "📊 Scatter Plot",
+                content: "Wind-Pressure relationship:",
+                bullets: [
+                    "X-axis: Maximum wind speed",
+                    "Y-axis: Minimum pressure",
+                    "Lower pressure = stronger storm",
+                    "Hover for storm details"
+                ],
+                tip: "💡 TIP: Most intense storms cluster in bottom-right"
+            },
+            {
+                title: "📈 Historical Timeline",
+                content: "Intensity trends over time:",
+                bullets: [
+                    "All Category 5 storms highlighted in purple",
+                    "Selected storms shown with markers",
+                    "Zoom and pan capabilities",
+                    "Export chart as image"
+                ],
+                tip: "💡 TIP: Look for patterns in Cat 5 frequency"
             }
         ]
     },
@@ -249,40 +230,48 @@ const helpContent = {
         title: "Response Tab Help",
         sections: [
             {
-                title: "🗂️ Navigation Tabs (In Order)",
-                content: "Navigate through all seven tabs for complete hurricane intelligence:",
-                bullets: [
-                    "🏠 Home - Dashboard overview and quick stats",
-                    "📅 Timeline - Interactive historical storm viewer",
-                    "🗺️ Regional - Multi-state comparison tools",
-                    "🗄️ Database - Complete searchable storm records",
-                    "🧠 Intelligence - Advanced storm analysis and comparisons",
-                    "🏥 Response - Red Cross disaster operations data (you are here)",
-                    "ℹ️ About - Data sources and project information"
-                ],
-                tip: "💡 TIP: Each tab has specialized tools - explore them all!"
-            },
-            {
                 title: "🚨 Red Cross Operations",
-                content: "View disaster response data:",
+                content: "Disaster response data overview:",
                 bullets: [
                     "Only shows Category 3+ storms with US landfall",
                     "Response levels: 1 (local) to 5 (national)",
-                    "Resource deployment charts",
-                    "Timeline of major operations"
+                    "Click operations to see storm tracks",
+                    "Sorted by impact severity"
                 ],
-                tip: "💡 TIP: Click on operations to see storm tracks"
+                tip: "💡 TIP: Level 5 responses indicate catastrophic events"
             },
             {
-                title: "📊 Resource Charts",
-                content: "Understanding response metrics:",
+                title: "📊 Resource Deployment",
+                content: "Response metrics visualization:",
                 bullets: [
-                    "Shelters opened",
-                    "Meals served",
+                    "Shelters opened per operation",
+                    "Meals served to affected populations",
                     "Relief items distributed",
                     "Volunteers deployed"
                 ],
-                tip: "💡 TIP: Larger storms typically trigger Level 5 responses"
+                tip: "💡 TIP: Hover over charts for detailed numbers"
+            },
+            {
+                title: "📅 Operations Timeline",
+                content: "Historical response patterns:",
+                bullets: [
+                    "Chronological list of major operations",
+                    "Response duration indicators",
+                    "Geographic coverage maps",
+                    "Impact statistics per event"
+                ],
+                tip: "💡 TIP: Recent operations show more detailed data"
+            },
+            {
+                title: "⚠️ Data Note",
+                content: "About the response data:",
+                bullets: [
+                    "Historical data may be estimated",
+                    "Pre-2000 operations have limited details",
+                    "Metrics standardized for comparison",
+                    "Yellow banner indicates fictional elements"
+                ],
+                tip: "💡 TIP: Focus on relative comparisons rather than absolute numbers"
             }
         ]
     },
@@ -290,40 +279,48 @@ const helpContent = {
         title: "About Tab Help",
         sections: [
             {
-                title: "🗂️ Navigation Tabs (In Order)",
-                content: "Navigate through all seven tabs for complete hurricane intelligence:",
-                bullets: [
-                    "🏠 Home - Dashboard overview and quick stats",
-                    "📅 Timeline - Interactive historical storm viewer",
-                    "🗺️ Regional - Multi-state comparison tools",
-                    "🗄️ Database - Complete searchable storm records",
-                    "🧠 Intelligence - Advanced storm analysis and comparisons",
-                    "🏥 Response - Red Cross disaster operations data",
-                    "ℹ️ About - Data sources and project information (you are here)"
-                ],
-                tip: "💡 TIP: Each tab has specialized tools - explore them all!"
-            },
-            {
                 title: "📚 Data Sources",
-                content: "Learn about our comprehensive hurricane data:",
+                content: "Understanding our data:",
                 bullets: [
                     "HURDAT2 - NOAA's official hurricane database",
                     "National Hurricane Center archives",
                     "Historical weather station records",
                     "Ship logs and maritime reports"
                 ],
-                tip: "💡 TIP: All data is verified against multiple sources"
+                tip: "💡 TIP: All data is cross-verified from multiple sources"
             },
             {
-                title: "📞 Contact Information",
-                content: "Get in touch with the project team:",
+                title: "✅ Data Verification",
+                content: "Quality assurance process:",
+                bullets: [
+                    "Multi-source verification for each storm",
+                    "Era-specific reliability classifications",
+                    "Satellite era (1980+) most accurate",
+                    "Pre-1900 data includes historical estimates"
+                ],
+                tip: "💡 TIP: Recent storms have the most reliable data"
+            },
+            {
+                title: "💻 Technical Information",
+                content: "Platform details:",
+                bullets: [
+                    "Built with Mapbox GL, Leaflet, Alpine.js",
+                    "Client-side data processing",
+                    "GitHub Pages hosting",
+                    "Open source repository"
+                ],
+                tip: "💡 TIP: Report issues on GitHub"
+            },
+            {
+                title: "📞 Contact",
+                content: "Get in touch:",
                 bullets: [
                     "Developer: Jeff Franzen",
                     "Organization: American Red Cross",
                     "Email: jeff.franzen2@redcross.org",
                     "GitHub: franzenjb/hurricane-dashboard-v2"
                 ],
-                tip: "💡 TIP: Report issues or suggestions on GitHub"
+                tip: "💡 TIP: Email for support or feature requests"
             }
         ]
     }
