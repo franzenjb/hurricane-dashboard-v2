@@ -734,6 +734,58 @@
         
             <div id="timeline"></div>
             
+            <!-- State Comparison Section -->
+            <div id="stateComparison" style="margin-top: 20px; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <h3 style="margin: 0 0 15px 0; color: #2c3e50; font-size: 18px; border-bottom: 2px solid #3498db; padding-bottom: 8px;">
+                    📊 State-by-State Comparison Analysis
+                </h3>
+                
+                <!-- Comparison Table -->
+                <div id="comparisonTable" style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                        <thead>
+                            <tr style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                                <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">State</th>
+                                <th style="padding: 12px; text-align: center; border: 1px solid #ddd;">Total Storms</th>
+                                <th style="padding: 12px; text-align: center; border: 1px solid #ddd;">Cat 3+</th>
+                                <th style="padding: 12px; text-align: center; border: 1px solid #ddd;">Cat 5</th>
+                                <th style="padding: 12px; text-align: center; border: 1px solid #ddd;">Avg Category</th>
+                                <th style="padding: 12px; text-align: center; border: 1px solid #ddd;">Max Wind (mph)</th>
+                                <th style="padding: 12px; text-align: center; border: 1px solid #ddd;">Total Deaths</th>
+                                <th style="padding: 12px; text-align: center; border: 1px solid #ddd;">Peak Decade</th>
+                                <th style="padding: 12px; text-align: center; border: 1px solid #ddd;">Last Hit</th>
+                            </tr>
+                        </thead>
+                        <tbody id="comparisonTableBody">
+                            <!-- Will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Additional Charts Section -->
+                <div style="display: flex; gap: 20px; margin-top: 20px; flex-wrap: wrap;">
+                    <!-- Category Distribution Chart -->
+                    <div style="flex: 1; min-width: 300px;">
+                        <h4 style="margin: 0 0 10px 0; color: #34495e; font-size: 14px;">Category Distribution by State</h4>
+                        <div id="categoryChart" style="height: 250px;"></div>
+                    </div>
+                    
+                    <!-- Decade Trend Chart -->
+                    <div style="flex: 1; min-width: 300px;">
+                        <h4 style="margin: 0 0 10px 0; color: #34495e; font-size: 14px;">Storms per Decade Trend</h4>
+                        <div id="decadeChart" style="height: 250px;"></div>
+                    </div>
+                </div>
+                
+                <!-- Summary Statistics -->
+                <div id="summaryStats" style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 6px;">
+                    <h4 style="margin: 0 0 10px 0; color: #2c3e50; font-size: 14px;">📈 Key Insights</h4>
+                    <div id="insights" style="display: flex; gap: 15px; flex-wrap: wrap;">
+                        <!-- Will be populated with insights -->
+                    </div>
+                </div>
+            </div>
+            
             <div class="stats-banner">
                 <span id="stats-text">Loading multi-state hurricane data...</span>
                 <div style="font-size: 12px; color: #bbb; margin-top: 8px;">
@@ -2269,7 +2321,230 @@
                 Plotly.purge('timeline');
                 createMultiStateTimeline();
                 updateStats();
+                updateStateComparison(); // Add comparison update
             }
+        }
+        
+        // Update state comparison table and charts
+        function updateStateComparison() {
+            const stateStats = {};
+            
+            // Initialize stats for each selected state
+            selectedStates.forEach(state => {
+                stateStats[state] = {
+                    total: 0,
+                    cat3Plus: 0,
+                    cat5: 0,
+                    categories: [],
+                    maxWind: 0,
+                    deaths: 0,
+                    years: [],
+                    decadeCount: {},
+                    storms: []
+                };
+            });
+            
+            // Calculate statistics for each state
+            ATLANTIC_STORMS_ENHANCED.forEach(storm => {
+                if (storm.year >= currentStartYear && storm.year <= currentEndYear) {
+                    if (storm.landfall_states && storm.landfall_states.length > 0) {
+                        storm.landfall_states.forEach(state => {
+                            if (selectedStates.includes(state)) {
+                                const stats = stateStats[state];
+                                stats.total++;
+                                stats.storms.push(storm);
+                                stats.categories.push(storm.category || 0);
+                                stats.years.push(storm.year);
+                                
+                                if (storm.category >= 3) stats.cat3Plus++;
+                                if (storm.category === 5) stats.cat5++;
+                                if (storm.wind_mph > stats.maxWind) stats.maxWind = storm.wind_mph;
+                                stats.deaths += storm.deaths || 0;
+                                
+                                // Track by decade
+                                const decade = Math.floor(storm.year / 10) * 10;
+                                stats.decadeCount[decade] = (stats.decadeCount[decade] || 0) + 1;
+                            }
+                        });
+                    }
+                }
+            });
+            
+            // Populate comparison table
+            const tbody = document.getElementById('comparisonTableBody');
+            tbody.innerHTML = '';
+            
+            const stateNames = {
+                'FL': 'Florida', 'TX': 'Texas', 'LA': 'Louisiana', 'NC': 'North Carolina',
+                'SC': 'South Carolina', 'GA': 'Georgia', 'AL': 'Alabama', 'MS': 'Mississippi',
+                'VA': 'Virginia', 'NY': 'New York', 'MA': 'Massachusetts', 'RI': 'Rhode Island',
+                'CT': 'Connecticut', 'NJ': 'New Jersey', 'DE': 'Delaware', 'MD': 'Maryland',
+                'ME': 'Maine', 'NH': 'New Hampshire', 'VT': 'Vermont'
+            };
+            
+            selectedStates.forEach(state => {
+                const stats = stateStats[state];
+                const avgCategory = stats.categories.length > 0 
+                    ? (stats.categories.reduce((a, b) => a + b, 0) / stats.categories.length).toFixed(1)
+                    : 0;
+                
+                // Find peak decade
+                let peakDecade = 'N/A';
+                let maxDecadeCount = 0;
+                Object.entries(stats.decadeCount).forEach(([decade, count]) => {
+                    if (count > maxDecadeCount) {
+                        maxDecadeCount = count;
+                        peakDecade = `${decade}s`;
+                    }
+                });
+                
+                const lastHit = stats.years.length > 0 ? Math.max(...stats.years) : 'N/A';
+                
+                const row = `
+                    <tr style="background: ${stats.total > 0 ? '#fff' : '#f9f9f9'};">
+                        <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">${stateNames[state] || state}</td>
+                        <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">${stats.total}</td>
+                        <td style="padding: 10px; text-align: center; border: 1px solid #ddd; color: #e74c3c; font-weight: bold;">${stats.cat3Plus}</td>
+                        <td style="padding: 10px; text-align: center; border: 1px solid #ddd; color: #8b008b; font-weight: bold;">${stats.cat5}</td>
+                        <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">${avgCategory}</td>
+                        <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">${stats.maxWind} mph</td>
+                        <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">${stats.deaths.toLocaleString()}</td>
+                        <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">${peakDecade}</td>
+                        <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">${lastHit}</td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+            
+            // Create category distribution chart
+            updateCategoryChart(stateStats);
+            
+            // Create decade trend chart
+            updateDecadeChart(stateStats);
+            
+            // Generate insights
+            generateInsights(stateStats);
+        }
+        
+        function updateCategoryChart(stateStats) {
+            const traces = [];
+            const categories = ['TS', 'Cat 1', 'Cat 2', 'Cat 3', 'Cat 4', 'Cat 5'];
+            
+            selectedStates.forEach(state => {
+                const stats = stateStats[state];
+                const categoryCounts = [0, 0, 0, 0, 0, 0];
+                
+                stats.categories.forEach(cat => {
+                    if (cat >= 0 && cat <= 5) {
+                        categoryCounts[cat]++;
+                    }
+                });
+                
+                traces.push({
+                    name: state,
+                    x: categories,
+                    y: categoryCounts,
+                    type: 'bar'
+                });
+            });
+            
+            const layout = {
+                barmode: 'group',
+                margin: { l: 40, r: 20, t: 20, b: 40 },
+                xaxis: { title: '' },
+                yaxis: { title: 'Number of Storms' },
+                showlegend: true,
+                legend: { orientation: 'h', y: 1.1 }
+            };
+            
+            Plotly.newPlot('categoryChart', traces, layout, {responsive: true});
+        }
+        
+        function updateDecadeChart(stateStats) {
+            const traces = [];
+            const decades = [];
+            
+            // Get all decades
+            selectedStates.forEach(state => {
+                Object.keys(stateStats[state].decadeCount).forEach(decade => {
+                    if (!decades.includes(decade)) {
+                        decades.push(decade);
+                    }
+                });
+            });
+            decades.sort();
+            
+            selectedStates.forEach(state => {
+                const stats = stateStats[state];
+                const counts = decades.map(decade => stats.decadeCount[decade] || 0);
+                
+                traces.push({
+                    name: state,
+                    x: decades.map(d => `${d}s`),
+                    y: counts,
+                    type: 'scatter',
+                    mode: 'lines+markers'
+                });
+            });
+            
+            const layout = {
+                margin: { l: 40, r: 20, t: 20, b: 40 },
+                xaxis: { title: '' },
+                yaxis: { title: 'Storms per Decade' },
+                showlegend: true,
+                legend: { orientation: 'h', y: 1.1 }
+            };
+            
+            Plotly.newPlot('decadeChart', traces, layout, {responsive: true});
+        }
+        
+        function generateInsights(stateStats) {
+            const insights = document.getElementById('insights');
+            insights.innerHTML = '';
+            
+            // Find state with most storms
+            let mostHitState = '';
+            let maxHits = 0;
+            Object.entries(stateStats).forEach(([state, stats]) => {
+                if (stats.total > maxHits) {
+                    maxHits = stats.total;
+                    mostHitState = state;
+                }
+            });
+            
+            // Find state with most deaths
+            let deadliestState = '';
+            let maxDeaths = 0;
+            Object.entries(stateStats).forEach(([state, stats]) => {
+                if (stats.deaths > maxDeaths) {
+                    maxDeaths = stats.deaths;
+                    deadliestState = state;
+                }
+            });
+            
+            const insightCards = [
+                {
+                    icon: '🎯',
+                    text: `<strong>${mostHitState}</strong> has the most landfalls (${maxHits} storms)`
+                },
+                {
+                    icon: '⚠️',
+                    text: `<strong>${deadliestState}</strong> has the highest death toll (${maxDeaths.toLocaleString()} deaths)`
+                },
+                {
+                    icon: '📈',
+                    text: `Period analyzed: ${currentStartYear}-${currentEndYear}`
+                }
+            ];
+            
+            insightCards.forEach(insight => {
+                insights.innerHTML += `
+                    <div style="flex: 1; min-width: 200px; padding: 10px; background: white; border-radius: 6px; border-left: 3px solid #3498db;">
+                        <span style="font-size: 20px; margin-right: 8px;">${insight.icon}</span>
+                        <span style="font-size: 13px; color: #555;">${insight.text}</span>
+                    </div>
+                `;
+            });
         }
         
         // Note: The actual createMultiStateTimeline function is already defined above (line 1259)
@@ -2509,6 +2784,7 @@
             // Apply initial filters to show storm markers
             setTimeout(() => {
                 applyFilters();
+                updateStateComparison(); // Initialize comparison on load
             }, 500);
         });
         
