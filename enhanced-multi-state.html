@@ -2413,16 +2413,10 @@
                 tbody.innerHTML += row;
             });
             
-            // Create category distribution chart
+            // Update all comparison charts with state data
             updateCategoryChart(stateStats);
-            
-            // Create decade trend chart
             updateDecadeChart(stateStats);
-            
-            // Create scatter plot
             updateScatterPlot(stateStats);
-            
-            // Generate insights
             generateInsights(stateStats);
         }
         
