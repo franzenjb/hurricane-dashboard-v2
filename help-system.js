@@ -96,7 +96,7 @@ const helpContent = {
                 title: "🌊 State Selection",
                 content: "Compare hurricane impacts across states:",
                 bullets: [
-                    "Select up to 3 states from the dropdown menu",
+                    "Select any number of states from the dropdown menu",
                     "View comparative timeline scatter plot",
                     "See all historical tracks on the map",
                     "Tracks are color-coded by selected state"
