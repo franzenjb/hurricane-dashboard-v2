@@ -52,6 +52,8 @@
             flex: 1;
             display: flex;
             flex-direction: column;
+            overflow-y: auto;
+            overflow-x: hidden;
         }
         
         .right-sidebar {
@@ -732,10 +734,10 @@
             </div>
         </div>
         
-            <div id="timeline"></div>
+            <div id="timeline" style="min-height: 600px; width: 100%;"></div>
             
             <!-- State Comparison Section -->
-            <div id="stateComparison" style="margin-top: 20px; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <div id="stateComparison" style="margin: 40px 20px; padding: 30px; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                 <h3 style="margin: 0 0 15px 0; color: #2c3e50; font-size: 18px; border-bottom: 2px solid #3498db; padding-bottom: 8px;">
                     📊 State-by-State Comparison Analysis
                 </h3>
@@ -762,18 +764,26 @@
                     </table>
                 </div>
                 
+                <!-- Wind-Pressure Scatter Plot -->
+                <div style="margin-top: 40px;">
+                    <h4 style="margin: 0 0 15px 0; color: #34495e; font-size: 16px; border-bottom: 1px solid #e0e0e0; padding-bottom: 8px;">
+                        🌀 Storm Intensity Scatter Plot (Wind Speed vs Pressure)
+                    </h4>
+                    <div id="scatterPlot" style="height: 400px; width: 100%;"></div>
+                </div>
+                
                 <!-- Additional Charts Section -->
-                <div style="display: flex; gap: 20px; margin-top: 20px; flex-wrap: wrap;">
+                <div style="display: flex; gap: 30px; margin-top: 40px; flex-wrap: wrap;">
                     <!-- Category Distribution Chart -->
-                    <div style="flex: 1; min-width: 300px;">
-                        <h4 style="margin: 0 0 10px 0; color: #34495e; font-size: 14px;">Category Distribution by State</h4>
-                        <div id="categoryChart" style="height: 250px;"></div>
+                    <div style="flex: 1; min-width: 400px;">
+                        <h4 style="margin: 0 0 15px 0; color: #34495e; font-size: 16px;">📊 Category Distribution by State</h4>
+                        <div id="categoryChart" style="height: 300px;"></div>
                     </div>
                     
                     <!-- Decade Trend Chart -->
-                    <div style="flex: 1; min-width: 300px;">
-                        <h4 style="margin: 0 0 10px 0; color: #34495e; font-size: 14px;">Storms per Decade Trend</h4>
-                        <div id="decadeChart" style="height: 250px;"></div>
+                    <div style="flex: 1; min-width: 400px;">
+                        <h4 style="margin: 0 0 15px 0; color: #34495e; font-size: 16px;">📈 Storms per Decade Trend</h4>
+                        <div id="decadeChart" style="height: 300px;"></div>
                     </div>
                 </div>
                 
@@ -2422,8 +2432,86 @@
             // Create decade trend chart
             updateDecadeChart(stateStats);
             
+            // Create scatter plot
+            updateScatterPlot(stateStats);
+            
             // Generate insights
             generateInsights(stateStats);
+        }
+        
+        function updateScatterPlot(stateStats) {
+            const traces = [];
+            const stateColors = {
+                'FL': '#FF6B6B', 'TX': '#4ECDC4', 'LA': '#45B7D1', 'NC': '#96CEB4',
+                'SC': '#FFEAA7', 'GA': '#DDA0DD', 'AL': '#98D8C8', 'MS': '#F7DC6F',
+                'VA': '#85C1E2', 'NY': '#F8B739', 'MA': '#BB8FCE', 'RI': '#85929E',
+                'CT': '#F1948A', 'NJ': '#73C6B6', 'DE': '#FAD7A0', 'MD': '#D7BDE2',
+                'ME': '#A9DFBF', 'NH': '#F9E79F', 'VT': '#AED6F1'
+            };
+            
+            selectedStates.forEach(state => {
+                const stats = stateStats[state];
+                const xData = [];
+                const yData = [];
+                const textData = [];
+                
+                stats.storms.forEach(storm => {
+                    if (storm.wind_mph && storm.pressure && storm.pressure > 0) {
+                        xData.push(storm.wind_mph);
+                        yData.push(storm.pressure);
+                        textData.push(`${storm.name} (${storm.year})`);
+                    }
+                });
+                
+                if (xData.length > 0) {
+                    traces.push({
+                        name: state,
+                        x: xData,
+                        y: yData,
+                        text: textData,
+                        mode: 'markers',
+                        type: 'scatter',
+                        marker: {
+                            size: 8,
+                            color: stateColors[state] || '#999',
+                            opacity: 0.7,
+                            line: {
+                                color: 'white',
+                                width: 1
+                            }
+                        },
+                        hovertemplate: '<b>%{text}</b><br>' +
+                                      'Wind: %{x} mph<br>' +
+                                      'Pressure: %{y} mb<br>' +
+                                      '<extra></extra>'
+                    });
+                }
+            });
+            
+            const layout = {
+                title: '',
+                xaxis: {
+                    title: 'Maximum Wind Speed (mph)',
+                    range: [60, 190]
+                },
+                yaxis: {
+                    title: 'Minimum Pressure (mb)',
+                    autorange: 'reversed',
+                    range: [1010, 880]
+                },
+                margin: { l: 60, r: 40, t: 40, b: 60 },
+                showlegend: true,
+                legend: {
+                    x: 1,
+                    y: 1,
+                    xanchor: 'right'
+                },
+                hovermode: 'closest',
+                plot_bgcolor: '#f8f9fa',
+                paper_bgcolor: 'white'
+            };
+            
+            Plotly.newPlot('scatterPlot', traces, layout, {responsive: true});
         }
         
         function updateCategoryChart(stateStats) {
