@@ -761,14 +761,6 @@
             </div>
         </div>
         
-        <!-- Data Filters (Regional - US Landfall only) -->
-        <div class="filter-section">
-            <div class="filter-title">Data Filters</div>
-            <div class="flex flex-wrap gap-1">
-                <span class="filter-chip" data-filter="special" data-value="us_landfall">US Landfall</span>
-            </div>
-        </div>
-        
         <!-- States -->
         <div class="filter-section">
             <div class="filter-title">Landfall States</div>
@@ -1543,8 +1535,8 @@
                 console.log('Active categories:', categories);
             }
             
-            // Get special filters
-            const usLandfallFilter = document.querySelector('.filter-chip[data-value="us_landfall"]')?.classList.contains('active') || false;
+            // No special filters needed - all storms are landfall storms
+            const usLandfallFilter = false;
             
             // Get year range
             currentStartYear = parseInt(document.getElementById('yearStart').value) || 2010;
@@ -1881,10 +1873,7 @@
                     }
                 }
                 
-                // Landfall only filter
-                if (activeFilters.landfallOnly && !isLikelyUSLandfall(storm)) {
-                    return false;
-                }
+                // No landfall filter needed - Regional tab only shows landfall storms by design
                 
                 // Only show hurricane season months (Jun-Dec: months 6-12)
                 if (storm.month < 6 || storm.month > 12) return false;
