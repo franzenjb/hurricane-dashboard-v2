@@ -30,30 +30,57 @@
             height: 60px !important;
         }
         
+        :root {
+            --arc-red: #ED1B2E;
+            --arc-dark-red: #B71234;
+            --arc-gray: #6D6E70;
+            --arc-light-gray: #F5F5F5;
+            --arc-dark: #231F20;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
             background-color: #f5f5f5;
             margin: 0;
             padding: 0;
             height: 100vh;
-            display: flex;
-            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        /* Professional header matching Database tab */
+        .compact-header {
+            height: 52px;
+            background: white;
+            border-bottom: 3px solid var(--arc-red);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1001;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
         
         .container {
             display: flex;
             background: white;
-            height: 100vh;
+            height: calc(100vh - 52px);
             width: 100vw;
             overflow: hidden;
+            margin-top: 52px;
+            position: relative;
         }
         
         .main-content {
             flex: 1;
             display: flex;
             flex-direction: column;
-            overflow: hidden; /* Changed to hidden to manage internal scrolling */
+            overflow: hidden;
             position: relative;
+            transition: margin-left 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        
+        .main-content.shifted {
+            margin-left: 320px;
         }
         
         .right-sidebar {
@@ -62,7 +89,8 @@
             border-left: 3px solid #007cba;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            height: 100%;
+            overflow: hidden;
         }
         
         .storm-info-panel {
@@ -593,9 +621,9 @@
         .filter-panel {
             position: fixed;
             left: -320px;
-            top: 44px;
+            top: 52px;
             width: 320px;
-            height: calc(100vh - 44px);
+            height: calc(100vh - 52px);
             background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(10px);
             box-shadow: 2px 0 10px rgba(0,0,0,0.1);
@@ -1397,14 +1425,21 @@
         // Filter Panel Functions
         function toggleFilterPanel() {
             const panel = document.getElementById('filterPanel');
+            const mainContent = document.querySelector('.main-content');
+            
             if (panel) {
                 panel.classList.toggle('open');
                 
-                // Update button position
-                const btn = document.getElementById('filterToggleBtn');
-                if (btn) {
+                // Shift main content when filters open
+                if (mainContent) {
+                    mainContent.classList.toggle('shifted');
+                }
+                
+                // Update arrow rotation
+                const arrow = document.querySelector('.filter-toggle .arrow');
+                if (arrow) {
                     const isOpen = panel.classList.contains('open');
-                    btn.style.left = isOpen ? '320px' : '0';
+                    arrow.style.transform = isOpen ? 'rotate(180deg)' : 'rotate(0)';
                 }
             }
         }
@@ -1816,15 +1851,24 @@
         }
         
         function updateStatsDisplay(storms) {
+            // Update header count
+            const regionalActiveCount = document.getElementById('regionalActiveCount');
+            if (regionalActiveCount) {
+                regionalActiveCount.textContent = storms.length;
+            }
+            
+            // Update detailed stats if element exists
             const statsText = document.getElementById('stats-text');
-            if (storms.length === 0) {
-                statsText.textContent = 'No storms found matching your criteria';
-            } else {
-                const cat5Count = storms.filter(s => s.category === 5).length;
-                const cat4Count = storms.filter(s => s.category === 4).length;
-                const cat3Count = storms.filter(s => s.category === 3).length;
-                statsText.innerHTML = `<strong>${storms.length}</strong> storms found | ` +
-                    `<strong>${cat5Count}</strong> Cat 5 | <strong>${cat4Count}</strong> Cat 4 | <strong>${cat3Count}</strong> Cat 3`;
+            if (statsText) {
+                if (storms.length === 0) {
+                    statsText.textContent = 'No storms found matching your criteria';
+                } else {
+                    const cat5Count = storms.filter(s => s.category === 5).length;
+                    const cat4Count = storms.filter(s => s.category === 4).length;
+                    const cat3Count = storms.filter(s => s.category === 3).length;
+                    statsText.innerHTML = `<strong>${storms.length}</strong> storms found | ` +
+                        `<strong>${cat5Count}</strong> Cat 5 | <strong>${cat4Count}</strong> Cat 4 | <strong>${cat3Count}</strong> Cat 3`;
+                }
             }
         }
 
