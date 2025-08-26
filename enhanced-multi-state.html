@@ -718,7 +718,19 @@
                    oninput="applyFiltersFromSearch()">
         </div>
         
-        <!-- Category (first like Database) -->
+        <!-- Impact Level (FIRST - like Database) -->
+        <div class="filter-section">
+            <div class="filter-title">Impact Level</div>
+            <div class="flex flex-wrap gap-1">
+                <span class="filter-chip" data-filter="impact" data-value="CATASTROPHIC">Catastrophic</span>
+                <span class="filter-chip" data-filter="impact" data-value="SEVERE">Severe</span>
+                <span class="filter-chip" data-filter="impact" data-value="MAJOR">Major</span>
+                <span class="filter-chip" data-filter="impact" data-value="MODERATE">Moderate</span>
+                <span class="filter-chip" data-filter="impact" data-value="MINOR">Minor</span>
+            </div>
+        </div>
+        
+        <!-- Category (SECOND - like Database) -->
         <div class="filter-section">
             <div class="filter-title">Category</div>
             <div class="flex flex-wrap gap-1">
@@ -732,14 +744,15 @@
             </div>
         </div>
         
-        <!-- Data Filters -->
+        <!-- Data Filters (THIRD - like Database) -->
         <div class="filter-section">
             <div class="filter-title">Data Filters</div>
             <div class="flex flex-wrap gap-1">
-                <span class="filter-chip" data-filter="special" data-value="high_impact">High Impact</span>
-                <span class="filter-chip" data-filter="special" data-value="major">Major (Cat 3+)</span>
+                <span class="filter-chip" data-filter="special" data-value="rc_response">RC Response</span>
+                <span class="filter-chip" data-filter="special" data-value="has_tcr">Has TCR</span>
+                <span class="filter-chip" data-filter="special" data-value="has_narrative">Has Narrative</span>
+                <span class="filter-chip" data-filter="special" data-value="high_quality">High Quality</span>
                 <span class="filter-chip" data-filter="special" data-value="us_landfall">US Landfall</span>
-                <span class="filter-chip" data-filter="special" data-value="recent">Recent (10yr)</span>
             </div>
         </div>
         
@@ -783,13 +796,19 @@
         </div>
     </div>
     
-    <!-- Toggle Button for Filter Panel -->
-    <button onclick="toggleFilterPanel()" id="filterToggleBtn" style="position: fixed; left: 0; top: 100px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 12px 20px; border-radius: 0 8px 8px 0; cursor: pointer; z-index: 10000; box-shadow: 2px 2px 10px rgba(0,0,0,0.2); font-weight: 600; display: flex; align-items: center; gap: 8px; transition: all 0.3s;">
+    <!-- Toggle Button for Filter Panel (Database style) -->
+    <button onclick="toggleFilterPanel()" id="filterToggleBtn" class="filter-toggle" 
+            style="position: fixed; left: 20px; top: 60px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                   color: white; border: none; padding: 8px 14px; border-radius: 8px; cursor: pointer; 
+                   z-index: 10000; box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4); 
+                   font-weight: 600; display: flex; align-items: center; gap: 8px; 
+                   transition: all 0.3s; animation: subtle-pulse 2s ease-in-out infinite;">
         <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" 
+                  d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
         </svg>
-        <span>Filters</span>
-        <span id="filterCount" style="background: white; color: #667eea; padding: 2px 6px; border-radius: 10px; font-size: 12px; display: none;">0</span>
+        <span style="font-weight: 600;">Filters</span>
+        <span class="arrow" style="display: inline-block; transition: transform 0.3s ease;">→</span>
     </button>
     
     <div class="container">
