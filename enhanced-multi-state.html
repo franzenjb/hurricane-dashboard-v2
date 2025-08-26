@@ -2712,43 +2712,13 @@
                     console.log(`=== MULTI-STATE CLICK HANDLER ===`);
                     console.log(`Point index: ${pointIndex}`);
                     
-                    // CRITICAL FIX: Apply the EXACT SAME filters as plot creation to avoid index mismatch
-                    const nameFilter = document.getElementById('nameFilter') ? document.getElementById('nameFilter').value.toLowerCase() : '';
-                    const landfallOnly = document.getElementById('landfallOnly') ? document.getElementById('landfallOnly').checked : false;
+                    // FIXED: Use the SAME array that was used to create the chart
+                    // Don't recreate the filtering - use window.currentFilteredStorms
+                    const storm = window.currentFilteredStorms[pointIndex];
                     
-                    // Get selected categories from checkboxes
-                    const selectedCategories = [];
-                    const categoryCheckboxes = document.querySelectorAll('#categoryFilter input[type="checkbox"]:checked');
-                    categoryCheckboxes.forEach(checkbox => {
-                        selectedCategories.push(parseInt(checkbox.value));
-                    });
-                    
-                    const allStorms = ATLANTIC_STORMS_ENHANCED.filter(storm => {
-                        const isSelectedState = selectedStates.some(state => 
-                            storm.landfall_states && storm.landfall_states.includes(state)
-                        );
-                        const inYearRange = storm.year >= currentStartYear && storm.year <= currentEndYear;
-                        
-                        if (!isSelectedState || !inYearRange) return false;
-                        
-                        // If name search is active, ONLY filter by name
-                        if (nameFilter) {
-                            return storm.name.toLowerCase().includes(nameFilter);
-                        }
-                        
-                        // Otherwise apply normal filters (same as plot creation)
-                        if (selectedCategories.length > 0 && !selectedCategories.includes(storm.category)) return false;
-                        if (storm.month < 6 || storm.month > 12) return false;
-                        if (landfallOnly && !isLikelyUSLandfall(storm)) return false;
-                        return true;
-                    });
-                    
-                    console.log(`Filtered storms count: ${allStorms.length}`);
-                    console.log(`Selected storm:`, allStorms[pointIndex]);
-                    
-                    const storm = allStorms[pointIndex];
                     if (storm) {
-                        console.log(`Storm ID: "${storm.storm_id}", Name: "${storm.name}"`);
+                        console.log(`Storm selected: ${storm.name} (${storm.year})`);
+                        console.log(`Storm ID: "${storm.storm_id}", Category: ${storm.category}`);
                         updateStormInfoPanel(storm);
                         showStormOnMap(storm);
                     } else {
@@ -3532,32 +3502,7 @@
         }
         
         // isLikelyUSLandfall function already defined above, no need to duplicate
-        
-        function updateStormInfoPanel(storm) {
-            // Update category icon
-            const categoryIcon = document.getElementById('categoryIcon');
-            const color = getCategoryColor(storm.category);
-            categoryIcon.style.backgroundColor = color;
-            categoryIcon.textContent = storm.category === 0 ? 'TS' : `C${storm.category}`;
-            
-            // Update storm title
-            document.getElementById('stormTitle').textContent = `${storm.name} (${storm.year})`;
-            
-            // Update stats
-            document.getElementById('statDate').textContent = `${getMonthName(storm.month)} ${storm.day}`;
-            document.getElementById('statWind').textContent = `${storm.wind_mph} mph`;
-            document.getElementById('statLandfall').textContent = storm.landfall_states && storm.landfall_states.length > 0 
-                ? storm.landfall_states.join(', ') 
-                : 'None';
-            
-            // Update narrative panel
-            const narrativeContent = document.getElementById('narrativeContent');
-            if (storm.narrative) {
-                narrativeContent.innerHTML = `<p>${storm.narrative}</p>`;
-            } else {
-                narrativeContent.innerHTML = `<p style="color: #666; font-style: italic;">No historical narrative available for this storm.</p>`;
-            }
-        }
+        // updateStormInfoPanel function already defined above at line 1052, no need to duplicate
         
         async function showStormOnMap(storm) {
             if (!map) return;

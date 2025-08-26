@@ -458,20 +458,19 @@
                 displaylogo: false
             };
             
-            Plotly.newPlot('timeline', traces, layout, config);
-            
-            // Add click handler for storm details
-            const timelineDiv = document.getElementById('timeline');
-            timelineDiv.on('plotly_click', function(data){
-                if (!data || !data.points || data.points.length === 0) return;
-                console.log('Storm clicked:', data);
-                const pointIndex = data.points[0].pointIndex;
-                const storm = filteredStorms[pointIndex];
-                if (storm) {
-                    console.log('Selected storm:', storm.name, storm.year);
-                    updateStormInfoPanel(storm);
-                    showStormOnMap(storm);
-                }
+            Plotly.newPlot('timeline', traces, layout, config).then(function(myPlot) {
+                // Add click handler for storm details
+                myPlot.on('plotly_click', function(data){
+                    if (!data || !data.points || data.points.length === 0) return;
+                    console.log('Storm clicked:', data);
+                    const pointIndex = data.points[0].pointIndex;
+                    const storm = filteredStorms[pointIndex];
+                    if (storm) {
+                        console.log('Selected storm:', storm.name, storm.year);
+                        updateStormInfoPanel(storm);
+                        showStormOnMap(storm);
+                    }
+                });
             });
         }
         
@@ -1068,32 +1067,6 @@
         }
 
 
-        function updateStormInfoPanel(storm) {
-            // Update category icon
-            const categoryIcon = document.getElementById('categoryIcon');
-            const color = getCategoryColor(storm.category);
-            categoryIcon.style.backgroundColor = color;
-            categoryIcon.textContent = storm.category === 0 ? 'TS' : `C${storm.category}`;
-            
-            // Update storm title
-            document.getElementById('stormTitle').textContent = `${storm.name} (${storm.year})`;
-            
-            // Update stats
-            document.getElementById('statDate').textContent = `${getMonthName(storm.month)} ${storm.day}`;
-            document.getElementById('statWind').textContent = `${storm.wind_mph} mph`;
-            document.getElementById('statLandfall').textContent = storm.landfall_states && storm.landfall_states.length > 0 
-                ? storm.landfall_states.join(', ') 
-                : 'None';
-            document.getElementById('statDeaths').textContent = storm.deaths || '0';
-            
-            // Update narrative panel
-            const narrativeContent = document.getElementById('narrativeContent');
-            if (storm.narrative) {
-                narrativeContent.innerHTML = `<p>${storm.narrative}</p>`;
-            } else {
-                narrativeContent.innerHTML = `<p style="color: #666; font-style: italic;">No historical narrative available for this storm.</p>`;
-            }
-        }
 
         function clearMapLayers() {
             if (map) {
