@@ -393,6 +393,20 @@
             position: relative;
         }
         
+        .stats-banner {
+            background: white;
+            padding: 8px 20px;
+            text-align: center;
+            font-size: 14px;
+            min-height: 20px;
+            flex-shrink: 0;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .stats-banner strong {
+            color: #667eea;
+            font-weight: 600;
+        }
         
         .selected-states {
             background: rgba(255,255,255,0.1);
@@ -835,6 +849,10 @@
                         <!-- Will be populated with insights -->
                     </div>
                 </div>
+            </div>
+            
+            <div class="stats-banner">
+                <span id="stats-text"></span>
             </div>
         </div>
         </div> <!-- Close scrollable wrapper -->
@@ -1318,7 +1336,11 @@
         function quickSelectStates(states) {
             selectedStates = states;
             console.log('Quick selected states:', selectedStates);
-            // Stats banner removed - no longer updating stats-text
+            // Keep banner minimal - just show selected states
+            const statsText = document.getElementById('stats-text');
+            if (statsText) {
+                statsText.innerHTML = `<strong>${selectedStates.length}</strong> state${selectedStates.length !== 1 ? 's' : ''} selected`;
+            }
         }
         
         function quickApplyFilters() {
@@ -1515,10 +1537,11 @@
             // Apply storm filters (this will call createMultiStateTimeline and updateStateComparison)
             applyStormFilters();
             
-            // Stats banner removed - skip stats display update
-            const activeCount = document.querySelectorAll('.filter-chip.active').length;
-            if (false) { // Keep for reference but disabled
-                statsText.innerHTML = `<strong>${selectedStates.length}</strong> state${selectedStates.length !== 1 ? 's' : ''} | <strong>${currentStartYear}-${currentEndYear}</strong> | <strong>${activeCount}</strong> filters active`;
+            // Keep stats display minimal
+            const statsText = document.getElementById('stats-text');
+            if (statsText) {
+                const activeCount = document.querySelectorAll('.filter-chip.active').length;
+                statsText.innerHTML = '';
             }
         }
         
@@ -1720,7 +1743,10 @@
                 applyFilters();
                 // applyFilters will call createMultiStateTimeline and updateStateComparison
                 
-                // Stats banner removed - no longer updating
+                // Keep stats minimal or empty
+                const statsText = document.getElementById('stats-text');
+                if (statsText) {
+                    statsText.innerHTML = '';
                 }
             } else {
                 console.warn('No states selected');
@@ -1894,7 +1920,12 @@
                 regionalActiveCount.textContent = storms.length;
             }
             
-            // Stats banner removed
+            // Update stats banner minimally
+            const statsText = document.getElementById('stats-text');
+            if (statsText) {
+                statsText.innerHTML = ''; // Keep empty
+            }
+            
             if (false) {
                 if (storms.length === 0) {
                     statsText.textContent = 'No storms found matching your criteria';
@@ -2774,7 +2805,11 @@
                 selectedStates[0] : 
                 `${selectedStates.length} selected states`;
                 
-            // Stats banner removed - this data is now shown in the insights section
+            // Keep stats banner empty
+            const statsText = document.getElementById('stats-text');
+            if (statsText) {
+                statsText.innerHTML = '';
+            }
         }
         
         // Close dropdown when clicking outside
