@@ -202,46 +202,28 @@
         </div>
         
         <div class="right-sidebar">
-            <div class="storm-info-panel" id="stormInfoPanel">
-                <div class="storm-banner">
-                    <div class="storm-name-section">
-                        <div class="category-icon" id="categoryIcon" style="background-color: #8B9DC3;">TS</div>
-                        <div class="storm-title" id="stormTitle">Select a Storm</div>
+            <div class="storm-info-panel" id="stormInfoPanel" style="height: 60px; min-height: 60px; max-height: 60px; padding: 10px 15px; display: flex; align-items: center; border-bottom: 2px solid #007cba; background: white;">
+                <div class="storm-banner" style="display: flex; flex-direction: row; gap: 15px; align-items: center; width: 100%;">
+                    <div class="storm-name-section" style="display: flex; align-items: center; gap: 10px;">
+                        <div class="category-icon" id="categoryIcon" style="background-color: #8B9DC3; width: 36px; height: 36px; font-size: 14px;">TS</div>
+                        <div class="storm-title" id="stormTitle" style="font-size: 18px; min-width: 120px;">Select a Storm</div>
                     </div>
-                    <div class="stats-inline">
-                        <div class="stat-inline">
-                            <div class="stat-label">Date</div>
-                            <div class="stat-value" id="statDate">-</div>
+                    <div class="stats-inline" style="display: flex; gap: 20px; flex: 1; justify-content: flex-end;">
+                        <div class="stat-inline" style="display: flex; align-items: center; gap: 5px;">
+                            <span class="stat-label" style="font-size: 11px; color: #666; text-transform: uppercase; font-weight: 600;">Date:</span>
+                            <span class="stat-value" id="statDate" style="font-size: 14px; font-weight: bold; color: #333;">-</span>
                         </div>
-                        <div class="stat-inline">
-                            <div class="stat-label">Wind</div>
-                            <div class="stat-value" id="statWind">-</div>
+                        <div class="stat-inline" style="display: flex; align-items: center; gap: 5px;">
+                            <span class="stat-label" style="font-size: 11px; color: #666; text-transform: uppercase; font-weight: 600;">Wind:</span>
+                            <span class="stat-value" id="statWind" style="font-size: 14px; font-weight: bold; color: #333;">-</span>
                         </div>
-                        <div class="stat-inline">
-                            <div class="stat-label">Landfall</div>
-                            <div class="stat-value" id="statLandfall">-</div>
+                        <div class="stat-inline" style="display: flex; align-items: center; gap: 5px;">
+                            <span class="stat-label" style="font-size: 11px; color: #666; text-transform: uppercase; font-weight: 600;">Landfall:</span>
+                            <span class="stat-value" id="statLandfall" style="font-size: 14px; font-weight: bold; color: #333;">-</span>
                         </div>
-                        <div class="stat-inline">
-                            <div class="stat-label">Deaths</div>
-                            <div class="stat-value" id="statDeaths">-</div>
-                        </div>
-                    </div>
-                    <div style="margin-top: 10px;">
-                        <button onclick="toggleSurgeVisualization()" style="width: 100%; padding: 8px; background: #007cba; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold;">
-                            🌊 Toggle Storm Surge
-                        </button>
-                    </div>
-                    <div style="margin-top: 8px;">
-                        <button id="animateBtn" onclick="toggleStormAnimation()" style="width: 100%; padding: 8px; background: #28a745; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold;">
-                            ▶️ Animate Storm Track
-                        </button>
-                    </div>
-                    <div id="animationControls" style="display: none; margin-top: 8px;">
-                        <input type="range" id="animationSpeed" min="50" max="1000" value="500" style="width: 100%;">
-                        <div style="display: flex; justify-content: space-between; font-size: 11px; color: #666;">
-                            <span>Slow</span>
-                            <span>Speed</span>
-                            <span>Fast</span>
+                        <div class="stat-inline" style="display: flex; align-items: center; gap: 5px;">
+                            <span class="stat-label" style="font-size: 11px; color: #666; text-transform: uppercase; font-weight: 600;">Deaths:</span>
+                            <span class="stat-value" id="statDeaths" style="font-size: 14px; font-weight: bold; color: #333;">-</span>
                         </div>
                     </div>
                 </div>
