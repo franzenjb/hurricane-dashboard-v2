@@ -1475,43 +1475,34 @@
                 document.querySelector('.filter-chip[data-value="FL"]').classList.add('active');
             }
             
-            // Get active category
-            const categoryChip = document.querySelector('.filter-chip[data-filter="category"].active');
-            const selectedCategory = categoryChip ? categoryChip.dataset.value : null;
+            // Get active impact levels
+            const impactLevels = [];
+            document.querySelectorAll('.filter-chip[data-filter="impact"].active').forEach(chip => {
+                impactLevels.push(chip.dataset.value);
+            });
             
-            // Get active decade
-            const decadeChip = document.querySelector('.filter-chip[data-filter="decade"].active');
-            const selectedDecade = decadeChip ? decadeChip.dataset.value : null;
+            // Get active categories
+            const categories = [];
+            document.querySelectorAll('.filter-chip[data-filter="category"].active').forEach(chip => {
+                categories.push(parseInt(chip.dataset.value));
+            });
             
             // Get special filters
-            const usLandfallFilter = document.querySelector('.filter-chip[data-value="us_landfall"]').classList.contains('active');
-            const majorFilter = document.querySelector('.filter-chip[data-value="major"]').classList.contains('active');
-            const recentFilter = document.querySelector('.filter-chip[data-value="recent"]').classList.contains('active');
+            const usLandfallFilter = document.querySelector('.filter-chip[data-value="us_landfall"]')?.classList.contains('active') || false;
             
             // Get year range
             currentStartYear = parseInt(document.getElementById('yearStart').value) || 2010;
             currentEndYear = parseInt(document.getElementById('yearEnd').value) || 2024;
             
-            // Update based on filters
-            if (recentFilter) {
-                currentStartYear = 2014;
-                currentEndYear = 2024;
-            } else if (selectedDecade && selectedDecade !== 'all') {
-                currentStartYear = parseInt(selectedDecade);
-                currentEndYear = currentStartYear + 9;
-            }
-            
             // Update active filters object
             activeFilters.states = selectedStates;
-            activeFilters.category = selectedCategory;
-            activeFilters.decade = selectedDecade;
+            activeFilters.impactLevels = impactLevels;
+            activeFilters.categories = categories;
             activeFilters.landfallOnly = usLandfallFilter;
             activeFilters.yearRange = { start: currentStartYear, end: currentEndYear };
             
-            // Apply storm filters
+            // Apply storm filters (this will call createMultiStateTimeline and updateStateComparison)
             applyStormFilters();
-            createMultiStateTimeline();
-            updateStateComparison();
             
             // Update stats display
             const statsText = document.getElementById('stats-text');
@@ -1781,13 +1772,17 @@
                     return storm.name.toLowerCase().includes(activeFilters.nameSearch.toLowerCase());
                 }
                 
+                // Impact level filter
+                if (activeFilters.impactLevels && activeFilters.impactLevels.length > 0) {
+                    if (!activeFilters.impactLevels.includes(storm.rc_impact_level)) {
+                        return false;
+                    }
+                }
+                
                 // Category filter
-                if (activeFilters.category) {
-                    if (activeFilters.category === 'major') {
-                        if (storm.category < 3) return false;
-                    } else {
-                        const cat = parseInt(activeFilters.category);
-                        if (storm.category !== cat) return false;
+                if (activeFilters.categories && activeFilters.categories.length > 0) {
+                    if (!activeFilters.categories.includes(storm.category)) {
+                        return false;
                     }
                 }
                 
@@ -1846,7 +1841,7 @@
             // Update the comparison charts (Category, Decade, Scatter)
             updateStateComparison();
             
-            console.log('=== applyFilters END ===');
+            console.log('=== applyStormFilters END ===');
             return allStorms;
         }
         
