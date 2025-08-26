@@ -766,30 +766,40 @@
         </div>
     </div>
     
-    <!-- Toggle Button for Filter Panel (Repositioned standalone) -->
-    <button onclick="toggleFilterPanel()" id="filterToggleBtn" class="filter-toggle" 
-            style="position: fixed; left: 20px; top: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-                   color: white; border: none; padding: 8px 14px; border-radius: 8px; cursor: pointer; 
-                   z-index: 10000; box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4); 
-                   font-weight: 600; display: flex; align-items: center; gap: 8px; 
-                   transition: all 0.3s; animation: subtle-pulse 2s ease-in-out infinite;">
-        <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" 
-                  d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
-        </svg>
-        <span style="font-weight: 600;">Filters</span>
-        <span class="arrow" style="display: inline-block; transition: transform 0.3s ease;">→</span>
-    </button>
+    <!-- Professional Header -->
+    <div class="compact-header">
+        <div style="height: 100%; padding: 0 16px; display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <button onclick="toggleFilterPanel()" id="filterToggleBtn" class="filter-toggle" 
+                        style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                               color: white; border: none; padding: 8px 14px; border-radius: 8px; cursor: pointer; 
+                               box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4); 
+                               font-weight: 600; display: flex; align-items: center; gap: 8px; 
+                               transition: all 0.3s; animation: subtle-pulse 2s ease-in-out infinite;">
+                    <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" 
+                              d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
+                    </svg>
+                    <span style="font-weight: 600;">Filters</span>
+                    <span class="arrow" style="display: inline-block; transition: transform 0.3s ease;">→</span>
+                </button>
+                <div style="width: 32px; height: 32px; background: #dc2626; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;">RC</div>
+                <div>
+                    <h1 style="font-size: 16px; font-weight: bold; color: #111827; line-height: 1.2; margin: 0;">Regional Hurricane Tracker</h1>
+                    <p style="font-size: 12px; color: #6b7280; line-height: 1.2; margin: 0;">American Red Cross Disaster Services</p>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 24px;">
+                <div style="display: flex; align-items: center; gap: 16px; font-size: 12px;">
+                    <span><strong style="font-size: 18px; color: #dc2626;">1,991</strong> storms</span>
+                    <span><strong style="font-size: 18px; color: #ea580c;" id="regionalActiveCount">0</strong> filtered</span>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <div class="container">
         <div class="main-content">
-            <!-- Stats Bar -->
-            <div class="stats-bar" style="padding: 10px 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
-                <div id="stats-text" style="font-size: 14px;">
-                    <strong>1</strong> state selected | <strong id="yearRangeDisplay">2010-2024</strong> | Click filters button to modify
-                </div>
-            </div>
-            
             <!-- Scrollable Content Wrapper -->
             <div style="flex: 1; overflow-y: auto; overflow-x: hidden; position: relative; z-index: 1;">
             <div id="timeline" style="min-height: 600px; width: 100%;"></div>

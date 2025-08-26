@@ -10,7 +10,19 @@
     <script src="storm-surge-layer.js"></script>
     <style>
         body { font-family: Arial, sans-serif; margin: 0; padding: 0; overflow: hidden; }
-        .container { display: flex; height: 100vh; width: 100vw; }
+        
+        /* Professional header matching Database tab */
+        .compact-header {
+            height: 44px;
+            background: white;
+            border-bottom: 2px solid #e74c3c;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+        .container { display: flex; height: calc(100vh - 44px); width: 100vw; margin-top: 44px; }
         .left-sidebar { width: 80px; background: #e0e0e0; padding: 15px; display: flex; flex-direction: column; align-items: center; border-right: 1px solid #ccc; position: relative; }
         .main-content { flex: 1; display: flex; flex-direction: column; min-width: 0; }
         .right-sidebar { width: 525px; background: #f5f5f5; border-left: 2px solid #ccc; display: flex; flex-direction: column; }
@@ -126,6 +138,25 @@
     </style>
 </head>
 <body>
+    <!-- Professional Header -->
+    <div class="compact-header">
+        <div style="height: 100%; padding: 0 16px; display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 32px; height: 32px; background: #dc2626; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;">RC</div>
+                <div>
+                    <h1 style="font-size: 16px; font-weight: bold; color: #111827; line-height: 1.2; margin: 0;">Hurricane Timeline Tracker</h1>
+                    <p style="font-size: 12px; color: #6b7280; line-height: 1.2; margin: 0;">American Red Cross Disaster Services</p>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 24px;">
+                <div style="display: flex; align-items: center; gap: 16px; font-size: 12px;">
+                    <span><strong style="font-size: 18px; color: #dc2626;">1,991</strong> storms</span>
+                    <span><strong style="font-size: 18px; color: #ea580c;" id="timelineActiveCount">0</strong> in view</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <div class="container">
         <div class="left-sidebar">
             <div style="margin-bottom: 20px; font-size: 12px; font-weight: bold;">Years</div>
