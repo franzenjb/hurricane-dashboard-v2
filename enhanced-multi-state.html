@@ -755,19 +755,13 @@
         <div class="filter-section">
             <div class="filter-title">Year Range</div>
             <div class="flex items-center gap-2">
-                <input type="number" id="yearStart" min="1851" max="2024" value="1900" 
-                       class="w-20 px-2 py-1 text-sm border border-gray-200 rounded">
+                <input type="number" id="yearStart" min="1851" max="2024" value="2010" 
+                       class="w-20 px-2 py-1 text-sm border border-gray-200 rounded"
+                       onchange="applyFilters()">
                 <span class="text-gray-500 text-sm">to</span>
                 <input type="number" id="yearEnd" min="1851" max="2024" value="2024" 
-                       class="w-20 px-2 py-1 text-sm border border-gray-200 rounded">
-            </div>
-            <div class="flex gap-2 mt-3">
-                <button onclick="applyFilters()" class="flex-1 px-3 py-1.5 bg-red-600 text-white text-xs font-medium rounded hover:bg-red-700 transition-colors">
-                    Apply
-                </button>
-                <button onclick="clearFilters()" class="flex-1 px-3 py-1.5 bg-gray-500 text-white text-xs font-medium rounded hover:bg-gray-600 transition-colors">
-                    Clear
-                </button>
+                       class="w-20 px-2 py-1 text-sm border border-gray-200 rounded"
+                       onchange="applyFilters()">
             </div>
         </div>
     </div>
@@ -1411,7 +1405,8 @@
                 chip.addEventListener('click', function() {
                     // Toggle active state for all chips (multi-select like Database)
                     this.classList.toggle('active');
-                    // Database tab doesn't auto-apply - waits for Apply button
+                    // Auto-apply filters immediately like Database tab
+                    applyFilters();
                 });
             });
         }
@@ -1419,7 +1414,7 @@
         function applyFiltersFromSearch() {
             const searchTerm = document.getElementById('searchInput').value;
             activeFilters.nameSearch = searchTerm || null;
-            applyRegionalFilters();
+            applyFilters();
         }
         
         // Main apply filters function (matches Database tab)
@@ -3348,18 +3343,24 @@
             
             // Initialize filters with Florida selected
             selectedStates = ['FL'];
-            activeFilters.states = ['FL'];
-            activeFilters.category = '3'; // Default Cat 3
-            activeFilters.decade = '2010';
+            const floridaChip = document.querySelector('.filter-chip[data-value="FL"]');
+            if (floridaChip) floridaChip.classList.add('active');
+            
+            // Set year inputs
+            document.getElementById('yearStart').value = 2010;
+            document.getElementById('yearEnd').value = 2024;
             currentStartYear = 2010;
             currentEndYear = 2024;
             
             // Apply initial filters to show storm markers
             setTimeout(() => {
                 console.log('Initializing with states:', selectedStates);
-                applyFilters();
-                createMultiStateTimeline();
-                updateStateComparison(); // Initialize comparison on load
+                if (typeof ATLANTIC_STORMS_ENHANCED !== 'undefined') {
+                    applyFilters();
+                } else {
+                    console.error('ATLANTIC_STORMS_ENHANCED not loaded yet, retrying...');
+                    setTimeout(() => applyFilters(), 1000);
+                }
             }, 500);
         });
         
