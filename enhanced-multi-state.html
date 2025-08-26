@@ -43,10 +43,9 @@
         .container {
             display: flex;
             background: white;
-            height: calc(100vh - 44px); /* Account for prototype banner */
+            height: 100vh;
             width: 100vw;
             overflow: hidden;
-            margin-top: 44px; /* Push down for fixed banner */
         }
         
         .main-content {
@@ -267,22 +266,6 @@
             height: 100%;
         }
         
-        .prototype-banner {
-            background: white;
-            color: #333;
-            padding: 12px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 16px;
-            border-bottom: 2px solid #e74c3c;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            height: 44px;
-            box-sizing: border-box;
-        }
         
         .controls-header {
             background: #2C3E50;
@@ -596,9 +579,6 @@
     </style>
 </head>
 <body>
-    <div class="prototype-banner">
-        <span style="margin-left: 100px;">PROTOTYPE: Multi-State Hurricane Tracker | Select states to compare regional hurricane activity</span>
-    </div>
     
     <style>
         /* EXACT Database filter panel styles */
@@ -794,7 +774,7 @@
     
     <!-- Toggle Button for Filter Panel (Repositioned standalone) -->
     <button onclick="toggleFilterPanel()" id="filterToggleBtn" class="filter-toggle" 
-            style="position: fixed; left: 20px; top: 60px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            style="position: fixed; left: 20px; top: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
                    color: white; border: none; padding: 8px 14px; border-radius: 8px; cursor: pointer; 
                    z-index: 10000; box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4); 
                    font-weight: 600; display: flex; align-items: center; gap: 8px; 
