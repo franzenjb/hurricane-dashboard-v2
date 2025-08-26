@@ -15,19 +15,19 @@
             box-sizing: border-box;
         }
         
-        /* Double the size of Plotly modebar buttons */
+        /* Normal size Plotly modebar buttons (matching Timeline) */
         .modebar-btn {
-            font-size: 32px !important;
-            width: 60px !important;
-            height: 60px !important;
+            font-size: 16px !important;
+            width: 30px !important;
+            height: 30px !important;
         }
         
         .modebar {
-            height: 60px !important;
+            height: 30px !important;
         }
         
         .modebar-group {
-            height: 60px !important;
+            height: 30px !important;
         }
         
         :root {
@@ -95,13 +95,10 @@
         }
         
         .storm-info-panel {
-            min-height: 110px;
-            max-height: 110px;
+            flex: 0 0 12%;
             background: white;
             padding: 15px;
             overflow: hidden;
-            flex-shrink: 0;
-            border-bottom: 1px solid #ddd;
         }
         
         .storm-banner {
@@ -165,11 +162,9 @@
         }
         
         .map-panel {
-            flex: 1;
-            min-height: 350px;
+            flex: 0 0 43%;
             background: white;
             position: relative;
-            border-bottom: 1px solid #ddd;
         }
         
         #map {
@@ -182,13 +177,13 @@
         }
         
         .narrative-panel {
-            flex: 1;
-            min-height: 200px;
+            flex: 0 0 45%;
             background: white;
             padding: 20px;
             display: flex;
             flex-direction: column;
-            overflow-y: auto;
+            overflow: hidden;
+            height: 100%;
         }
         
         .narrative-header {
@@ -211,13 +206,10 @@
         
         /* Storm info panel styles - matching Timeline tab exactly */
         .storm-info-panel {
-            min-height: 110px;
-            max-height: 110px;
+            flex: 0 0 12%;
             background: white;
             padding: 15px;
             overflow: hidden;
-            flex-shrink: 0;
-            border-bottom: 1px solid #ddd;
         }
         
         .storm-banner {
