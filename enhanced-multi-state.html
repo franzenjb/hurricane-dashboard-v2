@@ -419,40 +419,45 @@
             white-space: nowrap;
         }
         
-        /* Legend styles */
+        /* Compact legend styles - matches Timeline */
         .map-legend {
             position: absolute;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 12px;
-            border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 3px 8px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
             z-index: 1000;
-            font-size: 12px;
+            font-size: 9px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
         
         .legend-title {
             font-weight: bold;
-            margin-bottom: 8px;
-            text-align: center;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 4px;
+            margin-right: 4px;
+            font-size: 9px;
         }
         
         .legend-item {
             display: flex;
             align-items: center;
-            margin: 4px 0;
+            gap: 2px;
         }
         
         .legend-color {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            margin-right: 8px;
-            border: 2px solid white;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+            border: 1px solid rgba(0,0,0,0.2);
+        }
+        
+        .legend-label {
+            font-size: 9px;
+            white-space: nowrap;
         }
         
         /* Mobile optimizations */
@@ -883,30 +888,29 @@
             <div class="map-panel">
                 <div id="map"></div>
                 <div class="map-legend">
-                    <div class="legend-title">Hurricane Categories</div>
                     <div class="legend-item">
                         <div class="legend-color" style="background-color: #8B9DC3;"></div>
-                        <span>TS - Tropical Storm</span>
+                        <span class="legend-label">TS</span>
                     </div>
                     <div class="legend-item">
                         <div class="legend-color" style="background-color: #5CB85C;"></div>
-                        <span>Cat 1 (74-95 mph)</span>
+                        <span class="legend-label">1</span>
                     </div>
                     <div class="legend-item">
                         <div class="legend-color" style="background-color: #F0AD4E;"></div>
-                        <span>Cat 2 (96-110 mph)</span>
+                        <span class="legend-label">2</span>
                     </div>
                     <div class="legend-item">
                         <div class="legend-color" style="background-color: #FF7F00;"></div>
-                        <span>Cat 3 (111-129 mph)</span>
+                        <span class="legend-label">3</span>
                     </div>
                     <div class="legend-item">
                         <div class="legend-color" style="background-color: #D9534F;"></div>
-                        <span>Cat 4 (130-156 mph)</span>
+                        <span class="legend-label">4</span>
                     </div>
                     <div class="legend-item">
                         <div class="legend-color" style="background-color: #8B008B;"></div>
-                        <span>Cat 5 (≥157 mph)</span>
+                        <span class="legend-label">5</span>
                     </div>
                 </div>
             </div>
