@@ -1447,6 +1447,12 @@
             updateStatsDisplay(allStorms);
             // Don't call updateTimeline here - it would create infinite loop
             
+            // Update the timeline plot
+            createMultiStateTimeline();
+            
+            // Update the comparison charts (Category, Decade, Scatter)
+            updateStateComparison();
+            
             console.log('=== applyFilters END ===');
             return allStorms;
         }
@@ -2611,6 +2617,14 @@
         
         function updateCategoryChart(stateStats) {
             console.log('updateCategoryChart called with:', stateStats);
+            console.log('selectedStates in updateCategoryChart:', selectedStates);
+            
+            // Ensure we have selected states
+            if (!selectedStates || selectedStates.length === 0) {
+                console.log('No states selected, cannot update category chart');
+                return;
+            }
+            
             const traces = [];
             const categories = ['TS', 'Cat 1', 'Cat 2', 'Cat 3', 'Cat 4', 'Cat 5'];
             
@@ -2646,6 +2660,14 @@
         
         function updateDecadeChart(stateStats) {
             console.log('updateDecadeChart called with:', stateStats);
+            console.log('selectedStates in updateDecadeChart:', selectedStates);
+            
+            // Ensure we have selected states
+            if (!selectedStates || selectedStates.length === 0) {
+                console.log('No states selected, cannot update decade chart');
+                return;
+            }
+            
             const traces = [];
             const decades = [];
             
