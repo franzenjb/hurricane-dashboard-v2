@@ -954,7 +954,11 @@
                 currentEndYear = parseInt(endYearElem.value);
             }
             
-            applyFilters();
+            // Don't call applyFilters here - it creates an infinite loop
+            // applyFilters already calls updateTimeline, so just update the display
+            if (window.currentFilteredStorms) {
+                updateStatsDisplay(window.currentFilteredStorms);
+            }
         }
 
         function updateStormInfoPanel(storm) {
@@ -1441,8 +1445,7 @@
             
             // Update the stats banner
             updateStatsDisplay(allStorms);
-            // Update the timeline with filtered storms
-            updateTimeline();
+            // Don't call updateTimeline here - it would create infinite loop
             
             console.log('=== applyFilters END ===');
             return allStorms;
