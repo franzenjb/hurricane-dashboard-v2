@@ -599,102 +599,140 @@
         PROTOTYPE: Multi-State Hurricane Tracker | Select states to compare regional hurricane activity
     </div>
     
-    <!-- Filter Panel (Slide-out) -->
-    <div id="filterPanel" style="position: fixed; left: -320px; top: 0; width: 300px; height: 100%; background: #f8f9fa; box-shadow: 2px 0 10px rgba(0,0,0,0.2); z-index: 9999; transition: left 0.3s ease; overflow-y: auto; padding: 0;">
-        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 20px; position: sticky; top: 0; z-index: 10;">
-            <button onclick="toggleFilterPanel()" style="position: absolute; right: 15px; top: 15px; background: none; border: none; font-size: 24px; cursor: pointer; color: white; opacity: 0.9; hover: opacity: 1;">×</button>
-            <h3 style="margin: 0; font-size: 18px; font-weight: 600;">🔍 Filter Options</h3>
-        </div>
-        
-        <div style="padding: 20px;">
-        
-        <!-- State Selection -->
-        <div style="margin-bottom: 25px;">
-            <div style="font-size: 13px; font-weight: 600; color: #4a5568; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Landfall States</div>
-            <div style="max-height: 200px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; background: white;">
-                <div style="font-weight: bold; color: #666; margin-bottom: 5px;">GULF COAST</div>
-                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_FL" value="FL" checked onchange="updateSelectionFromPanel()"> Florida</label>
-                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_TX" value="TX" onchange="updateSelectionFromPanel()"> Texas</label>
-                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_LA" value="LA" onchange="updateSelectionFromPanel()"> Louisiana</label>
-                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_MS" value="MS" onchange="updateSelectionFromPanel()"> Mississippi</label>
-                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_AL" value="AL" onchange="updateSelectionFromPanel()"> Alabama</label>
-                
-                <div style="font-weight: bold; color: #666; margin: 10px 0 5px 0;">ATLANTIC COAST</div>
-                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_GA" value="GA" onchange="updateSelectionFromPanel()"> Georgia</label>
-                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_SC" value="SC" onchange="updateSelectionFromPanel()"> South Carolina</label>
-                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_NC" value="NC" onchange="updateSelectionFromPanel()"> North Carolina</label>
-                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_VA" value="VA" onchange="updateSelectionFromPanel()"> Virginia</label>
-                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_MD" value="MD" onchange="updateSelectionFromPanel()"> Maryland</label>
-                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_DE" value="DE" onchange="updateSelectionFromPanel()"> Delaware</label>
-                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_NJ" value="NJ" onchange="updateSelectionFromPanel()"> New Jersey</label>
-                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_NY" value="NY" onchange="updateSelectionFromPanel()"> New York</label>
-                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_CT" value="CT" onchange="updateSelectionFromPanel()"> Connecticut</label>
-                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_RI" value="RI" onchange="updateSelectionFromPanel()"> Rhode Island</label>
-                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_MA" value="MA" onchange="updateSelectionFromPanel()"> Massachusetts</label>
-                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_NH" value="NH" onchange="updateSelectionFromPanel()"> New Hampshire</label>
-                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_ME" value="ME" onchange="updateSelectionFromPanel()"> Maine</label>
-                <label style="display: block; margin-bottom: 5px;"><input type="checkbox" id="filter_VT" value="VT" onchange="updateSelectionFromPanel()"> Vermont</label>
+    <!-- Filter Panel (Database-style) -->
+    <div id="filterPanel" class="filter-panel" style="position: fixed; left: 0; top: 44px; width: 320px; height: calc(100vh - 44px); background: white; border-right: 2px solid #e0e0e0; display: flex; flex-direction: column; z-index: 9999; transition: transform 0.3s ease; transform: translateX(-100%);">
+        <div style="padding: 20px; flex: 1; overflow-y: auto;">
+            <h3 style="margin: 0 0 20px 0; color: #2c3e50; font-size: 20px; font-weight: bold;">Regional Filters</h3>
+            
+            <!-- Active Filters Display -->
+            <div id="activeFiltersDisplay" style="margin-bottom: 20px; padding: 10px; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 6px; display: none;">
+                <div style="font-weight: 600; margin-bottom: 8px; color: #0369a1;">Active Filters:</div>
+                <div id="activeFiltersList" style="display: flex; flex-wrap: wrap; gap: 8px;"></div>
             </div>
-        </div>
-        
-        <!-- Year Range -->
-        <div style="margin-bottom: 25px;">
-            <div style="font-size: 13px; font-weight: 600; color: #4a5568; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Year Range</div>
-            <div style="display: flex; gap: 10px; align-items: center; background: white; padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px;">
-                <input type="number" id="filter_start_year" value="2010" min="1851" max="2024" style="width: 80px; padding: 8px; border: 1px solid #cbd5e0; border-radius: 4px; font-size: 14px;">
-                <span style="color: #718096; font-size: 14px;">to</span>
-                <input type="number" id="filter_end_year" value="2024" min="1851" max="2024" style="width: 80px; padding: 8px; border: 1px solid #cbd5e0; border-radius: 4px; font-size: 14px;">
+            
+            <!-- States Selection (Primary) -->
+            <div style="margin-bottom: 25px; border: 2px solid #667eea; border-radius: 8px; padding: 15px; background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));">
+                <label style="display: block; font-weight: 700; margin-bottom: 12px; color: #2c3e50; font-size: 16px;">Select States (Required):</label>
+                <div style="max-height: 300px; overflow-y: auto; border: 1px solid #ddd; border-radius: 6px; background: white;">
+                    <!-- Gulf States -->
+                    <div style="background: #dc2626; color: white; padding: 8px 12px; font-weight: 600; font-size: 13px; position: sticky; top: 0; z-index: 10;">
+                        <label style="display: flex; align-items: center; cursor: pointer;">
+                            <input type="checkbox" id="SELECT_GULF" onchange="selectGroupFromPanel('gulf')" style="margin-right: 8px;">
+                            <span>GULF STATES (Select All)</span>
+                        </label>
+                    </div>
+                    <div style="padding: 8px 12px;">
+                        <label style="display: flex; align-items: center; padding: 6px 0; cursor: pointer;"><input type="checkbox" id="filter_FL" value="FL" checked onchange="updateSelectionFromPanel()" style="margin-right: 8px;"> Florida (FL)</label>
+                        <label style="display: flex; align-items: center; padding: 6px 0; cursor: pointer;"><input type="checkbox" id="filter_TX" value="TX" onchange="updateSelectionFromPanel()" style="margin-right: 8px;"> Texas (TX)</label>
+                        <label style="display: flex; align-items: center; padding: 6px 0; cursor: pointer;"><input type="checkbox" id="filter_LA" value="LA" onchange="updateSelectionFromPanel()" style="margin-right: 8px;"> Louisiana (LA)</label>
+                        <label style="display: flex; align-items: center; padding: 6px 0; cursor: pointer;"><input type="checkbox" id="filter_MS" value="MS" onchange="updateSelectionFromPanel()" style="margin-right: 8px;"> Mississippi (MS)</label>
+                        <label style="display: flex; align-items: center; padding: 6px 0; cursor: pointer;"><input type="checkbox" id="filter_AL" value="AL" onchange="updateSelectionFromPanel()" style="margin-right: 8px;"> Alabama (AL)</label>
+                    </div>
+                    
+                    <!-- Atlantic States -->
+                    <div style="background: #0369a1; color: white; padding: 8px 12px; font-weight: 600; font-size: 13px; position: sticky; top: 32px; z-index: 10;">
+                        <label style="display: flex; align-items: center; cursor: pointer;">
+                            <input type="checkbox" id="SELECT_ATLANTIC" onchange="selectGroupFromPanel('atlantic')" style="margin-right: 8px;">
+                            <span>ATLANTIC STATES (Select All)</span>
+                        </label>
+                    </div>
+                    <div style="padding: 8px 12px;">
+                        <label style="display: flex; align-items: center; padding: 6px 0; cursor: pointer;"><input type="checkbox" id="filter_GA" value="GA" onchange="updateSelectionFromPanel()" style="margin-right: 8px;"> Georgia (GA)</label>
+                        <label style="display: flex; align-items: center; padding: 6px 0; cursor: pointer;"><input type="checkbox" id="filter_SC" value="SC" onchange="updateSelectionFromPanel()" style="margin-right: 8px;"> South Carolina (SC)</label>
+                        <label style="display: flex; align-items: center; padding: 6px 0; cursor: pointer;"><input type="checkbox" id="filter_NC" value="NC" onchange="updateSelectionFromPanel()" style="margin-right: 8px;"> North Carolina (NC)</label>
+                        <label style="display: flex; align-items: center; padding: 6px 0; cursor: pointer;"><input type="checkbox" id="filter_VA" value="VA" onchange="updateSelectionFromPanel()" style="margin-right: 8px;"> Virginia (VA)</label>
+                        <label style="display: flex; align-items: center; padding: 6px 0; cursor: pointer;"><input type="checkbox" id="filter_MD" value="MD" onchange="updateSelectionFromPanel()" style="margin-right: 8px;"> Maryland (MD)</label>
+                        <label style="display: flex; align-items: center; padding: 6px 0; cursor: pointer;"><input type="checkbox" id="filter_DE" value="DE" onchange="updateSelectionFromPanel()" style="margin-right: 8px;"> Delaware (DE)</label>
+                        <label style="display: flex; align-items: center; padding: 6px 0; cursor: pointer;"><input type="checkbox" id="filter_NJ" value="NJ" onchange="updateSelectionFromPanel()" style="margin-right: 8px;"> New Jersey (NJ)</label>
+                        <label style="display: flex; align-items: center; padding: 6px 0; cursor: pointer;"><input type="checkbox" id="filter_NY" value="NY" onchange="updateSelectionFromPanel()" style="margin-right: 8px;"> New York (NY)</label>
+                        <label style="display: flex; align-items: center; padding: 6px 0; cursor: pointer;"><input type="checkbox" id="filter_CT" value="CT" onchange="updateSelectionFromPanel()" style="margin-right: 8px;"> Connecticut (CT)</label>
+                        <label style="display: flex; align-items: center; padding: 6px 0; cursor: pointer;"><input type="checkbox" id="filter_RI" value="RI" onchange="updateSelectionFromPanel()" style="margin-right: 8px;"> Rhode Island (RI)</label>
+                        <label style="display: flex; align-items: center; padding: 6px 0; cursor: pointer;"><input type="checkbox" id="filter_MA" value="MA" onchange="updateSelectionFromPanel()" style="margin-right: 8px;"> Massachusetts (MA)</label>
+                        <label style="display: flex; align-items: center; padding: 6px 0; cursor: pointer;"><input type="checkbox" id="filter_NH" value="NH" onchange="updateSelectionFromPanel()" style="margin-right: 8px;"> New Hampshire (NH)</label>
+                        <label style="display: flex; align-items: center; padding: 6px 0; cursor: pointer;"><input type="checkbox" id="filter_ME" value="ME" onchange="updateSelectionFromPanel()" style="margin-right: 8px;"> Maine (ME)</label>
+                    </div>
+                </div>
             </div>
-        </div>
-        
-        <!-- Storm Categories -->
-        <div style="margin-bottom: 25px;">
-            <div style="font-size: 13px; font-weight: 600; color: #4a5568; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Category</div>
-            <div style="background: white; padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px;">
-            <label style="display: block; margin-bottom: 8px; cursor: pointer;"><input type="checkbox" id="filter_cat_5" value="5" checked style="margin-right: 8px;"><span style="background: #8B008B; color: white; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;">Cat 5</span></label>
-            <label style="display: block; margin-bottom: 8px; cursor: pointer;"><input type="checkbox" id="filter_cat_4" value="4" checked style="margin-right: 8px;"><span style="background: #DC143C; color: white; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;">Cat 4</span></label>
-            <label style="display: block; margin-bottom: 8px; cursor: pointer;"><input type="checkbox" id="filter_cat_3" value="3" checked style="margin-right: 8px;"><span style="background: #FF8C00; color: white; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;">Cat 3</span></label>
-            <label style="display: block; margin-bottom: 8px; cursor: pointer;"><input type="checkbox" id="filter_cat_2" value="2" style="margin-right: 8px;"><span style="background: #FFD700; color: #333; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;">Cat 2</span></label>
-            <label style="display: block; margin-bottom: 8px; cursor: pointer;"><input type="checkbox" id="filter_cat_1" value="1" style="margin-right: 8px;"><span style="background: #90EE90; color: #333; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;">Cat 1</span></label>
-            <label style="display: block; margin-bottom: 8px; cursor: pointer;"><input type="checkbox" id="filter_cat_0" value="0" style="margin-right: 8px;"><span style="background: #87CEEB; color: #333; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;">TS</span></label>
+            
+            <!-- Category Selection -->
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; font-weight: 600; margin-bottom: 10px; color: #4b5563;">Hurricane Category</label>
+                <select id="categoryFilter" onchange="applyAllFilters()" style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px;">
+                    <option value="all">All Categories</option>
+                    <option value="5">Category 5 (≥157 mph)</option>
+                    <option value="4">Category 4 (130-156 mph)</option>
+                    <option value="3" selected>Category 3 (111-129 mph)</option>
+                    <option value="2">Category 2 (96-110 mph)</option>
+                    <option value="1">Category 1 (74-95 mph)</option>
+                    <option value="0">Tropical Storm (39-73 mph)</option>
+                    <option value="major">Major Hurricanes (Cat 3+)</option>
+                </select>
             </div>
-        </div>
-        
-        <!-- Other Options -->
-        <div style="margin-bottom: 25px;">
-            <div style="font-size: 13px; font-weight: 600; color: #4a5568; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Additional Filters</div>
-            <div style="background: white; padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px;">
-                <label style="display: block; margin-bottom: 10px; cursor: pointer;"><input type="checkbox" id="filter_landfall" style="margin-right: 8px;"> US Landfall Only</label>
-                <input type="text" id="filter_name" placeholder="Search by storm name..." style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e0; border-radius: 4px; font-size: 14px;">
+            
+            <!-- Decade Filter -->
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; font-weight: 600; margin-bottom: 10px; color: #4b5563;">Decade</label>
+                <select id="decadeFilter" onchange="applyAllFilters()" style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px;">
+                    <option value="all">All Decades</option>
+                    <option value="2020">2020s (2020-2024)</option>
+                    <option value="2010" selected>2010s</option>
+                    <option value="2000">2000s</option>
+                    <option value="1990">1990s</option>
+                    <option value="1980">1980s</option>
+                    <option value="1970">1970s</option>
+                    <option value="1960">1960s</option>
+                    <option value="1950">1950s</option>
+                    <option value="earlier">Earlier (1851-1949)</option>
+                </select>
             </div>
-        </div>
-        
-        <!-- Apply Button -->
-        <div style="margin-top: 25px; display: flex; gap: 10px;">
-            <button onclick="applyFiltersFromPanel()" style="flex: 1; padding: 10px; background: #dc2626; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600; transition: all 0.2s;" onmouseover="this.style.background='#b91c1c'" onmouseout="this.style.background='#dc2626'">Apply</button>
-            <button onclick="clearFiltersFromPanel()" style="flex: 1; padding: 10px; background: #6b7280; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600; transition: all 0.2s;" onmouseover="this.style.background='#4b5563'" onmouseout="this.style.background='#6b7280'">Clear</button>
-        </div>
+            
+            <!-- Year Range -->
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; font-weight: 600; margin-bottom: 10px; color: #4b5563;">Custom Year Range</label>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <input type="number" id="startYear" min="1851" max="2024" value="2010" onchange="applyAllFilters()" style="flex: 1; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px;">
+                    <span style="color: #6b7280;">to</span>
+                    <input type="number" id="endYear" min="1851" max="2024" value="2024" onchange="applyAllFilters()" style="flex: 1; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px;">
+                </div>
+            </div>
+            
+            <!-- Wind Speed Range -->
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; font-weight: 600; margin-bottom: 10px; color: #4b5563;">Wind Speed (mph)</label>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <input type="number" id="minWind" min="0" max="200" placeholder="Min" onchange="applyAllFilters()" style="flex: 1; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px;">
+                    <span style="color: #6b7280;">to</span>
+                    <input type="number" id="maxWind" min="0" max="200" placeholder="Max" onchange="applyAllFilters()" style="flex: 1; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px;">
+                </div>
+            </div>
+            
+            <!-- Search by Name -->
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; font-weight: 600; margin-bottom: 10px; color: #4b5563;">Search by Name</label>
+                <input type="text" id="nameSearch" placeholder="e.g., Katrina, Harvey..." oninput="applyAllFilters()" style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px;">
+            </div>
+            
+            <!-- Additional Options -->
+            <div style="margin-bottom: 20px;">
+                <label style="display: flex; align-items: center; cursor: pointer;">
+                    <input type="checkbox" id="landfallOnly" onchange="applyAllFilters()" style="margin-right: 8px;">
+                    <span style="color: #4b5563;">US Landfall Only</span>
+                </label>
+            </div>
+            
+            <!-- Clear All Button -->
+            <button onclick="clearAllFilters()" style="width: 100%; padding: 10px; background: #ef4444; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: background 0.2s;" onmouseover="this.style.background='#dc2626'" onmouseout="this.style.background='#ef4444'">Clear All Filters</button>
         </div>
     </div>
     
-    <!-- Filter Toggle Button -->
-    <button onclick="toggleFilterPanel()" style="position: fixed; left: 0; top: 100px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 0 8px 8px 0; padding: 12px 18px; cursor: pointer; z-index: 9998; box-shadow: 2px 2px 10px rgba(102, 126, 234, 0.4); font-weight: 600; font-size: 14px; transition: all 0.3s; display: flex; align-items: center; gap: 8px;" 
-            onmouseover="this.style.left='5px'; this.style.boxShadow='3px 3px 15px rgba(102, 126, 234, 0.6)'" 
-            onmouseout="this.style.left='0'; this.style.boxShadow='2px 2px 10px rgba(102, 126, 234, 0.4)'">
-        <svg style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
+    <!-- Toggle Button for Filter Panel -->
+    <button onclick="toggleFilterPanel()" id="filterToggleBtn" style="position: fixed; left: 0; top: 100px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 12px 20px; border-radius: 0 8px 8px 0; cursor: pointer; z-index: 10000; box-shadow: 2px 2px 10px rgba(0,0,0,0.2); font-weight: 600; display: flex; align-items: center; gap: 8px; transition: all 0.3s;">
+        <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
         </svg>
         <span>Filters</span>
+        <span id="filterCount" style="background: white; color: #667eea; padding: 2px 6px; border-radius: 10px; font-size: 12px; display: none;">0</span>
     </button>
-    
-    <!-- Quick Filter Buttons (Fallback) -->
-    <div style="position: fixed; left: 0; top: 150px; background: white; border: 1px solid #ddd; border-radius: 0 8px 8px 0; padding: 10px; z-index: 9997; box-shadow: 2px 2px 8px rgba(0,0,0,0.1);">
-        <div style="font-size: 12px; font-weight: 600; margin-bottom: 8px; color: #666;">Quick Filters:</div>
-        <button onclick="quickSelectStates(['FL', 'TX', 'LA'])" style="display: block; width: 100%; padding: 5px 10px; margin-bottom: 5px; background: #f0f0f0; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; font-size: 12px;">Gulf States</button>
-        <button onclick="quickSelectStates(['NC', 'SC', 'GA'])" style="display: block; width: 100%; padding: 5px 10px; margin-bottom: 5px; background: #f0f0f0; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; font-size: 12px;">SE Atlantic</button>
-        <button onclick="quickSelectStates(['FL'])" style="display: block; width: 100%; padding: 5px 10px; margin-bottom: 5px; background: #f0f0f0; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; font-size: 12px;">Florida Only</button>
-        <button onclick="quickApplyFilters()" style="display: block; width: 100%; padding: 5px 10px; background: #dc2626; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600;">Apply</button>
-    </div>
     
     <div class="container">
         <div class="main-content">
@@ -868,6 +906,23 @@
         let selectedStates = ['FL']; // Default to Florida
         let currentStartYear = 2010;
         let currentEndYear = 2024;
+        
+        // Helper function to select state groups
+        function selectGroupFromPanel(group) {
+            const gulfStates = ['FL', 'TX', 'LA', 'MS', 'AL'];
+            const atlanticStates = ['GA', 'SC', 'NC', 'VA', 'MD', 'DE', 'NJ', 'NY', 'CT', 'RI', 'MA', 'NH', 'ME'];
+            
+            const states = group === 'gulf' ? gulfStates : atlanticStates;
+            const checkbox = document.getElementById(group === 'gulf' ? 'SELECT_GULF' : 'SELECT_ATLANTIC');
+            const isChecked = checkbox.checked;
+            
+            states.forEach(state => {
+                const cb = document.getElementById(`filter_${state}`);
+                if (cb) cb.checked = isChecked;
+            });
+            
+            updateSelectionFromPanel();
+        }
         
         // Animation variables
         let animationMarker = null;
@@ -1271,101 +1326,261 @@
             }
         }
         
+        // Active filters object (Database-style)
+        let activeFilters = {
+            states: [],
+            category: null,
+            decade: null,
+            yearRange: null,
+            windSpeed: null,
+            nameSearch: null,
+            landfallOnly: false
+        };
+        
         // Filter Panel Functions
         function toggleFilterPanel() {
             const panel = document.getElementById('filterPanel');
             if (panel) {
-                const currentLeft = parseInt(panel.style.left);
-                panel.style.left = currentLeft < 0 ? '0' : '-320px';
-            } else {
-                console.error('Filter panel not found - using quick filters instead');
+                const isOpen = panel.style.transform === 'translateX(0px)';
+                panel.style.transform = isOpen ? 'translateX(-100%)' : 'translateX(0)';
+                
+                // Update button position
+                const btn = document.getElementById('filterToggleBtn');
+                if (btn) {
+                    btn.style.left = isOpen ? '0' : '320px';
+                }
             }
         }
         
         function updateSelectionFromPanel() {
             selectedStates = [];
-            // Get all state checkboxes (they start with filter_ and are 2-letter state codes)
+            // Get all state checkboxes
             const checkboxes = document.querySelectorAll('#filterPanel input[type="checkbox"][id^="filter_"]');
             checkboxes.forEach(cb => {
-                // Skip category checkboxes and other non-state checkboxes
-                if (!cb.id.includes('cat_') && !cb.id.includes('landfall') && cb.value.length === 2 && cb.checked) {
+                if (cb.value && cb.value.length === 2 && cb.checked) {
                     selectedStates.push(cb.value);
                 }
             });
             
-            // Update stats display
-            const statsText = document.getElementById('stats-text');
-            const yearRange = document.getElementById('yearRangeDisplay');
-            if (statsText) {
-                statsText.innerHTML = `<strong>${selectedStates.length}</strong> state${selectedStates.length !== 1 ? 's' : ''} selected | <strong>${yearRange ? yearRange.textContent : currentStartYear + '-' + currentEndYear}</strong> | Click filters button to modify`;
+            activeFilters.states = selectedStates;
+            updateActiveFiltersDisplay();
+            applyAllFilters();
+        }
+        
+        function updateActiveFiltersDisplay() {
+            const display = document.getElementById('activeFiltersDisplay');
+            const list = document.getElementById('activeFiltersList');
+            
+            if (!display || !list) return;
+            
+            list.innerHTML = '';
+            let hasFilters = false;
+            
+            // States filter chip
+            if (activeFilters.states && activeFilters.states.length > 0) {
+                hasFilters = true;
+                const chip = createFilterChip('States', activeFilters.states.join(', '), () => {
+                    activeFilters.states = [];
+                    selectedStates = ['FL']; // Default to Florida
+                    document.querySelectorAll('#filterPanel input[id^="filter_"][value]').forEach(cb => {
+                        cb.checked = cb.value === 'FL';
+                    });
+                    applyAllFilters();
+                });
+                list.appendChild(chip);
+            }
+            
+            // Category filter chip
+            if (activeFilters.category) {
+                hasFilters = true;
+                const categoryText = activeFilters.category === 'major' ? 'Major (Cat 3+)' : `Category ${activeFilters.category}`;
+                const chip = createFilterChip('Category', categoryText, () => {
+                    activeFilters.category = null;
+                    document.getElementById('categoryFilter').value = 'all';
+                    applyAllFilters();
+                });
+                list.appendChild(chip);
+            }
+            
+            // Decade filter chip
+            if (activeFilters.decade) {
+                hasFilters = true;
+                const chip = createFilterChip('Decade', activeFilters.decade + 's', () => {
+                    activeFilters.decade = null;
+                    document.getElementById('decadeFilter').value = 'all';
+                    applyAllFilters();
+                });
+                list.appendChild(chip);
+            }
+            
+            // Year range filter chip
+            if (activeFilters.yearRange) {
+                hasFilters = true;
+                const chip = createFilterChip('Years', `${activeFilters.yearRange.start}-${activeFilters.yearRange.end}`, () => {
+                    activeFilters.yearRange = null;
+                    document.getElementById('startYear').value = '';
+                    document.getElementById('endYear').value = '';
+                    applyAllFilters();
+                });
+                list.appendChild(chip);
+            }
+            
+            // Wind speed filter chip
+            if (activeFilters.windSpeed) {
+                hasFilters = true;
+                const chip = createFilterChip('Wind', `${activeFilters.windSpeed.min}-${activeFilters.windSpeed.max} mph`, () => {
+                    activeFilters.windSpeed = null;
+                    document.getElementById('minWind').value = '';
+                    document.getElementById('maxWind').value = '';
+                    applyAllFilters();
+                });
+                list.appendChild(chip);
+            }
+            
+            // Name search filter chip
+            if (activeFilters.nameSearch) {
+                hasFilters = true;
+                const chip = createFilterChip('Name', activeFilters.nameSearch, () => {
+                    activeFilters.nameSearch = null;
+                    document.getElementById('nameSearch').value = '';
+                    applyAllFilters();
+                });
+                list.appendChild(chip);
+            }
+            
+            // Landfall only filter chip
+            if (activeFilters.landfallOnly) {
+                hasFilters = true;
+                const chip = createFilterChip('Landfall', 'US Only', () => {
+                    activeFilters.landfallOnly = false;
+                    document.getElementById('landfallOnly').checked = false;
+                    applyAllFilters();
+                });
+                list.appendChild(chip);
+            }
+            
+            display.style.display = hasFilters ? 'block' : 'none';
+            
+            // Update filter count on button
+            const filterCount = document.getElementById('filterCount');
+            if (filterCount) {
+                const count = Object.values(activeFilters).filter(v => v !== null && v !== false && (Array.isArray(v) ? v.length > 0 : true)).length;
+                filterCount.textContent = count;
+                filterCount.style.display = count > 0 ? 'inline-block' : 'none';
             }
         }
         
-        function applyFiltersFromPanel() {
-            console.log('Applying filters from panel...');
+        function createFilterChip(label, value, onRemove) {
+            const chip = document.createElement('div');
+            chip.style.cssText = 'display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; background: white; border: 1px solid #cbd5e0; border-radius: 12px; font-size: 13px;';
             
-            // Get state selections
-            updateSelectionFromPanel();
-            console.log('Selected states:', selectedStates);
+            chip.innerHTML = `
+                <span style="font-weight: 600; color: #4b5563;">${label}:</span>
+                <span style="color: #1f2937;">${value}</span>
+                <button onclick="" style="background: none; border: none; color: #ef4444; cursor: pointer; padding: 0; margin-left: 4px; font-size: 16px; line-height: 1;">×</button>
+            `;
             
-            // Get year range
-            const startYear = document.getElementById('filter_start_year');
-            const endYear = document.getElementById('filter_end_year');
-            if (startYear) currentStartYear = parseInt(startYear.value);
-            if (endYear) currentEndYear = parseInt(endYear.value);
+            chip.querySelector('button').onclick = onRemove;
+            return chip;
+        }
+        
+        function applyAllFilters() {
+            console.log('Applying all filters...');
             
-            const yearRangeDisplay = document.getElementById('yearRangeDisplay');
-            if (yearRangeDisplay) {
-                yearRangeDisplay.textContent = `${currentStartYear}-${currentEndYear}`;
+            // Get filter values from UI
+            const categoryFilter = document.getElementById('categoryFilter')?.value;
+            const decadeFilter = document.getElementById('decadeFilter')?.value;
+            const startYear = document.getElementById('startYear')?.value;
+            const endYear = document.getElementById('endYear')?.value;
+            const minWind = document.getElementById('minWind')?.value;
+            const maxWind = document.getElementById('maxWind')?.value;
+            const nameSearch = document.getElementById('nameSearch')?.value;
+            const landfallOnly = document.getElementById('landfallOnly')?.checked;
+            
+            // Update active filters
+            activeFilters.category = categoryFilter !== 'all' ? categoryFilter : null;
+            activeFilters.decade = decadeFilter !== 'all' ? decadeFilter : null;
+            activeFilters.yearRange = (startYear && endYear) ? {start: parseInt(startYear), end: parseInt(endYear)} : null;
+            activeFilters.windSpeed = (minWind && maxWind) ? {min: parseInt(minWind), max: parseInt(maxWind)} : null;
+            activeFilters.nameSearch = nameSearch || null;
+            activeFilters.landfallOnly = landfallOnly || false;
+            
+            // Update year range if custom years are set
+            if (activeFilters.yearRange) {
+                currentStartYear = activeFilters.yearRange.start;
+                currentEndYear = activeFilters.yearRange.end;
+            } else if (activeFilters.decade && activeFilters.decade !== 'earlier') {
+                currentStartYear = parseInt(activeFilters.decade);
+                currentEndYear = currentStartYear + 9;
+            } else if (activeFilters.decade === 'earlier') {
+                currentStartYear = 1851;
+                currentEndYear = 1949;
+            } else {
+                // Default range
+                currentStartYear = 1851;
+                currentEndYear = 2024;
             }
-            console.log('Year range:', currentStartYear, '-', currentEndYear);
             
-            // Apply the filters
-            applyFilters();
+            // Update display
+            updateActiveFiltersDisplay();
             
-            // Update timeline and charts
+            // Apply filters and update charts
             if (selectedStates.length > 0) {
-                console.log('Updating timeline and comparison charts...');
+                applyFilters();
                 createMultiStateTimeline();
                 updateStateComparison();
+                
+                // Update stats bar
+                const statsText = document.getElementById('stats-text');
+                if (statsText) {
+                    statsText.innerHTML = `<strong>${selectedStates.length}</strong> state${selectedStates.length !== 1 ? 's' : ''} selected | <strong>${currentStartYear}-${currentEndYear}</strong> | ${Object.values(activeFilters).filter(v => v !== null && v !== false && (Array.isArray(v) ? v.length > 0 : true)).length} filters active`;
+                }
             } else {
-                console.error('No states selected!');
-                alert('Please select at least one state.');
+                console.warn('No states selected');
             }
-            
-            // Close the panel
-            toggleFilterPanel();
         }
         
-        function clearFiltersFromPanel() {
-            // Reset all checkboxes
-            document.querySelectorAll('#filterPanel input[type="checkbox"]').forEach(cb => {
-                cb.checked = false;
+        function clearAllFilters() {
+            // Reset all UI elements
+            document.getElementById('categoryFilter').value = 'all';
+            document.getElementById('decadeFilter').value = 'all';
+            document.getElementById('startYear').value = '';
+            document.getElementById('endYear').value = '';
+            document.getElementById('minWind').value = '';
+            document.getElementById('maxWind').value = '';
+            document.getElementById('nameSearch').value = '';
+            document.getElementById('landfallOnly').checked = false;
+            
+            // Reset states to Florida only
+            document.querySelectorAll('#filterPanel input[id^="filter_"][value]').forEach(cb => {
+                cb.checked = cb.value === 'FL';
             });
             
-            // Set Florida as default
-            document.getElementById('filter_FL').checked = true;
+            selectedStates = ['FL'];
             
-            // Reset categories to Cat 3+
-            document.getElementById('filter_cat_3').checked = true;
-            document.getElementById('filter_cat_4').checked = true;
-            document.getElementById('filter_cat_5').checked = true;
+            // Clear active filters
+            activeFilters = {
+                states: ['FL'],
+                category: null,
+                decade: null,
+                yearRange: null,
+                windSpeed: null,
+                nameSearch: null,
+                landfallOnly: false
+            };
             
-            // Reset year range
-            document.getElementById('filter_start_year').value = 2010;
-            document.getElementById('filter_end_year').value = 2024;
+            // Reset to default range
+            currentStartYear = 2010;
+            currentEndYear = 2024;
             
-            // Clear name search
-            document.getElementById('filter_name').value = '';
-            
-            // Apply the cleared filters
-            applyFiltersFromPanel();
+            // Apply cleared filters
+            applyAllFilters();
         }
         
         function applyFilters() {
             console.log('=== applyFilters START ===');
             console.log('Current selectedStates:', selectedStates);
-            console.log('Current year range:', currentStartYear, '-', currentEndYear);
+            console.log('Active filters:', activeFilters);
             
             // Check if data is loaded
             if (typeof ATLANTIC_STORMS_ENHANCED === 'undefined') {
@@ -1374,50 +1589,53 @@
             }
             console.log('Total storms in database:', ATLANTIC_STORMS_ENHANCED.length);
             
-            // Get filter values from the panel
-            const nameFilter = document.getElementById('filter_name') ? document.getElementById('filter_name').value.toLowerCase() : '';
-            const landfallOnly = document.getElementById('filter_landfall') ? document.getElementById('filter_landfall').checked : false;
-            
-            // Get selected categories from checkboxes
-            const selectedCategories = [];
-            const categoryCheckboxes = document.querySelectorAll('#filterPanel input[type="checkbox"][id^="filter_cat_"]:checked');
-            categoryCheckboxes.forEach(checkbox => {
-                selectedCategories.push(parseInt(checkbox.value));
-            });
-            
-            // If no categories selected, default to Cat 3+
-            if (selectedCategories.length === 0) {
-                selectedCategories.push(3, 4, 5);
-                console.log('No categories selected, defaulting to Cat 3+');
-            }
-            
-            console.log('Filter settings - Name:', nameFilter, 'Landfall:', landfallOnly, 'Categories:', selectedCategories);
-            
             // Apply filters to storms for the selected states
             const allStorms = ATLANTIC_STORMS_ENHANCED.filter(storm => {
+                // State filter (required)
                 const isSelectedState = selectedStates.some(state => 
                     storm.landfall_states && storm.landfall_states.includes(state)
                 );
+                if (!isSelectedState) return false;
+                
+                // Year range filter
                 const inYearRange = storm.year >= currentStartYear && storm.year <= currentEndYear;
+                if (!inYearRange) return false;
                 
-                if (!isSelectedState || !inYearRange) return false;
-                
-                // If name search is active, ONLY filter by name - ignore all other filters
-                if (nameFilter) {
-                    return storm.name.toLowerCase().includes(nameFilter);
+                // Name search (overrides other filters when active)
+                if (activeFilters.nameSearch) {
+                    return storm.name.toLowerCase().includes(activeFilters.nameSearch.toLowerCase());
                 }
                 
-                // Otherwise apply normal filters
-                if (selectedCategories.length > 0 && !selectedCategories.includes(storm.category)) return false;
+                // Category filter
+                if (activeFilters.category) {
+                    if (activeFilters.category === 'major') {
+                        if (storm.category < 3) return false;
+                    } else {
+                        const cat = parseInt(activeFilters.category);
+                        if (storm.category !== cat) return false;
+                    }
+                }
+                
+                // Wind speed filter
+                if (activeFilters.windSpeed) {
+                    if (storm.wind_mph < activeFilters.windSpeed.min || storm.wind_mph > activeFilters.windSpeed.max) {
+                        return false;
+                    }
+                }
+                
+                // Landfall only filter
+                if (activeFilters.landfallOnly && !isLikelyUSLandfall(storm)) {
+                    return false;
+                }
+                
                 // Only show hurricane season months (Jun-Dec: months 6-12)
                 if (storm.month < 6 || storm.month > 12) return false;
-                // Filter for landfall storms if checkbox is checked
-                if (landfallOnly && !isLikelyUSLandfall(storm)) return false;
+                
                 return true;
             });
             
-            // If name search is active and found storms, adjust year range to show results
-            if (nameFilter && allStorms.length > 0) {
+            // Auto-adjust year range for name search
+            if (activeFilters.nameSearch && allStorms.length > 0) {
                 const stormYears = allStorms.map(s => s.year);
                 const minStormYear = Math.min(...stormYears);
                 const maxStormYear = Math.max(...stormYears);
@@ -1428,8 +1646,8 @@
                     currentEndYear = Math.max(maxStormYear, currentEndYear);
                     
                     // Update the year input fields
-                    document.getElementById('start-year').value = currentStartYear;
-                    document.getElementById('end-year').value = currentEndYear;
+                    document.getElementById('startYear').value = currentStartYear;
+                    document.getElementById('endYear').value = currentEndYear;
                     
                     console.log(`Name search found storms from ${minStormYear}-${maxStormYear}, adjusted range to ${currentStartYear}-${currentEndYear}`);
                 }
@@ -2990,10 +3208,20 @@
             console.log('DOM loaded, initializing Regional tab...');
             initMap();
             
-            // Ensure selectedStates has at least Florida
-            if (!selectedStates || selectedStates.length === 0) {
-                selectedStates = ['FL'];
-                console.log('Set default state to Florida');
+            // Initialize filters with Florida selected
+            selectedStates = ['FL'];
+            activeFilters.states = ['FL'];
+            currentStartYear = 2010;
+            currentEndYear = 2024;
+            
+            // Set default filter values if elements exist
+            if (document.getElementById('categoryFilter')) {
+                document.getElementById('categoryFilter').value = '3';
+                activeFilters.category = '3';
+            }
+            if (document.getElementById('decadeFilter')) {
+                document.getElementById('decadeFilter').value = '2010';
+                activeFilters.decade = '2010';
             }
             
             // Apply initial filters to show storm markers
