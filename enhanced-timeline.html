@@ -366,6 +366,12 @@
         function createTimeline() {
             console.log('Creating timeline with', filteredStorms.length, 'storms (including', liveStorms.length, 'live)');
             
+            // Update the filtered storm count in the header
+            const countElement = document.getElementById('timelineActiveCount');
+            if (countElement) {
+                countElement.textContent = filteredStorms.length;
+            }
+            
             // IMPORTANT: Atlantic Hurricane Timeline Axis Convention
             // X-axis = MONTHS (horizontal: Jun, Jul, Aug, Sep, Oct, Nov)
             // Y-axis = HURRICANE SEASON YEAR (vertical: June storms near year mark, December storms near next year)
