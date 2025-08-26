@@ -3583,7 +3583,7 @@
             }
         }
         
-        function drawRainbowTrack(pointFeatures, storm) {
+        function drawRainbowTrack(pointFeatures, storm, animate = true) {
             console.log(`Drawing RAINBOW track with ${pointFeatures.length} points for ${storm.name}`);
             
             // Sort points by time
@@ -3595,8 +3595,9 @@
             });
             
             const allLatLngs = [];
+            const segments = [];
             
-            // Draw colored line segments
+            // Prepare segments for animation
             for (let i = 0; i < pointFeatures.length - 1; i++) {
                 const point1 = pointFeatures[i];
                 const point2 = pointFeatures[i + 1];
@@ -3622,19 +3623,51 @@
                 
                 const segmentColor = getCategoryColor(category);
                 
-                L.polyline([latLng1, latLng2], {
+                segments.push({
+                    coords: [latLng1, latLng2],
                     color: segmentColor,
-                    weight: 6,
-                    opacity: 1.0
-                }).addTo(map);
+                    index: i
+                });
             }
             
-            // Fit map to track bounds
+            // Fit map to track bounds first
             if (allLatLngs.length > 0) {
                 const bounds = L.latLngBounds(allLatLngs);
                 map.fitBounds(bounds, { 
                     padding: [20, 20],
                     maxZoom: 8
+                });
+            }
+            
+            // Animate the segments if animation is enabled
+            if (animate && segments.length > 0) {
+                let currentSegment = 0;
+                
+                function drawNextSegment() {
+                    if (currentSegment < segments.length) {
+                        const segment = segments[currentSegment];
+                        L.polyline(segment.coords, {
+                            color: segment.color,
+                            weight: 6,
+                            opacity: 1.0
+                        }).addTo(map);
+                        
+                        currentSegment++;
+                        // Use shorter delay for smoother animation
+                        setTimeout(drawNextSegment, 50);
+                    }
+                }
+                
+                // Start animation
+                drawNextSegment();
+            } else {
+                // Draw all segments at once if no animation
+                segments.forEach(segment => {
+                    L.polyline(segment.coords, {
+                        color: segment.color,
+                        weight: 6,
+                        opacity: 1.0
+                    }).addTo(map);
                 });
             }
         }
