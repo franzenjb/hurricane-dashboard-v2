@@ -208,7 +208,7 @@
                         <div class="category-icon" id="categoryIcon" style="background-color: #8B9DC3; width: 36px; height: 36px; font-size: 14px;">TS</div>
                         <div class="storm-title" id="stormTitle" style="font-size: 18px; min-width: 120px;">Select a Storm</div>
                     </div>
-                    <div class="stats-inline" style="display: flex; gap: 20px; flex: 1; justify-content: flex-end;">
+                    <div class="stats-inline" style="display: flex; gap: 30px; flex: 1; justify-content: flex-end;">
                         <div class="stat-inline" style="display: flex; align-items: center; gap: 5px;">
                             <span class="stat-label" style="font-size: 11px; color: #666; text-transform: uppercase; font-weight: 600;">Date:</span>
                             <span class="stat-value" id="statDate" style="font-size: 14px; font-weight: bold; color: #333;">-</span>
@@ -220,10 +220,6 @@
                         <div class="stat-inline" style="display: flex; align-items: center; gap: 5px;">
                             <span class="stat-label" style="font-size: 11px; color: #666; text-transform: uppercase; font-weight: 600;">Landfall:</span>
                             <span class="stat-value" id="statLandfall" style="font-size: 14px; font-weight: bold; color: #333;">-</span>
-                        </div>
-                        <div class="stat-inline" style="display: flex; align-items: center; gap: 5px;">
-                            <span class="stat-label" style="font-size: 11px; color: #666; text-transform: uppercase; font-weight: 600;">Deaths:</span>
-                            <span class="stat-value" id="statDeaths" style="font-size: 14px; font-weight: bold; color: #333;">-</span>
                         </div>
                     </div>
                 </div>
@@ -352,7 +348,6 @@
             } else {
                 document.getElementById('statLandfall').textContent = storm.is_live ? 'Currently at Sea' : 'No US Landfall';
             }
-            document.getElementById('statDeaths').textContent = storm.is_live ? 'Active Storm' : (storm.deaths || '0');
             
             // Update narrative panel
             const narrativeContent = document.getElementById('narrativeContent');

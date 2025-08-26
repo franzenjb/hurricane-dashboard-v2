@@ -145,7 +145,7 @@
         
         .stats-inline {
             display: flex;
-            gap: 20px;
+            gap: 30px;
             flex: 1;
             justify-content: flex-end;
         }
@@ -869,10 +869,6 @@
                             <span class="stat-label">Landfall:</span>
                             <span class="stat-value" id="statLandfall">-</span>
                         </div>
-                        <div class="stat-inline">
-                            <span class="stat-label">Deaths:</span>
-                            <span class="stat-value" id="statDeaths">-</span>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -1064,7 +1060,6 @@
             } else {
                 document.getElementById('statLandfall').textContent = 'No US Landfall';
             }
-            document.getElementById('statDeaths').textContent = storm.deaths || '0';
             
             // Update narrative panel
             const narrativeContent = document.getElementById('narrativeContent');
@@ -1386,11 +1381,32 @@
                     arrow.style.transform = isOpen ? 'rotate(180deg)' : 'rotate(0)';
                 }
                 
-                // Resize Plotly chart after transition completes
+                // Resize all Plotly charts after transition completes
                 setTimeout(() => {
-                    const timelineDiv = document.getElementById('timeline');
-                    if (timelineDiv && typeof Plotly !== 'undefined') {
-                        Plotly.Plots.resize(timelineDiv);
+                    if (typeof Plotly !== 'undefined') {
+                        // Resize timeline chart
+                        const timelineDiv = document.getElementById('timeline');
+                        if (timelineDiv) {
+                            Plotly.Plots.resize(timelineDiv);
+                        }
+                        
+                        // Resize scatter plot
+                        const scatterDiv = document.getElementById('scatterPlot');
+                        if (scatterDiv && scatterDiv.data) {
+                            Plotly.Plots.resize(scatterDiv);
+                        }
+                        
+                        // Resize category chart
+                        const categoryDiv = document.getElementById('categoryChart');
+                        if (categoryDiv && categoryDiv.data) {
+                            Plotly.Plots.resize(categoryDiv);
+                        }
+                        
+                        // Resize monthly chart
+                        const monthlyDiv = document.getElementById('monthlyChart');
+                        if (monthlyDiv && monthlyDiv.data) {
+                            Plotly.Plots.resize(monthlyDiv);
+                        }
                     }
                 }, 350); // Wait for CSS transition (0.3s) plus buffer
             }
@@ -3149,7 +3165,6 @@
             document.getElementById('statLandfall').textContent = storm.landfall_states && storm.landfall_states.length > 0 
                 ? storm.landfall_states.join(', ') 
                 : 'None';
-            document.getElementById('statDeaths').textContent = storm.deaths || '0';
             
             // Update narrative panel
             const narrativeContent = document.getElementById('narrativeContent');
