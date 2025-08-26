@@ -767,8 +767,8 @@
     <div class="container">
         <div class="main-content">
             <!-- Scrollable Content Wrapper -->
-            <div style="flex: 1; overflow-y: auto; overflow-x: hidden; position: relative; z-index: 1;">
-            <div id="timeline" style="min-height: 600px; width: 100%;"></div>
+            <div style="flex: 1; overflow-y: auto; overflow-x: hidden; position: relative; z-index: 1; display: flex; flex-direction: column;">
+            <div id="timeline" style="flex: 1; min-height: 600px; width: 100%;"></div>
             
             <!-- State Comparison Section -->
             <div id="stateComparison" style="margin: 40px 20px; padding: 30px; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
@@ -1379,6 +1379,14 @@
                     const isOpen = panel.classList.contains('open');
                     arrow.style.transform = isOpen ? 'rotate(180deg)' : 'rotate(0)';
                 }
+                
+                // Resize Plotly chart after transition completes
+                setTimeout(() => {
+                    const timelineDiv = document.getElementById('timeline');
+                    if (timelineDiv && typeof Plotly !== 'undefined') {
+                        Plotly.Plots.resize(timelineDiv);
+                    }
+                }, 350); // Wait for CSS transition (0.3s) plus buffer
             }
         }
         

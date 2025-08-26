@@ -188,6 +188,7 @@
                             </div>
                         </div>
                         <label><input type="checkbox" id="landfallOnly"> Landfall Only</label>
+                        <label><input type="checkbox" id="showNames" checked> Show Names</label>
                         <button onclick="applyFilters()" class="filter-button">Apply Filters</button>
                         <button onclick="clearFilters()" class="clear-button">Clear</button>
                     </div>
@@ -388,11 +389,13 @@
             // Y-axis = HURRICANE SEASON YEAR (vertical: June storms near year mark, December storms near next year)
             // This spreads the 7-month season across the full vertical space between year marks
             
+            const showNames = document.getElementById('showNames') ? document.getElementById('showNames').checked : true;
+            
             const traces = [{
                 x: filteredStorms.map(s => s.month + (s.day - 1) / 31), // Position within month based on day
                 y: filteredStorms.map(s => s.year + (s.month - 6 + (s.day - 1) / 31) / 7), // Position within hurricane season (Jun=0, Dec=1)
                 text: filteredStorms.map(s => s.name),
-                mode: 'markers+text',
+                mode: showNames ? 'markers+text' : 'markers',
                 type: 'scatter',
                 textposition: 'top center',
                 marker: {
