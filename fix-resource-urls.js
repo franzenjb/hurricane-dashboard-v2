@@ -34,9 +34,31 @@ storms.forEach(storm => {
     
     // Fix NHC Archive URL (only for 1998 and later)
     if (storm.year >= 1998) {
-        // Pattern: https://www.nhc.noaa.gov/archive/[year]/al[nn]/
-        const newArchiveUrl = `https://www.nhc.noaa.gov/archive/${storm.year}/al${stormNum}/`;
-        if (storm.resources.nhc_archive !== newArchiveUrl) {
+        let newArchiveUrl;
+        
+        if (storm.year >= 2006) {
+            // 2006 onwards: uses storm number format
+            // Pattern: https://www.nhc.noaa.gov/archive/[year]/al[nn]/
+            newArchiveUrl = `https://www.nhc.noaa.gov/archive/${storm.year}/al${stormNum}/`;
+        } else {
+            // 1998-2005: uses storm NAME with .shtml extension
+            // Pattern: https://www.nhc.noaa.gov/archive/[year]/[NAME].shtml
+            // For unnamed storms, skip archive URL
+            if (storm.name && !storm.name.startsWith('Storm ')) {
+                // Convert name to uppercase (standard format)
+                const stormName = storm.name.toUpperCase();
+                newArchiveUrl = `https://www.nhc.noaa.gov/archive/${storm.year}/${stormName}.shtml`;
+            } else {
+                // Unnamed storm - no archive page available
+                if (storm.resources.nhc_archive) {
+                    delete storm.resources.nhc_archive;
+                    removedArchives++;
+                }
+                newArchiveUrl = null;
+            }
+        }
+        
+        if (newArchiveUrl && storm.resources.nhc_archive !== newArchiveUrl) {
             storm.resources.nhc_archive = newArchiveUrl;
             fixedCount++;
         }
