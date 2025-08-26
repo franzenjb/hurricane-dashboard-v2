@@ -1419,7 +1419,7 @@
                 console.log('Filtered storms returned:', filteredStorms ? filteredStorms.length : 0);
                 
                 console.log('Calling createMultiStateTimeline...');
-                createMultiStateTimeline();
+                createMultiStateTimeline(window.currentFilteredStorms);
                 
                 console.log('Calling updateStateComparison...');
                 updateStateComparison();
@@ -1503,7 +1503,8 @@
         
         function applyFiltersFromSearch() {
             const searchTerm = document.getElementById('searchInput').value;
-            activeFilters.nameSearch = searchTerm || null;
+            // Don't set to null, keep empty string to distinguish from unset
+            activeFilters.nameSearch = searchTerm || '';
             applyFilters();
         }
         
@@ -1550,7 +1551,7 @@
             currentEndYear = parseInt(document.getElementById('yearEnd').value) || 2024;
             
             // Update active filters object (preserve nameSearch if it exists)
-            const currentNameSearch = activeFilters.nameSearch || document.getElementById('searchInput')?.value || null;
+            const currentNameSearch = document.getElementById('searchInput')?.value || activeFilters.nameSearch || '';
             
             activeFilters.states = selectedStates;
             activeFilters.impactLevels = impactLevels;
@@ -1768,8 +1769,7 @@
             // Apply filters and update charts
             if (selectedStates.length > 0) {
                 applyFilters();
-                createMultiStateTimeline();
-                updateStateComparison();
+                // applyFilters will call createMultiStateTimeline and updateStateComparison
                 
                 // Update stats bar
                 const statsText = document.getElementById('stats-text');
@@ -1831,26 +1831,36 @@
             console.log('Total storms in database:', ATLANTIC_STORMS_ENHANCED.length);
             
             // Apply filters to storms for the selected states
+            let stateFilteredCount = 0;
+            let yearFilteredCount = 0;
+            let categoryFilteredCount = 0;
+            let impactFilteredCount = 0;
+            
             const allStorms = ATLANTIC_STORMS_ENHANCED.filter(storm => {
                 // State filter (required)
                 const isSelectedState = selectedStates.some(state => 
                     storm.landfall_states && storm.landfall_states.includes(state)
                 );
                 if (!isSelectedState) return false;
+                stateFilteredCount++;
                 
                 // Year range filter
                 const inYearRange = storm.year >= currentStartYear && storm.year <= currentEndYear;
                 if (!inYearRange) return false;
+                yearFilteredCount++;
                 
-                // Name search (overrides other filters when active)
-                if (activeFilters.nameSearch) {
-                    return storm.name.toLowerCase().includes(activeFilters.nameSearch.toLowerCase());
+                // Name search filter (works WITH other filters, not instead of)
+                if (activeFilters.nameSearch && activeFilters.nameSearch.trim() !== '') {
+                    if (!storm.name || !storm.name.toLowerCase().includes(activeFilters.nameSearch.toLowerCase())) {
+                        return false;
+                    }
                 }
                 
                 // Impact level filter
                 if (activeFilters.impactLevels && activeFilters.impactLevels.length > 0) {
                     // Check if storm has impact level and it matches
-                    if (!storm.rc_impact_level || !activeFilters.impactLevels.includes(storm.rc_impact_level)) {
+                    const stormImpact = storm.rc_impact_level ? storm.rc_impact_level.toUpperCase() : null;
+                    if (!stormImpact || !activeFilters.impactLevels.includes(stormImpact)) {
                         return false;
                     }
                 }
@@ -1859,6 +1869,7 @@
                 if (activeFilters.categories && activeFilters.categories.length > 0) {
                     // Category is a number, ensure we're comparing correctly
                     if (storm.category === undefined || storm.category === null || !activeFilters.categories.includes(storm.category)) {
+                        categoryFilteredCount++;
                         return false;
                     }
                 }
@@ -1900,9 +1911,21 @@
                 }
             }
             
-            console.log('Filtered storms count:', allStorms.length);
+            console.log('Filter results:', {
+                totalStorms: ATLANTIC_STORMS_ENHANCED.length,
+                afterState: stateFilteredCount,
+                afterYear: yearFilteredCount,
+                categoriesFiltered: categoryFilteredCount,
+                impactFiltered: impactFilteredCount,
+                finalCount: allStorms.length
+            });
             if (allStorms.length > 0) {
-                console.log('Sample storms:', allStorms.slice(0, 3).map(s => s.name + ' ' + s.year));
+                console.log('Sample storms:', allStorms.slice(0, 3).map(s => ({
+                    name: s.name,
+                    year: s.year,
+                    category: s.category,
+                    impact: s.rc_impact_level
+                })));
             }
             
             // Store globally for use by other functions
@@ -1910,10 +1933,9 @@
             
             // Update the stats banner
             updateStatsDisplay(allStorms);
-            // Don't call updateTimeline here - it would create infinite loop
             
-            // Update the timeline plot
-            createMultiStateTimeline();
+            // Update the timeline plot with the filtered storms
+            createMultiStateTimeline(allStorms);
             
             // Update the comparison charts (Category, Decade, Scatter)
             updateStateComparison();
@@ -2519,12 +2541,12 @@
                 return;
             }
             
-            createMultiStateTimeline();
+            createMultiStateTimeline(window.currentFilteredStorms);
             const dropdown = document.getElementById('state-dropdown');
             if (dropdown) dropdown.classList.remove('show');
         }
         
-        function createMultiStateTimeline() {
+        function createMultiStateTimeline(filteredStorms) {
             const yearSpan = currentEndYear - currentStartYear + 1;
             const years = Array.from({length: yearSpan}, (_, i) => currentStartYear + i);
             const months = [6, 7, 8, 9, 10, 11];
@@ -2580,8 +2602,8 @@
                 }
             });
             
-            // Create trace using ATLANTIC_STORMS_ENHANCED data with FILTERING (same as timeline tab)
-            const allStorms = ATLANTIC_STORMS_ENHANCED.filter(storm => {
+            // Use the filtered storms passed in, or apply basic filtering if not provided
+            const allStorms = filteredStorms || window.currentFilteredStorms || ATLANTIC_STORMS_ENHANCED.filter(storm => {
                 const isSelectedState = selectedStates.some(state => 
                     storm.landfall_states && storm.landfall_states.includes(state)
                 );
@@ -2589,28 +2611,9 @@
                 
                 if (!isSelectedState || !inYearRange) return false;
                 
-                // Apply active filters (same logic as updateStats)
-                const nameFilter = document.getElementById('nameFilter') ? document.getElementById('nameFilter').value.toLowerCase() : '';
-                const landfallOnly = document.getElementById('landfallOnly') ? document.getElementById('landfallOnly').checked : false;
-                
-                // Get selected categories from checkboxes
-                const selectedCategories = [];
-                const categoryCheckboxes = document.querySelectorAll('#categoryFilter input[type="checkbox"]:checked');
-                categoryCheckboxes.forEach(checkbox => {
-                    selectedCategories.push(parseInt(checkbox.value));
-                });
-                
-                // If name search is active, ONLY filter by name - ignore all other filters
-                if (nameFilter) {
-                    return storm.name.toLowerCase().includes(nameFilter);
-                }
-                
-                // Otherwise apply normal filters
-                if (selectedCategories.length > 0 && !selectedCategories.includes(storm.category)) return false;
                 // Only show hurricane season months (Jun-Dec: months 6-12)
                 if (storm.month < 6 || storm.month > 12) return false;
-                // Filter for landfall storms if checkbox is checked
-                if (landfallOnly && !isLikelyUSLandfall(storm)) return false;
+                
                 return true;
             });
             
@@ -2859,7 +2862,7 @@
             
             if (selectedStates.length > 0) {
                 Plotly.purge('timeline');
-                createMultiStateTimeline();
+                createMultiStateTimeline(window.currentFilteredStorms);
                 updateStats();
                 updateStateComparison(); // Add comparison update
             }
@@ -3443,7 +3446,7 @@
             resizeTimeout = setTimeout(() => {
                 if (selectedStates.length > 0) {
                     Plotly.purge('timeline');
-                    createMultiStateTimeline();
+                    createMultiStateTimeline(window.currentFilteredStorms);
                 }
             }, 500);
         });
