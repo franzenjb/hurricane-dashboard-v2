@@ -1,5 +1,5 @@
 // Enhanced Atlantic Hurricane Database (HURDAT2) 1851-2024
-// CORRECTED VERSION - 2025-08-26T12:18:29.296Z
+// CORRECTED VERSION - 2025-08-26T12:27:13.297Z
 // Total storms: 1991
 // Data sources: NOAA HURDAT2 (peak intensities), Historical death records, AI-enhanced narratives
 // CRITICAL: This version contains ACCURATE peak intensity values from HURDAT2
@@ -67629,7 +67629,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL011998_Alex.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1998.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/1998/ALEX.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/1998/AL011998/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL011998.html"
     },
@@ -67677,7 +67676,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL021998_Bonnie.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1998.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/1998/BONNIE.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/1998/AL021998/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL021998.html"
     },
@@ -67725,7 +67723,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL031998_Charley.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1998.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/1998/CHARLEY.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/1998/AL031998/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL031998.html"
     },
@@ -67771,7 +67768,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL041998_Danielle.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1998.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/1998/DANIELLE.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/1998/AL041998/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL041998.html"
     },
@@ -67819,7 +67815,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL051998_Earl.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1998.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/1998/EARL.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/1998/AL051998/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL051998.html"
     },
@@ -67867,7 +67862,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL061998_Frances.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1998.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/1998/FRANCES.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/1998/AL061998/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL061998.html"
     },
@@ -67916,7 +67910,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL071998_Georges.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1998.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/1998/GEORGES.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/1998/AL071998/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL071998.html"
     },
@@ -67964,7 +67957,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL081998_Hermine.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1998.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/1998/HERMINE.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/1998/AL081998/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL081998.html"
     },
@@ -68010,7 +68002,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL091998_Ivan.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1998.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/1998/IVAN.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/1998/AL091998/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL091998.html"
     },
@@ -68056,7 +68047,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL101998_Jeanne.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1998.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/1998/JEANNE.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/1998/AL101998/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL101998.html"
     },
@@ -68102,7 +68092,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL111998_Karl.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1998.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/1998/KARL.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/1998/AL111998/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL111998.html"
     },
@@ -68148,7 +68137,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL121998_Lisa.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1998.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/1998/LISA.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/1998/AL121998/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL121998.html"
     },
@@ -68196,7 +68184,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL131998_Mitch.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1998.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/1998/MITCH.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/1998/AL131998/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL131998.html"
     },
@@ -68242,7 +68229,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL141998_Nicole.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1998.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/1998/NICOLE.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/1998/AL141998/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL141998.html"
     },
@@ -68288,7 +68274,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL011999_Arlene.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1999.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/1999/ARLENE.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/1999/AL011999/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL011999.html"
     },
@@ -68381,7 +68366,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL031999_Bret.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1999.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/1999/BRET.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/1999/AL031999/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL031999.html"
     },
@@ -68427,7 +68411,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL041999_Cindy.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1999.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/1999/CINDY.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/1999/AL041999/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL041999.html"
     },
@@ -68475,7 +68458,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL051999_Dennis.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1999.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/1999/DENNIS.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/1999/AL051999/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL051999.html"
     },
@@ -68521,7 +68503,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL061999_Emily.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1999.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/1999/EMILY.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/1999/AL061999/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL061999.html"
     },
@@ -68614,7 +68595,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL081999_Floyd.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1999.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/1999/FLOYD.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/1999/AL081999/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL081999.html"
     },
@@ -68660,7 +68640,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL091999_Gert.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1999.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/1999/GERT.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/1999/AL091999/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL091999.html"
     },
@@ -68708,7 +68687,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL101999_Harvey.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1999.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/1999/HARVEY.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/1999/AL101999/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL101999.html"
     },
@@ -68846,7 +68824,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL131999_Irene.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1999.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/1999/IRENE.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/1999/AL131999/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL131999.html"
     },
@@ -68892,7 +68869,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL141999_Jose.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1999.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/1999/JOSE.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/1999/AL141999/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL141999.html"
     },
@@ -68938,7 +68914,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL151999_Katrina.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1999.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/1999/KATRINA.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/1999/AL151999/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL151999.html"
     },
@@ -68984,7 +68959,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL161999_Lenny.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-1999.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/1999/LENNY.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/1999/AL161999/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL161999.html"
     },
@@ -69120,7 +69094,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL032000_Alberto.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2000.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2000/ALBERTO.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2000/AL032000/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL032000.html"
     },
@@ -69211,7 +69184,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL052000_Beryl.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2000.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2000/BERYL.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2000/AL052000/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL052000.html"
     },
@@ -69257,7 +69229,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL062000_Chris.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2000.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2000/CHRIS.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2000/AL062000/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL062000.html"
     },
@@ -69303,7 +69274,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL072000_Debby.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2000.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2000/DEBBY.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2000/AL072000/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL072000.html"
     },
@@ -69349,7 +69319,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL082000_Ernesto.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2000.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2000/ERNESTO.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2000/AL082000/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL082000.html"
     },
@@ -69442,7 +69411,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL102000_Florence.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2000.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2000/FLORENCE.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2000/AL102000/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL102000.html"
     },
@@ -69490,7 +69458,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL112000_Gordon.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2000.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2000/GORDON.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2000/AL112000/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL112000.html"
     },
@@ -69538,7 +69505,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL122000_Helene.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2000.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2000/HELENE.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2000/AL122000/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL122000.html"
     },
@@ -69584,7 +69550,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL132000_Isaac.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2000.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2000/ISAAC.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2000/AL132000/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL132000.html"
     },
@@ -69630,7 +69595,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL142000_Joyce.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2000.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2000/JOYCE.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2000/AL142000/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL142000.html"
     },
@@ -69676,7 +69640,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL152000_Keith.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2000.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2000/KEITH.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2000/AL152000/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL152000.html"
     },
@@ -69722,7 +69685,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL162000_Leslie.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2000.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2000/LESLIE.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2000/AL162000/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL162000.html"
     },
@@ -69768,7 +69730,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL172000_Michael.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2000.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2000/MICHAEL.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2000/AL172000/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL172000.html"
     },
@@ -69814,7 +69775,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL182000_Nadine.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2000.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2000/NADINE.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2000/AL182000/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL182000.html"
     },
@@ -69908,7 +69868,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL012001_Allison.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2001.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2001/ALLISON.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2001/AL012001/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL012001.html"
     },
@@ -70001,7 +69960,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL032001_Barry.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2001.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2001/BARRY.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2001/AL032001/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL032001.html"
     },
@@ -70047,7 +70005,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL042001_Chantal.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2001.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2001/CHANTAL.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2001/AL042001/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL042001.html"
     },
@@ -70093,7 +70050,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL052001_Dean.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2001.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2001/DEAN.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2001/AL052001/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL052001.html"
     },
@@ -70139,7 +70095,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL062001_Erin.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2001.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2001/ERIN.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2001/AL062001/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL062001.html"
     },
@@ -70185,7 +70140,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL072001_Felix.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2001.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2001/FELIX.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2001/AL072001/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL072001.html"
     },
@@ -70233,7 +70187,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL082001_Gabrielle.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2001.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2001/GABRIELLE.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2001/AL082001/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL082001.html"
     },
@@ -70324,7 +70277,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL102001_Humberto.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2001.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2001/HUMBERTO.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2001/AL102001/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL102001.html"
     },
@@ -70370,7 +70322,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL112001_Iris.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2001.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2001/IRIS.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2001/AL112001/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL112001.html"
     },
@@ -70416,7 +70367,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL122001_Jerry.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2001.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2001/JERRY.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2001/AL122001/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL122001.html"
     },
@@ -70462,7 +70412,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL132001_Karen.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2001.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2001/KAREN.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2001/AL132001/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL132001.html"
     },
@@ -70508,7 +70457,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL142001_Lorenzo.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2001.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2001/LORENZO.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2001/AL142001/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL142001.html"
     },
@@ -70554,7 +70502,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL152001_Michelle.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2001.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2001/MICHELLE.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2001/AL152001/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL152001.html"
     },
@@ -70600,7 +70547,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL162001_Noel.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2001.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2001/NOEL.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2001/AL162001/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL162001.html"
     },
@@ -70646,7 +70592,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL172001_Olga.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2001.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2001/OLGA.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2001/AL172001/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL172001.html"
     },
@@ -70692,7 +70637,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL012002_Arthur.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2002.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2002/ARTHUR.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2002/AL012002/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL012002.html"
     },
@@ -70741,7 +70685,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL022002_Bertha.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2002.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2002/BERTHA.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2002/AL022002/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL022002.html"
     },
@@ -70787,7 +70730,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL032002_Cristobal.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2002.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2002/CRISTOBAL.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2002/AL032002/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL032002.html"
     },
@@ -70833,7 +70775,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL042002_Dolly.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2002.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2002/DOLLY.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2002/AL042002/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL042002.html"
     },
@@ -70881,7 +70822,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL052002_Edouard.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2002.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2002/EDOUARD.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2002/AL052002/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL052002.html"
     },
@@ -70929,7 +70869,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL062002_Fay.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2002.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2002/FAY.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2002/AL062002/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL062002.html"
     },
@@ -71020,7 +70959,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL082002_Gustav.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2002.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2002/GUSTAV.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2002/AL082002/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL082002.html"
     },
@@ -71069,7 +71007,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL092002_Hanna.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2002.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2002/HANNA.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2002/AL092002/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL092002.html"
     },
@@ -71117,7 +71054,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL102002_Isidore.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2002.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2002/ISIDORE.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2002/AL102002/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL102002.html"
     },
@@ -71163,7 +71099,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL112002_Josephine.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2002.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2002/JOSEPHINE.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2002/AL112002/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL112002.html"
     },
@@ -71212,7 +71147,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL122002_Kyle.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2002.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2002/KYLE.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2002/AL122002/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL122002.html"
     },
@@ -71260,7 +71194,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL132002_Lili.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2002.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2002/LILI.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2002/AL132002/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL132002.html"
     },
@@ -71351,7 +71284,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL012003_Ana.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2003.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2003/ANA.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2003/AL012003/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL012003.html"
     },
@@ -71444,7 +71376,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL032003_Bill.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2003.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2003/BILL.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2003/AL032003/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL032003.html"
     },
@@ -71492,7 +71423,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL042003_Claudette.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2003.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2003/CLAUDETTE.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2003/AL042003/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL042003.html"
     },
@@ -71538,7 +71468,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL052003_Danny.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2003.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2003/DANNY.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2003/AL052003/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL052003.html"
     },
@@ -71676,7 +71605,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL082003_Erika.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2003.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2003/ERIKA.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2003/AL082003/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL082003.html"
     },
@@ -71767,7 +71695,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL102003_Fabian.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2003.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2003/FABIAN.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2003/AL102003/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL102003.html"
     },
@@ -71815,7 +71742,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL112003_Grace.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2003.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2003/GRACE.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2003/AL112003/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL112003.html"
     },
@@ -71863,7 +71789,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL122003_Henri.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2003.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2003/HENRI.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2003/AL122003/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL122003.html"
     },
@@ -71911,7 +71836,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL132003_Isabel.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2003.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2003/ISABEL.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2003/AL132003/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL132003.html"
     },
@@ -72002,7 +71926,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL152003_Juan.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2003.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2003/JUAN.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2003/AL152003/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL152003.html"
     },
@@ -72048,7 +71971,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL162003_Kate.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2003.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2003/KATE.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2003/AL162003/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL162003.html"
     },
@@ -72094,7 +72016,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL172003_Larry.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2003.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2003/LARRY.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2003/AL172003/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL172003.html"
     },
@@ -72140,7 +72061,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL182003_Mindy.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2003.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2003/MINDY.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2003/AL182003/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL182003.html"
     },
@@ -72186,7 +72106,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL192003_Nicholas.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2003.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2003/NICHOLAS.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2003/AL192003/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL192003.html"
     },
@@ -72232,7 +72151,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL202003_Odette.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2003.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2003/ODETTE.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2003/AL202003/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL202003.html"
     },
@@ -72278,7 +72196,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL212003_Peter.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2003.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2003/PETER.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2003/AL212003/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL212003.html"
     },
@@ -72324,7 +72241,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL012004_Alex.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2004.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2004/ALEX.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2004/AL012004/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL012004.html"
     },
@@ -72372,7 +72288,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL022004_Bonnie.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2004.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2004/BONNIE.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2004/AL022004/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL022004.html"
     },
@@ -72421,7 +72336,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL032004_Charley.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2004.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2004/CHARLEY.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2004/AL032004/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL032004.html"
     },
@@ -72467,7 +72381,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL042004_Danielle.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2004.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2004/DANIELLE.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2004/AL042004/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL042004.html"
     },
@@ -72513,7 +72426,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL052004_Earl.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2004.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2004/EARL.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2004/AL052004/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL052004.html"
     },
@@ -72561,7 +72473,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL062004_Frances.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2004.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2004/FRANCES.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2004/AL062004/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL062004.html"
     },
@@ -72609,7 +72520,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL072004_Gaston.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2004.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2004/GASTON.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2004/AL072004/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL072004.html"
     },
@@ -72657,7 +72567,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL082004_Hermine.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2004.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2004/HERMINE.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2004/AL082004/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL082004.html"
     },
@@ -72706,7 +72615,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL092004_Ivan.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2004.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2004/IVAN.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2004/AL092004/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL092004.html"
     },
@@ -72799,7 +72707,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL112004_Jeanne.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2004.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2004/JEANNE.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2004/AL112004/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL112004.html"
     },
@@ -72845,7 +72752,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL122004_Karl.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2004.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2004/KARL.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2004/AL122004/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL122004.html"
     },
@@ -72891,7 +72797,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL132004_Lisa.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2004.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2004/LISA.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2004/AL132004/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL132004.html"
     },
@@ -72939,7 +72844,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL142004_Matthew.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2004.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2004/MATTHEW.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2004/AL142004/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL142004.html"
     },
@@ -72985,7 +72889,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL152004_Nicole.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2004.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2004/NICOLE.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2004/AL152004/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL152004.html"
     },
@@ -73031,7 +72934,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL162004_Otto.pdf",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2004.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2004/OTTO.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2004/AL162004/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL162004.html"
     },
@@ -73078,9 +72980,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL012005_Arlene.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al012005_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2005.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2005/ARLENE.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2005/AL012005/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL012005.html"
     },
@@ -73125,9 +73025,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL022005_Bret.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al022005_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2005.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2005/BRET.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2005/AL022005/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL022005.html"
     },
@@ -73174,9 +73072,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "CINDY made landfall in Alabama, Louisiana, Maryland, Maine, Mississippi, North Carolina, New Jersey, and Virginia as a Category 1 hurricane on July 3, 2005, with maximum winds of 65 mph. The hurricane produced damaging winds and coastal flooding in the affected areas.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL032005_Cindy.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al032005_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2005.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2005/CINDY.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2005/AL032005/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL032005.html"
     },
@@ -73223,9 +73119,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "DENNIS developed into a Category 4 hurricane and made landfall in Alabama, Florida, and Mississippi on July 4, 2005. The storm reached maximum sustained winds of 130 mph with a minimum central pressure of 930 mb, producing extreme hurricane winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL042005_Dennis.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al042005_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2005.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2005/DENNIS.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2005/AL042005/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL042005.html"
     },
@@ -73270,9 +73164,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL052005_Emily.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al052005_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2005.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2005/EMILY.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2005/AL052005/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL052005.html"
     },
@@ -73317,9 +73209,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL062005_Franklin.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al062005_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2005.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2005/FRANKLIN.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2005/AL062005/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL062005.html"
     },
@@ -73364,9 +73254,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL072005_Gert.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al072005_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2005.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2005/GERT.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2005/AL072005/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL072005.html"
     },
@@ -73411,9 +73299,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL082005_Harvey.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al082005_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2005.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2005/HARVEY.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2005/AL082005/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL082005.html"
     },
@@ -73458,9 +73344,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL092005_Irene.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al092005_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2005.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2005/IRENE.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2005/AL092005/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL092005.html"
     },
@@ -73505,9 +73389,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL102005_Ten.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al102005_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2005.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2005/TEN.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2005/AL102005/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL102005.html"
     },
@@ -73552,9 +73434,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL112005_Jose.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al112005_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2005.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2005/JOSE.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2005/AL112005/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL112005.html"
     },
@@ -73602,9 +73482,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "KATRINA developed into a Category 5 hurricane and made landfall in Florida, Louisiana, and Mississippi on August 23, 2005. The storm reached maximum sustained winds of 150 mph with a minimum central pressure of 902 mb, producing catastrophic Category 5 winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Katrina became one of the most devastating natural disasters in U.S. history,.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL122005_Katrina.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al122005_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2005.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2005/KATRINA.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2005/AL122005/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL122005.html"
     },
@@ -73649,9 +73527,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL132005_Lee.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al132005_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2005.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2005/LEE.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2005/AL132005/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL132005.html"
     },
@@ -73696,9 +73572,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL142005_Maria.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al142005_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2005.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2005/MARIA.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2005/AL142005/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL142005.html"
     },
@@ -73743,9 +73617,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL152005_Nate.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al152005_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2005.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2005/NATE.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2005/AL152005/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL152005.html"
     },
@@ -73790,9 +73662,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "OPHELIA made landfall in North Carolina as a Category 1 hurricane on September 6, 2005, with maximum winds of 75 mph. The hurricane produced damaging winds and coastal flooding in the affected areas.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL162005_Ophelia.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al162005_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2005.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2005/OPHELIA.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2005/AL162005/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL162005.html"
     },
@@ -73837,9 +73707,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL172005_Philippe.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al172005_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2005.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2005/PHILIPPE.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2005/AL172005/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL172005.html"
     },
@@ -73886,9 +73754,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "RITA developed into a Category 5 hurricane and made landfall in Florida, Louisiana, and Texas on September 18, 2005. The storm reached maximum sustained winds of 155 mph with a minimum central pressure of 895 mb, producing catastrophic Category 5 winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Rita caused $18 billion in damage and was notable for triggering the.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL182005_Rita.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al182005_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2005.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2005/RITA.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2005/AL182005/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL182005.html"
     },
@@ -73933,9 +73799,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL192005_Nineteen.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al192005_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2005.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2005/NINETEEN.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2005/AL192005/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL192005.html"
     },
@@ -73980,9 +73844,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL202005_Stan.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al202005_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2005.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2005/STAN.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2005/AL202005/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL202005.html"
     },
@@ -74027,7 +73889,6 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL212005_Storm 21 Of 2005.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al212005_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2005.txt",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2005/AL212005/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL212005.html"
@@ -74075,9 +73936,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL222005_Tammy.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al222005_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2005.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2005/TAMMY.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2005/AL222005/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL222005.html"
     },
@@ -74122,9 +73981,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL232005_Twenty-Two.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al232005_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2005.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2005/TWENTY-TWO.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2005/AL232005/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL232005.html"
     },
@@ -74169,9 +74026,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL242005_Vince.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al242005_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2005.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2005/VINCE.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2005/AL242005/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL242005.html"
     },
@@ -74218,9 +74073,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "WILMA developed into a Category 5 hurricane and made landfall in Florida on October 15, 2005. The storm reached maximum sustained winds of 160 mph with a minimum central pressure of 882 mb, producing catastrophic Category 5 winds across the affected regions. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Wilma set records as the most intense Atlantic hurricane ever recorded, with a minimum pressure of 882 mb, causing $29 billion in damage and demonstrating the explosive intensification potential of Gulf storms.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL252005_Wilma.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al252005_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2005.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2005/WILMA.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2005/AL252005/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL252005.html"
     },
@@ -74265,9 +74118,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL262005_Alpha.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al262005_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2005.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2005/ALPHA.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2005/AL262005/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL262005.html"
     },
@@ -74312,9 +74163,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL272005_Beta.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al272005_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2005.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2005/BETA.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2005/AL272005/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL272005.html"
     },
@@ -74359,9 +74208,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL282005_Gamma.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al282005_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2005.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2005/GAMMA.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2005/AL282005/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL282005.html"
     },
@@ -74406,9 +74253,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL292005_Delta.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al292005_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2005.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2005/DELTA.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2005/AL292005/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL292005.html"
     },
@@ -74453,9 +74298,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL302005_Epsilon.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al302005_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2005.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2005/EPSILON.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2005/AL302005/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL302005.html"
     },
@@ -74500,9 +74343,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL312005_Zeta.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al312005_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2005.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2005/ZETA.shtml",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2005/AL312005/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL312005.html"
     },
@@ -74549,9 +74390,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL012006_Alberto.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al012006_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2006.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2006/al01/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2006/AL012006/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL012006.html"
     },
@@ -74596,9 +74435,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL022006_Storm 2 Of 2006.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al022006_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2006.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2006/al02/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2006/AL022006/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL022006.html"
     },
@@ -74645,9 +74482,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL032006_Beryl.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al032006_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2006.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2006/al03/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2006/AL032006/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL032006.html"
     },
@@ -74692,9 +74527,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL042006_Chris.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al042006_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2006.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2006/al04/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2006/AL042006/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL042006.html"
     },
@@ -74739,9 +74572,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL052006_Debby.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al052006_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2006.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2006/al05/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2006/AL052006/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL052006.html"
     },
@@ -74789,9 +74620,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "ERNESTO made landfall in Florida, Maryland, North Carolina, New York, Pennsylvania, and Virginia as a Category 1 hurricane on August 24, 2006, with maximum winds of 65 mph. The hurricane produced damaging winds and coastal flooding in the affected areas.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL062006_Ernesto.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al062006_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2006.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2006/al06/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2006/AL062006/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL062006.html"
     },
@@ -74836,9 +74665,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL072006_Florence.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al072006_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2006.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2006/al07/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2006/AL072006/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL072006.html"
     },
@@ -74883,9 +74710,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL082006_Gordon.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al082006_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2006.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2006/al08/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2006/AL082006/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL082006.html"
     },
@@ -74930,9 +74755,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL092006_Helene.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al092006_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2006.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2006/al09/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2006/AL092006/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL092006.html"
     },
@@ -74977,9 +74800,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL102006_Isaac.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al102006_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2006.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2006/al10/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2006/AL102006/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL102006.html"
     },
@@ -75024,9 +74845,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL012007_Andrea.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al012007_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2007.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2007/al01/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2007/AL012007/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL012007.html"
     },
@@ -75073,9 +74892,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL022007_Barry.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al022007_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2007.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2007/al02/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2007/AL022007/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL022007.html"
     },
@@ -75120,9 +74937,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL032007_Chantal.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al032007_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2007.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2007/al03/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2007/AL032007/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL032007.html"
     },
@@ -75167,9 +74982,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL042007_Dean.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al042007_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2007.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2007/al04/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2007/AL042007/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL042007.html"
     },
@@ -75216,9 +75029,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL052007_Erin.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al052007_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2007.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2007/al05/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2007/AL052007/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL052007.html"
     },
@@ -75263,9 +75074,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL062007_Felix.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al062007_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2007.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2007/al06/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2007/AL062007/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL062007.html"
     },
@@ -75312,9 +75121,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL072007_Gabrielle.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al072007_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2007.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2007/al07/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2007/AL072007/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL072007.html"
     },
@@ -75359,9 +75166,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL082007_Ingrid.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al082007_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2007.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2007/al08/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2007/AL082007/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL082007.html"
     },
@@ -75408,9 +75213,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "HUMBERTO made landfall in Louisiana, Mississippi, and Texas as a Category 1 hurricane on September 12, 2007, with maximum winds of 80 mph. The hurricane produced damaging winds and coastal flooding in the affected areas.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL092007_Humberto.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al092007_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2007.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2007/al09/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2007/AL092007/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL092007.html"
     },
@@ -75457,9 +75260,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL102007_Ten.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al102007_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2007.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2007/al10/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2007/AL102007/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL102007.html"
     },
@@ -75504,9 +75305,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL112007_Jerry.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al112007_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2007.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2007/al11/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2007/AL112007/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL112007.html"
     },
@@ -75551,9 +75350,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL122007_Karen.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al122007_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2007.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2007/al12/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2007/AL122007/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL122007.html"
     },
@@ -75598,9 +75395,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL132007_Lorenzo.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al132007_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2007.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2007/al13/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2007/AL132007/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL132007.html"
     },
@@ -75645,9 +75440,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL142007_Melissa.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al142007_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2007.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2007/al14/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2007/AL142007/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL142007.html"
     },
@@ -75692,9 +75485,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL152007_Fifteen.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al152007_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2007.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2007/al15/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2007/AL152007/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL152007.html"
     },
@@ -75739,9 +75530,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "NOEL made landfall in Puerto Rico as a Category 1 hurricane on October 24, 2007, with maximum winds of 75 mph. The hurricane produced damaging winds and coastal flooding in the affected areas.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL162007_Noel.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al162007_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2007.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2007/al16/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2007/AL162007/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL162007.html"
     },
@@ -75786,9 +75575,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL172007_Olga.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al172007_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2007.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2007/al17/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2007/AL172007/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL172007.html"
     },
@@ -75833,9 +75620,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL012008_Arthur.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al012008_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2008.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2008/al01/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2008/AL012008/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL012008.html"
     },
@@ -75880,9 +75665,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL022008_Bertha.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al022008_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2008.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2008/al02/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2008/AL022008/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL022008.html"
     },
@@ -75927,9 +75710,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL032008_Cristobal.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al032008_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2008.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2008/al03/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2008/AL032008/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL032008.html"
     },
@@ -75976,9 +75757,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "DOLLY made landfall in Texas as a Category 2 hurricane on July 20, 2008, with maximum winds of 85 mph. The hurricane produced damaging winds and coastal flooding in the affected areas.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL042008_Dolly.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al042008_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2008.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2008/al04/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2008/AL042008/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL042008.html"
     },
@@ -76025,9 +75804,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL052008_Edouard.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al052008_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2008.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2008/al05/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2008/AL052008/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL052008.html"
     },
@@ -76074,9 +75851,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL062008_Fay.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al062008_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2008.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2008/al06/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2008/AL062008/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL062008.html"
     },
@@ -76123,9 +75898,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "GUSTAV developed into a Category 4 hurricane and made landfall in Florida, Louisiana, and Texas on August 25, 2008. The storm reached maximum sustained winds of 135 mph with a minimum central pressure of 941 mb, producing extreme hurricane winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL072008_Gustav.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al072008_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2008.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2008/al07/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2008/AL072008/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL072008.html"
     },
@@ -76172,9 +75945,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "HANNA made landfall in Massachusetts, Maine, North Carolina, New Jersey, South Carolina, and Virginia as a Category 1 hurricane on August 28, 2008, with maximum winds of 75 mph. The hurricane produced damaging winds and coastal flooding in the affected areas.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL082008_Hanna.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al082008_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2008.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2008/al08/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2008/AL082008/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL082008.html"
     },
@@ -76221,9 +75992,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "IKE developed into a Category 4 hurricane and made landfall in Florida and Texas on September 1, 2008. The storm reached maximum sustained winds of 125 mph with a minimum central pressure of 935 mb, producing extreme hurricane winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL092008_Ike.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al092008_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2008.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2008/al09/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2008/AL092008/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL092008.html"
     },
@@ -76268,9 +76037,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL102008_Josephine.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al102008_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2008.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2008/al10/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2008/AL102008/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL102008.html"
     },
@@ -76315,9 +76082,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL112008_Kyle.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al112008_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2008.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2008/al11/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2008/AL112008/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL112008.html"
     },
@@ -76362,9 +76127,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL122008_Laura.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al122008_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2008.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2008/al12/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2008/AL122008/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL122008.html"
     },
@@ -76409,9 +76172,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL132008_Marco.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al132008_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2008.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2008/al13/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2008/AL132008/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL132008.html"
     },
@@ -76456,9 +76217,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL142008_Nana.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al142008_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2008.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2008/al14/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2008/AL142008/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL142008.html"
     },
@@ -76503,9 +76262,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL152008_Omar.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al152008_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2008.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2008/al15/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2008/AL152008/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL152008.html"
     },
@@ -76550,9 +76307,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL162008_Sixteen.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al162008_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2008.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2008/al16/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2008/AL162008/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL162008.html"
     },
@@ -76597,9 +76352,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "PALOMA developed into a Category 4 hurricane and made landfall in Florida on November 5, 2008. The storm reached maximum sustained winds of 125 mph with a minimum central pressure of 944 mb, producing extreme hurricane winds across the affected regions. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL172008_Paloma.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al172008_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2008.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2008/al17/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2008/AL172008/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL172008.html"
     },
@@ -76644,9 +76397,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL012009_One.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al012009_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2009.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2009/al01/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2009/AL012009/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL012009.html"
     },
@@ -76691,9 +76442,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL022009_Ana.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al022009_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2009.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2009/al02/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2009/AL022009/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL022009.html"
     },
@@ -76738,9 +76487,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL032009_Bill.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al032009_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2009.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2009/al03/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2009/AL032009/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL032009.html"
     },
@@ -76787,9 +76534,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL042009_Claudette.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al042009_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2009.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2009/al04/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2009/AL042009/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL042009.html"
     },
@@ -76834,9 +76579,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL052009_Danny.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al052009_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2009.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2009/al05/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2009/AL052009/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL052009.html"
     },
@@ -76881,9 +76624,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL062009_Erika.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al062009_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2009.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2009/al06/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2009/AL062009/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL062009.html"
     },
@@ -76928,9 +76669,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL072009_Fred.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al072009_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2009.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2009/al07/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2009/AL072009/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL072009.html"
     },
@@ -76975,9 +76714,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL082009_Eight.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al082009_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2009.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2009/al08/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2009/AL082009/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL082009.html"
     },
@@ -77022,9 +76759,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL092009_Grace.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al092009_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2009.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2009/al09/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2009/AL092009/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL092009.html"
     },
@@ -77069,9 +76804,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL102009_Henri.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al102009_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2009.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2009/al10/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2009/AL102009/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL102009.html"
     },
@@ -77116,9 +76849,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "IDA made landfall in Alabama, Florida, and Georgia as a Category 2 hurricane on November 4, 2009, with maximum winds of 90 mph. The hurricane produced damaging winds and coastal flooding in the affected areas.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL112009_Ida.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al112009_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2009.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2009/al11/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2009/AL112009/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL112009.html"
     },
@@ -77163,9 +76894,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL012010_Alex.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al012010_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2010.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2010/al01/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2010/AL012010/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL012010.html"
     },
@@ -77212,9 +76941,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL022010_Two.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al022010_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2010.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2010/al02/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2010/AL022010/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL022010.html"
     },
@@ -77261,9 +76988,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL032010_Bonnie.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al032010_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2010.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2010/al03/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2010/AL032010/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL032010.html"
     },
@@ -77308,9 +77033,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL042010_Colin.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al042010_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2010.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2010/al04/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2010/AL042010/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL042010.html"
     },
@@ -77355,9 +77078,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL052010_Five.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al052010_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2010.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2010/al05/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2010/AL052010/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL052010.html"
     },
@@ -77402,9 +77123,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL062010_Danielle.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al062010_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2010.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2010/al06/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2010/AL062010/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL062010.html"
     },
@@ -77449,9 +77168,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL072010_Earl.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al072010_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2010.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2010/al07/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2010/AL072010/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL072010.html"
     },
@@ -77496,9 +77213,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL082010_Fiona.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al082010_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2010.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2010/al08/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2010/AL082010/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL082010.html"
     },
@@ -77543,9 +77258,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL092010_Gaston.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al092010_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2010.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2010/al09/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2010/AL092010/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL092010.html"
     },
@@ -77590,9 +77303,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL102010_Hermine.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al102010_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2010.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2010/al10/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2010/AL102010/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL102010.html"
     },
@@ -77637,9 +77348,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL112010_Igor.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al112010_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2010.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2010/al11/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2010/AL112010/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL112010.html"
     },
@@ -77684,9 +77393,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL122010_Julia.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al122010_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2010.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2010/al12/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2010/AL122010/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL122010.html"
     },
@@ -77731,9 +77438,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL132010_Karl.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al132010_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2010.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2010/al13/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2010/AL132010/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL132010.html"
     },
@@ -77778,9 +77483,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL142010_Lisa.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al142010_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2010.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2010/al14/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2010/AL142010/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL142010.html"
     },
@@ -77825,9 +77528,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL152010_Matthew.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al152010_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2010.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2010/al15/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2010/AL152010/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL152010.html"
     },
@@ -77872,9 +77573,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL162010_Nicole.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al162010_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2010.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2010/al16/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2010/AL162010/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL162010.html"
     },
@@ -77919,9 +77618,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL172010_Otto.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al172010_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2010.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2010/al17/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2010/AL172010/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL172010.html"
     },
@@ -77966,9 +77663,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL182010_Paula.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al182010_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2010.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2010/al18/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2010/AL182010/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL182010.html"
     },
@@ -78013,9 +77708,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL192010_Richard.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al192010_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2010.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2010/al19/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2010/AL192010/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL192010.html"
     },
@@ -78060,9 +77753,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL202010_Shary.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al202010_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2010.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2010/al20/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2010/AL202010/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL202010.html"
     },
@@ -78107,9 +77798,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL212010_Tomas.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al212010_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2010.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2010/al21/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2010/AL212010/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL212010.html"
     },
@@ -78154,9 +77843,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL012011_Arlene.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al012011_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2011.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2011/al01/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2011/AL012011/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL012011.html"
     },
@@ -78201,9 +77888,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL022011_Bret.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al022011_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2011.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2011/al02/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2011/AL022011/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL022011.html"
     },
@@ -78248,9 +77933,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL032011_Cindy.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al032011_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2011.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2011/al03/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2011/AL032011/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL032011.html"
     },
@@ -78297,9 +77980,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL042011_Don.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al042011_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2011.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2011/al04/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2011/AL042011/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL042011.html"
     },
@@ -78344,9 +78025,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL052011_Emily.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al052011_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2011.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2011/al05/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2011/AL052011/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL052011.html"
     },
@@ -78391,9 +78070,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL062011_Franklin.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al062011_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2011.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2011/al06/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2011/AL062011/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL062011.html"
     },
@@ -78438,9 +78115,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL072011_Gert.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al072011_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2011.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2011/al07/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2011/AL072011/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL072011.html"
     },
@@ -78485,9 +78160,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL082011_Harvey.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al082011_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2011.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2011/al08/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2011/AL082011/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL082011.html"
     },
@@ -78535,9 +78208,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "IRENE developed into a Category 3 hurricane and made landfall in Massachusetts, Maryland, Maine, North Carolina, New Hampshire, New Jersey, New York, Puerto Rico, Virginia, and the U.S. Virgin Islands on August 21, 2011. The storm reached maximum sustained winds of 105 mph with a minimum central pressure of 942 mb, producing major hurricane winds across the affected regions. The storm's track brought significant impacts across multiple states, demonstrating the far-reaching effects of major Atlantic hurricanes. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL092011_Irene.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al092011_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2011.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2011/al09/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2011/AL092011/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL092011.html"
     },
@@ -78582,9 +78253,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL102011_Ten.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al102011_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2011.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2011/al10/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2011/AL102011/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL102011.html"
     },
@@ -78629,9 +78298,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL112011_Jose.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al112011_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2011.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2011/al11/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2011/AL112011/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL112011.html"
     },
@@ -78676,9 +78343,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL122011_Katia.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al122011_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2011.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2011/al12/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2011/AL122011/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL122011.html"
     },
@@ -78723,9 +78388,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL202011_Storm 20 Of 2011.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al202011_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2011.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2011/al20/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2011/AL202011/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL202011.html"
     },
@@ -78772,9 +78435,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL132011_Lee.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al132011_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2011.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2011/al13/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2011/AL132011/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL132011.html"
     },
@@ -78819,9 +78480,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL142011_Maria.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al142011_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2011.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2011/al14/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2011/AL142011/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL142011.html"
     },
@@ -78866,9 +78525,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL152011_Nate.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al152011_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2011.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2011/al15/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2011/AL152011/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL152011.html"
     },
@@ -78913,9 +78570,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL162011_Ophelia.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al162011_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2011.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2011/al16/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2011/AL162011/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL162011.html"
     },
@@ -78960,9 +78615,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL172011_Philippe.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al172011_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2011.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2011/al17/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2011/AL172011/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL172011.html"
     },
@@ -79007,9 +78660,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL182011_Rina.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al182011_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2011.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2011/al18/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2011/AL182011/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL182011.html"
     },
@@ -79054,9 +78705,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL192011_Sean.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al192011_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2011.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2011/al19/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2011/AL192011/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL192011.html"
     },
@@ -79101,9 +78750,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL012012_Alberto.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al012012_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2012.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2012/al01/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2012/AL012012/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL012012.html"
     },
@@ -79150,9 +78797,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL022012_Beryl.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al022012_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2012.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2012/al02/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2012/AL022012/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL022012.html"
     },
@@ -79197,9 +78842,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL032012_Chris.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al032012_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2012.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2012/al03/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2012/AL032012/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL032012.html"
     },
@@ -79246,9 +78889,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL042012_Debby.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al042012_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2012.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2012/al04/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2012/AL042012/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL042012.html"
     },
@@ -79293,9 +78934,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL052012_Ernesto.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al052012_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2012.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2012/al05/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2012/AL052012/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL052012.html"
     },
@@ -79340,9 +78979,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL062012_Florence.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al062012_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2012.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2012/al06/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2012/AL062012/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL062012.html"
     },
@@ -79387,9 +79024,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL072012_Helene.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al072012_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2012.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2012/al07/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2012/AL072012/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL072012.html"
     },
@@ -79434,9 +79069,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL082012_Gordon.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al082012_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2012.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2012/al08/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2012/AL082012/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL082012.html"
     },
@@ -79483,9 +79116,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "ISAAC developed into a Category 1 hurricane and made landfall in Florida, Louisiana, Mississippi, and Texas on August 20, 2012. The storm reached maximum sustained winds of 70 mph with a minimum central pressure of 965 mb, producing minimal hurricane winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The hurricane brought damaging winds, coastal flooding, and power disruptions, affecting thousands of residents and requiring extensive recovery efforts.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL092012_Isaac.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al092012_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2012.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2012/al09/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2012/AL092012/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL092012.html"
     },
@@ -79530,9 +79161,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL102012_Joyce.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al102012_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2012.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2012/al10/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2012/AL102012/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL102012.html"
     },
@@ -79577,9 +79206,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL112012_Kirk.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al112012_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2012.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2012/al11/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2012/AL112012/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL112012.html"
     },
@@ -79624,9 +79251,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL122012_Leslie.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al122012_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2012.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2012/al12/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2012/AL122012/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL122012.html"
     },
@@ -79671,9 +79296,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL132012_Michael.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al132012_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2012.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2012/al13/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2012/AL132012/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL132012.html"
     },
@@ -79718,9 +79341,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL142012_Nadine.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al142012_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2012.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2012/al14/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2012/AL142012/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL142012.html"
     },
@@ -79765,9 +79386,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL152012_Oscar.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al152012_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2012.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2012/al15/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2012/AL152012/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL152012.html"
     },
@@ -79812,9 +79431,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL162012_Patty.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al162012_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2012.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2012/al16/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2012/AL162012/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL162012.html"
     },
@@ -79859,9 +79476,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL172012_Rafael.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al172012_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2012.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2012/al17/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2012/AL172012/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL172012.html"
     },
@@ -79908,9 +79523,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "SANDY developed into a Category 3 hurricane and made landfall in New Jersey, New York, and Pennsylvania on October 21, 2012. The storm reached maximum sustained winds of 100 mph with a minimum central pressure of 940 mb, producing major hurricane winds across the affected regions. The storm's track brought significant impacts across multiple states, demonstrating the far-reaching effects of major Atlantic hurricanes. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Superstorm Sandy caused $65 billion in damage and 147 deaths, redefining hurricane risk for the.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL182012_Sandy.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al182012_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2012.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2012/al18/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2012/AL182012/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL182012.html"
     },
@@ -79955,9 +79568,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL192012_Tony.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al192012_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2012.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2012/al19/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2012/AL192012/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL192012.html"
     },
@@ -80004,9 +79615,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL012013_Andrea.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al012013_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2013.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2013/al01/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2013/AL012013/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL012013.html"
     },
@@ -80051,9 +79660,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL022013_Barry.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al022013_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2013.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2013/al02/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2013/AL022013/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL022013.html"
     },
@@ -80098,9 +79705,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL032013_Chantal.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al032013_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2013.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2013/al03/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2013/AL032013/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL032013.html"
     },
@@ -80145,9 +79750,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL042013_Dorian.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al042013_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2013.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2013/al04/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2013/AL042013/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL042013.html"
     },
@@ -80192,9 +79795,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL052013_Erin.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al052013_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2013.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2013/al05/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2013/AL052013/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL052013.html"
     },
@@ -80239,9 +79840,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL062013_Fernand.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al062013_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2013.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2013/al06/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2013/AL062013/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL062013.html"
     },
@@ -80286,9 +79885,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL072013_Gabrielle.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al072013_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2013.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2013/al07/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2013/AL072013/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL072013.html"
     },
@@ -80333,9 +79930,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL082013_Eight.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al082013_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2013.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2013/al08/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2013/AL082013/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL082013.html"
     },
@@ -80380,9 +79975,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL092013_Humberto.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al092013_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2013.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2013/al09/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2013/AL092013/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL092013.html"
     },
@@ -80427,9 +80020,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL102013_Ingrid.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al102013_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2013.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2013/al10/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2013/AL102013/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL102013.html"
     },
@@ -80474,9 +80065,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL112013_Jerry.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al112013_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2013.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2013/al11/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2013/AL112013/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL112013.html"
     },
@@ -80521,9 +80110,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL122013_Karen.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al122013_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2013.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2013/al12/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2013/AL122013/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL122013.html"
     },
@@ -80568,9 +80155,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL132013_Lorenzo.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al132013_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2013.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2013/al13/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2013/AL132013/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL132013.html"
     },
@@ -80615,9 +80200,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL142013_Melissa.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al142013_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2013.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2013/al14/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2013/AL142013/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL142013.html"
     },
@@ -80662,9 +80245,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL152013_Storm 15 Of 2013.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al152013_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2013.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2013/al15/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2013/AL152013/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL152013.html"
     },
@@ -80711,9 +80292,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "ARTHUR developed into a Category 2 hurricane and made landfall in North Carolina on June 28, 2014. The storm reached maximum sustained winds of 85 mph with a minimum central pressure of 973 mb, producing moderate hurricane-force winds across the affected regions. The hurricane brought damaging winds, coastal flooding, and power disruptions, affecting thousands of residents and requiring extensive recovery efforts.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL012014_Arthur.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al012014_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2014.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2014/al01/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2014/AL012014/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL012014.html"
     },
@@ -80758,9 +80337,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL022014_Two.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al022014_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2014.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2014/al02/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2014/AL022014/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL022014.html"
     },
@@ -80805,9 +80382,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "BERTHA made landfall in Puerto Rico as a Category 1 hurricane on July 29, 2014, with maximum winds of 70 mph. The hurricane produced damaging winds and coastal flooding in the affected areas.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL032014_Bertha.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al032014_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2014.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2014/al03/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2014/AL032014/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL032014.html"
     },
@@ -80852,9 +80427,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL042014_Cristobal.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al042014_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2014.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2014/al04/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2014/AL042014/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL042014.html"
     },
@@ -80899,9 +80472,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL052014_Dolly.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al052014_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2014.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2014/al05/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2014/AL052014/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL052014.html"
     },
@@ -80946,9 +80517,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL062014_Edouard.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al062014_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2014.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2014/al06/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2014/AL062014/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL062014.html"
     },
@@ -80993,9 +80562,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL072014_Fay.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al072014_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2014.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2014/al07/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2014/AL072014/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL072014.html"
     },
@@ -81040,9 +80607,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL082014_Gonzalo.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al082014_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2014.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2014/al08/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2014/AL082014/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL082014.html"
     },
@@ -81087,9 +80652,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL092014_Hanna.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al092014_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2014.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2014/al09/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2014/AL092014/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL092014.html"
     },
@@ -81136,9 +80699,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL012015_Ana.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al012015_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2015.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2015/al01/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2015/AL012015/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL012015.html"
     },
@@ -81185,9 +80746,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL022015_Bill.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al022015_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2015.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2015/al02/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2015/AL022015/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL022015.html"
     },
@@ -81232,9 +80791,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL032015_Claudette.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al032015_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2015.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2015/al03/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2015/AL032015/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL032015.html"
     },
@@ -81279,9 +80836,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL042015_Danny.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al042015_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2015.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2015/al04/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2015/AL042015/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL042015.html"
     },
@@ -81326,9 +80881,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL052015_Erika.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al052015_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2015.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2015/al05/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2015/AL052015/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL052015.html"
     },
@@ -81373,9 +80926,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL062015_Fred.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al062015_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2015.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2015/al06/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2015/AL062015/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL062015.html"
     },
@@ -81420,9 +80971,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL072015_Grace.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al072015_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2015.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2015/al07/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2015/AL072015/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL072015.html"
     },
@@ -81467,9 +81016,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL082015_Henri.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al082015_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2015.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2015/al08/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2015/AL082015/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL082015.html"
     },
@@ -81514,9 +81061,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL092015_Nine.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al092015_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2015.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2015/al09/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2015/AL092015/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL092015.html"
     },
@@ -81561,9 +81106,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL102015_Ida.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al102015_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2015.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2015/al10/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2015/AL102015/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL102015.html"
     },
@@ -81608,9 +81151,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL112015_Joaquin.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al112015_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2015.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2015/al11/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2015/AL112015/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL112015.html"
     },
@@ -81655,9 +81196,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL122015_Kate.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al122015_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2015.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2015/al12/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2015/AL122015/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL122015.html"
     },
@@ -81702,9 +81241,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL012016_Alex.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al012016_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2016.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2016/al01/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2016/AL012016/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL012016.html"
     },
@@ -81751,9 +81288,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL022016_Bonnie.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al022016_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2016.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2016/al02/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2016/AL022016/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL022016.html"
     },
@@ -81800,9 +81335,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL032016_Colin.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al032016_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2016.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2016/al03/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2016/AL032016/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL032016.html"
     },
@@ -81847,9 +81380,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL042016_Danielle.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al042016_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2016.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2016/al04/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2016/AL042016/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL042016.html"
     },
@@ -81894,9 +81425,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL052016_Earl.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al052016_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2016.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2016/al05/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2016/AL052016/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL052016.html"
     },
@@ -81941,9 +81470,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL062016_Fiona.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al062016_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2016.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2016/al06/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2016/AL062016/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL062016.html"
     },
@@ -81988,9 +81515,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL072016_Gaston.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al072016_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2016.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2016/al07/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2016/AL072016/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL072016.html"
     },
@@ -82035,9 +81560,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL082016_Eight.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al082016_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2016.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2016/al08/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2016/AL082016/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL082016.html"
     },
@@ -82084,9 +81607,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "HERMINE made landfall in Florida, Georgia, Massachusetts, North Carolina, and South Carolina as a Category 1 hurricane on August 28, 2016, with maximum winds of 70 mph. The hurricane produced damaging winds and coastal flooding in the affected areas.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL092016_Hermine.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al092016_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2016.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2016/al09/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2016/AL092016/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL092016.html"
     },
@@ -82131,9 +81652,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL102016_Ian.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al102016_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2016.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2016/al10/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2016/AL102016/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL102016.html"
     },
@@ -82180,9 +81699,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL112016_Julia.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al112016_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2016.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2016/al11/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2016/AL112016/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL112016.html"
     },
@@ -82227,9 +81744,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL122016_Karl.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al122016_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2016.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2016/al12/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2016/AL122016/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL122016.html"
     },
@@ -82274,9 +81789,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL132016_Lisa.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al132016_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2016.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2016/al13/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2016/AL132016/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL132016.html"
     },
@@ -82323,9 +81836,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "MATTHEW developed into a Category 5 hurricane and made landfall in Florida, North Carolina, and South Carolina on September 28, 2016. The storm reached maximum sustained winds of 145 mph with a minimum central pressure of 934 mb, producing catastrophic Category 5 winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL142016_Matthew.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al142016_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2016.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2016/al14/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2016/AL142016/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL142016.html"
     },
@@ -82370,9 +81881,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL152016_Nicole.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al152016_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2016.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2016/al15/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2016/AL152016/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL152016.html"
     },
@@ -82417,9 +81926,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL162016_Otto.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al162016_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2016.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2016/al16/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2016/AL162016/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL162016.html"
     },
@@ -82464,9 +81971,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL012017_Arlene.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al012017_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2017.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2017/al01/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2017/AL012017/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL012017.html"
     },
@@ -82511,9 +82016,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL022017_Bret.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al022017_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2017.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2017/al02/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2017/AL022017/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL022017.html"
     },
@@ -82560,9 +82063,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL032017_Cindy.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al032017_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2017.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2017/al03/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2017/AL032017/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL032017.html"
     },
@@ -82607,9 +82108,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL042017_Four.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al042017_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2017.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2017/al04/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2017/AL042017/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL042017.html"
     },
@@ -82654,9 +82153,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL052017_Don.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al052017_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2017.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2017/al05/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2017/AL052017/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL052017.html"
     },
@@ -82703,9 +82200,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL062017_Emily.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al062017_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2017.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2017/al06/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2017/AL062017/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL062017.html"
     },
@@ -82750,9 +82245,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL072017_Franklin.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al072017_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2017.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2017/al07/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2017/AL072017/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL072017.html"
     },
@@ -82797,9 +82290,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL082017_Gert.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al082017_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2017.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2017/al08/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2017/AL082017/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL082017.html"
     },
@@ -82846,9 +82337,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "HARVEY developed into a Category 4 hurricane and made landfall in Alabama, Louisiana, Mississippi, and Texas on August 16, 2017. The storm reached maximum sustained winds of 115 mph with a minimum central pressure of 937 mb, producing extreme hurricane winds across the affected regions. The storm's track brought significant impacts across multiple states, demonstrating the far-reaching effects of major Atlantic hurricanes. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Harvey caused $125 billion in damage and 107 deaths, with its unprecedented rainfall over Southeast.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL092017_Harvey.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al092017_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2017.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2017/al09/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2017/AL092017/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL092017.html"
     },
@@ -82895,9 +82384,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "IRMA developed into a Category 5 hurricane and made landfall in Alabama, Florida, and Georgia on August 30, 2017. The storm reached maximum sustained winds of 155 mph with a minimum central pressure of 914 mb, producing catastrophic Category 5 winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Irma caused $77 billion in damage and 134 deaths, with its massive.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL112017_Irma.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al112017_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2017.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2017/al11/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2017/AL112017/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL112017.html"
     },
@@ -82942,9 +82429,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL122017_Jose.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al122017_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2017.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2017/al12/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2017/AL122017/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL122017.html"
     },
@@ -82989,9 +82474,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL132017_Katia.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al132017_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2017.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2017/al13/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2017/AL132017/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL132017.html"
     },
@@ -83036,9 +82519,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL142017_Lee.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al142017_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2017.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2017/al14/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2017/AL142017/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL142017.html"
     },
@@ -83083,9 +82564,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "MARIA developed into a Category 5 hurricane and made landfall in Puerto Rico and the U.S. Virgin Islands on September 16, 2017. The storm reached maximum sustained winds of 150 mph with a minimum central pressure of 908 mb, producing catastrophic Category 5 winds across the affected regions. The storm's track brought significant impacts across multiple states, demonstrating the far-reaching effects of major Atlantic hurricanes. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Maria caused $90 billion in damage and nearly 3,000 deaths in Puerto.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL152017_Maria.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al152017_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2017.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2017/al15/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2017/AL152017/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL152017.html"
     },
@@ -83132,9 +82611,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "NATE developed into a Category 1 hurricane and made landfall in Alabama, Louisiana, Maine, Mississippi, New Hampshire, New York, Pennsylvania, and Virginia on October 3, 2017. The storm reached maximum sustained winds of 80 mph with a minimum central pressure of 981 mb, producing minimal hurricane winds across the affected regions. The storm's track brought significant impacts across multiple states, demonstrating the far-reaching effects of major Atlantic hurricanes. The hurricane brought damaging winds, coastal flooding, and power disruptions, affecting thousands of residents and requiring extensive recovery efforts.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL162017_Nate.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al162017_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2017.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2017/al16/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2017/AL162017/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL162017.html"
     },
@@ -83179,9 +82656,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL172017_Ophelia.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al172017_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2017.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2017/al17/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2017/AL172017/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL172017.html"
     },
@@ -83226,9 +82701,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL182017_Philippe.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al182017_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2017.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2017/al18/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2017/AL182017/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL182017.html"
     },
@@ -83273,9 +82746,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL192017_Rina.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al192017_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2017.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2017/al19/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2017/AL192017/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL192017.html"
     },
@@ -83322,9 +82793,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL012018_Alberto.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al012018_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2018.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2018/al01/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2018/AL012018/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL012018.html"
     },
@@ -83369,9 +82838,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL022018_Beryl.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al022018_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2018.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2018/al02/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2018/AL022018/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL022018.html"
     },
@@ -83416,9 +82883,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL032018_Chris.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al032018_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2018.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2018/al03/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2018/AL032018/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL032018.html"
     },
@@ -83463,9 +82928,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL042018_Debby.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al042018_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2018.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2018/al04/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2018/AL042018/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL042018.html"
     },
@@ -83510,9 +82973,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL052018_Ernesto.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al052018_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2018.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2018/al05/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2018/AL052018/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL052018.html"
     },
@@ -83559,9 +83020,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "FLORENCE developed into a Category 4 hurricane and made landfall in Massachusetts, North Carolina, New York, South Carolina, and Virginia on August 30, 2018. The storm reached maximum sustained winds of 130 mph with a minimum central pressure of 937 mb, producing extreme hurricane winds across the affected regions. The storm's track brought significant impacts across multiple states, demonstrating the far-reaching effects of major Atlantic hurricanes. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Florence caused $24 billion in damage and 53 deaths, with its.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL062018_Florence.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al062018_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2018.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2018/al06/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2018/AL062018/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL062018.html"
     },
@@ -83609,9 +83068,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL072018_Gordon.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al072018_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2018.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2018/al07/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2018/AL072018/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL072018.html"
     },
@@ -83656,9 +83113,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL082018_Helene.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al082018_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2018.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2018/al08/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2018/AL082018/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL082018.html"
     },
@@ -83703,9 +83158,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL092018_Isaac.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al092018_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2018.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2018/al09/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2018/AL092018/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL092018.html"
     },
@@ -83750,9 +83203,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL102018_Joyce.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al102018_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2018.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2018/al10/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2018/AL102018/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL102018.html"
     },
@@ -83797,9 +83248,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL112018_Eleven.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al112018_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2018.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2018/al11/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2018/AL112018/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL112018.html"
     },
@@ -83844,9 +83293,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL122018_Kirk.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al122018_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2018.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2018/al12/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2018/AL122018/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL122018.html"
     },
@@ -83891,9 +83338,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL132018_Leslie.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al132018_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2018.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2018/al13/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2018/AL132018/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL132018.html"
     },
@@ -83940,9 +83385,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "MICHAEL developed into a Category 5 hurricane and made landfall in Florida, Georgia, North Carolina, South Carolina, and Virginia on October 6, 2018. The storm reached maximum sustained winds of 140 mph with a minimum central pressure of 919 mb, producing catastrophic Category 5 winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Michael caused $25 billion in damage and 74.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL142018_Michael.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al142018_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2018.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2018/al14/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2018/AL142018/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL142018.html"
     },
@@ -83987,9 +83430,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL152018_Nadine.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al152018_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2018.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2018/al15/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2018/AL152018/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL152018.html"
     },
@@ -84034,9 +83475,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL162018_Oscar.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al162018_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2018.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2018/al16/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2018/AL162018/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL162018.html"
     },
@@ -84081,9 +83520,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL012019_Andrea.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al012019_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2019.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2019/al01/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2019/AL012019/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL012019.html"
     },
@@ -84130,9 +83567,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "BARRY made landfall in Florida, Louisiana, and Texas as a Category 1 hurricane on July 10, 2019, with maximum winds of 65 mph. The hurricane produced damaging winds and coastal flooding in the affected areas.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL022019_Barry.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al022019_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2019.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2019/al02/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2019/AL022019/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL022019.html"
     },
@@ -84177,9 +83612,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL032019_Three.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al032019_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2019.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2019/al03/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2019/AL032019/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL032019.html"
     },
@@ -84224,9 +83657,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL042019_Chantal.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al042019_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2019.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2019/al04/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2019/AL042019/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL042019.html"
     },
@@ -84273,9 +83704,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "DORIAN developed into a Category 5 hurricane and made landfall in North Carolina, South Carolina, and the U.S. Virgin Islands on August 24, 2019. The storm reached maximum sustained winds of 160 mph with a minimum central pressure of 910 mb, producing catastrophic Category 5 winds across the affected regions. The storm's track brought significant impacts across multiple states, demonstrating the far-reaching effects of major Atlantic hurricanes. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL052019_Dorian.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al052019_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2019.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2019/al05/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2019/AL052019/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL052019.html"
     },
@@ -84320,9 +83749,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL062019_Erin.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al062019_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2019.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2019/al06/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2019/AL062019/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL062019.html"
     },
@@ -84367,9 +83794,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL072019_Fernand.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al072019_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2019.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2019/al07/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2019/AL072019/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL072019.html"
     },
@@ -84414,9 +83839,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL082019_Gabrielle.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al082019_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2019.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2019/al08/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2019/AL082019/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL082019.html"
     },
@@ -84461,9 +83884,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL092019_Humberto.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al092019_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2019.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2019/al09/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2019/AL092019/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL092019.html"
     },
@@ -84508,9 +83929,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL102019_Jerry.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al102019_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2019.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2019/al10/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2019/AL102019/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL102019.html"
     },
@@ -84557,9 +83976,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL112019_Imelda.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al112019_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2019.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2019/al11/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2019/AL112019/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL112019.html"
     },
@@ -84604,9 +84021,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL122019_Karen.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al122019_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2019.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2019/al12/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2019/AL122019/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL122019.html"
     },
@@ -84651,9 +84066,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL132019_Lorenzo.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al132019_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2019.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2019/al13/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2019/AL132019/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL132019.html"
     },
@@ -84698,9 +84111,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL142019_Melissa.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al142019_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2019.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2019/al14/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2019/AL142019/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL142019.html"
     },
@@ -84745,9 +84156,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL152019_Fifteen.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al152019_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2019.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2019/al15/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2019/AL152019/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL152019.html"
     },
@@ -84792,9 +84201,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL162019_Nestor.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al162019_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2019.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2019/al16/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2019/AL162019/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL162019.html"
     },
@@ -84839,9 +84246,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL172019_Olga.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al172019_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2019.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2019/al17/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2019/AL172019/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL172019.html"
     },
@@ -84886,9 +84291,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL182019_Pablo.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al182019_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2019.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2019/al18/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2019/AL182019/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL182019.html"
     },
@@ -84933,9 +84336,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL192019_Rebekah.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al192019_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2019.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2019/al19/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2019/AL192019/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL192019.html"
     },
@@ -84980,9 +84381,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL202019_Sebastien.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al202019_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2019.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2019/al20/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2019/AL202019/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL202019.html"
     },
@@ -85027,9 +84426,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL012020_Arthur.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al012020_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2020.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2020/al01/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2020/AL012020/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL012020.html"
     },
@@ -85076,9 +84473,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL022020_Bertha.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al022020_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2020.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2020/al02/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2020/AL022020/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL022020.html"
     },
@@ -85125,9 +84520,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL032020_Cristobal.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al032020_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2020.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2020/al03/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2020/AL032020/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL032020.html"
     },
@@ -85172,9 +84565,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL042020_Dolly.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al042020_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2020.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2020/al04/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2020/AL042020/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL042020.html"
     },
@@ -85219,9 +84610,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL052020_Edouard.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al052020_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2020.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2020/al05/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2020/AL052020/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL052020.html"
     },
@@ -85268,9 +84657,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL062020_Fay.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al062020_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2020.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2020/al06/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2020/AL062020/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL062020.html"
     },
@@ -85315,9 +84702,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL072020_Gonzalo.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al072020_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2020.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2020/al07/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2020/AL072020/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL072020.html"
     },
@@ -85364,9 +84749,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "HANNA made landfall in Texas as a Category 1 hurricane on July 23, 2020, with maximum winds of 80 mph. The hurricane produced damaging winds and coastal flooding in the affected areas.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL082020_Hanna.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al082020_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2020.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2020/al08/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2020/AL082020/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL082020.html"
     },
@@ -85413,9 +84796,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "ISAIAS made landfall in Florida, North Carolina, New York, South Carolina, and Virginia as a Category 1 hurricane on July 28, 2020, with maximum winds of 80 mph. The hurricane produced damaging winds and coastal flooding in the affected areas.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL092020_Isaias.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al092020_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2020.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2020/al09/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2020/AL092020/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL092020.html"
     },
@@ -85460,9 +84841,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL102020_Ten.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al102020_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2020.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2020/al10/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2020/AL102020/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL102020.html"
     },
@@ -85507,9 +84886,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL112020_Josephine.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al112020_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2020.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2020/al11/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2020/AL112020/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL112020.html"
     },
@@ -85554,9 +84931,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL122020_Kyle.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al122020_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2020.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2020/al12/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2020/AL122020/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL122020.html"
     },
@@ -85603,9 +84978,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "LAURA developed into a Category 4 hurricane and made landfall in Louisiana and Puerto Rico on August 20, 2020. The storm reached maximum sustained winds of 130 mph with a minimum central pressure of 937 mb, producing extreme hurricane winds across the affected regions. The storm's track brought significant impacts across multiple states, demonstrating the far-reaching effects of major Atlantic hurricanes. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL132020_Laura.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al132020_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2020.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2020/al13/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2020/AL132020/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL132020.html"
     },
@@ -85650,9 +85023,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "MARCO made landfall in Florida and Louisiana as a Category 1 hurricane on August 20, 2020, with maximum winds of 65 mph. The hurricane produced damaging winds and coastal flooding in the affected areas.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL142020_Marco.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al142020_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2020.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2020/al14/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2020/AL142020/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL142020.html"
     },
@@ -85697,9 +85068,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL152020_Omar.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al152020_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2020.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2020/al15/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2020/AL152020/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL152020.html"
     },
@@ -85744,9 +85113,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL162020_Nana.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al162020_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2020.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2020/al16/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2020/AL162020/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL162020.html"
     },
@@ -85791,9 +85158,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL172020_Paulette.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al172020_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2020.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2020/al17/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2020/AL172020/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL172020.html"
     },
@@ -85838,9 +85203,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL182020_Rene.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al182020_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2020.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2020/al18/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2020/AL182020/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL182020.html"
     },
@@ -85888,9 +85251,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "SALLY developed into a Category 2 hurricane and made landfall in Alabama, Florida, Georgia, North Carolina, and South Carolina on September 11, 2020. The storm reached maximum sustained winds of 95 mph with a minimum central pressure of 965 mb, producing moderate hurricane-force winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The hurricane brought damaging winds, coastal flooding, and power disruptions, affecting thousands of residents and requiring extensive recovery efforts.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL192020_Sally.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al192020_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2020.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2020/al19/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2020/AL192020/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL192020.html"
     },
@@ -85935,9 +85296,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL202020_Teddy.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al202020_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2020.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2020/al20/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2020/AL202020/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL202020.html"
     },
@@ -85982,9 +85341,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL212020_Vicky.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al212020_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2020.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2020/al21/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2020/AL212020/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL212020.html"
     },
@@ -86031,9 +85388,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL222020_Beta.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al222020_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2020.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2020/al22/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2020/AL222020/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL222020.html"
     },
@@ -86078,9 +85433,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL232020_Wilfred.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al232020_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2020.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2020/al23/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2020/AL232020/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL232020.html"
     },
@@ -86125,9 +85478,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL242020_Alpha.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al242020_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2020.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2020/al24/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2020/AL242020/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL242020.html"
     },
@@ -86172,9 +85523,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL252020_Gamma.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al252020_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2020.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2020/al25/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2020/AL252020/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL252020.html"
     },
@@ -86221,9 +85570,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "DELTA developed into a Category 4 hurricane and made landfall in Alabama, Louisiana, Mississippi, and Texas on October 4, 2020. The storm reached maximum sustained winds of 120 mph with a minimum central pressure of 953 mb, producing extreme hurricane winds across the affected regions. The storm's track brought significant impacts across multiple states, demonstrating the far-reaching effects of major Atlantic hurricanes. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL262020_Delta.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al262020_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2020.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2020/al26/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2020/AL262020/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL262020.html"
     },
@@ -86268,9 +85615,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL272020_Epsilon.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al272020_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2020.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2020/al27/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2020/AL272020/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL272020.html"
     },
@@ -86317,9 +85662,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "ZETA developed into a Category 3 hurricane and made landfall in Alabama, Louisiana, Mississippi, North Carolina, and Virginia on October 24, 2020. The storm reached maximum sustained winds of 100 mph with a minimum central pressure of 970 mb, producing major hurricane winds across the affected regions. The storm's track brought significant impacts across multiple states, demonstrating the far-reaching effects of major Atlantic hurricanes. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL282020_Zeta.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al282020_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2020.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2020/al28/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2020/AL282020/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL282020.html"
     },
@@ -86366,9 +85709,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "ETA developed into a Category 4 hurricane and made landfall in Florida and Georgia on October 31, 2020. The storm reached maximum sustained winds of 130 mph with a minimum central pressure of 922 mb, producing extreme hurricane winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL292020_Eta.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al292020_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2020.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2020/al29/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2020/AL292020/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL292020.html"
     },
@@ -86413,9 +85754,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL302020_Theta.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al302020_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2020.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2020/al30/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2020/AL302020/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL302020.html"
     },
@@ -86460,9 +85799,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL312020_Iota.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al312020_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2020.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2020/al31/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2020/AL312020/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL312020.html"
     },
@@ -86507,9 +85844,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL012021_Ana.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al012021_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2021.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2021/al01/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2021/AL012021/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL012021.html"
     },
@@ -86554,9 +85889,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL022021_Bill.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al022021_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2021.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2021/al02/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2021/AL022021/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL022021.html"
     },
@@ -86603,9 +85936,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL032021_Claudette.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al032021_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2021.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2021/al03/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2021/AL032021/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL032021.html"
     },
@@ -86652,9 +85983,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL042021_Danny.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al042021_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2021.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2021/al04/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2021/AL042021/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL042021.html"
     },
@@ -86703,9 +86032,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "ELSA developed into a Category 1 hurricane and made landfall in Connecticut, Delaware, Florida, Georgia, Massachusetts, Maine, North Carolina, South Carolina, and Virginia on June 30, 2021. The storm reached maximum sustained winds of 75 mph with a minimum central pressure of 991 mb, producing minimal hurricane winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The hurricane brought damaging winds, coastal flooding, and power disruptions, affecting thousands of residents and requiring extensive recovery efforts.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL052021_Elsa.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al052021_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2021.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2021/al05/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2021/AL052021/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL052021.html"
     },
@@ -86752,9 +86079,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL062021_Fred.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al062021_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2021.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2021/al06/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2021/AL062021/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL062021.html"
     },
@@ -86799,9 +86124,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL072021_Grace.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al072021_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2021.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2021/al07/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2021/AL072021/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL072021.html"
     },
@@ -86849,9 +86172,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "HENRI made landfall in Massachusetts and New York as a Category 1 hurricane on August 15, 2021, with maximum winds of 65 mph. The hurricane produced damaging winds and coastal flooding in the affected areas.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL082021_Henri.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al082021_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2021.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2021/al08/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2021/AL082021/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL082021.html"
     },
@@ -86898,9 +86219,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "IDA developed into a Category 4 hurricane and made landfall in Alabama, Florida, Louisiana, Maryland, Maine, Mississippi, New Jersey, New York, and Virginia on August 26, 2021. The storm reached maximum sustained winds of 130 mph with a minimum central pressure of 929 mb, producing extreme hurricane winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL092021_Ida.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al092021_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2021.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2021/al09/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2021/AL092021/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL092021.html"
     },
@@ -86945,9 +86264,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL102021_Kate.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al102021_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2021.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2021/al10/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2021/AL102021/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL102021.html"
     },
@@ -86992,9 +86309,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL112021_Julian.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al112021_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2021.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2021/al11/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2021/AL112021/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL112021.html"
     },
@@ -87039,9 +86354,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL122021_Larry.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al122021_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2021.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2021/al12/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2021/AL122021/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL122021.html"
     },
@@ -87088,9 +86401,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL132021_Mindy.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al132021_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2021.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2021/al13/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2021/AL132021/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL132021.html"
     },
@@ -87137,9 +86448,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "NICHOLAS made landfall in Louisiana and Texas as a Category 1 hurricane on September 12, 2021, with maximum winds of 65 mph. The hurricane produced damaging winds and coastal flooding in the affected areas.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL142021_Nicholas.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al142021_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2021.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2021/al14/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2021/AL142021/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL142021.html"
     },
@@ -87184,9 +86493,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL152021_Odette.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al152021_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2021.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2021/al15/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2021/AL152021/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL152021.html"
     },
@@ -87231,9 +86538,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL162021_Peter.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al162021_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2021.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2021/al16/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2021/AL162021/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL162021.html"
     },
@@ -87278,9 +86583,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL172021_Rose.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al172021_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2021.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2021/al17/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2021/AL172021/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL172021.html"
     },
@@ -87325,9 +86628,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL182021_Sam.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al182021_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2021.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2021/al18/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2021/AL182021/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL182021.html"
     },
@@ -87372,9 +86673,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL192021_Teresa.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al192021_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2021.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2021/al19/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2021/AL192021/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL192021.html"
     },
@@ -87419,9 +86718,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL202021_Victor.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al202021_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2021.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2021/al20/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2021/AL202021/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL202021.html"
     },
@@ -87466,9 +86763,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL212021_Wanda.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al212021_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2021.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2021/al21/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2021/AL212021/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL212021.html"
     },
@@ -87513,9 +86808,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL012022_Alex.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al012022_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2022.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2022/al01/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2022/AL012022/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL012022.html"
     },
@@ -87560,9 +86853,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL022022_Bonnie.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al022022_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2022.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2022/al02/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2022/AL022022/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL022022.html"
     },
@@ -87609,9 +86900,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL032022_Colin.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al032022_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2022.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2022/al03/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2022/AL032022/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL032022.html"
     },
@@ -87656,9 +86945,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL052022_Danielle.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al052022_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2022.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2022/al05/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2022/AL052022/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL052022.html"
     },
@@ -87703,9 +86990,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL062022_Earl.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al062022_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2022.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2022/al06/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2022/AL062022/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL062022.html"
     },
@@ -87750,9 +87035,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "FIONA developed into a Category 4 hurricane and made landfall in Puerto Rico on September 14, 2022. The storm reached maximum sustained winds of 120 mph with a minimum central pressure of 931 mb, producing extreme hurricane winds across the affected regions. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL072022_Fiona.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al072022_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2022.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2022/al07/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2022/AL072022/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL072022.html"
     },
@@ -87797,9 +87080,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL082022_Gaston.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al082022_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2022.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2022/al08/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2022/AL082022/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL082022.html"
     },
@@ -87847,9 +87128,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "IAN developed into a Category 5 hurricane and made landfall in Florida, North Carolina, and South Carolina on September 22, 2022. The storm reached maximum sustained winds of 140 mph with a minimum central pressure of 937 mb, producing catastrophic Category 5 winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Ian caused over $112 billion in damage and 161 deaths,.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL092022_Ian.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al092022_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2022.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2022/al09/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2022/AL092022/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL092022.html"
     },
@@ -87894,9 +87173,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL102022_Hermine.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al102022_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2022.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2022/al10/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2022/AL102022/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL102022.html"
     },
@@ -87941,9 +87218,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL112022_Eleven.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al112022_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2022.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2022/al11/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2022/AL112022/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL112022.html"
     },
@@ -87988,9 +87263,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL122022_Twelve.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al122022_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2022.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2022/al12/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2022/AL122022/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL122022.html"
     },
@@ -88035,9 +87308,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL132022_Julia.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al132022_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2022.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2022/al13/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2022/AL132022/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL132022.html"
     },
@@ -88082,9 +87353,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL142022_Karl.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al142022_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2022.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2022/al14/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2022/AL142022/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL142022.html"
     },
@@ -88129,9 +87398,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL152022_Lisa.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al152022_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2022.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2022/al15/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2022/AL152022/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL152022.html"
     },
@@ -88176,9 +87443,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL162022_Martin.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al162022_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2022.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2022/al16/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2022/AL162022/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL162022.html"
     },
@@ -88225,9 +87490,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "NICOLE developed into a Category 1 hurricane and made landfall in Florida, Georgia, and North Carolina on November 6, 2022. The storm reached maximum sustained winds of 65 mph with a minimum central pressure of 980 mb, producing minimal hurricane winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The hurricane brought damaging winds, coastal flooding, and power disruptions, affecting thousands of residents and requiring extensive recovery efforts.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL172022_Nicole.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al172022_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2022.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2022/al17/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2022/AL172022/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL172022.html"
     },
@@ -88272,9 +87535,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL012023_Storm 1 Of 2023.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al012023_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2023.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2023/al01/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2023/AL012023/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL012023.html"
     },
@@ -88319,9 +87580,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL022023_Arlene.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al022023_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2023.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2023/al02/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2023/AL022023/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL022023.html"
     },
@@ -88366,9 +87625,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL032023_Bret.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al032023_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2023.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2023/al03/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2023/AL032023/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL032023.html"
     },
@@ -88413,9 +87670,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL042023_Cindy.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al042023_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2023.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2023/al04/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2023/AL042023/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL042023.html"
     },
@@ -88460,9 +87715,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL052023_Don.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al052023_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2023.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2023/al05/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2023/AL052023/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL052023.html"
     },
@@ -88507,9 +87760,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL062023_Gert.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al062023_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2023.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2023/al06/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2023/AL062023/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL062023.html"
     },
@@ -88554,9 +87805,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL072023_Emily.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al072023_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2023.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2023/al07/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2023/AL072023/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL072023.html"
     },
@@ -88601,9 +87850,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL082023_Franklin.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al082023_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2023.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2023/al08/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2023/AL082023/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL082023.html"
     },
@@ -88650,9 +87897,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL092023_Harold.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al092023_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2023.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2023/al09/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2023/AL092023/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL092023.html"
     },
@@ -88699,9 +87944,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "IDALIA developed into a Category 4 hurricane and made landfall in Florida, Georgia, and South Carolina on August 26, 2023. The storm reached maximum sustained winds of 115 mph with a minimum central pressure of 942 mb, producing extreme hurricane winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL102023_Idalia.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al102023_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2023.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2023/al10/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2023/AL102023/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL102023.html"
     },
@@ -88746,9 +87989,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL112023_Jose.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al112023_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2023.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2023/al11/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2023/AL112023/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL112023.html"
     },
@@ -88793,9 +88034,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL122023_Katia.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al122023_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2023.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2023/al12/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2023/AL122023/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL122023.html"
     },
@@ -88840,9 +88079,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL132023_Lee.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al132023_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2023.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2023/al13/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2023/AL132023/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL132023.html"
     },
@@ -88887,9 +88124,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL142023_Margot.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al142023_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2023.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2023/al14/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2023/AL142023/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL142023.html"
     },
@@ -88934,9 +88169,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL152023_Nigel.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al152023_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2023.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2023/al15/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2023/AL152023/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL152023.html"
     },
@@ -88983,9 +88216,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL162023_Ophelia.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al162023_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2023.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2023/al16/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2023/AL162023/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL162023.html"
     },
@@ -89030,9 +88261,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL172023_Philippe.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al172023_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2023.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2023/al17/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2023/AL172023/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL172023.html"
     },
@@ -89077,9 +88306,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL182023_Rina.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al182023_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2023.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2023/al18/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2023/AL182023/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL182023.html"
     },
@@ -89124,9 +88351,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL192023_Sean.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al192023_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2023.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2023/al19/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2023/AL192023/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL192023.html"
     },
@@ -89171,9 +88396,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL202023_Tammy.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al202023_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2023.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2023/al20/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2023/AL202023/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL202023.html"
     },
@@ -89218,9 +88441,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL212023_Twenty-One.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al212023_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2023.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2023/al21/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2023/AL212023/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL212023.html"
     },
@@ -89265,9 +88486,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL012024_Alberto.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al012024_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2024.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2024/al01/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2024/AL012024/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL012024.html"
     },
@@ -89314,9 +88533,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "BERYL developed into a Category 5 hurricane and made landfall in New York and Texas on June 28, 2024. The storm reached maximum sustained winds of 145 mph with a minimum central pressure of 932 mb, producing catastrophic Category 5 winds across the affected regions. The storm's track brought significant impacts across multiple states, demonstrating the far-reaching effects of major Atlantic hurricanes. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Beryl set records as the earliest Category 5 hurricane in the Atlantic, reaching unprecedented strength.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL022024_Beryl.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al022024_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2024.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2024/al02/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2024/AL022024/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL022024.html"
     },
@@ -89361,9 +88578,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL032024_Chris.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al032024_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2024.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2024/al03/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2024/AL032024/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL032024.html"
     },
@@ -89411,9 +88626,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "DEBBY developed into a Category 1 hurricane and made landfall in Florida, Georgia, North Carolina, New York, Pennsylvania, South Carolina, and Virginia on August 2, 2024. The storm reached maximum sustained winds of 70 mph with a minimum central pressure of 979 mb, producing minimal hurricane winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The hurricane brought damaging winds, coastal flooding, and power disruptions, affecting thousands of residents and requiring extensive recovery efforts. Hurricane Debby caused significant flooding across Florida and the Southeast.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL042024_Debby.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al042024_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2024.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2024/al04/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2024/AL042024/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL042024.html"
     },
@@ -89458,9 +88671,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "ERNESTO made landfall in the U.S. Virgin Islands as a Category 2 hurricane on August 11, 2024, with maximum winds of 85 mph. The hurricane produced damaging winds and coastal flooding in the affected areas.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL052024_Ernesto.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al052024_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2024.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2024/al05/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2024/AL052024/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL052024.html"
     },
@@ -89507,9 +88718,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "FRANCINE developed into a Category 2 hurricane and made landfall in Louisiana, Mississippi, and Texas on September 8, 2024. The storm reached maximum sustained winds of 90 mph with a minimum central pressure of 972 mb, producing moderate hurricane-force winds across the affected regions. The storm's track brought significant impacts across multiple states, demonstrating the far-reaching effects of major Atlantic hurricanes. The hurricane brought damaging winds, coastal flooding, and power disruptions, affecting thousands of residents and requiring extensive recovery efforts. Hurricane Francine brought damaging winds and storm surge to Louisiana, continuing the pattern of Gulf Coast hurricane impacts and testing post-Katrina flood protection systems.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL062024_Francine.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al062024_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2024.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2024/al06/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2024/AL062024/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL062024.html"
     },
@@ -89554,9 +88763,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL072024_Gordon.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al072024_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2024.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2024/al07/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2024/AL072024/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL072024.html"
     },
@@ -89603,9 +88810,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "HELENE developed into a Category 4 hurricane and made landfall in Florida, Georgia, North Carolina, and South Carolina on September 23, 2024. The storm reached maximum sustained winds of 120 mph with a minimum central pressure of 939 mb, producing extreme hurricane winds across the affected regions. The hurricane's path carried it across multiple states, affecting infrastructure, communities, and ecosystems from Florida through the broader southeastern region. The major hurricane caused significant structural damage, widespread power outages, and flooding, highlighting the vulnerability of coastal communities to intense tropical cyclones. Hurricane Helene caused over $47 billion in damage and 230+ deaths.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL092024_Helene.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al092024_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2024.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2024/al09/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2024/AL092024/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL092024.html"
     },
@@ -89650,9 +88855,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL102024_Isaac.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al102024_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2024.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2024/al10/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2024/AL102024/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL102024.html"
     },
@@ -89697,9 +88900,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "Tropical Storm Isaac formed in the Atlantic in late September 2024.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL112024_Isaac.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al112024_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2024.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2024/al11/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2024/AL112024/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL112024.html"
     },
@@ -89744,9 +88945,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL122024_Kirk.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al122024_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2024.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2024/al12/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2024/AL122024/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL122024.html"
     },
@@ -89791,9 +88990,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL132024_Leslie.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al132024_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2024.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2024/al13/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2024/AL132024/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL132024.html"
     },
@@ -89840,9 +89037,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "Hurricane Milton explosively intensified into a Category 5 hurricane in October 2024, becoming one of the most rapidly intensifying hurricanes on record. With peak winds of 180 mph and a minimum pressure of 897 mb, Milton threatened Florida's west coast before making landfall near Siesta Key as a Category 3 storm. The hurricane spawned numerous tornadoes across Florida and caused significant storm surge along the coast. Despite weakening before landfall, Milton still caused 24 deaths and billions in damage.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL142024_Milton.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al142024_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2024.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2024/al14/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2024/AL142024/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL142024.html"
     },
@@ -89887,9 +89082,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL152024_Nadine.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al152024_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2024.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2024/al15/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2024/AL152024/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL152024.html"
     },
@@ -89934,9 +89127,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL162024_Oscar.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al162024_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2024.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2024/al16/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2024/AL162024/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL162024.html"
     },
@@ -89981,9 +89172,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL172024_Patty.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al172024_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2024.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2024/al17/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2024/AL172024/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL172024.html"
     },
@@ -90028,9 +89217,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": "RAFAEL made landfall in Florida as a Category 3 hurricane on November 3, 2024, with maximum winds of 105 mph. The hurricane produced damaging winds and coastal flooding in the affected areas.",
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL182024_Rafael.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al182024_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2024.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2024/al18/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2024/AL182024/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL182024.html"
     },
@@ -90075,9 +89262,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "narrative": null,
     "resources": {
       "tcr_pdf": "https://www.nhc.noaa.gov/data/tcr/AL192024_Sara.pdf",
-      "tcr_shp": "https://www.nhc.noaa.gov/gis/best_track/al192024_best_track.zip",
       "best_track": "https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atl-1851-2024.txt",
-      "nhc_archive": "https://www.nhc.noaa.gov/archive/2024/al19/",
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/2024/AL192024/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL192024.html"
     },

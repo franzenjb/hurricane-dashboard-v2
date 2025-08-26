@@ -1013,7 +1013,7 @@
                 'RC Impact Score', 'RC Impact Level', 
                 'RC Responded', 'RC Operation Type', 
                 'Estimated Shelters', 'Estimated Meals', 'Estimated Volunteers',
-                'TCR PDF', 'NHC Archive', 'Has Narrative', 'Has Track Data',
+                'TCR PDF', 'Has Narrative', 'Has Track Data',
                 'Narrative'
             ];
             
@@ -1040,7 +1040,6 @@
                 s.rc_response?.estimated_meals || '',
                 s.rc_response?.estimated_volunteers || '',
                 s.resources?.tcr_pdf || '',
-                s.resources?.nhc_archive || '',
                 s.data_quality?.has_narrative ? 'Yes' : 'No',
                 s.data_quality?.has_track_data ? 'Yes' : 'No',
                 (s.narrative || '').replace(/"/g, '""')  // Escape quotes in narrative
