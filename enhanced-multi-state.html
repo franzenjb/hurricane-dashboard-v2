@@ -393,21 +393,6 @@
             position: relative;
         }
         
-        .stats-banner {
-            background: #2C3E50 !important;
-            color: white !important;
-            padding: 15px 20px !important;
-            text-align: center;
-            font-size: 16px;
-            line-height: 1.4;
-            border-top: 3px solid #e74c3c;
-            flex-shrink: 0;
-        }
-        
-        .stats-banner strong {
-            color: #e74c3c;
-            font-weight: 600;
-        }
         
         .selected-states {
             background: rgba(255,255,255,0.1);
@@ -476,10 +461,6 @@
                 justify-content: center;
             }
             
-            .stats-banner {
-                font-size: 14px;
-                padding: 12px 15px !important;
-            }
         }
         
         /* Modal styles for storm details */
@@ -853,13 +834,6 @@
                     <div id="insights" style="display: flex; gap: 15px; flex-wrap: wrap;">
                         <!-- Will be populated with insights -->
                     </div>
-                </div>
-            </div>
-            
-            <div class="stats-banner">
-                <span id="stats-text">Loading multi-state hurricane data...</span>
-                <div style="font-size: 12px; color: #bbb; margin-top: 8px;">
-                    HURDAT2 Database | Multi-State Analysis | Research: jeff.franzen2@redcross.org
                 </div>
             </div>
         </div>
@@ -1344,7 +1318,7 @@
         function quickSelectStates(states) {
             selectedStates = states;
             console.log('Quick selected states:', selectedStates);
-            document.getElementById('stats-text').innerHTML = `<strong>${selectedStates.length}</strong> state${selectedStates.length !== 1 ? 's' : ''} selected | <strong>${currentStartYear}-${currentEndYear}</strong> | ${selectedStates.join(', ')}`;
+            // Stats banner removed - no longer updating stats-text
         }
         
         function quickApplyFilters() {
@@ -1541,10 +1515,9 @@
             // Apply storm filters (this will call createMultiStateTimeline and updateStateComparison)
             applyStormFilters();
             
-            // Update stats display
-            const statsText = document.getElementById('stats-text');
-            if (statsText) {
-                const activeCount = document.querySelectorAll('.filter-chip.active').length;
+            // Stats banner removed - skip stats display update
+            const activeCount = document.querySelectorAll('.filter-chip.active').length;
+            if (false) { // Keep for reference but disabled
                 statsText.innerHTML = `<strong>${selectedStates.length}</strong> state${selectedStates.length !== 1 ? 's' : ''} | <strong>${currentStartYear}-${currentEndYear}</strong> | <strong>${activeCount}</strong> filters active`;
             }
         }
@@ -1747,10 +1720,7 @@
                 applyFilters();
                 // applyFilters will call createMultiStateTimeline and updateStateComparison
                 
-                // Update stats bar
-                const statsText = document.getElementById('stats-text');
-                if (statsText) {
-                    statsText.innerHTML = `<strong>${selectedStates.length}</strong> state${selectedStates.length !== 1 ? 's' : ''} selected | <strong>${currentStartYear}-${currentEndYear}</strong> | ${Object.values(activeFilters).filter(v => v !== null && v !== false && (Array.isArray(v) ? v.length > 0 : true)).length} filters active`;
+                // Stats banner removed - no longer updating
                 }
             } else {
                 console.warn('No states selected');
@@ -1924,9 +1894,8 @@
                 regionalActiveCount.textContent = storms.length;
             }
             
-            // Update detailed stats if element exists
-            const statsText = document.getElementById('stats-text');
-            if (statsText) {
+            // Stats banner removed
+            if (false) {
                 if (storms.length === 0) {
                     statsText.textContent = 'No storms found matching your criteria';
                 } else {
@@ -2805,8 +2774,7 @@
                 selectedStates[0] : 
                 `${selectedStates.length} selected states`;
                 
-            document.getElementById('stats-text').innerHTML = 
-                `<strong>${totalStorms} hurricane landfalls</strong> across ${stateNames} (${currentStartYear}-${currentEndYear}), including <strong>${majorHurricanes} major hurricanes</strong> (Category 3+), resulting in <strong>${totalDeaths.toLocaleString()} deaths</strong>.`;
+            // Stats banner removed - this data is now shown in the insights section
         }
         
         // Close dropdown when clicking outside
