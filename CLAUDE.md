@@ -189,6 +189,67 @@ const colors = {
 - Controls: Play/pause, frame navigation, speed adjustment
 - State management: `animationState` object tracks current frame, segments, and view mode
 
+**Animation Implementation**:
+```javascript
+// Standard animation pattern for storm tracks
+function drawRainbowTrack(map, stormPoints, animate = false) {
+    // Build segments with colors
+    const segments = [];
+    for (let i = 0; i < stormPoints.length - 1; i++) {
+        segments.push({
+            coords: [[lat1, lon1], [lat2, lon2]],
+            color: getCategoryColor(category)
+        });
+    }
+    
+    // Animate if requested
+    if (animate && segments.length > 0) {
+        let currentSegment = 0;
+        function drawNextSegment() {
+            if (currentSegment < segments.length) {
+                L.polyline(segments[currentSegment].coords, {
+                    color: segments[currentSegment].color,
+                    weight: 6,
+                    opacity: 1.0
+                }).addTo(map);
+                currentSegment++;
+                setTimeout(drawNextSegment, 50); // 50ms delay between segments
+            }
+        }
+        drawNextSegment();
+    }
+}
+```
+
+### 5. Legend Design Pattern
+**Compact Horizontal Legend** (used in sidebars to maximize map visibility):
+```css
+.legend-horizontal {
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-size: 10px;
+    z-index: 1000;
+    display: flex;
+    gap: 8px;
+}
+```
+
+```html
+<div class="legend-horizontal">
+    <span style="color: #87CEEB;">TS</span>
+    <span style="color: #90EE90;">1</span>
+    <span style="color: #FFD700;">2</span>
+    <span style="color: #FF8C00;">3</span>
+    <span style="color: #DC143C;">4</span>
+    <span style="color: #8B008B;">5</span>
+</div>
+```
+
 ## Data Structures
 
 ### Storm Object
@@ -239,6 +300,57 @@ const colors = {
 
 ## Common Issues & Solutions
 
+### Plotly Click Handler Not Working
+**Problem**: Timeline/Regional scatter plot clicks don't trigger storm selection
+**Solution**: Use promise syntax when attaching handler:
+```javascript
+// WRONG - handler won't attach properly
+const timelineDiv = document.getElementById('timeline');
+Plotly.newPlot('timeline', traces, layout, config);
+timelineDiv.on('plotly_click', function(data) { ... });
+
+// CORRECT - use promise to ensure plot is ready
+Plotly.newPlot('timeline', traces, layout, config).then(function(myPlot) {
+    myPlot.on('plotly_click', function(data) {
+        const pointIndex = data.points[0].pointIndex;
+        const storm = filteredStorms[pointIndex];
+        if (storm) {
+            updateStormInfoPanel(storm);
+            showStormOnMap(storm);
+        }
+    });
+});
+```
+
+### Wrong Storm Selected in Sidebar
+**Problem**: Regional tab selecting wrong storm when clicked
+**Root Cause**: Creating new filtered array causes index mismatch
+**Solution**: Use the same filtered array that Plotly is displaying:
+```javascript
+// WRONG - creates new filter causing index mismatch
+myPlot.on('plotly_click', function(data) {
+    const pointIndex = data.points[0].pointIndex;
+    const newFilteredStorms = atlanticStorms.filter(...); // Don't do this!
+    const storm = newFilteredStorms[pointIndex]; // Wrong storm!
+});
+
+// CORRECT - use existing filtered array
+window.currentFilteredStorms = filteredStorms; // Store globally
+myPlot.on('plotly_click', function(data) {
+    const pointIndex = data.points[0].pointIndex;
+    const storm = window.currentFilteredStorms[pointIndex]; // Correct storm!
+});
+```
+
+### Duplicate Function Definitions
+**Problem**: Functions defined multiple times override each other
+**Solution**: Search for duplicate function names and remove extras:
+```bash
+# Find duplicate functions
+grep -n "function updateStormInfoPanel" enhanced-multi-state.html
+# Remove any duplicates found
+```
+
 ### Browser Cache
 - **Solution**: DevTools → Network → Disable cache
 - **Alternative**: Hard refresh (Cmd+Shift+R / Ctrl+F5)
@@ -269,12 +381,16 @@ const colors = {
 ### Before Committing
 1. **Run locally**: Test all tabs with `./run-local.sh`
 2. **Console check**: No errors (F12)
-3. **Database modal**: View button opens with animated track
-4. **Animation controls**: Play/pause/forward/back work in 2D and 3D
-5. **3D view**: Storm path displays with correct colors
-6. **Storm labels**: Readable with white backgrounds in Intelligence tab
-7. **Response tab**: Only shows Cat 3+ with US landfall
-8. **TCR downloads**: Work for 1995+ storms
+3. **Timeline sidebar**: Click storms, verify map updates and narrative shows
+4. **Regional sidebar**: Click storms, verify correct storm selected
+5. **Animation**: Both Timeline and Regional show animated tracks
+6. **Legend visibility**: Compact legend doesn't obstruct map view
+7. **Database modal**: View button opens with animated track
+8. **Animation controls**: Play/pause/forward/back work in 2D and 3D
+9. **3D view**: Storm path displays with correct colors
+10. **Storm labels**: Readable with white backgrounds in Intelligence tab
+11. **Response tab**: Only shows Cat 3+ with US landfall
+12. **TCR downloads**: Work for 1995+ storms
 
 ### After Pushing
 - GitHub Pages deploys in 2-3 minutes
@@ -366,7 +482,7 @@ gh issue create --title "Database not loading" --label "critical"
 2. **Check console**: No errors in browser console (F12)
 3. **Verify animations**: Both 2D and 3D modes work
 4. **Test storm switching**: Can change storms without closing modal
-5. **Check data integrity**: 1,991 Atlantic storms still load
+5. **Check data integrity**: 1,992 Atlantic storms still load
 6. **Verify deployment**: Changes appear on GitHub Pages after push
 
 #### Common Pitfalls to Avoid
@@ -376,6 +492,8 @@ gh issue create --title "Database not loading" --label "critical"
 - **Preserve animation state** when switching 2D/3D
 - **Don't modify storm database** without extensive testing
 - **Keep GeoJSON files organized** by decade
+- **Check for duplicate function definitions** before adding new ones
+- **Use existing filtered arrays** for index consistency
 
 ### Performance & Optimization
 
@@ -431,6 +549,12 @@ code --install-extension github.vscode-pull-request-github
 3. Check GitHub Actions tab for deployment status
 4. Verify you pushed to main branch
 
+#### When Sidebar Not Updating
+1. Check Plotly click handler is attached with promise syntax
+2. Verify filtered storm array matches Plotly's data
+3. Look for duplicate function definitions overriding handlers
+4. Check browser console for JavaScript errors
+
 ## Critical Data Integrity
 
 ### HURDAT2 Standards
@@ -446,3 +570,21 @@ code --install-extension github.vscode-pull-request-github
 - Landfall detection may miss complex paths
 - Damage data incomplete for many storms
 - Wind speeds in GeoJSON are in knots (multiply by 1.15 for mph)
+
+## Recent Bug Fixes & Solutions
+
+### Timeline Tab Sidebar Fix (Fixed)
+**Issue**: Storm selection not updating map or narrative
+**Solution**: Properly attached Plotly click handler using promise syntax
+
+### Regional Tab Wrong Storm Selection (Fixed)  
+**Issue**: Clicking storm showed different storm in sidebar
+**Solution**: Used consistent filtered array (`window.currentFilteredStorms`)
+
+### Duplicate Function Override (Fixed)
+**Issue**: Second updateStormInfoPanel function overriding correct one
+**Solution**: Removed duplicate function definition
+
+### Legend Obstruction (Fixed)
+**Issue**: Large legend covering significant portion of small sidebar maps
+**Solution**: Redesigned as minimal horizontal bar at bottom center

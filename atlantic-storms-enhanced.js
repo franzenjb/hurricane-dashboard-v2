@@ -17422,8 +17422,8 @@ const ATLANTIC_STORMS_ENHANCED = [
       "nhc_graphics": "https://www.nhc.noaa.gov/archive/1900/AL011900/",
       "ibtracs": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/online/ibtracs/AL011900.html"
     },
-    "rc_impact_score": 0,
-    "rc_impact_level": "NONE",
+    "rc_impact_score": 100,
+    "rc_impact_level": "CATASTROPHIC",
     "rc_response": {
       "responded": true,
       "operation_type": "Level 3",
@@ -48934,7 +48934,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 24.3,
     "lon": 86.6,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 259,
     "landfall_states": [
       "LA"
     ],
@@ -67260,7 +67260,7 @@ const ATLANTIC_STORMS_ENHANCED = [
     "lat": 25.4,
     "lon": 75.8,
     "landfall_state": null,
-    "deaths": 0,
+    "deaths": 65,
     "landfall_states": [
       "FL",
       "LA"
