@@ -89,15 +89,19 @@
             border-left: 3px solid #007cba;
             display: flex;
             flex-direction: column;
-            height: 100%;
+            height: calc(100vh - 52px);
             overflow: hidden;
+            position: relative;
         }
         
         .storm-info-panel {
-            flex: 0 0 12%;
+            min-height: 110px;
+            max-height: 110px;
             background: white;
             padding: 15px;
             overflow: hidden;
+            flex-shrink: 0;
+            border-bottom: 1px solid #ddd;
         }
         
         .storm-banner {
@@ -161,9 +165,11 @@
         }
         
         .map-panel {
-            flex: 0 0 43%;
+            flex: 1;
+            min-height: 350px;
             background: white;
             position: relative;
+            border-bottom: 1px solid #ddd;
         }
         
         #map {
@@ -176,13 +182,13 @@
         }
         
         .narrative-panel {
-            flex: 0 0 45%;
+            flex: 1;
+            min-height: 200px;
             background: white;
             padding: 20px;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
-            height: 100%;
+            overflow-y: auto;
         }
         
         .narrative-header {
@@ -205,10 +211,13 @@
         
         /* Storm info panel styles - matching Timeline tab exactly */
         .storm-info-panel {
-            flex: 0 0 12%;
+            min-height: 110px;
+            max-height: 110px;
             background: white;
             padding: 15px;
             overflow: hidden;
+            flex-shrink: 0;
+            border-bottom: 1px solid #ddd;
         }
         
         .storm-banner {
@@ -784,13 +793,23 @@
             <div class="filter-title">Year Range</div>
             <div class="flex items-center gap-2">
                 <input type="number" id="yearStart" min="1851" max="2024" value="2010" 
-                       class="w-20 px-2 py-1 text-sm border border-gray-200 rounded"
-                       onchange="applyFilters()">
+                       class="w-20 px-2 py-1 text-sm border border-gray-200 rounded">
                 <span class="text-gray-500 text-sm">to</span>
                 <input type="number" id="yearEnd" min="1851" max="2024" value="2024" 
-                       class="w-20 px-2 py-1 text-sm border border-gray-200 rounded"
-                       onchange="applyFilters()">
+                       class="w-20 px-2 py-1 text-sm border border-gray-200 rounded">
             </div>
+        </div>
+        
+        <!-- Clear Filters Button -->
+        <div class="filter-section" style="padding-top: 8px;">
+            <button onclick="clearAllFilters()" 
+                    style="width: 100%; padding: 8px; background: #6b7280; color: white; 
+                           border: none; border-radius: 6px; font-size: 14px; 
+                           font-weight: 500; cursor: pointer; transition: background 0.2s;"
+                    onmouseover="this.style.background='#4b5563'" 
+                    onmouseout="this.style.background='#6b7280'">
+                Clear All Filters
+            </button>
         </div>
     </div>
     
@@ -1447,13 +1466,39 @@
         // Initialize filter chip click handlers
         function initializeFilterChips() {
             document.querySelectorAll('.filter-chip').forEach(chip => {
-                chip.addEventListener('click', function() {
-                    // Toggle active state for all chips (multi-select like Database)
+                chip.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const filter = this.dataset.filter;
+                    const value = this.dataset.value;
+                    
+                    // Toggle active state
                     this.classList.toggle('active');
-                    // Auto-apply filters immediately like Database tab
+                    
+                    // Immediately apply filters
+                    console.log(`Filter clicked: ${filter} = ${value}, active: ${this.classList.contains('active')}`);
                     applyFilters();
                 });
             });
+            
+            // Also add year input listeners for automatic filtering
+            const yearStart = document.getElementById('yearStart');
+            const yearEnd = document.getElementById('yearEnd');
+            
+            if (yearStart) {
+                yearStart.addEventListener('change', () => {
+                    console.log('Year start changed to:', yearStart.value);
+                    applyFilters();
+                });
+            }
+            
+            if (yearEnd) {
+                yearEnd.addEventListener('change', () => {
+                    console.log('Year end changed to:', yearEnd.value);
+                    applyFilters();
+                });
+            }
         }
         
         function applyFiltersFromSearch() {
@@ -1512,22 +1557,37 @@
             }
         }
         
-        // Clear filters function (matches Database tab)
-        function clearFilters() {
-            // Clear all active chips except default Florida
+        // Clear all filters function
+        function clearAllFilters() {
+            console.log('Clearing all filters...');
+            
+            // Clear all active chips
             document.querySelectorAll('.filter-chip').forEach(chip => {
                 chip.classList.remove('active');
             });
             
-            // Set defaults
-            document.querySelector('.filter-chip[data-value="FL"]').classList.add('active');
-            document.querySelector('.filter-chip[data-value="3"]').classList.add('active');
-            document.querySelector('.filter-chip[data-value="2010"]').classList.add('active');
+            // Set default Florida only
+            const floridaChip = document.querySelector('.filter-chip[data-value="FL"]');
+            if (floridaChip) floridaChip.classList.add('active');
             
             // Reset year inputs
             document.getElementById('yearStart').value = 2010;
             document.getElementById('yearEnd').value = 2024;
             document.getElementById('searchInput').value = '';
+            
+            // Reset active filters
+            selectedStates = ['FL'];
+            activeFilters = {
+                states: ['FL'],
+                impactLevels: [],
+                categories: [],
+                landfallOnly: false,
+                yearRange: { start: 2010, end: 2024 },
+                nameSearch: null
+            };
+            
+            currentStartYear = 2010;
+            currentEndYear = 2024;
             
             // Apply cleared filters
             applyFilters();
@@ -2055,18 +2115,8 @@
             return colors[category] || "#757575";
         }
         
-        // Enhanced landfall detection using analyzed track data (same as timeline tab)
-        function isLikelyUSLandfall(storm) {
-            // Use the enhanced landfall_states array if available
-            if (storm.landfall_states && Array.isArray(storm.landfall_states)) {
-                return storm.landfall_states.length > 0;
-            }
-            
-            // Fallback to coordinate-based detection for older data
-            if (!storm.lat || !storm.lon) return false;
-            
-            // Atlantic basin US landfall areas only
-            const ATLANTIC_US_LANDFALL_BOUNDS = {
+        // Remove duplicate function - already defined earlier
+        /* function isLikelyUSLandfall(storm) - REMOVED DUPLICATE */
                 // East Coast: Maine to Florida Keys
                 eastCoast: {
                     north: 47.5, south: 24.3, east: -66.0, west: -87.0
@@ -3167,15 +3217,8 @@
             return months[month-1];
         }
         
-        function isLikelyUSLandfall(storm) {
-            if (storm.landfall_states && storm.landfall_states.length > 0) {
-                return true;
-            }
-            if (storm.lat && storm.lon) {
-                return storm.lat > 25 && storm.lon > -100 && storm.lon < -65;
-            }
-            return false;
-        }
+        // Remove third duplicate of isLikelyUSLandfall
+        /* function isLikelyUSLandfall - REMOVED DUPLICATE */
         
         function updateStormInfoPanel(storm) {
             // Update category icon
