@@ -1509,6 +1509,8 @@
         
         // Main apply filters function (matches Database tab)
         function applyFilters() {
+            console.log('=== applyFilters called ===');
+            
             // Get active state chips
             selectedStates = [];
             document.querySelectorAll('.filter-chip[data-filter="state"].active').forEach(chip => {
@@ -1532,6 +1534,14 @@
                 categories.push(parseInt(chip.dataset.value));
             });
             
+            // Debug logging
+            if (impactLevels.length > 0) {
+                console.log('Active impact levels:', impactLevels);
+            }
+            if (categories.length > 0) {
+                console.log('Active categories:', categories);
+            }
+            
             // Get special filters
             const usLandfallFilter = document.querySelector('.filter-chip[data-value="us_landfall"]')?.classList.contains('active') || false;
             
@@ -1539,12 +1549,17 @@
             currentStartYear = parseInt(document.getElementById('yearStart').value) || 2010;
             currentEndYear = parseInt(document.getElementById('yearEnd').value) || 2024;
             
-            // Update active filters object
+            // Update active filters object (preserve nameSearch if it exists)
+            const currentNameSearch = activeFilters.nameSearch || document.getElementById('searchInput')?.value || null;
+            
             activeFilters.states = selectedStates;
             activeFilters.impactLevels = impactLevels;
             activeFilters.categories = categories;
             activeFilters.landfallOnly = usLandfallFilter;
             activeFilters.yearRange = { start: currentStartYear, end: currentEndYear };
+            activeFilters.nameSearch = currentNameSearch;
+            
+            console.log('Active filters:', activeFilters);
             
             // Apply storm filters (this will call createMultiStateTimeline and updateStateComparison)
             applyStormFilters();
@@ -1834,14 +1849,16 @@
                 
                 // Impact level filter
                 if (activeFilters.impactLevels && activeFilters.impactLevels.length > 0) {
-                    if (!activeFilters.impactLevels.includes(storm.rc_impact_level)) {
+                    // Check if storm has impact level and it matches
+                    if (!storm.rc_impact_level || !activeFilters.impactLevels.includes(storm.rc_impact_level)) {
                         return false;
                     }
                 }
                 
                 // Category filter
                 if (activeFilters.categories && activeFilters.categories.length > 0) {
-                    if (!activeFilters.categories.includes(storm.category)) {
+                    // Category is a number, ensure we're comparing correctly
+                    if (storm.category === undefined || storm.category === null || !activeFilters.categories.includes(storm.category)) {
                         return false;
                     }
                 }
