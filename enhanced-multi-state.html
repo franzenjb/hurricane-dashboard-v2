@@ -268,13 +268,13 @@
         }
         
         .prototype-banner {
-            background: linear-gradient(45deg, #e74c3c, #c0392b);
-            color: white;
+            background: white;
+            color: #333;
             padding: 12px;
             text-align: center;
             font-weight: bold;
             font-size: 16px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            border-bottom: 2px solid #e74c3c;
             position: fixed;
             top: 0;
             left: 0;
@@ -597,7 +597,7 @@
 </head>
 <body>
     <div class="prototype-banner">
-        PROTOTYPE: Multi-State Hurricane Tracker | Select states to compare regional hurricane activity
+        <span style="margin-left: 100px;">PROTOTYPE: Multi-State Hurricane Tracker | Select states to compare regional hurricane activity</span>
     </div>
     
     <style>
@@ -792,7 +792,7 @@
         </div>
     </div>
     
-    <!-- Toggle Button for Filter Panel (Database style) -->
+    <!-- Toggle Button for Filter Panel (Repositioned standalone) -->
     <button onclick="toggleFilterPanel()" id="filterToggleBtn" class="filter-toggle" 
             style="position: fixed; left: 20px; top: 60px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
                    color: white; border: none; padding: 8px 14px; border-radius: 8px; cursor: pointer; 
