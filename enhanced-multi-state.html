@@ -2115,43 +2115,7 @@
             return colors[category] || "#757575";
         }
         
-        // Remove duplicate function - already defined earlier
-        /* function isLikelyUSLandfall(storm) - REMOVED DUPLICATE */
-                // East Coast: Maine to Florida Keys
-                eastCoast: {
-                    north: 47.5, south: 24.3, east: -66.0, west: -87.0
-                },
-                // Gulf Coast: Florida to Texas (Atlantic storms that enter Gulf)
-                gulfCoast: {
-                    north: 32.0, south: 24.0, east: -80.0, west: -98.0
-                },
-                // Puerto Rico and US Virgin Islands (Atlantic territories)
-                caribbeanTerritories: {
-                    north: 18.6, south: 17.6, east: -64.5, west: -67.5
-                }
-            };
-            
-            const lat = storm.lat;
-            const lon = storm.lon;
-            
-            // Check if coordinates fall within Atlantic basin US landfall zones
-            const inEastCoast = (lat >= ATLANTIC_US_LANDFALL_BOUNDS.eastCoast.south && 
-                               lat <= ATLANTIC_US_LANDFALL_BOUNDS.eastCoast.north &&
-                               lon >= ATLANTIC_US_LANDFALL_BOUNDS.eastCoast.west && 
-                               lon <= ATLANTIC_US_LANDFALL_BOUNDS.eastCoast.east);
-                               
-            const inGulfCoast = (lat >= ATLANTIC_US_LANDFALL_BOUNDS.gulfCoast.south && 
-                               lat <= ATLANTIC_US_LANDFALL_BOUNDS.gulfCoast.north &&
-                               lon >= ATLANTIC_US_LANDFALL_BOUNDS.gulfCoast.west && 
-                               lon <= ATLANTIC_US_LANDFALL_BOUNDS.gulfCoast.east);
-                               
-            const inCaribbean = (lat >= ATLANTIC_US_LANDFALL_BOUNDS.caribbeanTerritories.south && 
-                               lat <= ATLANTIC_US_LANDFALL_BOUNDS.caribbeanTerritories.north &&
-                               lon >= ATLANTIC_US_LANDFALL_BOUNDS.caribbeanTerritories.west && 
-                               lon <= ATLANTIC_US_LANDFALL_BOUNDS.caribbeanTerritories.east);
-            
-            return inEastCoast || inGulfCoast || inCaribbean;
-        }
+        // Using the isLikelyUSLandfall function already defined above
         
         // (Removed duplicate applyFilters function - using the one defined above)
         
@@ -3217,8 +3181,7 @@
             return months[month-1];
         }
         
-        // Remove third duplicate of isLikelyUSLandfall
-        /* function isLikelyUSLandfall - REMOVED DUPLICATE */
+        // isLikelyUSLandfall function already defined above, no need to duplicate
         
         function updateStormInfoPanel(storm) {
             // Update category icon
