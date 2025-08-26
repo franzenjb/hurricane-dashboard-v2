@@ -2533,7 +2533,7 @@
             // Calculate responsive font sizes
             const width = window.innerWidth;
             const baseFontSize = width < 768 ? 14 : width < 1200 ? 18 : 20;
-            const titleFontSize = width < 768 ? 24 : width < 1200 ? 28 : 32;
+            const titleFontSize = width < 768 ? 12 : width < 1200 ? 14 : 16;  // Reduced by 50%
             
             // Add year labels (every 5 years for longer timelines)
             const yearInterval = yearSpan > 30 ? 10 : 5;
@@ -3188,7 +3188,34 @@
                 paper_bgcolor: 'white'
             };
             
-            Plotly.newPlot('scatterPlot', traces, layout, {responsive: true});
+            Plotly.newPlot('scatterPlot', traces, layout, {responsive: true}).then(function(scatterDiv) {
+                // Add click handler to show storm in right panel
+                scatterDiv.on('plotly_click', function(data) {
+                    if (!data || !data.points || data.points.length === 0) return;
+                    
+                    const point = data.points[0];
+                    const stormName = point.text;
+                    
+                    // Extract storm name and year from the text (format: "STORM_NAME (YEAR)")
+                    const matches = stormName.match(/^(.+?)\s*\((\d{4})\)$/);
+                    if (matches) {
+                        const name = matches[1].trim();
+                        const year = parseInt(matches[2]);
+                        
+                        // Find the storm in our data
+                        const storm = window.currentFilteredStorms.find(s => 
+                            s.name === name && s.year === year
+                        );
+                        
+                        if (storm) {
+                            console.log('Scatter plot storm clicked:', storm.name, storm.year);
+                            // Update the right panel with storm info
+                            updateStormInfoPanel(storm);
+                            showStormOnMap(storm);
+                        }
+                    }
+                });
+            });
         }
         
         function updateCategoryChart(stateStats) {
