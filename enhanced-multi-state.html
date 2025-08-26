@@ -812,22 +812,38 @@
                     <div id="scatterPlot" style="height: 400px; width: 100%;"></div>
                 </div>
                 
-                <!-- Additional Charts Section - Stacked Vertically -->
+                <!-- CUTTING EDGE ANALYTICS SECTION -->
                 <div style="margin-top: 40px;">
-                    <!-- Category Distribution Chart -->
-                    <div style="margin-bottom: 40px;">
-                        <h4 style="margin: 0 0 15px 0; color: #34495e; font-size: 16px; border-bottom: 1px solid #e0e0e0; padding-bottom: 8px;">
-                            📊 Category Distribution by State
+                    <!-- 3D Hurricane Power Matrix -->
+                    <div style="margin-bottom: 40px; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+                        <h4 style="margin: 0 0 20px 0; color: white; font-size: 20px; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+                            🌀 HURRICANE POWER MATRIX™ - 3D Intensity Analysis
                         </h4>
-                        <div id="categoryChart" style="height: 350px; width: 100%;"></div>
+                        <div id="categoryChart" style="height: 450px; width: 100%; background: rgba(255,255,255,0.95); border-radius: 10px; padding: 10px;"></div>
                     </div>
                     
-                    <!-- Decade Trend Chart -->
-                    <div>
-                        <h4 style="margin: 0 0 15px 0; color: #34495e; font-size: 16px; border-bottom: 1px solid #e0e0e0; padding-bottom: 8px;">
-                            📈 Storms per Decade Trend
+                    <!-- Temporal Storm Surge Ribbon -->
+                    <div style="margin-bottom: 40px; padding: 20px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+                        <h4 style="margin: 0 0 20px 0; color: white; font-size: 20px; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+                            ⚡ TEMPORAL STORM SURGE™ - Century Impact Flow
                         </h4>
-                        <div id="decadeChart" style="height: 350px; width: 100%;"></div>
+                        <div id="decadeChart" style="height: 450px; width: 100%; background: rgba(255,255,255,0.95); border-radius: 10px; padding: 10px;"></div>
+                    </div>
+                    
+                    <!-- Catastrophic Impact Radial -->
+                    <div style="margin-bottom: 40px; padding: 20px; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+                        <h4 style="margin: 0 0 20px 0; color: white; font-size: 20px; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+                            💥 CATASTROPHIC IMPACT RADIAL™ - Multi-Dimensional Risk
+                        </h4>
+                        <div id="impactRadial" style="height: 500px; width: 100%; background: rgba(255,255,255,0.95); border-radius: 10px; padding: 10px;"></div>
+                    </div>
+                    
+                    <!-- Storm Velocity Heatmap -->
+                    <div style="padding: 20px; background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+                        <h4 style="margin: 0 0 20px 0; color: #333; font-size: 20px; font-weight: bold; text-shadow: 1px 1px 2px rgba(255,255,255,0.5);">
+                            🔥 VELOCITY HEATMAP™ - Speed vs Destruction Matrix
+                        </h4>
+                        <div id="velocityHeatmap" style="height: 450px; width: 100%; background: rgba(255,255,255,0.95); border-radius: 10px; padding: 10px;"></div>
                     </div>
                 </div>
                 
@@ -1406,6 +1422,17 @@
                         const monthlyDiv = document.getElementById('monthlyChart');
                         if (monthlyDiv && monthlyDiv.data) {
                             Plotly.Plots.resize(monthlyDiv);
+                        }
+                        
+                        // Resize new visualizations
+                        const radialDiv = document.getElementById('impactRadial');
+                        if (radialDiv && radialDiv.data) {
+                            Plotly.Plots.resize(radialDiv);
+                        }
+                        
+                        const heatmapDiv = document.getElementById('velocityHeatmap');
+                        if (heatmapDiv && heatmapDiv.data) {
+                            Plotly.Plots.resize(heatmapDiv);
                         }
                     }
                 }, 350); // Wait for CSS transition (0.3s) plus buffer
@@ -2913,8 +2940,173 @@
             updateCategoryChart(stateStats);
             updateDecadeChart(stateStats);
             updateScatterPlot(stateStats);
+            
+            // Create new cutting-edge visualizations
+            createImpactRadial(stateStats);
+            createVelocityHeatmap(stateStats);
+            
             generateInsights(stateStats);
             console.log('=== updateStateComparison END ===');
+        }
+        
+        // New cutting-edge visualizations
+        function createImpactRadial(stateStats) {
+            if (!selectedStates || selectedStates.length === 0) return;
+            
+            // Create multi-dimensional radial chart
+            const categories = ['Total Storms', 'Cat 5 Count', 'Major (3+)', 'Peak Wind', 'Deaths', 'Damage'];
+            const traces = [];
+            
+            selectedStates.forEach(state => {
+                const stats = stateStats[state];
+                
+                // Normalize values for radar chart
+                const values = [
+                    (stats.total / 50) * 100, // Normalize to 100
+                    (stats.cat5 / 3) * 100,
+                    (stats.cat3Plus / 20) * 100,
+                    (stats.maxWind / 200) * 100,
+                    Math.min((stats.deaths / 1000) * 100, 100),
+                    Math.min((stats.avgCategory / 5) * 100, 100)
+                ];
+                
+                traces.push({
+                    type: 'scatterpolar',
+                    r: values,
+                    theta: categories,
+                    fill: 'toself',
+                    fillcolor: `rgba(${Math.random() * 155 + 100}, ${Math.random() * 155 + 100}, ${Math.random() * 155 + 100}, 0.2)`,
+                    line: {
+                        color: `rgba(${Math.random() * 155 + 100}, ${Math.random() * 155 + 100}, ${Math.random() * 155 + 100}, 0.8)`,
+                        width: 2
+                    },
+                    name: state,
+                    hovertemplate: '<b>%{fullData.name}</b><br>%{theta}: %{r:.1f}<extra></extra>'
+                });
+            });
+            
+            const layoutRadial = {
+                polar: {
+                    radialaxis: {
+                        visible: true,
+                        range: [0, 100],
+                        tickfont: {size: 10},
+                        gridcolor: 'rgba(250, 112, 154, 0.3)'
+                    },
+                    angularaxis: {
+                        tickfont: {size: 12, color: '#333'},
+                        gridcolor: 'rgba(254, 225, 64, 0.3)'
+                    },
+                    bgcolor: 'rgba(255, 255, 255, 0.95)'
+                },
+                showlegend: true,
+                legend: {
+                    x: 1.1,
+                    y: 1,
+                    bgcolor: 'rgba(255, 255, 255, 0.8)',
+                    bordercolor: '#fee140',
+                    borderwidth: 1
+                },
+                margin: {t: 20, r: 80, b: 20, l: 20},
+                paper_bgcolor: 'rgba(0, 0, 0, 0)',
+                font: {family: 'Arial, sans-serif'}
+            };
+            
+            Plotly.newPlot('impactRadial', traces, layoutRadial, {
+                responsive: true,
+                displayModeBar: false
+            });
+        }
+        
+        function createVelocityHeatmap(stateStats) {
+            if (!selectedStates || selectedStates.length === 0) return;
+            
+            // Create velocity vs destruction heatmap
+            const windRanges = ['< 75', '75-95', '96-110', '111-129', '130-156', '> 157'];
+            const zData = [];
+            
+            selectedStates.forEach(state => {
+                const stats = stateStats[state];
+                const row = [0, 0, 0, 0, 0, 0];
+                
+                stats.storms.forEach(storm => {
+                    const wind = storm.wind_mph;
+                    if (wind < 75) row[0]++;
+                    else if (wind <= 95) row[1]++;
+                    else if (wind <= 110) row[2]++;
+                    else if (wind <= 129) row[3]++;
+                    else if (wind <= 156) row[4]++;
+                    else row[5]++;
+                });
+                
+                zData.push(row);
+            });
+            
+            const trace = {
+                z: zData,
+                x: windRanges,
+                y: selectedStates,
+                type: 'heatmap',
+                colorscale: [
+                    [0, '#a8edea'],
+                    [0.2, '#fed6e3'],
+                    [0.4, '#ff9a9e'],
+                    [0.6, '#fad0c4'],
+                    [0.8, '#ff6b6b'],
+                    [1, '#ee5a24']
+                ],
+                showscale: true,
+                colorbar: {
+                    title: 'Storm<br>Count',
+                    titleside: 'right',
+                    tickmode: 'linear',
+                    tick0: 0,
+                    dtick: 5
+                },
+                hovertemplate: '<b>%{y}</b><br>Wind: %{x} mph<br>Count: %{z}<extra></extra>'
+            };
+            
+            // Add text annotations
+            const annotations = [];
+            for (let i = 0; i < selectedStates.length; i++) {
+                for (let j = 0; j < windRanges.length; j++) {
+                    const currentValue = zData[i][j];
+                    if (currentValue > 0) {
+                        annotations.push({
+                            x: windRanges[j],
+                            y: selectedStates[i],
+                            text: currentValue.toString(),
+                            font: {
+                                size: 12,
+                                color: currentValue > 10 ? 'white' : '#333'
+                            },
+                            showarrow: false
+                        });
+                    }
+                }
+            }
+            
+            const layoutHeatmap = {
+                xaxis: {
+                    title: 'Wind Speed (mph)',
+                    titlefont: {color: '#333', size: 14},
+                    tickfont: {color: '#333'}
+                },
+                yaxis: {
+                    title: 'State',
+                    titlefont: {color: '#333', size: 14},
+                    tickfont: {color: '#333'}
+                },
+                annotations: annotations,
+                margin: {t: 20, r: 20, b: 60, l: 60},
+                paper_bgcolor: 'rgba(0, 0, 0, 0)',
+                plot_bgcolor: 'rgba(255, 255, 255, 0.95)'
+            };
+            
+            Plotly.newPlot('velocityHeatmap', [trace], layoutHeatmap, {
+                responsive: true,
+                displayModeBar: false
+            });
         }
         
         function updateScatterPlot(stateStats) {
@@ -2997,8 +3189,7 @@
         }
         
         function updateCategoryChart(stateStats) {
-            console.log('updateCategoryChart called with:', stateStats);
-            console.log('selectedStates in updateCategoryChart:', selectedStates);
+            console.log('Creating 3D Hurricane Power Matrix...');
             
             // Ensure we have selected states
             if (!selectedStates || selectedStates.length === 0) {
@@ -3006,53 +3197,141 @@
                 return;
             }
             
-            const traces = [];
-            const categories = ['TS', 'Cat 1', 'Cat 2', 'Cat 3', 'Cat 4', 'Cat 5'];
+            // Create stunning 3D surface plot for category distribution
+            const states = selectedStates;
+            const categories = ['TS', 'C1', 'C2', 'C3', 'C4', 'C5'];
             
-            selectedStates.forEach(state => {
+            // Build z-data matrix for 3D surface
+            const zData = [];
+            const surfaceColors = [];
+            
+            states.forEach((state, stateIdx) => {
                 const stats = stateStats[state];
-                const categoryCounts = [0, 0, 0, 0, 0, 0];
+                const row = [];
+                const colorRow = [];
                 
-                stats.categories.forEach(cat => {
-                    if (cat >= 0 && cat <= 5) {
-                        categoryCounts[cat]++;
+                for (let cat = 0; cat <= 5; cat++) {
+                    const count = stats.categories.filter(c => c === cat).length;
+                    row.push(count);
+                    // Create intensity-based coloring
+                    const intensity = Math.min(count / 20, 1);
+                    colorRow.push(`rgba(${255 - intensity * 100}, ${50 + intensity * 150}, ${200 + intensity * 55}, ${0.8 + intensity * 0.2})`);
+                }
+                zData.push(row);
+                surfaceColors.push(colorRow);
+            });
+            
+            const trace3D = {
+                z: zData,
+                x: categories,
+                y: states,
+                type: 'surface',
+                colorscale: [
+                    [0, 'rgba(102, 126, 234, 0.2)'],
+                    [0.25, 'rgba(118, 75, 162, 0.4)'],
+                    [0.5, 'rgba(237, 100, 166, 0.6)'],
+                    [0.75, 'rgba(255, 87, 87, 0.8)'],
+                    [1, 'rgba(255, 0, 0, 1)']
+                ],
+                contours: {
+                    z: {
+                        show: true,
+                        usecolormap: true,
+                        highlightcolor: "#42f462",
+                        project: {z: true}
                     }
-                });
-                
-                traces.push({
-                    name: state,
-                    x: categories,
-                    y: categoryCounts,
-                    type: 'bar'
+                },
+                showscale: false
+            };
+            
+            // Add animated marker trace for peaks
+            const markerTrace = {
+                x: [],
+                y: [],
+                z: [],
+                mode: 'markers',
+                marker: {
+                    size: 12,
+                    color: [],
+                    colorscale: 'Viridis',
+                    showscale: true,
+                    colorbar: {
+                        title: 'Storm<br>Intensity',
+                        thickness: 15,
+                        len: 0.7
+                    },
+                    line: {
+                        color: 'rgba(255, 255, 255, 0.8)',
+                        width: 2
+                    }
+                },
+                type: 'scatter3d',
+                text: [],
+                hovertemplate: '<b>%{text}</b><extra></extra>'
+            };
+            
+            // Add peak points
+            states.forEach((state, stateIdx) => {
+                categories.forEach((cat, catIdx) => {
+                    const value = zData[stateIdx][catIdx];
+                    if (value > 0) {
+                        markerTrace.x.push(cat);
+                        markerTrace.y.push(state);
+                        markerTrace.z.push(value + 1);
+                        markerTrace.marker.color.push(value);
+                        markerTrace.text.push(`${state}: ${value} ${cat} storms`);
+                    }
                 });
             });
             
-            const layout = {
-                barmode: 'group',
-                margin: { l: 40, r: 20, t: 20, b: 40 },
-                xaxis: { title: '' },
-                yaxis: { title: 'Number of Storms' },
-                showlegend: true,
-                legend: { orientation: 'h', y: 1.1 }
+            const layout3D = {
+                scene: {
+                    xaxis: {
+                        title: 'Hurricane Category',
+                        titlefont: {color: '#667eea', size: 14},
+                        gridcolor: 'rgba(0, 0, 0, 0.1)'
+                    },
+                    yaxis: {
+                        title: 'State',
+                        titlefont: {color: '#667eea', size: 14},
+                        gridcolor: 'rgba(0, 0, 0, 0.1)'
+                    },
+                    zaxis: {
+                        title: 'Storm Count',
+                        titlefont: {color: '#667eea', size: 14},
+                        gridcolor: 'rgba(0, 0, 0, 0.1)'
+                    },
+                    camera: {
+                        eye: {x: 1.5, y: 1.5, z: 1.5},
+                        center: {x: 0, y: 0, z: 0}
+                    },
+                    aspectmode: 'cube'
+                },
+                margin: {l: 0, r: 0, b: 0, t: 0},
+                paper_bgcolor: 'rgba(0, 0, 0, 0)',
+                plot_bgcolor: 'rgba(0, 0, 0, 0)',
+                showlegend: false,
+                hovermode: 'closest'
             };
             
-            Plotly.newPlot('categoryChart', traces, layout, {responsive: true});
+            Plotly.newPlot('categoryChart', [trace3D, markerTrace], layout3D, {
+                responsive: true,
+                displayModeBar: false
+            });
         }
         
         function updateDecadeChart(stateStats) {
-            console.log('updateDecadeChart called with:', stateStats);
-            console.log('selectedStates in updateDecadeChart:', selectedStates);
+            console.log('Creating Temporal Storm Surge visualization...');
             
             // Ensure we have selected states
             if (!selectedStates || selectedStates.length === 0) {
-                console.log('No states selected, cannot update decade chart');
                 return;
             }
             
             const traces = [];
             const decades = [];
             
-            // Get all decades
+            // Get all decades and create flowing ribbon visualization
             selectedStates.forEach(state => {
                 Object.keys(stateStats[state].decadeCount).forEach(decade => {
                     if (!decades.includes(decade)) {
@@ -3062,28 +3341,99 @@
             });
             decades.sort();
             
-            selectedStates.forEach(state => {
+            // Create stacked area chart with gradients
+            const stateColors = {
+                'FL': 'rgba(240, 147, 251, 0.8)',
+                'TX': 'rgba(245, 87, 108, 0.8)',
+                'LA': 'rgba(255, 119, 168, 0.8)',
+                'NC': 'rgba(255, 154, 158, 0.8)',
+                'SC': 'rgba(255, 206, 84, 0.8)',
+                'GA': 'rgba(237, 117, 99, 0.8)',
+                'AL': 'rgba(255, 175, 123, 0.8)',
+                'MS': 'rgba(255, 195, 160, 0.8)',
+                'VA': 'rgba(250, 208, 196, 0.8)',
+                'NY': 'rgba(255, 154, 0, 0.8)',
+                'MA': 'rgba(255, 183, 77, 0.8)',
+                'Others': 'rgba(189, 195, 199, 0.8)'
+            };
+            
+            selectedStates.forEach((state, idx) => {
                 const stats = stateStats[state];
                 const counts = decades.map(decade => stats.decadeCount[decade] || 0);
                 
+                // Create flowing ribbon effect with area fills
                 traces.push({
                     name: state,
                     x: decades.map(d => `${d}s`),
                     y: counts,
                     type: 'scatter',
-                    mode: 'lines+markers'
+                    mode: 'lines',
+                    stackgroup: 'one',
+                    fillcolor: stateColors[state] || stateColors['Others'],
+                    line: {
+                        color: stateColors[state] || stateColors['Others'],
+                        width: 0.5
+                    },
+                    hovertemplate: '<b>%{fullData.name}</b><br>%{x}: %{y} storms<extra></extra>'
                 });
+                
+                // Add glow effect markers at peaks
+                const maxCount = Math.max(...counts);
+                const peakIdx = counts.indexOf(maxCount);
+                if (maxCount > 0) {
+                    traces.push({
+                        name: '',
+                        x: [`${decades[peakIdx]}s`],
+                        y: [counts[peakIdx]],
+                        type: 'scatter',
+                        mode: 'markers',
+                        showlegend: false,
+                        marker: {
+                            size: 20,
+                            color: 'rgba(255, 255, 255, 0.9)',
+                            line: {
+                                color: stateColors[state] || stateColors['Others'],
+                                width: 3
+                            }
+                        },
+                        hovertemplate: `<b>PEAK: ${state}</b><br>${decades[peakIdx]}s: ${maxCount} storms<extra></extra>`
+                    });
+                }
             });
             
             const layout = {
-                margin: { l: 40, r: 20, t: 20, b: 40 },
-                xaxis: { title: '' },
-                yaxis: { title: 'Storms per Decade' },
+                margin: { l: 50, r: 20, t: 20, b: 50 },
+                xaxis: {
+                    title: 'Time Period',
+                    titlefont: {color: '#f5576c', size: 14},
+                    gridcolor: 'rgba(255, 255, 255, 0.2)',
+                    tickfont: {color: '#333'}
+                },
+                yaxis: {
+                    title: 'Cumulative Storm Impact',
+                    titlefont: {color: '#f5576c', size: 14},
+                    gridcolor: 'rgba(255, 255, 255, 0.2)',
+                    tickfont: {color: '#333'}
+                },
                 showlegend: true,
-                legend: { orientation: 'h', y: 1.1 }
+                legend: {
+                    orientation: 'h',
+                    y: -0.2,
+                    x: 0.5,
+                    xanchor: 'center',
+                    bgcolor: 'rgba(255, 255, 255, 0.8)',
+                    bordercolor: '#f5576c',
+                    borderwidth: 1
+                },
+                paper_bgcolor: 'rgba(0, 0, 0, 0)',
+                plot_bgcolor: 'rgba(245, 87, 108, 0.05)',
+                hovermode: 'x unified'
             };
             
-            Plotly.newPlot('decadeChart', traces, layout, {responsive: true});
+            Plotly.newPlot('decadeChart', traces, layout, {
+                responsive: true,
+                displayModeBar: false
+            });
         }
         
         function generateInsights(stateStats) {
